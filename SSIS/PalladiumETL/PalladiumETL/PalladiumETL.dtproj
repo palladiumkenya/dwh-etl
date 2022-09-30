@@ -14,6 +14,11 @@
     <Manifest>
       <DTSPackages>
         <DtsPackage FormatVersion="8">
+          <Name>Load_ARTOutcome.dtsx</Name>
+          <FullPath>Load_ARTOutcome.dtsx</FullPath>
+          <References />
+        </DtsPackage>
+        <DtsPackage FormatVersion="8">
           <Name>Load_Dim_Tables.dtsx</Name>
           <FullPath>Load_Dim_Tables.dtsx</FullPath>
           <References />
@@ -39,8 +44,8 @@
           <References />
         </DtsPackage>
         <DtsPackage FormatVersion="8">
-          <Name>Load_ARTOutcome.dtsx</Name>
-          <FullPath>Load_ARTOutcome.dtsx</FullPath>
+          <Name>Package1.dtsx</Name>
+          <FullPath>Package1.dtsx</FullPath>
           <References />
         </DtsPackage>
       </DTSPackages>
