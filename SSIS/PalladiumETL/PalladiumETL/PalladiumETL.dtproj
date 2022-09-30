@@ -38,6 +38,11 @@
           <FullPath>Load_ODS_CT_Tables.dtsx</FullPath>
           <References />
         </DtsPackage>
+        <DtsPackage FormatVersion="8">
+          <Name>Load_ARTOutcome.dtsx</Name>
+          <FullPath>Load_ARTOutcome.dtsx</FullPath>
+          <References />
+        </DtsPackage>
       </DTSPackages>
     </Manifest>
   </DeploymentModelSpecificContent>
@@ -59,13 +64,7 @@
         <LinkedAzureSSISIR />
         <LinkedAzureStorage />
         <RemoteExecutionFolder />
-        <ParameterConfigurationValues>
-          <ConfigurationSetting>
-            <Id>LastModifiedTime</Id>
-            <Name>LastModifiedTime</Name>
-            <Value xsi:type="xsd:dateTime">2022-09-27T12:50:00.1515656Z</Value>
-          </ConfigurationSetting>
-        </ParameterConfigurationValues>
+        <ParameterConfigurationValues />
       </Options>
     </Configuration>
   </Configurations>
