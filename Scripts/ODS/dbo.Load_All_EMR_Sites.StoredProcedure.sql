@@ -1,37 +1,42 @@
 SELECT
-    mfl_interface_db.facilities_facility_info.id,
-    mfl_code,
-    mfl_interface_db.facilities_facility_info.name As FacilityName,
+    mfl_interface_db.facilities_facility_info.mfl_code as `MFL_Code`,
+    mfl_interface_db.facilities_facility_info.name As `Facility Name`,
+    mfl_interface_db.facilities_facility_info.date_modified as `DateModified`,
+    mfl_interface_db.facilities_facility_info.date_added as `DateCreated`,
     mfl_interface_db.facilities_counties.name As County,
     mfl_interface_db.facilities_sub_counties.name As SubCounty,
     facilities_owner.name As Owner,
-    lat,
-    lon ,
+    lat as Latitude,
+    lon as Longitude,
    mfl_interface_db.facilities_partners.name As SDP,
-   #type As EMR
+   mfl_interface_db.facilities_sdp_agencies.name As `SDP Agency`,
+   (case when  mfl_interface_db.facilities_implementation_type.ct = 1 then 'CT' when  mfl_interface_db.facilities_implementation_type.ct = 0 then '' end) AS Implementation,
    mfl_interface_db.facilities_emr_type.type As EMR,
    facilities_emr_info.status As `EMR Status`,
    facilities_hts_use_type.hts_use_name As `HTS Use`,
    facilities_hts_deployment_type.deployment As `HTS Deployment`,
    facilities_hts_info.status As `HTS Status`,
    facilities_il_info.status as 'IL Status',
-   facilities_il_info.webADT_registration as 'registration ie',
-   facilities_il_info.webADT_pharmacy as 'pharmacy ie',
-   facilities_il_info.Mlab,
+   facilities_il_info.webADT_registration as 'Registration IE',
+   facilities_il_info.webADT_pharmacy as 'Phamarmacy IE',
+   facilities_il_info.Mlab as `mlab`,
    facilities_il_info.Ushauri,
    facilities_mhealth_info.Nishauri,
-   facilities_emr_info.ovc,
-   facilities_emr_info.otz,
-   facilities_emr_info.prep,
-   facilities_il_info.three_PM,
-   facilities_il_info.air,
-   facilities_implementation_type.kp,
-   facilities_emr_info.mnch,
-   facilities_emr_info.tb,
-   facilities_emr_info.lab_manifest
+   '' AS `Appointment Management IE`,
+   facilities_emr_info.ovc as `OVC`,
+   facilities_emr_info.otz as `OTZ`,
+   facilities_emr_info.prep as `PrEP`,
+   facilities_il_info.three_PM as `3PM`,
+   facilities_il_info.air as `AIR`,
+   facilities_implementation_type.kp as `KP`,
+   facilities_emr_info.mnch as `MCH`,
+   facilities_emr_info.tb as `TB`,
+   facilities_emr_info.lab_manifest as `Lab Manifest`,
+   '' as Comments,
+   '' as Project
 FROM mfl_interface_db.facilities_facility_info
 LEFT OUTER JOIN mfl_interface_db.facilities_owner
-ON mfl_interface_db.facilities_owner .id = mfl_interface_db.facilities_facility_info .owner_id                       
+ON mfl_interface_db.facilities_owner .id = mfl_interface_db.facilities_facility_info .owner_id
 LEFT OUTER JOIN mfl_interface_db.facilities_counties
 ON mfl_interface_db.facilities_counties.id = facilities_facility_info.county_id
 LEFT OUTER JOIN mfl_interface_db.facilities_sub_counties
@@ -54,4 +59,6 @@ LEFT OUTER JOIN mfl_interface_db.facilities_mhealth_info
 ON mfl_interface_db.facilities_mhealth_info.facility_info_id = facilities_facility_info.id
 LEFT OUTER JOIN mfl_interface_db.facilities_implementation_type
 ON mfl_interface_db.facilities_implementation_type.facility_info_id = facilities_facility_info.id
-where facilities_facility_info.approved = True;
+LEFT OUTER JOIN mfl_interface_db.facilities_sdp_agencies
+ON mfl_interface_db.facilities_sdp_agencies.id = facilities_partners.agency_id
+where facilities_facility_info.approved = True
