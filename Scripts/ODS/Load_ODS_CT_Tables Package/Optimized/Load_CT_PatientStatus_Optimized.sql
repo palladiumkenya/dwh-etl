@@ -2,16 +2,16 @@ BEGIN
 		DECLARE		@MaxExitDate_Hist			DATETIME,
 					@ExitDate					DATETIME
 				
-		SELECT @MaxExitDate_Hist =  MAX(MaxExitDate) FROM [ODS].[dbo].[CT_LopatientStatus_Log]  (NoLock);
+		SELECT @MaxExitDate_Hist =  MAX(MaxExitDate) FROM [ODS].[dbo].[CT_patientStatus_Log]  (NoLock);
 		SELECT @ExitDate = MAX(ExitDate) FROM [DWAPICentral].[dbo].[PatientStatusExtract] WITH (NOLOCK) ;
 		
-		IF (SELECT COUNT(1) FROM [ODS].[dbo].[CT_LopatientStatus_Log] (NoLock) WHERE MaxExitDate = @ExitDate) > 0
+		IF (SELECT COUNT(1) FROM [ODS].[dbo].[CT_patientStatus_Log] (NoLock) WHERE MaxExitDate = @ExitDate) > 0
 		RETURN
 
 			ELSE
 				BEGIN
 					
-					INSERT INTO  [ODS].[dbo].[CT_PharmacyVisit_Log](MaxDispenseDate,LoadStartDateTime)
+					INSERT INTO  [ODS].[dbo].[CT_patientStatus_Log] (MaxExitDate,LoadStartDateTime)
 					VALUES(@ExitDate,GETDATE());
 	       ---- Refresh [ODS].[dbo].[CT_PatientStatus]
 		   INSERT INTO [ODS].[dbo].[CT_PatientStatus](PatientID,PatientPK,FacilityName,SiteCode,ExitDescription,ExitDate,ExitReason,Emr,Project,
@@ -48,7 +48,7 @@ BEGIN
 						---INNER JOIN FacilityManifest_MaxDateRecieved(NoLock) a ON F.Code = a.SiteCode and a.[End] is not null and a.[Session] is not null
 						WHERE p.gender!='Unknown' AND ExitDate > @MaxExitDate_Hist;
 
-						UPDATE [ODS].[dbo].[CT_LopatientStatus_Log]
+						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
 						SET LoadEndDateTime = GETDATE()
 						WHERE MaxExitDate = @ExitDate;
 				END

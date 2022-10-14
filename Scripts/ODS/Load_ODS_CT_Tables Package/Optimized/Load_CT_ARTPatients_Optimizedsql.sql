@@ -43,10 +43,10 @@ BEGIN
 				SET LoadEndDateTime = GETDATE()
 				WHERE MaxLastVisitDate = @LastVisitDate;
 			END
-			---Remove any duplicate from [NDWH_DB].[dbo].[DimPatient]
+			---Remove any duplicate from [ODS].[dbo].[CT_ARTPatients] 
 			;WITH CTE AS   
 				(  
-					SELECT [PatientPK],[SiteCode],ROW_NUMBER()  ----PARTITION by the columns
+					SELECT [PatientPK],[SiteCode],ROW_NUMBER() 
 					OVER (PARTITION BY [PatientPK],[SiteCode] 
 					ORDER BY [PatientPK],[SiteCode]) AS dump_ 
 					FROM [ODS].[dbo].[CT_ARTPatients] 
@@ -54,22 +54,6 @@ BEGIN
 			
 			DELETE FROM CTE WHERE dump_ >1;
 
-			------- Rrefresh DimFacility
-
-			--MERGE [NDWH_DB].[dbo].[DimFacility] AS a
-			--	USING(SELECT  P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,PKV,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
-			--			FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
-			--			INNER JOIN [DWAPICentral].[dbo].[Facility] F with (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0 
-			--			---INNER JOIN FacilityManifest_MaxDateRecieved(NoLock) a ON F.Code = a.SiteCode
-			--			WHERE P.Voided=0 and P.[Gender] is NOT NULL and p.gender!='Unknown' ) AS b 
-			--			ON(a.PatientID=b.PatientID and a.PatientPK = b.PatientPK and a.SiteCode = b.SiteCode)
-			--WHEN MATCHED THEN
-			--UPDATE SET 
-			--a.FacilityName = B.FacilityName
-			--WHEN NOT MATCHED THEN 
-			--INSERT(PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI) 
-			--VALUES(PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI);
-			
 	END
 
 

@@ -41,7 +41,7 @@ BEGIN
 					WHERE MaxVisitDate = @VisitDate;
 
 			END
-			---Remove any duplicate from [NDWH_DB].[dbo].[DimPatient]
+			---Remove any duplicate from [ODS].[dbo].[CT_AllergiesChronicIllness]
 			;WITH CTE AS   
 				(  
 					SELECT [PatientPK],[SiteCode],VisitDate,ROW_NUMBER() 

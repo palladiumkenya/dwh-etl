@@ -14,22 +14,22 @@ BEGIN
 					INSERT INTO  [dbo].[CT_PatientLabs_Log](MaxOrderedbyDate,LoadStartDateTime)
 					VALUES( @OrderedbyDate,GETDATE())
 
-					INSERT INTO [ODS].[dbo].[CT_PatientLabs](PatientID,PatientPk,FacilityName,
-															SiteCode,VisitID,OrderedbyDate,ReportedbyDate,TestName,TestResult,
-															Emr,Project,CKV,DateSampleTaken,SampleType
+					INSERT INTO [ODS].[dbo].[CT_PatientLabs](PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,
+					EnrollmentTest,TestResult,Emr,Project,DateImported,Reason,Created,CKV,DateSampleTaken,SampleType
 															)
 					SELECT 
-						  P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Name AS FacilityName, 
-						  F.Code AS SiteCode,PL.[VisitId],PL.[OrderedByDate],PL.[ReportedByDate],PL.[TestName]
-						  ,PL.[TestResult],P.[Emr]
+						  P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName, 
+						  PL.[VisitId],PL.[OrderedByDate],PL.[ReportedByDate],PL.[TestName],
+						  PL.[EnrollmentTest],PL.[TestResult],P.[Emr]
 						  ,CASE P.[Project] 
 								WHEN 'I-TECH' THEN 'Kenya HMIS II' 
 								WHEN 'HMIS' THEN 'Kenya HMIS II'
 						   ELSE P.[Project] 
-						   END AS [Project] 
-						   ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
-						 -- ,PL.[Processed],PL.[EnrollmentTest],PL.[Created],
-						  --,PL.Reason
+						   END AS [Project] ,
+						   Getdate() as DateImported,
+						   null as Reason,
+						   null as Created,
+						   LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 						  
 					-------------------- Added by Dennis as missing columns
 						,PL.DateSampleTaken,
@@ -45,7 +45,7 @@ BEGIN
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;
 
 			END
-			---Remove any duplicate from [NDWH_DB].[dbo].[DimPatient]
+			---Remove any duplicate from [ODS].[dbo].[CT_PatientLabs]
 			;WITH CTE AS   
 				(  
 					SELECT [PatientPK],[SiteCode],OrderedbyDate,ROW_NUMBER() 

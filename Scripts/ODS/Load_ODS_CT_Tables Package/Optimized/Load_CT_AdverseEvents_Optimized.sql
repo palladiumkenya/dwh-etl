@@ -43,7 +43,7 @@ BEGIN
 					WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;
 
 			END
-			---Remove any duplicate from [NDWH_DB].[dbo].[DimPatient]
+			---Remove any duplicate from [ODS].[dbo].[CT_AdverseEvents] 
 			;WITH CTE AS   
 				(  
 					SELECT [PatientPK],[SiteCode],ROW_NUMBER() 

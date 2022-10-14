@@ -43,7 +43,7 @@ BEGIN
 				WHERE MaxDispenseDate = @DispenseDate;
 
 			END
-			---Remove any duplicate from [NDWH_DB].[dbo].[DimPatient]
+			---Remove any duplicate from [ODS].[dbo].[CT_PatientPharmacy] 
 			;WITH CTE AS   
 				(  
 					SELECT [PatientPK],[SiteCode],DispenseDate,ROW_NUMBER() 
