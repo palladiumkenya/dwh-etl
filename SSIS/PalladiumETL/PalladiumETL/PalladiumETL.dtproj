@@ -18,7 +18,7 @@
           <FullPath>Load_ARTOutcome.dtsx</FullPath>
           <References />
         </DtsPackage>
-        <DtsPackage FormatVersion="0">
+        <DtsPackage FormatVersion="8">
           <Name>Load_Dim_Tables 1.dtsx</Name>
           <FullPath>Load_Dim_Tables 1.dtsx</FullPath>
           <References />
@@ -44,11 +44,21 @@
           <References />
         </DtsPackage>
         <DtsPackage FormatVersion="8">
+          <Name>Load_ODS_CT_Tables_Old1.dtsx</Name>
+          <FullPath>Load_ODS_CT_Tables_Old1.dtsx</FullPath>
+          <References />
+        </DtsPackage>
+        <DtsPackage FormatVersion="8">
+          <Name>Load_ODS_CT_Tables_old.dtsx</Name>
+          <FullPath>Load_ODS_CT_Tables_old.dtsx</FullPath>
+          <References />
+        </DtsPackage>
+        <DtsPackage FormatVersion="8">
           <Name>Load_ODS_CT_Tables.dtsx</Name>
           <FullPath>Load_ODS_CT_Tables.dtsx</FullPath>
           <References />
         </DtsPackage>
-        <DtsPackage FormatVersion="0">
+        <DtsPackage FormatVersion="8">
           <Name>SendEmails.dtsx</Name>
           <FullPath>SendEmails.dtsx</FullPath>
           <References />
