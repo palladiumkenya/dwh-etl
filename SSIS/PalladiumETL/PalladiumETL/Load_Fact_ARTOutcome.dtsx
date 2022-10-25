@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="9/27/2022 3:16:31 PM"
@@ -6,14 +6,13 @@
   DTS:CreatorComputerName="DENNIS"
   DTS:CreatorName="DENNIS\DENO"
   DTS:DTSID="{5D10D114-1542-4A3B-AC4E-DA37E4C0D082}"
-  DTS:EnableConfig="True"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="15.0.2000.170"
   DTS:LocaleID="1033"
   DTS:ObjectName="Load_Fact_ARTOutcome"
   DTS:PackageType="5"
   DTS:VersionBuild="45"
-  DTS:VersionGUID="{8454B0B8-0A51-420B-8FD8-D967D80F20D7}">
+  DTS:VersionGUID="{5BCB3B5B-207E-481C-9EE9-C685DCB1C2CA}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -22,6 +21,30 @@
       DTS:CreationName="OLEDB"
       DTS:DTSID="{B67E9E16-145C-4F44-ADAC-65FB5967136E}"
       DTS:ObjectName="OLE_DB_Destination">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_Destination_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_Destination_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_Destination_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_Destination_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_Destination]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_Destination_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_Destination_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_Destination_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_Destination_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_Destination_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_Destination_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_Destination_UserName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
@@ -30,7 +53,7 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAWn4RW3P1uUavqCa9fUQKJgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABmQhR7Pdwn/i1NLRxg6YMo2lj1Aq27lA7bPTVSYJ7WuwAAAAAOgAAAAAIAACAAAAAA2lBH5zW/0d35VN9C9koLMH7TNm/EIjxFp/5U2C+IFjAAAABx7iOugkjZ/RADvlQvnqEEwMtZmB81rF1NOxO1wN5OA89n+G62CGEpWlMJhfSm/VFAAAAAeg7Nu6azHYLi+M+wkaBEuvVjgfFEtWG0Vma8uA/vB7lpxlZZzHHar8bKKaBxly8k/BpoqhzVfS01hRZHcXoiBw</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAf2Tn0+bxsUOTiWVPrtGpTQAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADsywVXYsR7FOIUF8kHqI82TMzHpjGWdSMDtHkMmNntWAAAAAAOgAAAAAIAACAAAABf3pmk4mcGykhfhHjPkLJPLChUqjgYhHZhA0rH059ZoTAAAAB4WMr4IYnxp+x4/ouWrphx45fChNLN4VF8fTcFNCo+9uxWH/Fa2jC4v+l5m+ILrudAAAAAJqJEW0UUbUHjIgJq2UblJ+ca+/CXvbMq2Q2bw1pXeu/UZDXgpFM3bHig288mygVuiOoTMDeq3ToeAaLFytwPvA</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
@@ -39,6 +62,30 @@
       DTS:CreationName="OLEDB"
       DTS:DTSID="{493B5239-9CAF-4903-AF0B-CAEB9EB58942}"
       DTS:ObjectName="OLE_DB_DWAPICental_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_DWAPICental_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_DWAPICental_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_DWAPICental_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_DWAPICental_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_DWAPICental_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_DWAPICental_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_DWAPICental_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_DWAPICental_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_DWAPICental_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_DWAPICental_Src_UserName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
@@ -51,6 +98,30 @@
       DTS:CreationName="OLEDB"
       DTS:DTSID="{C4ED4657-A0C4-4FF0-9159-0925F4631A96}"
       DTS:ObjectName="OLE_DB_NDWH">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_NDWH_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_NDWH_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_NDWH_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_NDWH_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_NDWH]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_NDWH_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_NDWH_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_NDWH_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_NDWH_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_NDWH_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_NDWH_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_NDWH_UserName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
@@ -63,6 +134,30 @@
       DTS:CreationName="OLEDB"
       DTS:DTSID="{9E32B875-FE23-424B-ACA4-59388C913CFC}"
       DTS:ObjectName="OLE_DB_ODS_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_ODS_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_ODS_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_ODS_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_ODS_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_ODS_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_ODS_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_ODS_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_ODS_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_ODS_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_ODS_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_ODS_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_ODS_Src_UserName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
@@ -71,20 +166,141 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAWn4RW3P1uUavqCa9fUQKJgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABkI4niwd+FcDCZpzC3LBR83vqCgv3zllqf+8lZ8/CmigAAAAAOgAAAAAIAACAAAAATwtFQxTEUm/jesuW2MxCUtMz+6oszT83kRHAxXiJoszAAAAC8v+fQAuFZZlgSU0yhHOCGpGohgXgImA9vPLTQPreqYcPx9q3KmBOYDvPyYHU5DSpAAAAAg6c1uk8hhBQhSyWVxybsjOrQLf0IJPkkO99yylIv55Fax2K1Vf1VEF8M08QcP7rQeQ2GXXFaDqaWjuPietsN1A</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAf2Tn0+bxsUOTiWVPrtGpTQAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACcfZLnG3kPkG4fY8fmuOaEN97AAFrnTQMJZrkt3TnIagAAAAAOgAAAAAIAACAAAACVQBl/cmpOilNhn+feDpp0npQmDW3ONGLyOYEXjFAd8DAAAAD5pRdbmaz+cCN8Pls21UhRHVm+kjqA3JkWorDttTJT+WUU3figVVrXIfFCBgaS40BAAAAAURJ7RuF+WBhcXWFpkKgbo51uy64Y6FvWYcH1+Xk2rklXsXEiHm9fX6pOIY3nejkUw7P4huTKeSmLm0RkEXOJdQ</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
-  <DTS:Configurations>
-    <DTS:Configuration
-      DTS:ConfigurationString="D:\palladium\dwh-etl\Configs\LoadFactARTOutcome.dtsConfig"
-      DTS:ConfigurationType="1"
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
       DTS:CreationName=""
-      DTS:DTSID="{CBDF2161-4017-4379-89DA-1D7F8904F98D}"
-      DTS:ObjectName="LoadFactARTOutcome" />
-  </DTS:Configurations>
+      DTS:DataType="8"
+      DTS:DTSID="{51AD1D48-46B5-4821-9F06-C4F7FB0A19CE}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_FacilitySqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Facility]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{7BC3E3A3-F7C0-434B-B886-CC36AF4CAD13}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_FacilitySqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Facility]) [refTable]
+where [refTable].[MFL_Code] = ?</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{A472D150-7EE6-4FBC-859C-0F87E324062F}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_PatientSqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Patient]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{DFB212C2-606B-4CC8-8041-EEDD11899EA6}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_PatientSqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Patient]) [refTable]
+where [refTable].[PatientID] = ? and [refTable].[PatientPK] = ? and [refTable].[SiteCode] = ?</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{B2F9BF11-593A-494B-B514-BC8FDCC09A1E}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LookupSqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Date]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{6E4BF71A-93FC-4AF7-8D05-E77A1EDCE39F}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LookupSqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Date]) [refTable]
+where [refTable].[DateAlternateKey] = ?</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
   <DTS:Variables />
+  <DTS:PropertyExpression
+    DTS:Name="CheckpointFileName">@[$Project::CheckpointFileName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreationDate">@[$Project::CreationDate]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorComputerName">@[$Project::CreatorComputerName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorName">@[$Project::CreatorName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DelayValidation">@[$Project::DelayValidation]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Description">@[$Project::Description]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DesignTimeProperties">@[$Project::DesignTimeProperties]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Disable">@[$Project::Disable]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DisableEventHandlers">@[$Project::DisableEventHandlers]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpDescriptor">@[$Project::DumpDescriptor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpOnAnyError">@[$Project::DumpOnAnyError]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EnableDump">@[$Project::EnableDump]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EncryptCheckpoints">@[$Project::EncryptCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailPackageOnFailure">@[$Project::FailPackageOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailParentOnFailure">@[$Project::FailParentOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="ForceExecutionValue">@[$Project::ForceExecutionValue]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IgnoreConfigurationsOnLoad">@[$Project::IgnoreConfigurationsOnLoad]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="InteractiveMode">@[$Project::InteractiveMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IsolationLevel">@[$Project::IsolationLevel]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="LocaleID">@[$Project::LocaleID]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaxConcurrentExecutables">@[$Project::MaxConcurrentExecutables]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaximumErrorCount">@[$Project::MaximumErrorCount]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Name">@[$Project::Name]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="OfflineMode">@[$Project::OfflineMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="PackagePassword">@[$Project::PackagePassword]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SQLFolder">@[$Project::SQLFolder]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SafeRecursiveProjectPackageExecution">@[$Project::SafeRecursiveProjectPackageExecution]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SaveCheckpoints">@[$Project::SaveCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SuppressConfigurationWarnings">@[$Project::SuppressConfigurationWarnings]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdateObjects">@[$Project::UpdateObjects]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdatePackage">@[$Project::UpdatePackage]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionBuild">@[$Project::VersionBuild]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionComments">@[$Project::VersionComments]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMajor">@[$Project::VersionMajor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMinor">@[$Project::VersionMinor]</DTS:PropertyExpression>
   <DTS:Executables>
     <DTS:Executable
       DTS:refId="Package\Load Fact_ARTOutcome"
@@ -97,6 +313,18 @@
       DTS:ObjectName="Load Fact_ARTOutcome"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="[Lookup].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LookupSqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lookup].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LookupSqlCommandParam]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Facility].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LkpDim_FacilitySqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Facility].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LkpDim_FacilitySqlCommandParam]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Patient].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LkpDim_PatientSqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Patient].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LkpDim_PatientSqlCommandParam]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <pipeline
           version="1">
