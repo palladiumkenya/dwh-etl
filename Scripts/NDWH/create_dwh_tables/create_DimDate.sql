@@ -1,7 +1,7 @@
 --DimDate
 CREATE TABLE [dbo].DimDate(
 	[DateKey] [int] PRIMARY KEY NOT NULL,
-	[Date] [varchar](200) NULL,
+	[Date] [date] NULL,
 	[Year]  [int] NULL,
 	[Month] [int] NULL,
 	[CalendarQuarter] [varchar](20) NULL,
