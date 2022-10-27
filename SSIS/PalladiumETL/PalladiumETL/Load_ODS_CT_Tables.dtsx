@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="D:\SSIS_Checkpoint\Chekpoint.xml"
+  DTS:CheckpointFileName="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS_Checkpoint\Checkpoint.xml"
   DTS:CheckpointUsage="1"
   DTS:CreationDate="10/18/2022 3:43:31 PM"
   DTS:CreationName="Microsoft.Package"
@@ -14,8 +14,8 @@
   DTS:ObjectName="Load_ODS_CT_Tables"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="46"
-  DTS:VersionGUID="{DE906923-1AF9-4E6E-86F7-FAF2F4366428}">
+  DTS:VersionBuild="47"
+  DTS:VersionGUID="{F268058B-9510-4E39-9C2B-3460993AB6C3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
