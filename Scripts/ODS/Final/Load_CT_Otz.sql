@@ -1,6 +1,13 @@
 BEGIN
-			--CREATE INDEX CT_Otz ON [ODS].[dbo].[CT_Otz] (sitecode,PatientPK);
-	       ---- Refresh [ODS].[dbo].[CT_Otz]
+			DECLARE @MaxVisitDate_Hist			DATETIME,
+				   @VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Otz_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[OtzExtract](NoLock)
+					
+			INSERT INTO  [ODS].[dbo].[CT_Otz_Log](MaxVisitDate,LoadStartDateTime)
+			VALUES(@MaxVisitDate_Hist,GETDATE())
+
 			MERGE [ODS].[dbo].[CT_Otz] AS a
 				USING(SELECT
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,OE.[VisitId] AS VisitID,
@@ -49,16 +56,26 @@ BEGIN
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,DateImported,CKV,PatientUnique_ID,OtzUnique_ID) 
 						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,DateImported,CKV,PatientUnique_ID,OtzUnique_ID);
 				
+					UPDATE [ODS].[dbo].[CT_Otz_Log]
+					SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @MaxVisitDate_Hist;
+
+					INSERT INTO [ODS].[dbo].[CT_OtzCount_Log]([SiteCode],[CreatedDate],[OtzCount])
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS OtzCount 
+					FROM [ODS].[dbo].[CT_Otz]
+					--WHERE @MaxCreatedDate  > @MaxCreatedDate
+					GROUP BY SiteCode;
+
 					--DROP INDEX CT_Otz ON [ODS].[dbo].[CT_Otz];
 					---Remove any duplicate from [ODS].[dbo].[CT_Otz]
-					WITH CTE AS   
-						(  
-							SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID,ROW_NUMBER() 
-							OVER (PARTITION BY [PatientPK],[SiteCode], VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID
-							ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID) AS dump_ 
-							FROM [ODS].[dbo].[CT_Otz] 
-							)  
+					--WITH CTE AS   
+					--	(  
+					--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID,ROW_NUMBER() 
+					--		OVER (PARTITION BY [PatientPK],[SiteCode], VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID
+					--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID) AS dump_ 
+					--		FROM [ODS].[dbo].[CT_Otz] 
+					--		)  
 			
-					DELETE FROM CTE WHERE dump_ >1;
+					--DELETE FROM CTE WHERE dump_ >1;
 
 	END

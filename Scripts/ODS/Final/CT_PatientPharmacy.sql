@@ -1,6 +1,15 @@
 BEGIN
-	       ---- Refresh [ODS].[dbo].[CT_PatientPharmacy]
-		   --CREATE INDEX CT_PatientPharmacy ON [ODS].[dbo].[CT_PatientPharmacy] (sitecode,PatientPK,DispenseDate);
+	      DECLARE @MaxDispenseDate_Hist			DATETIME,
+				  @DispenseDate					DATETIME,
+				  @MaxCreatedDate				DATETIME
+				
+		SELECT @MaxDispenseDate_Hist =  MAX(MaxDispenseDate) FROM [ODS].[dbo].[CT_PharmacyVisit_Log]  (NoLock)
+		SELECT @DispenseDate = MAX(DispenseDate) FROM [DWAPICentral].[dbo].[PatientPharmacyExtract] WITH (NOLOCK) 
+		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) 
+		
+					
+					INSERT INTO  [ODS].[dbo].[CT_PharmacyVisit_Log](MaxDispenseDate,LoadStartDateTime)
+					VALUES(@DispenseDate,GETDATE())
 
 			MERGE [ODS].[dbo].[CT_PatientPharmacy] AS a
 				USING(SELECT 
@@ -61,16 +70,25 @@ BEGIN
 				INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID) 
 				VALUES(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID);
 			
+			UPDATE [ODS].[dbo].[CT_PharmacyVisit_Log]
+				SET LoadEndDateTime = GETDATE()
+				WHERE MaxDispenseDate = @DispenseDate;
+
+			INSERT INTO [ODS].[dbo].[CT_PatientPharmacyCount_Log]([SiteCode],[CreatedDate],[PatientPharmacyCount])
+			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientPharmacyCount 
+			FROM [ODS].[dbo].[CT_PatientPharmacy] 
+			--WHERE @MaxCreatedDate  > @MaxCreatedDate
+			GROUP BY SiteCode;
 			--DROP INDEX CT_PatientPharmacy ON [ODS].[dbo].[CT_PatientPharmacy] ;
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientPharmacy] 
-			WITH CTE AS   
-				(  
-					SELECT [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID,ROW_NUMBER() 
-					OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID
-					ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,PatientUnique_ID,PatientPharmacyUnique_ID) AS dump_ 
-					FROM [ODS].[dbo].[CT_PatientPharmacy] 
-					)  
+			--WITH CTE AS   
+			--	(  
+			--		SELECT [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID
+			--		ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,PatientUnique_ID,PatientPharmacyUnique_ID) AS dump_ 
+			--		FROM [ODS].[dbo].[CT_PatientPharmacy] 
+			--		)  
 			
-			DELETE FROM CTE WHERE dump_ >1;
+			--DELETE FROM CTE WHERE dump_ >1;
 
 	END

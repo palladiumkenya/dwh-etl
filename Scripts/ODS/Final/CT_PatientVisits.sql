@@ -1,9 +1,21 @@
 BEGIN
 	 
-			--CREATE INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits] (sitecode,PatientPK,visitID,visitDate);
+	 DECLARE @MaxVisitDate_Hist		DATETIME,
+			@VisitDate				DATETIME,
+			@MaxCreatedDate			DATETIME
+				
+		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Visit_Log]  (NoLock);
+		SELECT @VisitDate			= MAX(VisitDate)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK) ;
+		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) ;
 
-	       ---- Refresh [ODS].[dbo].[CT_PatientVisits]
-		   --truncate table [ODS].[dbo].[CT_PatientVisits]
+		--insert into  [ODS].[dbo].[CT_VisitCount_Log](CreatedDate)
+		--values(dateadd(year,-1,getdate()))
+
+		
+				
+					INSERT INTO  [ODS].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
+					VALUES(@VisitDate,GETDATE());
+
 			MERGE [ODS].[dbo].[CT_PatientVisits] AS a
 				USING(SELECT distinct P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
 						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
@@ -101,14 +113,26 @@ BEGIN
 			
 			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
-			WITH CTE AS   
-				(  
-					SELECT [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID,ROW_NUMBER() 
-					OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID
-					ORDER BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID) AS dump_ 
-					FROM [ODS].[dbo].[CT_PatientVisits] 
-					)  
+
+			UPDATE [ODS].[dbo].[CT_Visit_Log]
+				  SET LoadEndDateTime = GETDATE()
+			WHERE MaxVisitDate = @VisitDate;
+
+			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
+			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
+			FROM [ODS].[dbo].[CT_PatientVisits] 
+			--WHERE @MaxCreatedDate  > @MaxCreatedDate
+			GROUP BY SiteCode;
+
+
+			--WITH CTE AS   
+			--	(  
+			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID
+			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID) AS dump_ 
+			--		FROM [ODS].[dbo].[CT_PatientVisits] 
+			--		)  
 			
-			DELETE FROM CTE WHERE dump_ >1;
+			--DELETE FROM CTE WHERE dump_ >1;
 			
 	END

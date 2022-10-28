@@ -1,4 +1,13 @@
 BEGIN
+			DECLARE		@MaxExitDate_Hist			DATETIME,
+					@ExitDate					DATETIME
+				
+		SELECT @MaxExitDate_Hist =  MAX(MaxExitDate) FROM [ODS].[dbo].[CT_patientStatus_Log]  (NoLock);
+		SELECT @ExitDate = MAX(ExitDate) FROM [DWAPICentral].[dbo].[PatientStatusExtract] WITH (NOLOCK) ;
+		
+					
+					INSERT INTO  [ODS].[dbo].[CT_patientStatus_Log] (MaxExitDate,LoadStartDateTime)
+					VALUES(@ExitDate,GETDATE());
 	       ---- Refresh [ODS].[dbo].[CT_PatientStatus]
 			--CREATE INDEX CT_PatientStatus ON [ODS].[dbo].[CT_PatientStatus] (sitecode,PatientPK,exitdate);
 			MERGE [ODS].[dbo].[CT_PatientStatus] AS a
@@ -63,17 +72,28 @@ BEGIN
 							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID )--/*,SpecificDeathReason,DeathDate,EffectiveDiscontinuationDate */) 
 							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID); --/*ReasonForDeath,SpecificDeathReason,DeathDate /*EffectiveDiscontinuationDate/*);
 			
+
+						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
+						SET LoadEndDateTime = GETDATE()
+						WHERE MaxExitDate = @ExitDate;
+
+						INSERT INTO [ODS].[dbo].[CT_PatientStatusCount_Log]([SiteCode],[CreatedDate],[PatientStatusCount])
+						SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientStatusCount 
+						FROM [ODS].[dbo].[CT_PatientStatus]  
+						--WHERE @MaxCreatedDate  > @MaxCreatedDate
+						GROUP BY SiteCode;
+
 						--DROP INDEX CT_PatientStatus ON [ODS].[dbo].[CT_PatientStatus] ;
 						---Remove any duplicate from [ODS].[dbo].[CT_PatientStatus] 
-						WITH CTE AS   
-							(  
-								SELECT [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID,ROW_NUMBER() 
-								OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate ,PatientUnique_ID,PatientStatusUnique_ID
-								ORDER BY [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID) AS dump_ 
-								FROM [ODS].[dbo].[CT_PatientStatus] 
-								)  
+					--	WITH CTE AS   
+					--		(  
+					--			SELECT [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID,ROW_NUMBER() 
+					--			OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate ,PatientUnique_ID,PatientStatusUnique_ID
+					--			ORDER BY [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID) AS dump_ 
+					--			FROM [ODS].[dbo].[CT_PatientStatus] 
+					--			)  
 			
-					DELETE FROM CTE WHERE dump_ >1;
+					--DELETE FROM CTE WHERE dump_ >1;
 
 			
 	END

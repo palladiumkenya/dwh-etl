@@ -1,6 +1,15 @@
 BEGIN
-			--CREATE INDEX CT_Patient ON [ODS].[dbo].[CT_Patient] (sitecode,PatientPK);
-	       ---- Refresh [ODS].[dbo].[CT_Patient]
+			
+			 DECLARE @MaxRegistrationDate_Hist			DATETIME,
+					 @RegistrationDate					DATETIME
+				
+			SELECT @MaxRegistrationDate_Hist =  MAX(MaxRegistrationDate) FROM [ODS].[dbo].[CT_Patient_Log]  (NoLock)
+			SELECT @RegistrationDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
+				
+					
+			INSERT INTO  [ODS].[dbo].[CT_Patient_Log](MaxRegistrationDate,LoadStartDateTime)
+			VALUES(@RegistrationDate,GETDATE())
+
 			MERGE [ODS].[dbo].[CT_Patient] AS a
 				USING(SELECT  P.ID,P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,PKV,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
 						,LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
@@ -56,16 +65,26 @@ BEGIN
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV) 
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV);
 				
+				   UPDATE [ODS].[dbo].[CT_Patient_Log]
+					SET LoadEndDateTime = GETDATE()
+					WHERE MaxRegistrationDate = @RegistrationDate;
+
+					INSERT INTO [ODS].[dbo].[CT_PatientCount_Log]([SiteCode],[CreatedDate],[PatientCount])
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
+					FROM [ODS].[dbo].[CT_Patient] 
+					--WHERE @MaxCreatedDate  > @MaxCreatedDate
+					GROUP BY SiteCode;
+
 				--DROP INDEX CT_Patient ON [ODS].[dbo].[CT_Patient];
 				---Remove any duplicate from [ODS].[dbo].[CT_Patient]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],RegistrationDate,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],RegistrationDate
-						ORDER BY [PatientPK],[SiteCode],RegistrationDate) AS dump_ 
-						FROM [ODS].[dbo].[CT_Patient] 
-						)  
+				--WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],RegistrationDate,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],RegistrationDate
+				--		ORDER BY [PatientPK],[SiteCode],RegistrationDate) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_Patient] 
+				--		)  
 			
-				DELETE FROM CTE WHERE dump_ >1;
+				--DELETE FROM CTE WHERE dump_ >1;
 
 	END

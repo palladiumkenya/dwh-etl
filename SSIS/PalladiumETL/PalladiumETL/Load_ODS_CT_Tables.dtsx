@@ -14,8 +14,8 @@
   DTS:ObjectName="Load_ODS_CT_Tables"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="47"
-  DTS:VersionGUID="{F268058B-9510-4E39-9C2B-3460993AB6C3}">
+  DTS:VersionBuild="48"
+  DTS:VersionGUID="{4CCA5597-E9E1-4E13-B231-A0AD0A699C3B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -324,6 +324,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{55BAF01A-D4EC-49E5-9C8D-14D27A675B96}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load_CT_Covid"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
@@ -342,6 +343,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{97215935-2154-41E0-A25D-348D380D8D47}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:FailParentOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load_CT_DefaulterTracing"

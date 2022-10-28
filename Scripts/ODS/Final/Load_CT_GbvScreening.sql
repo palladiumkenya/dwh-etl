@@ -47,14 +47,14 @@ BEGIN
 				
 				--DROP INDEX CT_GbvScreening ON [ODS].[dbo].[CT_GbvScreening];
 				---Remove any duplicate from [ODS].[dbo].[CT_GbvScreening]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID
-						ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID) AS dump_ 
-						FROM [ODS].[dbo].[CT_GbvScreening] 
-						)  
+				--WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID
+				--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,GbvScreeningUnique_ID) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_GbvScreening] 
+				--		)  
 			
-				DELETE FROM CTE WHERE dump_ >1;
+				--DELETE FROM CTE WHERE dump_ >1;
 
 	END
