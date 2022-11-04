@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/30/2022 8:42:05 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DENNIS"
+  DTS:CreatorName="DENNIS\DENO"
+  DTS:DTSID="{A3D91796-74F6-4FCA-9BF3-AB26B862028D}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.170"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Load_ARTOutcome"
+  DTS:PackageType="5"
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{E941A80D-3E07-4A53-8E50-B4754875EF2A}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DENNIS\SQL2017.NDWH_DB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{E543B6ED-04A7-4E03-8FC8-E3BB0A099E12}"
+      DTS:ObjectName="DENNIS\SQL2017.NDWH_DB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Load_ARTOutcome.sql]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{E1663B15-DAC8-4231-B61E-389B9A51C2F8}"
+      DTS:ObjectName="Load_ARTOutcome.sql">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="D:\palladium\dwh-etl\Scripts\ODS\CT\Load_ARTOutcome.sql" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:PropertyExpression
+    DTS:Name="CheckpointFileName">@[$Project::CheckpointFileName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreationDate">@[$Project::CreationDate]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorComputerName">@[$Project::CreatorComputerName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorName">@[$Project::CreatorName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DelayValidation">@[$Project::DelayValidation]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Description">@[$Project::Description]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DesignTimeProperties">@[$Project::DesignTimeProperties]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Disable">@[$Project::Disable]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DisableEventHandlers">@[$Project::DisableEventHandlers]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpDescriptor">@[$Project::DumpDescriptor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpOnAnyError">@[$Project::DumpOnAnyError]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EnableDump">@[$Project::EnableDump]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EncryptCheckpoints">@[$Project::EncryptCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailPackageOnFailure">@[$Project::FailPackageOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailParentOnFailure">@[$Project::FailParentOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="ForceExecutionValue">@[$Project::ForceExecutionValue]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IgnoreConfigurationsOnLoad">@[$Project::IgnoreConfigurationsOnLoad]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="InteractiveMode">@[$Project::InteractiveMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IsolationLevel">@[$Project::IsolationLevel]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="LocaleID">@[$Project::LocaleID]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaxConcurrentExecutables">@[$Project::MaxConcurrentExecutables]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaximumErrorCount">@[$Project::MaximumErrorCount]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Name">@[$Project::Name]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="OfflineMode">@[$Project::OfflineMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="PackagePassword">@[$Project::PackagePassword]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SQLFolder">@[$Project::SQLFolder]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SafeRecursiveProjectPackageExecution">@[$Project::SafeRecursiveProjectPackageExecution]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SaveCheckpoints">@[$Project::SaveCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SuppressConfigurationWarnings">@[$Project::SuppressConfigurationWarnings]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdateObjects">@[$Project::UpdateObjects]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdatePackage">@[$Project::UpdatePackage]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionBuild">@[$Project::VersionBuild]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionComments">@[$Project::VersionComments]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMajor">@[$Project::VersionMajor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMinor">@[$Project::VersionMinor]</DTS:PropertyExpression>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Landing ARTOutcome"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6A968748-4EC5-4211-AA4B-C3A02745BE6D}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Landing ARTOutcome"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{E543B6ED-04A7-4E03-8FC8-E3BB0A099E12}"
+          SQLTask:SqlStmtSourceType="FileConnection"
+          SQLTask:SqlStatementSource="Load_ARTOutcome.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="208,42.6666666666667"
+          Id="Package\Load Landing ARTOutcome"
+          TopLeft="402.499994002283,18.8499996629357" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
