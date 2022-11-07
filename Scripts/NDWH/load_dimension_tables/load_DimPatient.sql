@@ -21,7 +21,7 @@ with patient_source as (
 	left join All_Staging.dbo.stg_PatientsWABWHOCD4 as wabwhocd4 on patients.PatientPK = wabwhocd4.PatientPK
 		and patients.SiteCode = wabwhocd4.SiteCode
 )
-insert into dbo.DimPatient
 select
 	patient_source.*
+into dbo.DimPatient
 from patient_source;

@@ -1,4 +1,6 @@
 ---DimDate Load
+--- This is just loaded once for dates from 1900 to 2100
+
 declare @sdate date = '1900-01-01', @edate date = '2100-12-31';
 
 with dates_cte(date) as (
@@ -8,7 +10,6 @@ with dates_cte(date) as (
     from dates_cte
     where date < @edate
 )
-insert into dbo.DimDate
 select 
 	format(date, 'yyyyMMdd') as DateKey,
 	Date,
@@ -22,5 +23,6 @@ select
 		when month(date) between 7 and 9 then 4
 	end as CDCFinancialQuarter,
 	cast(getdate() as date) as LoadDate
+into dbo.DimDate
 from dates_CTE
 option (maxrecursion 0);

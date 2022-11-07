@@ -16,7 +16,6 @@ with distinct_ARTOutcomes as (
 		union all
 	select'uL' as ARTOutcome
 )
-insert into dbo.DimARTOutcome
 select 
 	ARTOutcome,
 	case
@@ -30,4 +29,5 @@ select
 		when ARTOutcome = 'uL' then 'Undocumented Loss'
 	end as ARTOutcomeDescription,
 	cast(getdate() as date) as LoadDate
- from distinct_ARTOutcomes;
+into dbo.DimARTOutcome
+from distinct_ARTOutcomes;
