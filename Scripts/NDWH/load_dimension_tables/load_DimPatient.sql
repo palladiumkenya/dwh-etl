@@ -17,8 +17,8 @@ with patient_source as (
 		cast(format(bWHODate,'yyyyMMdd') as int) as DateBaselineWHOKey,
 		cast(getdate() as date) as LoadDate
 	from 
-	All_Staging.dbo.stg_Patients as patients
-	left join All_Staging.dbo.stg_PatientsWABWHOCD4 as wabwhocd4 on patients.PatientPK = wabwhocd4.PatientPK
+	ODS.dbo.CT_Patient as patients
+	left join ODS.dbo.CT_PatientsWABWHOCD4 as wabwhocd4 on patients.PatientPK = wabwhocd4.PatientPK
 		and patients.SiteCode = wabwhocd4.SiteCode
 )
 select
