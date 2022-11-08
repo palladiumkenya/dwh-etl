@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium SSIS\SSIS_Checkpoint\Chekpoint.xml"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\Checkpoint.xml"
   DTS:CheckpointUsage="1"
   DTS:CreationDate="10/18/2022 3:43:31 PM"
   DTS:CreationName="Microsoft.Package"
@@ -14,8 +14,8 @@
   DTS:ObjectName="Load_ODS_CT_Tables"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="50"
-  DTS:VersionGUID="{CFAE3067-6F1B-44B2-8327-AB4A28625D6A}">
+  DTS:VersionBuild="51"
+  DTS:VersionGUID="{3DD862A4-181B-48D2-9C55-840359957E3D}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -26,7 +26,7 @@
       DTS:ObjectName="CT_AdverseEvents.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\CT_AdverseEvents.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\CT_AdverseEvents.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -36,7 +36,7 @@
       DTS:ObjectName="CT_PatientPharmacy.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\CT_PatientPharmacy.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\CT_PatientPharmacy.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -46,7 +46,7 @@
       DTS:ObjectName="CT_PatientStatus.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\CT_PatientStatus.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\CT_PatientStatus.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -56,7 +56,7 @@
       DTS:ObjectName="CT_PatientVisits.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\CT_PatientVisits.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\CT_PatientVisits.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -66,7 +66,7 @@
       DTS:ObjectName="Load_CT_AllergiesChronicIllness.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_AllergiesChronicIllness.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_AllergiesChronicIllness.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -76,7 +76,7 @@
       DTS:ObjectName="Load_CT_ARTPatient.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_ARTPatient.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_ARTPatient.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -86,7 +86,7 @@
       DTS:ObjectName="Load_CT_ContactListing.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_ContactListing.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_ContactListing.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -96,7 +96,7 @@
       DTS:ObjectName="Load_CT_Covid.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_Covid.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_Covid.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -106,7 +106,7 @@
       DTS:ObjectName="Load_CT_DefaulterTracing.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_DefaulterTracing.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_DefaulterTracing.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -116,7 +116,7 @@
       DTS:ObjectName="Load_CT_DepressionScreening.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_DepressionScreening.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_DepressionScreening.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -126,7 +126,7 @@
       DTS:ObjectName="Load_CT_DrugAlcoholScreening.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_DrugAlcoholScreening.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_DrugAlcoholScreening.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -136,7 +136,7 @@
       DTS:ObjectName="Load_CT_EnhancedAdherenceCounselling.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_EnhancedAdherenceCounselling.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_EnhancedAdherenceCounselling.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -146,7 +146,7 @@
       DTS:ObjectName="Load_CT_GbvScreening.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_GbvScreening.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_GbvScreening.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -156,7 +156,7 @@
       DTS:ObjectName="Load_CT_Ipt.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_Ipt.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_Ipt.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -166,7 +166,7 @@
       DTS:ObjectName="Load_CT_Otz.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_Otz.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_Otz.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -176,7 +176,7 @@
       DTS:ObjectName="Load_CT_Ovz.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_Ovz.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_Ovz.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -186,7 +186,7 @@
       DTS:ObjectName="Load_CT_Patient.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_Patient.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_Patient.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -196,7 +196,7 @@
       DTS:ObjectName="Load_CT_PatientLabs.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium SSIS\dwh-etl-dev\Scripts\ODS\Final\Load_CT_PatientLabs.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_PatientLabs.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -206,19 +206,19 @@
       DTS:ObjectName="Load_CT_PatientsWABWHOCD4.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="D:\palladium\dwh-etl\Scripts\ODS\Final\Load_CT_PatientsWABWHOCD4.sql" />
+          DTS:ConnectionString="C:\Palladium\dwh-etl\dwh-etl-dev\SSIS\PalladiumETL\Scripts\ODS\Final\Load_CT_PatientsWABWHOCD4.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[OLE_DB_SQL2017_Dest.ODS]"
+      DTS:refId="Package.ConnectionManagers[OLE_DB.ODS_Src]"
       DTS:CreationName="OLEDB"
       DTS:DTSID="{2EFA8763-E778-411E-B3B3-526C49ACC469}"
-      DTS:ObjectName="OLE_DB_SQL2017_Dest.ODS">
+      DTS:ObjectName="OLE_DB.ODS_Src">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=WIN-LQ135V1RIG4;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Load_ODS_CT_Tables-{2EFA8763-E778-411E-B3B3-526C49ACC469}DENNIS\SQL2017.ODS;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Load_ODS_CT_Tables-{2EFA8763-E778-411E-B3B3-526C49ACC469}DENNIS\SQL2017.ODS;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -343,6 +343,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{97215935-2154-41E0-A25D-348D380D8D47}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:FailParentOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load_CT_DefaulterTracing"
@@ -360,6 +361,7 @@
       DTS:refId="Package\Load_CT_DepressionScreening"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{C148DB2F-075B-486F-8701-1467EDF4FCD5}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:FailPackageOnFailure="True"
@@ -3668,7 +3670,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
           Id="Package\Load_CT_PatientsWABWHOCD4"
           TopLeft="981.249985378236,117.433331543406" />
         <NodeLayout
-          Size="242,42.6666666666667"
+          Size="198,42.6666666666667"
           Id="Package\Script_Task_To_Send_Emails_On_Start"
           TopLeft="39.3749994132668,22.7499995931983" />
         <NodeLayout
@@ -3699,18 +3701,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="281.374999413267,43.9833330892523">
+          TopLeft="237.374999413267,43.9833330892523">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="22.9999960511922,0"
+              EndConnector="66.9999960511924,0"
               Start="0,0"
-              End="15.4999960511922,0">
+              End="59.4999960511924,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="15.4999960511922,0" />
+                    End="59.4999960511924,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

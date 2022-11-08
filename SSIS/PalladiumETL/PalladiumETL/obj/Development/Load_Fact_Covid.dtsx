@@ -13,10 +13,51 @@
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
   DTS:VersionBuild="28"
-  DTS:VersionGUID="{1F0B31B8-67D3-453E-9438-3E7EAA4CBA62}">
+  DTS:VersionGUID="{212BDECB-27F1-4B53-A192-B2C369ECB94A}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_Destination]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{88EAEF28-AFBB-4EFA-BF68-4F82EF45C0CB}"
+      DTS:ObjectName="OLE_DB_Destination">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_Destination_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_Destination_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_Destination_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_Destination_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_Destination]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_Destination_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_Destination_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_Destination_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_Destination_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_Destination_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_Destination_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_Destination_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=sa;Initial Catalog=STAGING_DB;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABSBIw+9Ph5AcqpdOKygD/wZUU69PixB3guqVbqNPXHDwAAAAAOgAAAAAIAACAAAABEQ1IsIwjqfqYLs8dqq291B/iiDR/3kFfVB5A8e83+BRAAAACyQGENIe/IicqtC0IxZCB6QAAAAGKRNQC6+oasZYyODNI0CalSL4yy9mmIPcrXllV+JuiFS/yi2Ki6ttEYs0P1KrurWld2ITMDPvrhyGjfjWJEVhI</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB_DWAPICental_Src]"
       DTS:CreationName="OLEDB"
@@ -54,7 +95,7 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADjT+/hmFUZc7UuuGGmuBthLJO/qUeYZ7M61EnnvxgvhgAAAAAOgAAAAAIAACAAAACbIf055C1c0xjajzIGtV3KGL0yCzJ9Jn3JTH/aP/D30RAAAAAme5hmJ6UpYqeEZ7FjMWQnQAAAAEG+noT5cxsgky4AXq6fWmTVx71wWGwA2/Cc7ZxGl85vVO5kj4bhY/fj9/zWH2QjJwsCauw2spcAfdiz+wMYEuc</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAA09te3aab13dlSWPYC5kfjjWPE5zJkjxG7wr8dkFiJDwAAAAAOgAAAAAIAACAAAABfJevoKiP6ES/huRU1mbhUbzVfJvJVOGZJ01pPfe8aIhAAAAB4OiWCNFfxSLuyYmxqJRSrQAAAAKXMy5lYXIfItOqeVJ3nPX9asq6dZ1Dj4VoVp58a7pMFNIGDx7NCG42jAe0743ahFkBxHymWidSrxuZ8LVt3yQU</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
@@ -95,7 +136,7 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAAQtu5JqsrTh4JcCF1rPRCsp6zLLdY4ZJ1jeHDt3plkowAAAAAOgAAAAAIAACAAAAA1wEEH6ZBWfQzHQU7wFnc2U654wqzU/OAtHvTQiLDG0xAAAAAr08ZpOvlzOb/+qjSnBw2tQAAAAPOKc3kLySMZ0sTE8Bk/Tl4ePyU6okfWbEzqp3UtPuCgg++szqBTPAPgI26JC4REyTG85rNrZQ22Rowbwss0Cys</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADN0t72/iS23rcN6oCJ6q/RXfWls/7pUsRNPheuAiVFbwAAAAAOgAAAAAIAACAAAAClJs+AZV2xrLhCni9GVNK5LHoEBMeJZCtatFKXOViDuBAAAACdvDjhDkS4FOKb3bTz0R52QAAAAPHxYuXiTd/6B6V4zoSBrhq+stvy+lNS3UD+vcbG/hdD/Lt3SsYZcc21xG19V6Mt1CYM/w/FBldPw4y7Gc+OXlY</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
@@ -136,7 +177,7 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACiTSLHVpxKz8wDrA/uzZFJUqebR1sRP0O+6FnHKbUdXQAAAAAOgAAAAAIAACAAAADxdtVZ34Y6U1TRFcH2Y4hhGEo/pk0htd7EmjPfKXLPmxAAAAABYNCwe9G397MKyM1BPRFOQAAAAF2JHAoLr8SOrpBkn+vslrFetEyRWIMGWSHFOeP5slQV5KrrbOAK81n6RI2+03A8Io8pGnM4aZzwcn3zR4uGT7U</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABU3nIxb9XmTsFz6ZVLyv7WhBJKtK9fL5EGQMjxW43IWgAAAAAOgAAAAAIAACAAAADaUFznmwIEEqUPdHLtp5sDxVYRPDbVDv/vBWeiRdZc9xAAAAA81OS9729D34sFreUPK9BMQAAAACVM52bO3ZUJaWPK3AN1DyouDOEPDOoee5nensC2ZDKn9JobvTlcjqiPZyLCPnehecDo6mTvH0PA0sSyANg4d70</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
