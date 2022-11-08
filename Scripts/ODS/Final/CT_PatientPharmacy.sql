@@ -2,7 +2,7 @@ BEGIN
 	      DECLARE @MaxDispenseDate_Hist			DATETIME,
 				  @DispenseDate					DATETIME,
 				  @MaxCreatedDate				DATETIME
-				
+
 		SELECT @MaxDispenseDate_Hist =  MAX(MaxDispenseDate) FROM [ODS].[dbo].[CT_PharmacyVisit_Log]  (NoLock)
 		SELECT @DispenseDate = MAX(DispenseDate) FROM [DWAPICentral].[dbo].[PatientPharmacyExtract] WITH (NOLOCK) 
 		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) 

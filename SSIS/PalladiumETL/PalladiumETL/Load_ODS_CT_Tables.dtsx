@@ -361,6 +361,7 @@
       DTS:refId="Package\Load_CT_DepressionScreening"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{C148DB2F-075B-486F-8701-1467EDF4FCD5}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:FailPackageOnFailure="True"

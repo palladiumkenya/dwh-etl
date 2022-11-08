@@ -240,6 +240,7 @@
       DTS:refId="Package\Execute Load_ARTOutcome"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{6638E5CC-B92D-4B27-BB9B-2E0B5BAA291A}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:LocaleID="-1"

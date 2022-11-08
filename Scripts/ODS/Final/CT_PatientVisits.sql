@@ -7,7 +7,7 @@ BEGIN
 		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Visit_Log]  (NoLock);
 		SELECT @VisitDate			= MAX(VisitDate)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK) ;
 		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) ;
-
+				
 		--insert into  [ODS].[dbo].[CT_VisitCount_Log](CreatedDate)
 		--values(dateadd(year,-1,getdate()))
 
@@ -16,6 +16,8 @@ BEGIN
 					INSERT INTO  [ODS].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
 					VALUES(@VisitDate,GETDATE());
 
+	       ---- Refresh [ODS].[dbo].[CT_PatientVisits]
+		   --truncate table [ODS].[dbo].[CT_PatientVisits]
 			MERGE [ODS].[dbo].[CT_PatientVisits] AS a
 				USING(SELECT distinct P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
 						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
@@ -116,7 +118,7 @@ BEGIN
 
 			UPDATE [ODS].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
-			WHERE MaxVisitDate = @VisitDate;
+				  WHERE MaxVisitDate = @VisitDate;
 
 			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
 			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
@@ -125,6 +127,8 @@ BEGIN
 			GROUP BY SiteCode;
 
 
+			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
+			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
 			--WITH CTE AS   
 			--	(  
 			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID,ROW_NUMBER() 

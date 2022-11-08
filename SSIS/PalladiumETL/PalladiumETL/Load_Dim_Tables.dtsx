@@ -1008,6 +1008,8 @@
         DTS:Name="RunInOptimizedMode">@[$Project::LoadDimDrug_RunInOptimizedMode]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <pipeline
+          BLOBTempStoragePath=""
+          bufferTempStoragePath=""
           version="1" />
       </DTS:ObjectData>
     </DTS:Executable>
@@ -6848,6 +6850,8 @@
         DTS:Name="RunInOptimizedMode">@[$Project::LoadDimTreatmentType_RunInOptimizedMode]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <pipeline
+          BLOBTempStoragePath=""
+          bufferTempStoragePath=""
           version="1" />
       </DTS:ObjectData>
     </DTS:Executable>
