@@ -1,0 +1,1844 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/27/2022 3:16:31 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DENNIS"
+  DTS:CreatorName="DENNIS\DENO"
+  DTS:DTSID="{5D10D114-1542-4A3B-AC4E-DA37E4C0D082}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.845.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="SendEmails"
+  DTS:PackageType="5"
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="28"
+  DTS:VersionGUID="{5BCB3B5B-207E-481C-9EE9-C685DCB1C2CA}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_Destination]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{B67E9E16-145C-4F44-ADAC-65FB5967136E}"
+      DTS:ObjectName="OLE_DB_Destination">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_Destination_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_Destination_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_Destination_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_Destination_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_Destination]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_Destination_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_Destination_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_Destination_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_Destination_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_Destination_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_Destination_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_Destination_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=sa;Initial Catalog=STAGING_DB;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACY6+AJCK6EMqmK2jDdoC9RfO/h28Kg12X0IGqNvEOtYgAAAAAOgAAAAAIAACAAAAAl3UWTUq2lIwOo45IKSkDj7N1JTMeL3NTy1CxCE5OSXBAAAABk5323RvQ/9uRxTeMGg6QQQAAAAMHCx4k1o4KEL04DdmmmxvNlWQ/QeMazD6aW4uqZMSTY38RsFzQvZXS2moyZv7hGrMxxBseBltoqiU+qAQOKjgY</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_DWAPICental_Src]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{493B5239-9CAF-4903-AF0B-CAEB9EB58942}"
+      DTS:ObjectName="OLE_DB_DWAPICental_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_DWAPICental_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_DWAPICental_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_DWAPICental_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_DWAPICental_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_DWAPICental_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_DWAPICental_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_DWAPICental_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_DWAPICental_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_DWAPICental_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_DWAPICental_Src_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABtMJCTXIKfR7ePu2D8qpzkt+sEJDkoki2qGyzjhagqsgAAAAAOgAAAAAIAACAAAADfSdl9MZjDi01zEStMPZekRz0I/1NOwiz978wRzG8XZhAAAACPvKC+pfSQkpZnJJZsV8UFQAAAAOVmVYpTQg1vxchd3F+KCP1+Vb+PqafONA/I0iXAy2ehl4EwzkMMTEQ61Lzmuzm03gKNTmYVHIjz1n8M4dCXFK8</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_NDWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C4ED4657-A0C4-4FF0-9159-0925F4631A96}"
+      DTS:ObjectName="OLE_DB_NDWH">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_NDWH_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_NDWH_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_NDWH_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_NDWH_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_NDWH]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_NDWH_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_NDWH_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_NDWH_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_NDWH_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_NDWH_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_NDWH_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_NDWH_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABr3+zclKC79u01mSo6NElAiqjbW1NiMKdPHvIB65OvfgAAAAAOgAAAAAIAACAAAAB2UWkmdAfWEd9fiSjkBY7Wi1r6DGJdILd9ITcly96w9xAAAAAxyxluRvA+uh+Z5Bkg96l0QAAAAD1EAu5yftztqydeJ17HgbbErog5/WjfzZltZ+/6IrkIarFVcNd1db5z3Ox/lWx1KDbmPNV5jMVq2LHLwRDo3J0</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_ODS_Src]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{9E32B875-FE23-424B-ACA4-59388C913CFC}"
+      DTS:ObjectName="OLE_DB_ODS_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_ODS_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_ODS_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_ODS_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_ODS_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_ODS_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_ODS_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_ODS_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_ODS_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_ODS_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_ODS_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_ODS_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_ODS_Src_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADMplYlBVdWWVgGXxl8tHmRoMflkQcfZVugO9eFPBKf9gAAAAAOgAAAAAIAACAAAAAqKY5w/rNIxd2AY4b0q1jER7IwEuGbhb5O6TBLzrOJvxAAAABkeAUBR5JOVaLPUg0ZedsjQAAAABwu6hwIekOS/5Th/Gs4UyrgSKr0/+llnxZAiHLk1I0ENHKcjiafnX1k/vaRYYFnlKpwXLIGMxJi+CkVKUz5/o0</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{51AD1D48-46B5-4821-9F06-C4F7FB0A19CE}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_FacilitySqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Facility]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{7BC3E3A3-F7C0-434B-B886-CC36AF4CAD13}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_FacilitySqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Facility]) [refTable]
+where [refTable].[MFL_Code] = ?</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{A472D150-7EE6-4FBC-859C-0F87E324062F}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_PatientSqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Patient]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{DFB212C2-606B-4CC8-8041-EEDD11899EA6}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LkpDim_PatientSqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Patient]) [refTable]
+where [refTable].[PatientID] = ? and [refTable].[PatientPK] = ? and [refTable].[SiteCode] = ?</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{B2F9BF11-593A-494B-B514-BC8FDCC09A1E}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LookupSqlCommand">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from [dbo].[Dim_Date]</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{6E4BF71A-93FC-4AF7-8D05-E77A1EDCE39F}"
+      DTS:ObjectName="LoadFact_ARTOutcome_LookupSqlCommandParam">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">select * from (select * from [dbo].[Dim_Date]) [refTable]
+where [refTable].[DateAlternateKey] = ?</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:PropertyExpression
+    DTS:Name="CheckpointFileName">@[$Project::CheckpointFileName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreationDate">@[$Project::CreationDate]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorComputerName">@[$Project::CreatorComputerName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorName">@[$Project::CreatorName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DelayValidation">@[$Project::DelayValidation]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Description">@[$Project::Description]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DesignTimeProperties">@[$Project::DesignTimeProperties]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Disable">@[$Project::Disable]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DisableEventHandlers">@[$Project::DisableEventHandlers]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpDescriptor">@[$Project::DumpDescriptor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpOnAnyError">@[$Project::DumpOnAnyError]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EnableDump">@[$Project::EnableDump]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EncryptCheckpoints">@[$Project::EncryptCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailPackageOnFailure">@[$Project::FailPackageOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailParentOnFailure">@[$Project::FailParentOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="ForceExecutionValue">@[$Project::ForceExecutionValue]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IgnoreConfigurationsOnLoad">@[$Project::IgnoreConfigurationsOnLoad]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="InteractiveMode">@[$Project::InteractiveMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IsolationLevel">@[$Project::IsolationLevel]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="LocaleID">@[$Project::LocaleID]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaxConcurrentExecutables">@[$Project::MaxConcurrentExecutables]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaximumErrorCount">@[$Project::MaximumErrorCount]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Name">@[$Project::Name]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="OfflineMode">@[$Project::OfflineMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="PackagePassword">@[$Project::PackagePassword]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SQLFolder">@[$Project::SQLFolder]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SafeRecursiveProjectPackageExecution">@[$Project::SafeRecursiveProjectPackageExecution]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SaveCheckpoints">@[$Project::SaveCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SuppressConfigurationWarnings">@[$Project::SuppressConfigurationWarnings]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdateObjects">@[$Project::UpdateObjects]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdatePackage">@[$Project::UpdatePackage]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionBuild">@[$Project::VersionBuild]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionComments">@[$Project::VersionComments]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMajor">@[$Project::VersionMajor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMinor">@[$Project::VersionMinor]</DTS:PropertyExpression>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Fact_ARTOutcome"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{3FB96CB4-5C97-4ACF-AC48-954726865151}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Fact_ARTOutcome"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="[Lookup].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LookupSqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lookup].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LookupSqlCommandParam]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Facility].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LkpDim_FacilitySqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Facility].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LkpDim_FacilitySqlCommandParam]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Patient].[SqlCommand]">@[$Package::LoadFact_ARTOutcome_LkpDim_PatientSqlCommand]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="[Lkp Dim_Patient].[SqlCommandParam]">@[$Package::LoadFact_ARTOutcome_LkpDim_PatientSqlCommandParam]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Fact_ARTOutcome\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input].Columns[PatientPK]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="PatientPK"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input].Columns[MFLCode]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MFLCode"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[MFLCode]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]"
+                      name="_PatientPK"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="255"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]"
+                      name="_MFLCode"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[MFLCode]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lkp Dim_Facility"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[Dim_Facility]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[Dim_Facility]) [refTable]
+where [refTable].[MFL_Code] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="FacilityKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CountyKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SubCountyKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="AgencyKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MFL_Code" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Facility Name" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="County" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="SubCounty" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Owner" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Latitude" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Longitude" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="SDP" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="SDP Agency" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Implementation" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="EMR" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="EMR Status" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="HTS Use" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="HTS Deployment" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="HTS Status" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="IL Status" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Registration IE" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Phamarmacy IE" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="mlab" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Ushauri" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Nishauri" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Appointment Management IE" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="OVC" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="OTZ" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PrEP" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="3PM" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="AIR" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="KP" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="MCH" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="TB" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Lab Manifest" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Comments" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Project" dataType="DT_WSTR" length="100" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Load_DTS" dataType="DT_DBTIMESTAMP" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input].Columns[_MFLCode]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="_MFLCode"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">MFL_Code</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Match Output].Columns[FacilityKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Match Output].Columns[FacilityKey]"
+                      name="FacilityKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">FacilityKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lkp Dim_Patient"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[Dim_Patient]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[Dim_Patient]) [refTable]
+where [refTable].[PatientID] = ? and [refTable].[PatientPK] = ? and [refTable].[SiteCode] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="PatientKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FacilityKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="GenderKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MaritalStatusKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EmrTypeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EducationLevelKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CountyKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SubCountyKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PatientTypeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PopulationTypeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="OccupationKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PatientID" dataType="DT_WSTR" length="100" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PatientPK" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SiteCode" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="FacilityName" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Gender" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="DOB" dataType="DT_DBTIMESTAMP2" length="0" precision="0" scale="7" codePage="0"/&gt;&lt;referenceColumn name="RegistrationDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="RegistrationAtCCC" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="RegistrationAtPMTCT" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="RegistrationAtTBClinic" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PatientSource" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Region" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="District" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Village" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="ContactRelation" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="LastVisit" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MaritalStatus" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="EducationLevel" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="DateConfirmedHIVPositive" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PreviousARTExposure" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PreviousARTStartDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Emr" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Project" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="DateImported" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PKV" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientUID" dataType="DT_GUID" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="RegistrationYear" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MPIPKV" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Orphan" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="Inschool" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientType" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PopulationType" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="KeyPopulationType" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentCounty" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentSubCounty" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentLocation" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentSubLocation" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentWard" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PatientResidentVillage" dataType="DT_STR" length="250" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="TransferInDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Occupation" dataType="DT_WSTR" length="150" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="NUPI" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Load_DTS" dataType="DT_DBTIMESTAMP" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]};#{Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]};#{Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input].Columns[PatientID]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="PatientID"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">PatientID</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input].Columns[_PatientPK]"
+                      cachedDataType="i4"
+                      cachedName="_PatientPK"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">PatientPK</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input].Columns[_MFLCode]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="_MFLCode"
+                      lineageId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output].Columns[_MFLCode]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">SiteCode</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Match Output].Columns[PatientKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Match Output].Columns[PatientKey]"
+                      name="PatientKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">PatientKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Fact_ARTOutcome\Load Fact Table"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Load Fact Table"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Fact_ARTOutcomes]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Fact_ARTOutcome\Load Fact Table.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[PatientKey]"
+                      cachedDataType="i4"
+                      cachedName="PatientKey"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[PatientKey]"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Match Output].Columns[PatientKey]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[FacilityKey]"
+                      cachedDataType="i4"
+                      cachedName="FacilityKey"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[FacilityKey]"
+                      lineageId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Match Output].Columns[FacilityKey]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[ARTOutome]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="ARTOutome"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[ARTOutcome]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTOutome]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[AsOfDate_DateKey]"
+                      cachedDataType="i4"
+                      cachedName="AsOfDate_DateKey"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AsOfDateKey]"
+                      lineageId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Match Output].Columns[AsOfDate_DateKey]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[Gender]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="Gender"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[Gender]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[Gender]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[AgeLastVisit]"
+                      cachedDataType="i4"
+                      cachedName="AgeLastVisit"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgeLastVisit]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeLastVisit]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[AgeEnrollment]"
+                      cachedDataType="i4"
+                      cachedName="AgeEnrollment"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgeEnrollment]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeEnrollment]" />
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].Columns[AsOfDate]"
+                      cachedDataType="dbDate"
+                      cachedName="AsOfDate"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AsOfDate]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AsOfDate]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[FactARTStatusKey]"
+                      dataType="i4"
+                      name="FactARTStatusKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[PatientKey]"
+                      dataType="i4"
+                      name="PatientKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[FacilityKey]"
+                      dataType="i4"
+                      name="FacilityKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgencyKey]"
+                      dataType="i4"
+                      name="AgencyKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[PartnerKey]"
+                      dataType="i4"
+                      name="PartnerKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgeGroupKey]"
+                      dataType="i4"
+                      name="AgeGroupKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[PopulationTypeKey]"
+                      dataType="i4"
+                      name="PopulationTypeKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[EnrollmentDateKey]"
+                      dataType="i4"
+                      name="EnrollmentDateKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[NextAppointmentDateKey]"
+                      dataType="i4"
+                      name="NextAppointmentDateKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[ARTOutcome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ARTOutcome" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[StartRegimenKey]"
+                      dataType="i4"
+                      name="StartRegimenKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[MOHAgeBandKey]"
+                      dataType="i4"
+                      name="MOHAgeBandKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[KeyPopulationTypeKey]"
+                      dataType="i4"
+                      name="KeyPopulationTypeKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[CurrentRegimenKey]"
+                      dataType="i4"
+                      name="CurrentRegimenKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[StartRegimenLineKey]"
+                      dataType="i4"
+                      name="StartRegimenLineKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[DateLastVisitKey]"
+                      dataType="i4"
+                      name="DateLastVisitKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[StartARTDateKey]"
+                      dataType="i4"
+                      name="StartARTDateKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[DateConfirmedHIVPositiveKey]"
+                      dataType="i4"
+                      name="DateConfirmedHIVPositiveKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AsOfDateKey]"
+                      dataType="i4"
+                      name="AsOfDateKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[Load_DTS]"
+                      dataType="bytes"
+                      length="8"
+                      name="Load_DTS" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgeLastVisit]"
+                      dataType="i4"
+                      name="AgeLastVisit" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AgeEnrollment]"
+                      dataType="i4"
+                      name="AgeEnrollment" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input].ExternalColumns[AsOfDate]"
+                      dataType="dbDate"
+                      name="AsOfDate" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Load Fact Table.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Load Fact Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Load Fact Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Load Fact Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Fact_ARTOutcome\Lookup"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lookup"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[Dim_Date]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[Dim_Date]) [refTable]
+where [refTable].[DateAlternateKey] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DateAlternateKey" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayNumberOfWeek" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayNameOfWeek" dataType="DT_WSTR" length="9" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayNumberOfMonth" dataType="DT_I2" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfMonth" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayNumberOfYear" dataType="DT_I2" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfYear" dataType="DT_WSTR" length="3" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="WeekNumberOfMonth" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="ISOWeekNumberOfYear" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="ISOWeekOfYear" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="WeekNumberOfYear" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="WeekOfYear" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MonthName" dataType="DT_WSTR" length="9" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MonthNumberOfYear" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="MonthOfYear" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CalendarQuarter" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CalendarQuarterName" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CalendarSemester" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CalendarSemesterName" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CalendarYear" dataType="DT_I2" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FiscalQuarter" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FiscalQuarterName" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FiscalSemester" dataType="DT_UI1" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FiscalSemesterName" dataType="DT_WSTR" length="2" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FiscalYear" dataType="DT_I2" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EffectiveDate" dataType="DT_DBTIMESTAMP" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="LastUpdateDate" dataType="DT_DBTIMESTAMP" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="AllowAutoUpdateBitFlag" dataType="DT_BOOL" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="WorkDay" dataType="DT_STR" length="8" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="IsWorkDay" dataType="DT_BOOL" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EOMONTHDATE" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="workingDays" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AsOfDate]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Fact_ARTOutcome\Lookup.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input].Columns[AsOfDate]"
+                      cachedDataType="dbDate"
+                      cachedName="AsOfDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AsOfDate]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">DateAlternateKey</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Match Output].Columns[AsOfDate_DateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Match Output].Columns[AsOfDate_DateKey]"
+                      name="AsOfDate_DateKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">DateKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Fact_ARTOutcome\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Landing_ARTOutcomeReport]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Fact_ARTOutcome\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_NDWH]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientID]"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]"
+                      name="PatientID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientPK]"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]"
+                      name="PatientPK"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[MFLCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[MFLCode]"
+                      length="255"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[MFLCode]"
+                      name="MFLCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[FacilityName]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FacilityName]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[FacilityName]"
+                      name="FacilityName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CTPartner]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTPartner]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CTPartner]"
+                      name="CTPartner"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CTAgency]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTAgency]"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CTAgency]"
+                      name="CTAgency"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[County]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[County]"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[County]"
+                      name="County"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[Subcounty]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Subcounty]"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[Subcounty]"
+                      name="Subcounty"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PopulationType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PopulationType]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[PopulationType]"
+                      name="PopulationType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[KeyPopulationType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[KeyPopulationType]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[KeyPopulationType]"
+                      name="KeyPopulationType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CurrentRegimen]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CurrentRegimen]"
+                      length="150"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[CurrentRegimen]"
+                      name="CurrentRegimen"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Gender]"
+                      length="10"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[Gender]"
+                      name="Gender"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeLastVisit]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AgeLastVisit]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeLastVisit]"
+                      name="AgeLastVisit"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[EnrollmentDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EnrollmentDate]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[EnrollmentDate]"
+                      name="EnrollmentDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeEnrollment]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AgeEnrollment]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AgeEnrollment]"
+                      name="AgeEnrollment"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartRegimen]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartRegimen]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartRegimen]"
+                      name="StartRegimen"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartRegimenLine]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartRegimenLine]"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartRegimenLine]"
+                      name="StartRegimenLine"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTOutome]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ARTOutome]"
+                      length="2"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTOutome]"
+                      name="ARTOutome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AsOfDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AsOfDate]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[AsOfDate]"
+                      name="AsOfDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateLastVisit]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateLastVisit]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateLastVisit]"
+                      name="DateLastVisit"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NextAppointmentDate]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[NextAppointmentDate]"
+                      name="NextAppointmentDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartARTDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartARTDate]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[StartARTDate]"
+                      name="StartARTDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateConfirmedHIVPositive]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateConfirmedHIVPositive]"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].Columns[DateConfirmedHIVPositive]"
+                      name="DateConfirmedHIVPositive"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientID]"
+                      dataType="wstr"
+                      length="50"
+                      name="PatientID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientPK]"
+                      dataType="wstr"
+                      length="50"
+                      name="PatientPK" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[MFLCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="MFLCode" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FacilityName]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      name="FacilityName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTPartner]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      name="CTPartner" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTAgency]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="CTAgency" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[County]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="County" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Subcounty]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="Subcounty" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      name="PopulationType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[KeyPopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      name="KeyPopulationType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CurrentRegimen]"
+                      dataType="wstr"
+                      length="150"
+                      name="CurrentRegimen" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AgeLastVisit]"
+                      dataType="i4"
+                      name="AgeLastVisit" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EnrollmentDate]"
+                      dataType="dbDate"
+                      name="EnrollmentDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AgeEnrollment]"
+                      dataType="i4"
+                      name="AgeEnrollment" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartRegimen]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      name="StartRegimen" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartRegimenLine]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      name="StartRegimenLine" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ARTOutome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="ARTOutome" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AsOfDate]"
+                      dataType="dbDate"
+                      name="AsOfDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateLastVisit]"
+                      dataType="dbDate"
+                      name="DateLastVisit" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      name="NextAppointmentDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StartARTDate]"
+                      dataType="dbDate"
+                      name="StartARTDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateConfirmedHIVPositive]"
+                      dataType="dbDate"
+                      name="DateConfirmedHIVPositive" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientID]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientID]"
+                      name="PatientID" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
+                      name="PatientPK" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[MFLCode]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[MFLCode]"
+                      name="MFLCode" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
+                      name="FacilityName" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTPartner]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTPartner]"
+                      name="CTPartner" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTAgency]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTAgency]"
+                      name="CTAgency" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[County]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[County]"
+                      name="County" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Subcounty]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Subcounty]"
+                      name="Subcounty" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
+                      name="PopulationType" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
+                      name="KeyPopulationType" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CurrentRegimen]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CurrentRegimen]"
+                      name="CurrentRegimen" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Gender]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Gender]"
+                      name="Gender" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AgeLastVisit]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AgeLastVisit]"
+                      name="AgeLastVisit" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EnrollmentDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EnrollmentDate]"
+                      name="EnrollmentDate" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AgeEnrollment]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AgeEnrollment]"
+                      name="AgeEnrollment" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartRegimen]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartRegimen]"
+                      name="StartRegimen" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartRegimenLine]"
+                      codePage="1252"
+                      dataType="str"
+                      length="250"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartRegimenLine]"
+                      name="StartRegimenLine" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ARTOutome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ARTOutome]"
+                      name="ARTOutome" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AsOfDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AsOfDate]"
+                      name="AsOfDate" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateLastVisit]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateLastVisit]"
+                      name="DateLastVisit" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
+                      name="NextAppointmentDate" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartARTDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StartARTDate]"
+                      name="StartARTDate" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateConfirmedHIVPositive]"
+                      dataType="dbDate"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateConfirmedHIVPositive]"
+                      name="DateConfirmedHIVPositive" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Fact_ARTOutcome.Paths[Data Conversion Output]"
+              endId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Inputs[Lookup Input]"
+              name="Data Conversion Output"
+              startId="Package\Load Fact_ARTOutcome\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Load Fact_ARTOutcome.Paths[Lookup Match Output]"
+              endId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Inputs[Lookup Input]"
+              name="Lookup Match Output"
+              startId="Package\Load Fact_ARTOutcome\Lkp Dim_Patient.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\Load Fact_ARTOutcome.Paths[Lookup Match Output1]"
+              endId="Package\Load Fact_ARTOutcome\Lookup.Inputs[Lookup Input]"
+              name="Lookup Match Output"
+              startId="Package\Load Fact_ARTOutcome\Lkp Dim_Facility.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\Load Fact_ARTOutcome.Paths[Lookup Match Output2]"
+              endId="Package\Load Fact_ARTOutcome\Load Fact Table.Inputs[OLE DB Destination Input]"
+              name="Lookup Match Output"
+              startId="Package\Load Fact_ARTOutcome\Lookup.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\Load Fact_ARTOutcome.Paths[OLE DB Source Output]"
+              endId="Package\Load Fact_ARTOutcome\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load Fact_ARTOutcome\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="157.333333333334,42.6666666666667"
+          Id="{112A9DDD-1931-48A3-9AA8-2F5B91A5A1E1}"
+          TopLeft="28.1666666666667,5.49999999999993" />
+        <NodeLayout
+          Size="132,42.6666666666667"
+          Id="{478523CE-3C0C-4073-B370-A12D71F15308}"
+          TopLeft="330.624995073304,18.1999996745586" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

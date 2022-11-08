@@ -1,0 +1,1937 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/27/2022 3:16:31 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DENNIS"
+  DTS:CreatorName="DENNIS\DENO"
+  DTS:DTSID="{1D48EE43-1778-44FE-970A-E19B03EC64C9}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.845.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="SendEmails"
+  DTS:PackageType="5"
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="28"
+  DTS:VersionGUID="{1F0B31B8-67D3-453E-9438-3E7EAA4CBA62}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_DWAPICental_Src]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{8AC0987B-6DCC-4F06-AE52-C25BD466C8E5}"
+      DTS:ObjectName="OLE_DB_DWAPICental_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_DWAPICental_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_DWAPICental_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_DWAPICental_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_DWAPICental_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_DWAPICental_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_DWAPICental_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_DWAPICental_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_DWAPICental_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_DWAPICental_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_DWAPICental_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_DWAPICental_Src_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADjT+/hmFUZc7UuuGGmuBthLJO/qUeYZ7M61EnnvxgvhgAAAAAOgAAAAAIAACAAAACbIf055C1c0xjajzIGtV3KGL0yCzJ9Jn3JTH/aP/D30RAAAAAme5hmJ6UpYqeEZ7FjMWQnQAAAAEG+noT5cxsgky4AXq6fWmTVx71wWGwA2/Cc7ZxGl85vVO5kj4bhY/fj9/zWH2QjJwsCauw2spcAfdiz+wMYEuc</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_NDWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{B8245F48-8FFA-438C-8181-E71AC08DBAF7}"
+      DTS:ObjectName="OLE_DB_NDWH">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_NDWH_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_NDWH_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_NDWH_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_NDWH_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_NDWH]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_NDWH_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_NDWH_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_NDWH_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_NDWH_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_NDWH_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_NDWH_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_NDWH_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAAQtu5JqsrTh4JcCF1rPRCsp6zLLdY4ZJ1jeHDt3plkowAAAAAOgAAAAAIAACAAAAA1wEEH6ZBWfQzHQU7wFnc2U654wqzU/OAtHvTQiLDG0xAAAAAr08ZpOvlzOb/+qjSnBw2tQAAAAPOKc3kLySMZ0sTE8Bk/Tl4ePyU6okfWbEzqp3UtPuCgg++szqBTPAPgI26JC4REyTG85rNrZQ22Rowbwss0Cys</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB_ODS_Src]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{136282BF-BA54-45D7-8368-A309BF2C72F2}"
+      DTS:ObjectName="OLE_DB_ODS_Src">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectByProxy">@[$Project::OLE_DB_ODS_Src_ConnectByProxy]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryCount">@[$Project::OLE_DB_ODS_Src_ConnectRetryCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectRetryInterval">@[$Project::OLE_DB_ODS_Src_ConnectRetryInterval]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectUsingManagedIdentity">@[$Project::OLE_DB_ODS_Src_ConnectUsingManagedIdentity]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::OLE_DB_ODS_Src]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Project::OLE_DB_ODS_Src_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::OLE_DB_ODS_Src_InitialCatalog]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Project::OLE_DB_ODS_Src_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Password">@[$Project::OLE_DB_ODS_Src_Password]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RetainSameConnection">@[$Project::OLE_DB_ODS_Src_RetainSameConnection]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLE_DB_ODS_Src_ServerName]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="UserName">@[$Project::OLE_DB_ODS_Src_UserName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg91GL0mG5U64SolQopgQZwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACiTSLHVpxKz8wDrA/uzZFJUqebR1sRP0O+6FnHKbUdXQAAAAAOgAAAAAIAACAAAADxdtVZ34Y6U1TRFcH2Y4hhGEo/pk0htd7EmjPfKXLPmxAAAAABYNCwe9G397MKyM1BPRFOQAAAAF2JHAoLr8SOrpBkn+vslrFetEyRWIMGWSHFOeP5slQV5KrrbOAK81n6RI2+03A8Io8pGnM4aZzwcn3zR4uGT7U</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{CF013124-147C-420D-ABD1-187608CFE5D4}"
+      DTS:ObjectName="PopulateDimPatient_AutoAdjustBufferSize">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{32EDD4A0-E281-43D3-A2FC-EA515E462D4D}"
+      DTS:ObjectName="PopulateDimPatient_BLOBTempStoragePath">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue"
+        xml:space="preserve"></DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{6DDBA68E-99EC-42F7-BFC1-EB4848AC194A}"
+      DTS:ObjectName="PopulateDimPatient_BufferTempStoragePath">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue"
+        xml:space="preserve"></DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{E3EC8FCA-B3DD-4D6B-8D25-21082C6F1AA9}"
+      DTS:ObjectName="PopulateDimPatient_DefaultBufferMaxRows">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">10000</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{210CDB9C-97B0-4543-9B60-37DA42D822D4}"
+      DTS:ObjectName="PopulateDimPatient_DefaultBufferSize">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">10485760</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{A6B52352-38E5-471F-A13E-5E776A1F0454}"
+      DTS:ObjectName="PopulateDimPatient_DelayValidation">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{B941D0AF-9F03-456F-AAB8-0F26F0EEED98}"
+      DTS:ObjectName="PopulateDimPatient_Description">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">Data Flow Task</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{E23682ED-8C4D-4ADA-A7B6-AE0729B637E0}"
+      DTS:ObjectName="PopulateDimPatient_Disable">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{1843B5A4-B279-47D9-ABFF-883BFABD03EF}"
+      DTS:ObjectName="PopulateDimPatient_DisableEventHandlers">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{66CD311F-B63E-445A-AD50-99D1A6052311}"
+      DTS:ObjectName="PopulateDimPatient_EngineThreads">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">10</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{CE848A85-3B8A-42BF-BFB5-01043EA551FA}"
+      DTS:ObjectName="PopulateDimPatient_FailPackageOnFailure">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{29839216-9D94-48AE-93C9-AAC046E97D70}"
+      DTS:ObjectName="PopulateDimPatient_FailParentOnFailure">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{E6A4F616-0666-4115-BFE9-4729993D456E}"
+      DTS:ObjectName="PopulateDimPatient_ForceExecutionValue">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{45B8E667-0D11-4FF5-BA59-ED140CB93945}"
+      DTS:ObjectName="PopulateDimPatient_IsolationLevel">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">1048576</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{011C27A2-2FF4-47F7-80AF-D56693B31B25}"
+      DTS:ObjectName="PopulateDimPatient_LocaleID">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">1033</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{76E62B64-19B8-496C-B12D-CA3ABF54BC96}"
+      DTS:ObjectName="PopulateDimPatient_MaximumErrorCount">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">1</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{95F84C81-6614-4575-A43D-3F382B504139}"
+      DTS:ObjectName="PopulateDimPatient_Name">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">Populate DimPatient</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="11"
+      DTS:DTSID="{8C549A32-E972-4192-8962-80337A94B52D}"
+      DTS:ObjectName="PopulateDimPatient_RunInOptimizedMode">
+      <DTS:Property
+        DTS:DataType="11"
+        DTS:Name="ParameterValue">-1</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:PropertyExpression
+    DTS:Name="CheckpointFileName">@[$Project::CheckpointFileName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreationDate">@[$Project::CreationDate]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorComputerName">@[$Project::CreatorComputerName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="CreatorName">@[$Project::CreatorName]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DelayValidation">@[$Project::DelayValidation]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Description">@[$Project::Description]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DesignTimeProperties">@[$Project::DesignTimeProperties]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Disable">@[$Project::Disable]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DisableEventHandlers">@[$Project::DisableEventHandlers]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpDescriptor">@[$Project::DumpDescriptor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="DumpOnAnyError">@[$Project::DumpOnAnyError]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EnableDump">@[$Project::EnableDump]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="EncryptCheckpoints">@[$Project::EncryptCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailPackageOnFailure">@[$Project::FailPackageOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="FailParentOnFailure">@[$Project::FailParentOnFailure]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="ForceExecutionValue">@[$Project::ForceExecutionValue]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IgnoreConfigurationsOnLoad">@[$Project::IgnoreConfigurationsOnLoad]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="InteractiveMode">@[$Project::InteractiveMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="IsolationLevel">@[$Project::IsolationLevel]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="LocaleID">@[$Project::LocaleID]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaxConcurrentExecutables">@[$Project::MaxConcurrentExecutables]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="MaximumErrorCount">@[$Project::MaximumErrorCount]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="Name">@[$Project::Name]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="OfflineMode">@[$Project::OfflineMode]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="PackagePassword">@[$Project::PackagePassword]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SQLFolder">@[$Project::SQLFolder]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SafeRecursiveProjectPackageExecution">@[$Project::SafeRecursiveProjectPackageExecution]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SaveCheckpoints">@[$Project::SaveCheckpoints]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="SuppressConfigurationWarnings">@[$Project::SuppressConfigurationWarnings]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdateObjects">@[$Project::UpdateObjects]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="UpdatePackage">@[$Project::UpdatePackage]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionBuild">@[$Project::VersionBuild]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionComments">@[$Project::VersionComments]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMajor">@[$Project::VersionMajor]</DTS:PropertyExpression>
+  <DTS:PropertyExpression
+    DTS:Name="VersionMinor">@[$Project::VersionMinor]</DTS:PropertyExpression>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Populate DimPatient"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{DF112286-0FAC-4297-BB7D-731830EDFB5A}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="1033"
+      DTS:ObjectName="Populate DimPatient"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="AutoAdjustBufferSize">@[$Package::PopulateDimPatient_AutoAdjustBufferSize]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="BLOBTempStoragePath">@[$Package::PopulateDimPatient_BLOBTempStoragePath]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="BufferTempStoragePath">@[$Package::PopulateDimPatient_BufferTempStoragePath]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="DefaultBufferMaxRows">@[$Package::PopulateDimPatient_DefaultBufferMaxRows]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="DefaultBufferSize">@[$Package::PopulateDimPatient_DefaultBufferSize]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="DelayValidation">@[$Package::PopulateDimPatient_DelayValidation]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Description">@[$Package::PopulateDimPatient_Description]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Disable">@[$Package::PopulateDimPatient_Disable]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="DisableEventHandlers">@[$Package::PopulateDimPatient_DisableEventHandlers]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="EngineThreads">@[$Package::PopulateDimPatient_EngineThreads]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="FailPackageOnFailure">@[$Package::PopulateDimPatient_FailPackageOnFailure]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="FailParentOnFailure">@[$Package::PopulateDimPatient_FailParentOnFailure]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ForceExecutionValue">@[$Package::PopulateDimPatient_ForceExecutionValue]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="IsolationLevel">@[$Package::PopulateDimPatient_IsolationLevel]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="LocaleID">@[$Package::PopulateDimPatient_LocaleID]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="MaximumErrorCount">@[$Package::PopulateDimPatient_MaximumErrorCount]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Name">@[$Package::PopulateDimPatient_Name]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="RunInOptimizedMode">@[$Package::PopulateDimPatient_RunInOptimizedMode]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <pipeline
+          BLOBTempStoragePath=""
+          bufferTempStoragePath=""
+          version="1">
+          <components>
+            <component
+              refId="Package\Populate DimPatient\Rd frm OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Rd frm OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[CT_PatientVisits]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Populate DimPatient\Rd frm OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLE_DB_ODS_Src]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLE_DB_ODS_Src]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientID]"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientID]"
+                      name="PatientID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientPK]"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientPK]"
+                      name="PatientPK"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SiteCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SiteCode]"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SiteCode]"
+                      name="SiteCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[FacilityName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FacilityName]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[FacilityName]"
+                      name="FacilityName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Emr]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Emr]"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Emr]"
+                      name="Emr"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Project]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Project]"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Project]"
+                      name="Project"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DateImported]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateImported]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DateImported]"
+                      name="DateImported"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PKV]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PKV]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PKV]"
+                      name="PKV"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientUID]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientUID]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PatientUID]"
+                      name="PatientUID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PopulationType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PopulationType]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PopulationType]"
+                      name="PopulationType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[KeyPopulationType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[KeyPopulationType]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[KeyPopulationType]"
+                      name="KeyPopulationType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitID]"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitID]"
+                      name="VisitID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitDate]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitDate]"
+                      name="VisitDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SERVICE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SERVICE]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SERVICE]"
+                      name="SERVICE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitType]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitType]"
+                      name="VisitType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[WHOStage]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[WHOStage]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[WHOStage]"
+                      name="WHOStage"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[WABStage]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[WABStage]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[WABStage]"
+                      name="WABStage"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Pregnant]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Pregnant]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Pregnant]"
+                      name="Pregnant"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[LMP]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LMP]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[LMP]"
+                      name="LMP"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[EDD]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EDD]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[EDD]"
+                      name="EDD"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Height]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Height]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Height]"
+                      name="Height"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Weight]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Weight]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Weight]"
+                      name="Weight"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[BP]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BP]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[BP]"
+                      name="BP"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OI]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OI]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OI]"
+                      name="OI"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OIDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OIDate]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OIDate]"
+                      name="OIDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Adherence]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Adherence]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Adherence]"
+                      name="Adherence"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[AdherenceCategory]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AdherenceCategory]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[AdherenceCategory]"
+                      name="AdherenceCategory"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[FamilyPlanningMethod]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FamilyPlanningMethod]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[FamilyPlanningMethod]"
+                      name="FamilyPlanningMethod"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PwP]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PwP]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PwP]"
+                      name="PwP"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[GestationAge]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[GestationAge]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[GestationAge]"
+                      name="GestationAge"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NextAppointmentDate]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NextAppointmentDate]"
+                      name="NextAppointmentDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineReg]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineReg]"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineReg]"
+                      name="SubstitutionFirstlineReg"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionFirstLineRegReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstLineRegReason]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionFirstLineRegReason]"
+                      name="SubstitutionFirstLineRegReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionSecondLineReg]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondLineReg]"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionSecondLineReg]"
+                      name="SubstitutionSecondLineReg"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionSecondLineRegReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondLineRegReason]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SubstitutionSecondLineRegReason]"
+                      name="SubstitutionSecondLineRegReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChange]"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]"
+                      name="SecondLineRegChange"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChangeReason]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]"
+                      name="SecondLineRegChangeReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DeletedFlag]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DeletedFlag]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DeletedFlag]"
+                      name="DeletedFlag"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DifferentiatedCare]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DifferentiatedCare]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[DifferentiatedCare]"
+                      name="DifferentiatedCare"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[StabilityAssessment]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StabilityAssessment]"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[StabilityAssessment]"
+                      name="StabilityAssessment"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitBy]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitBy]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[VisitBy]"
+                      name="VisitBy"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Temp]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Temp]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Temp]"
+                      name="Temp"
+                      precision="18"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PulseRate]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PulseRate]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[PulseRate]"
+                      name="PulseRate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[RespiratoryRate]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RespiratoryRate]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[RespiratoryRate]"
+                      name="RespiratoryRate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OxygenSaturation]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OxygenSaturation]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[OxygenSaturation]"
+                      name="OxygenSaturation"
+                      precision="18"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Muac]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Muac]"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Muac]"
+                      name="Muac"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NutritionalStatus]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NutritionalStatus]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NutritionalStatus]"
+                      name="NutritionalStatus"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[EverHadMenses]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EverHadMenses]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[EverHadMenses]"
+                      name="EverHadMenses"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Breastfeeding]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Breastfeeding]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Breastfeeding]"
+                      name="Breastfeeding"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Menopausal]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Menopausal]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Menopausal]"
+                      name="Menopausal"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NoFPReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NoFPReason]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[NoFPReason]"
+                      name="NoFPReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ProphylaxisUsed]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProphylaxisUsed]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ProphylaxisUsed]"
+                      name="ProphylaxisUsed"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CTXAdherence]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTXAdherence]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CTXAdherence]"
+                      name="CTXAdherence"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CurrentRegimen]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CurrentRegimen]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CurrentRegimen]"
+                      name="CurrentRegimen"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[HCWConcern]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[HCWConcern]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[HCWConcern]"
+                      name="HCWConcern"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[TCAReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TCAReason]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[TCAReason]"
+                      name="TCAReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ClinicalNotes]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ClinicalNotes]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ClinicalNotes]"
+                      name="ClinicalNotes"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[GeneralExamination]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[GeneralExamination]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[GeneralExamination]"
+                      name="GeneralExamination"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SystemExamination]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SystemExamination]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[SystemExamination]"
+                      name="SystemExamination"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Skin]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Skin]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Skin]"
+                      name="Skin"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Eyes]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Eyes]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Eyes]"
+                      name="Eyes"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ENT]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ENT]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[ENT]"
+                      name="ENT"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Chest]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Chest]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Chest]"
+                      name="Chest"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CVS]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CVS]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CVS]"
+                      name="CVS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Abdomen]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Abdomen]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Abdomen]"
+                      name="Abdomen"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CNS]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CNS]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[CNS]"
+                      name="CNS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Genitourinary]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Genitourinary]"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].Columns[Genitourinary]"
+                      name="Genitourinary"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientID]"
+                      dataType="wstr"
+                      length="50"
+                      name="PatientID" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientPK]"
+                      dataType="wstr"
+                      length="50"
+                      name="PatientPK" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SiteCode]"
+                      dataType="wstr"
+                      length="50"
+                      name="SiteCode" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FacilityName]"
+                      dataType="wstr"
+                      length="250"
+                      name="FacilityName" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Emr]"
+                      dataType="wstr"
+                      length="100"
+                      name="Emr" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Project]"
+                      dataType="wstr"
+                      length="100"
+                      name="Project" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DateImported]"
+                      dataType="dbDate"
+                      name="DateImported" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PKV]"
+                      dataType="wstr"
+                      length="250"
+                      name="PKV" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PatientUID]"
+                      dataType="guid"
+                      name="PatientUID" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      name="PopulationType" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[KeyPopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      name="KeyPopulationType" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitID]"
+                      dataType="wstr"
+                      length="50"
+                      name="VisitID" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitDate]"
+                      dataType="dbDate"
+                      name="VisitDate" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SERVICE]"
+                      dataType="wstr"
+                      length="250"
+                      name="SERVICE" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitType]"
+                      dataType="wstr"
+                      length="250"
+                      name="VisitType" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[WHOStage]"
+                      dataType="wstr"
+                      length="150"
+                      name="WHOStage" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[WABStage]"
+                      dataType="wstr"
+                      length="250"
+                      name="WABStage" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Pregnant]"
+                      dataType="wstr"
+                      length="250"
+                      name="Pregnant" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LMP]"
+                      dataType="wstr"
+                      length="150"
+                      name="LMP" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EDD]"
+                      dataType="wstr"
+                      length="150"
+                      name="EDD" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Height]"
+                      dataType="wstr"
+                      length="150"
+                      name="Height" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Weight]"
+                      dataType="wstr"
+                      length="150"
+                      name="Weight" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[BP]"
+                      dataType="wstr"
+                      length="250"
+                      name="BP" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OI]"
+                      dataType="wstr"
+                      length="250"
+                      name="OI" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OIDate]"
+                      dataType="dbDate"
+                      name="OIDate" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Adherence]"
+                      dataType="wstr"
+                      length="250"
+                      name="Adherence" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AdherenceCategory]"
+                      dataType="wstr"
+                      length="250"
+                      name="AdherenceCategory" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[FamilyPlanningMethod]"
+                      dataType="wstr"
+                      length="250"
+                      name="FamilyPlanningMethod" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PwP]"
+                      dataType="wstr"
+                      length="250"
+                      name="PwP" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[GestationAge]"
+                      dataType="wstr"
+                      length="150"
+                      name="GestationAge" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      name="NextAppointmentDate" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineReg]"
+                      dataType="wstr"
+                      length="100"
+                      name="SubstitutionFirstlineReg" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstLineRegReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SubstitutionFirstLineRegReason" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondLineReg]"
+                      dataType="wstr"
+                      length="100"
+                      name="SubstitutionSecondLineReg" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondLineRegReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SubstitutionSecondLineRegReason" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChange]"
+                      dataType="wstr"
+                      length="100"
+                      name="SecondLineRegChange" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChangeReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SecondLineRegChangeReason" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DeletedFlag]"
+                      dataType="bool"
+                      name="DeletedFlag" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DifferentiatedCare]"
+                      dataType="wstr"
+                      length="250"
+                      name="DifferentiatedCare" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StabilityAssessment]"
+                      dataType="wstr"
+                      length="250"
+                      name="StabilityAssessment" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[VisitBy]"
+                      dataType="wstr"
+                      length="150"
+                      name="VisitBy" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Temp]"
+                      dataType="numeric"
+                      name="Temp"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PulseRate]"
+                      dataType="i4"
+                      name="PulseRate" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RespiratoryRate]"
+                      dataType="i4"
+                      name="RespiratoryRate" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OxygenSaturation]"
+                      dataType="numeric"
+                      name="OxygenSaturation"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Muac]"
+                      dataType="i4"
+                      name="Muac" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NutritionalStatus]"
+                      dataType="wstr"
+                      length="150"
+                      name="NutritionalStatus" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[EverHadMenses]"
+                      dataType="wstr"
+                      length="150"
+                      name="EverHadMenses" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Breastfeeding]"
+                      dataType="wstr"
+                      length="150"
+                      name="Breastfeeding" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Menopausal]"
+                      dataType="wstr"
+                      length="150"
+                      name="Menopausal" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NoFPReason]"
+                      dataType="wstr"
+                      length="150"
+                      name="NoFPReason" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ProphylaxisUsed]"
+                      dataType="wstr"
+                      length="150"
+                      name="ProphylaxisUsed" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CTXAdherence]"
+                      dataType="wstr"
+                      length="150"
+                      name="CTXAdherence" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CurrentRegimen]"
+                      dataType="wstr"
+                      length="150"
+                      name="CurrentRegimen" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[HCWConcern]"
+                      dataType="wstr"
+                      length="150"
+                      name="HCWConcern" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TCAReason]"
+                      dataType="wstr"
+                      length="150"
+                      name="TCAReason" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ClinicalNotes]"
+                      dataType="wstr"
+                      length="150"
+                      name="ClinicalNotes" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[GeneralExamination]"
+                      dataType="wstr"
+                      length="150"
+                      name="GeneralExamination" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SystemExamination]"
+                      dataType="wstr"
+                      length="150"
+                      name="SystemExamination" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Skin]"
+                      dataType="wstr"
+                      length="150"
+                      name="Skin" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Eyes]"
+                      dataType="wstr"
+                      length="150"
+                      name="Eyes" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ENT]"
+                      dataType="wstr"
+                      length="150"
+                      name="ENT" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Chest]"
+                      dataType="wstr"
+                      length="150"
+                      name="Chest" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CVS]"
+                      dataType="wstr"
+                      length="150"
+                      name="CVS" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Abdomen]"
+                      dataType="wstr"
+                      length="150"
+                      name="Abdomen" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CNS]"
+                      dataType="wstr"
+                      length="150"
+                      name="CNS" />
+                    <externalMetadataColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Genitourinary]"
+                      dataType="wstr"
+                      length="150"
+                      name="Genitourinary" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientID]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientID]"
+                      name="PatientID" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
+                      name="PatientPK" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SiteCode]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SiteCode]"
+                      name="SiteCode" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
+                      name="FacilityName" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitID]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitID]"
+                      name="VisitID" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitDate]"
+                      name="VisitDate" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SERVICE]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SERVICE]"
+                      name="SERVICE" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitType]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitType]"
+                      name="VisitType" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[WHOStage]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[WHOStage]"
+                      name="WHOStage" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[WABStage]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[WABStage]"
+                      name="WABStage" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Pregnant]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Pregnant]"
+                      name="Pregnant" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LMP]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LMP]"
+                      name="LMP" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EDD]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EDD]"
+                      name="EDD" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Height]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Height]"
+                      name="Height" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Weight]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Weight]"
+                      name="Weight" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BP]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[BP]"
+                      name="BP" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OI]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OI]"
+                      name="OI" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OIDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OIDate]"
+                      name="OIDate" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Adherence]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Adherence]"
+                      name="Adherence" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AdherenceCategory]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AdherenceCategory]"
+                      name="AdherenceCategory" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FamilyPlanningMethod]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[FamilyPlanningMethod]"
+                      name="FamilyPlanningMethod" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PwP]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PwP]"
+                      name="PwP" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[GestationAge]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[GestationAge]"
+                      name="GestationAge" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
+                      name="NextAppointmentDate" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineReg]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineReg]"
+                      name="SubstitutionFirstlineReg" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstLineRegReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstLineRegReason]"
+                      name="SubstitutionFirstLineRegReason" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondLineReg]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondLineReg]"
+                      name="SubstitutionSecondLineReg" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondLineRegReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondLineRegReason]"
+                      name="SubstitutionSecondLineRegReason" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChange]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChange]"
+                      name="SecondLineRegChange" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChangeReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChangeReason]"
+                      name="SecondLineRegChangeReason" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Emr]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Emr]"
+                      name="Emr" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Project]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Project]"
+                      name="Project" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateImported]"
+                      dataType="dbDate"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DateImported]"
+                      name="DateImported" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PKV]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PKV]"
+                      name="PKV" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientUID]"
+                      dataType="guid"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PatientUID]"
+                      name="PatientUID" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DeletedFlag]"
+                      dataType="bool"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DeletedFlag]"
+                      name="DeletedFlag" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DifferentiatedCare]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DifferentiatedCare]"
+                      name="DifferentiatedCare" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StabilityAssessment]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StabilityAssessment]"
+                      name="StabilityAssessment" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
+                      name="PopulationType" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
+                      name="KeyPopulationType" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitBy]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[VisitBy]"
+                      name="VisitBy" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Temp]"
+                      dataType="numeric"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Temp]"
+                      name="Temp"
+                      precision="18"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PulseRate]"
+                      dataType="i4"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PulseRate]"
+                      name="PulseRate" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RespiratoryRate]"
+                      dataType="i4"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RespiratoryRate]"
+                      name="RespiratoryRate" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OxygenSaturation]"
+                      dataType="numeric"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OxygenSaturation]"
+                      name="OxygenSaturation"
+                      precision="18"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Muac]"
+                      dataType="i4"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Muac]"
+                      name="Muac" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NutritionalStatus]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NutritionalStatus]"
+                      name="NutritionalStatus" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EverHadMenses]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[EverHadMenses]"
+                      name="EverHadMenses" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Breastfeeding]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Breastfeeding]"
+                      name="Breastfeeding" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Menopausal]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Menopausal]"
+                      name="Menopausal" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NoFPReason]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NoFPReason]"
+                      name="NoFPReason" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProphylaxisUsed]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ProphylaxisUsed]"
+                      name="ProphylaxisUsed" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTXAdherence]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CTXAdherence]"
+                      name="CTXAdherence" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CurrentRegimen]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CurrentRegimen]"
+                      name="CurrentRegimen" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[HCWConcern]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[HCWConcern]"
+                      name="HCWConcern" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TCAReason]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TCAReason]"
+                      name="TCAReason" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ClinicalNotes]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ClinicalNotes]"
+                      name="ClinicalNotes" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[GeneralExamination]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[GeneralExamination]"
+                      name="GeneralExamination" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SystemExamination]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SystemExamination]"
+                      name="SystemExamination" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Skin]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Skin]"
+                      name="Skin" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Eyes]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Eyes]"
+                      name="Eyes" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ENT]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ENT]"
+                      name="ENT" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Chest]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Chest]"
+                      name="Chest" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CVS]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CVS]"
+                      name="CVS" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Abdomen]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Abdomen]"
+                      name="Abdomen" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CNS]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CNS]"
+                      name="CNS" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Genitourinary]"
+                      dataType="wstr"
+                      length="150"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Genitourinary]"
+                      name="Genitourinary" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Populate DimPatient\Rd frm OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="157.333333333334,42.6666666666667"
+          Id="{112A9DDD-1931-48A3-9AA8-2F5B91A5A1E1}"
+          TopLeft="28.1666666666667,5.49999999999993" />
+        <NodeLayout
+          Size="132,42.6666666666667"
+          Id="{478523CE-3C0C-4073-B370-A12D71F15308}"
+          TopLeft="330.624995073304,18.1999996745586" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
