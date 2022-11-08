@@ -1,8 +1,8 @@
 BEGIN
 	 
-	 DECLARE @MaxVisitDate_Hist		DATETIME,
-			@VisitDate				DATETIME,
-			@MaxCreatedDate			DATETIME
+	 DECLARE	@MaxVisitDate_Hist		DATETIME,
+				@VisitDate				DATETIME,
+				@MaxCreatedDate			DATETIME
 				
 		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Visit_Log]  (NoLock);
 		SELECT @VisitDate			= MAX(VisitDate)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK) ;
@@ -13,8 +13,8 @@ BEGIN
 
 		
 				
-					INSERT INTO  [ODS].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
-					VALUES(@VisitDate,GETDATE());
+		INSERT INTO  [ODS].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@VisitDate,GETDATE());
 
 	       ---- Refresh [ODS].[dbo].[CT_PatientVisits]
 		   --truncate table [ODS].[dbo].[CT_PatientVisits]
@@ -54,6 +54,10 @@ BEGIN
 							and a.visitDate = b.visitDate
 							and a.PatientUnique_ID = b.PatientVisitUnique_ID
 							)
+					WHEN NOT MATCHED THEN 
+							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,CKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID) 
+							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,PKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID)
+			
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.FacilityName				= B.FacilityName,
@@ -109,13 +113,14 @@ BEGIN
 						a.CNS						=b.CNS,
 						a.Genitourinary				=b.Genitourinary
 
-			WHEN NOT MATCHED THEN 
-			INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,CKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID) 
-			VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,PKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID);
-			
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+
 			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
-
 			UPDATE [ODS].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxVisitDate = @VisitDate;
@@ -123,7 +128,7 @@ BEGIN
 			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
 			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
 			FROM [ODS].[dbo].[CT_PatientVisits] 
-			--WHERE @MaxCreatedDate  > @MaxCreatedDate
+			WHERE @MaxCreatedDate  > @MaxCreatedDate
 			GROUP BY SiteCode;
 
 

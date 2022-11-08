@@ -3,10 +3,9 @@ BEGIN
 			 DECLARE @MaxRegistrationDate_Hist			DATETIME,
 					 @RegistrationDate					DATETIME
 				
-			SELECT @MaxRegistrationDate_Hist =  MAX(MaxRegistrationDate) FROM [ODS].[dbo].[CT_Patient_Log]  (NoLock)
-			SELECT @RegistrationDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
-				
-					
+			SELECT @MaxRegistrationDate_Hist	= MAX(MaxRegistrationDate) FROM [ODS].[dbo].[CT_Patient_Log]  (NoLock)
+			SELECT @RegistrationDate			= MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
+									
 			INSERT INTO  [ODS].[dbo].[CT_Patient_Log](MaxRegistrationDate,LoadStartDateTime)
 			VALUES(@RegistrationDate,GETDATE())
 
@@ -23,50 +22,57 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.RegistrationDate =b.RegistrationDate)
-					WHEN MATCHED THEN
-						UPDATE SET 
-						a.PatientID					=b.PatientID,
-						a.FacilityName				=b.FacilityName	,
-						a.Gender					=b.Gender,
-						a.DOB						=b.DOB,						
-						a.RegistrationAtCCC			=b.RegistrationAtCCC,
-						a.RegistrationAtPMTCT		=b.RegistrationAtPMTCT,
-						a.RegistrationAtTBClinic	=b.RegistrationAtTBClinic,
-						a.PatientSource				=b.PatientSource,
-						a.Region					=b.Region,
-						a.District					=b.District,
-						a.Village					=b.Village,
-						a.ContactRelation			=b.ContactRelation,
-						a.LastVisit					=b.LastVisit,
-						a.MaritalStatus				=b.MaritalStatus,
-						a.EducationLevel			=b.EducationLevel,
-						a.DateConfirmedHIVPositive	=b.DateConfirmedHIVPositive	,
-						a.PreviousARTExposure		=b.PreviousARTExposure,
-						a.PreviousARTStartDate		=b.PreviousARTStartDate,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
-						a.Orphan					=b.Orphan,
-						a.Inschool					=b.Inschool	,
-						a.PatientType				=b.PatientType,
-						a.PopulationType			=b.PopulationType,
-						a.KeyPopulationType			=b.KeyPopulationType,
-						a.PatientResidentCounty		=b.PatientResidentCounty,
-						a.PatientResidentSubCounty	=b.PatientResidentSubCounty,
-						a.PatientResidentLocation	=b.PatientResidentLocation,
-						a.PatientResidentSubLocation=b.PatientResidentSubLocation,
-						a.PatientResidentWard		=b.PatientResidentWard	,
-						a.PatientResidentVillage	=b.PatientResidentVillage,
-						a.TransferInDate			=b.TransferInDate,
-						a.Occupation				=b.Occupation,
-						a.NUPI						=b.NUPI,
-						a.CKV						=b.CKV
-							
-					WHEN NOT MATCHED THEN 
+
+						WHEN NOT MATCHED THEN 
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV);
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV)
 				
-				   UPDATE [ODS].[dbo].[CT_Patient_Log]
-					SET LoadEndDateTime = GETDATE()
+						WHEN MATCHED THEN
+							UPDATE SET 
+							a.PatientID					=b.PatientID,
+							a.FacilityName				=b.FacilityName	,
+							a.Gender					=b.Gender,
+							a.DOB						=b.DOB,						
+							a.RegistrationAtCCC			=b.RegistrationAtCCC,
+							a.RegistrationAtPMTCT		=b.RegistrationAtPMTCT,
+							a.RegistrationAtTBClinic	=b.RegistrationAtTBClinic,
+							a.PatientSource				=b.PatientSource,
+							a.Region					=b.Region,
+							a.District					=b.District,
+							a.Village					=b.Village,
+							a.ContactRelation			=b.ContactRelation,
+							a.LastVisit					=b.LastVisit,
+							a.MaritalStatus				=b.MaritalStatus,
+							a.EducationLevel			=b.EducationLevel,
+							a.DateConfirmedHIVPositive	=b.DateConfirmedHIVPositive	,
+							a.PreviousARTExposure		=b.PreviousARTExposure,
+							a.PreviousARTStartDate		=b.PreviousARTStartDate,
+							a.Emr						=b.Emr,
+							a.Project					=b.Project,
+							a.Orphan					=b.Orphan,
+							a.Inschool					=b.Inschool	,
+							a.PatientType				=b.PatientType,
+							a.PopulationType			=b.PopulationType,
+							a.KeyPopulationType			=b.KeyPopulationType,
+							a.PatientResidentCounty		=b.PatientResidentCounty,
+							a.PatientResidentSubCounty	=b.PatientResidentSubCounty,
+							a.PatientResidentLocation	=b.PatientResidentLocation,
+							a.PatientResidentSubLocation=b.PatientResidentSubLocation,
+							a.PatientResidentWard		=b.PatientResidentWard	,
+							a.PatientResidentVillage	=b.PatientResidentVillage,
+							a.TransferInDate			=b.TransferInDate,
+							a.Occupation				=b.Occupation,
+							a.NUPI						=b.NUPI,
+							a.CKV						=b.CKV
+							
+						WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+							
+
+					UPDATE [ODS].[dbo].[CT_Patient_Log]
+						SET LoadEndDateTime = GETDATE()
 					WHERE MaxRegistrationDate = @RegistrationDate;
 
 					INSERT INTO [ODS].[dbo].[CT_PatientCount_Log]([SiteCode],[CreatedDate],[PatientCount])

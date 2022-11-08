@@ -1,4 +1,19 @@
 BEGIN
+
+		DECLARE	@MaxAdverseEventStartDate	DATETIME,
+				@AdverseEventStartDate		DATETIME,
+				@MaxCreatedDate				DATETIME
+				
+		SELECT @MaxAdverseEventStartDate		= MAX(MaxAdverseEventStartDate) FROM [ODS].[dbo].[CT_AdverseEvent_Log]  (NoLock);
+		SELECT @AdverseEventStartDate	= MAX(AdverseEventStartDate)	FROM [DWAPICentral].[dbo].[PatientAdverseEventExtract] WITH (NOLOCK) ;
+		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_AdverseEventCount_Log] WITH (NOLOCK) ;
+				
+		--insert into  [ODS].[dbo].[CT_AdverseEventCount_Log](CreatedDate)
+		--values(dateadd(year,-1,getdate()))
+						
+		INSERT INTO  [ODS].[dbo].[CT_AdverseEvent_Log](MaxAdverseEventStartDate,LoadStartDateTime)
+		VALUES(@AdverseEventStartDate,GETDATE());
+
 			--CREATE INDEX CT_AdverseEvents  ON [ODS].[dbo].[CT_AdverseEvents] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_AdverseEvents]
 			MERGE [ODS].[dbo].[CT_AdverseEvents] AS a
@@ -30,6 +45,11 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID = b.AdverseEventsUnique_ID )
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID) 
+						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.PatientID						=b.PatientID,
@@ -44,12 +64,26 @@ BEGIN
 							a.AdverseEventActionTaken		=b.AdverseEventActionTaken,
 							a.AdverseEventClinicalOutcome	=b.AdverseEventClinicalOutcome,
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
-							a.CKV							=b.CKV														
+							a.CKV							=b.CKV		
+					
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
+				  SET LoadEndDateTime = GETDATE()
+				  WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;
+
+				INSERT INTO [ODS].[dbo].[CT_AdverseEventCount_Log]([SiteCode],[CreatedDate],[AdverseEventCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS AdverseEventCount 
+				FROM [ODS].[dbo].[CT_AdverseEvents] 
+				--WHERE @MaxCreatedDate  > @MaxCreatedDate
+				GROUP BY SiteCode;
+
+
 							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID) 
-						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID);
-				
+
 					--DROP INDEX CT_AdverseEvents ON [ODS].[dbo].[CT_AdverseEvents];
 					---Remove any duplicate from [ODS].[dbo].[CT_Patient]
 					WITH CTE AS   
