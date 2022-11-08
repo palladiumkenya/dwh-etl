@@ -1,4 +1,13 @@
 BEGIN
+		DECLARE	@MaxCovid19AssessmentDate_Hist			DATETIME,
+				    @Covid19AssessmentDate					DATETIME
+				
+		SELECT @MaxCovid19AssessmentDate_Hist =  MAX(MaxCovid19AssessmentDate) FROM [ODS].[dbo].[CT_Covid_Log]  (NoLock)
+		SELECT @Covid19AssessmentDate = MAX(Covid19AssessmentDate) FROM [DWAPICentral].[dbo].[CovidExtract](NoLock)		
+					
+		INSERT INTO  [ODS].[dbo].[CT_Covid_Log](MaxCovid19AssessmentDate,LoadStartDateTime)
+		VALUES(@MaxCovid19AssessmentDate_Hist,GETDATE())
+
 			--CREATE INDEX CT_Covid ON [ODS].[dbo].[CT_Covid] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_Covid]
 			MERGE [ODS].[dbo].[CT_Covid] AS a
@@ -47,6 +56,11 @@ BEGIN
 						AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
 						and a.PatientUnique_ID =b.CovidUnique_ID
 						)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID) 
+						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 						
 						a.Emr								=b.Emr,
@@ -85,11 +99,22 @@ BEGIN
 						a.BoosterDoseVerified				=b.BoosterDoseVerified,
 						a.[Sequence]						=b.[Sequence],
 						a.COVID19TestResult					=b.COVID19TestResult
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID) 
-						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID);
-				
+						
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+				UPDATE [ODS].[dbo].[CT_Covid_Log]
+					SET LoadEndDateTime = GETDATE()
+					WHERE MaxCovid19AssessmentDate = @MaxCovid19AssessmentDate_Hist;
+
+				INSERT INTO [ODS].[dbo].[CT_CovidCount_Log]([SiteCode],[CreatedDate],[CovidCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS CovidCount 
+				FROM [ODS].[dbo].[CT_Covid] 
+				--WHERE @MaxCreatedDate  > @MaxCreatedDate
+				GROUP BY SiteCode;
+
 				--DROP INDEX CT_Covid ON [ODS].[dbo].[CT_Covid];
 				---Remove any duplicate from [ODS].[dbo].[CT_Covid]
 				WITH CTE AS   

@@ -1,13 +1,13 @@
 BEGIN
 			DECLARE		@MaxExitDate_Hist			DATETIME,
-					@ExitDate					DATETIME
+						@ExitDate					DATETIME
 				
-		SELECT @MaxExitDate_Hist =  MAX(MaxExitDate) FROM [ODS].[dbo].[CT_patientStatus_Log]  (NoLock);
-		SELECT @ExitDate = MAX(ExitDate) FROM [DWAPICentral].[dbo].[PatientStatusExtract] WITH (NOLOCK) ;
+			SELECT @MaxExitDate_Hist =  MAX(MaxExitDate) FROM [ODS].[dbo].[CT_patientStatus_Log]  (NoLock);
+			SELECT @ExitDate = MAX(ExitDate) FROM [DWAPICentral].[dbo].[PatientStatusExtract] WITH (NOLOCK) ;
 		
 					
-					INSERT INTO  [ODS].[dbo].[CT_patientStatus_Log] (MaxExitDate,LoadStartDateTime)
-					VALUES(@ExitDate,GETDATE());
+			INSERT INTO  [ODS].[dbo].[CT_patientStatus_Log] (MaxExitDate,LoadStartDateTime)
+			VALUES(@ExitDate,GETDATE());
 	       ---- Refresh [ODS].[dbo].[CT_PatientStatus]
 			--CREATE INDEX CT_PatientStatus ON [ODS].[dbo].[CT_PatientStatus] (sitecode,PatientPK,exitdate);
 			MERGE [ODS].[dbo].[CT_PatientStatus] AS a
@@ -52,6 +52,10 @@ BEGIN
 						and a.exitdate = b.exitdate
 						and a.PatientUnique_ID =b.PatientStatusUnique_ID 
 						)
+					WHEN NOT MATCHED THEN 
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID )--/*,SpecificDeathReason,DeathDate,EffectiveDiscontinuationDate */) 
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID) --/*ReasonForDeath,SpecificDeathReason,DeathDate /*EffectiveDiscontinuationDate/*);
+			
 						WHEN MATCHED THEN
 							UPDATE SET 
 								a.PatientID						=b.PatientID,
@@ -68,13 +72,14 @@ BEGIN
 								a.SpecificDeathReason			=b.SpecificDeathReason,
 								a.DeathDate						=b.DeathDate,
 								a.EffectiveDiscontinuationDate	=b.EffectiveDiscontinuationDate
-						WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID )--/*,SpecificDeathReason,DeathDate,EffectiveDiscontinuationDate */) 
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID); --/*ReasonForDeath,SpecificDeathReason,DeathDate /*EffectiveDiscontinuationDate/*);
-			
+						
+						WHEN NOT MATCHED BY SOURCE 
+							THEN
+							/* The Record is in the target table but doen't exit on the source table*/
+								Delete;
 
 						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
-						SET LoadEndDateTime = GETDATE()
+							SET LoadEndDateTime = GETDATE()
 						WHERE MaxExitDate = @ExitDate;
 
 						INSERT INTO [ODS].[dbo].[CT_PatientStatusCount_Log]([SiteCode],[CreatedDate],[PatientStatusCount])

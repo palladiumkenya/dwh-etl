@@ -1,4 +1,12 @@
 BEGIN
+		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
+				   @OrderedbyDate					DATETIME
+				
+		SELECT @MaxOrderedbyDate_Hist =  MAX(MaxOrderedbyDate) FROM [dbo].[CT_PatientLabs_Log]  (NoLock)
+		SELECT  @OrderedbyDate = MAX(OrderedbyDate) FROM [DWAPICentral].[dbo].[PatientLaboratoryExtract] WITH (NOLOCK) 		
+					
+		INSERT INTO  [dbo].[CT_PatientLabs_Log](MaxOrderedbyDate,LoadStartDateTime)
+		VALUES( @OrderedbyDate,GETDATE())
 	
 	       ---- Refresh [ODS].[dbo].[CT_PatientLabs]
 			MERGE [ODS].[dbo].[CT_PatientLabs] AS a
@@ -34,6 +42,12 @@ BEGIN
 						and  a.TestName COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestName COLLATE SQL_Latin1_General_CP1_CI_AS
 						--and a.TestResult		=b.TestResult
 						)
+
+												
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created) 
+						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.PatientID			=b.PatientID	,
@@ -49,12 +63,23 @@ BEGIN
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType		,
 							a.Created			=b.Created			,
-							a.CKV				=b.CKV				
+							a.CKV				=b.CKV	
 							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created) 
-						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created);
-				
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+					UPDATE [dbo].[CT_PatientLabs_Log]
+					SET LoadEndDateTime = GETDATE()
+					WHERE MaxOrderedbyDate =  @OrderedbyDate;
+
+				INSERT INTO [ODS].[dbo].[CT_PatientLabsCount_Log]([SiteCode],[CreatedDate],[PatientLabsCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientLabsCount 
+				FROM [ODS].[dbo].[CT_PatientLabs] 
+				--WHERE @MaxCreatedDate  > @MaxCreatedDate
+				GROUP BY SiteCode;
+
 				--DROP INDEX CT_PatientLabs ON [ODS].[dbo].[CT_PatientLabs];
 				---Remove any duplicate from [ODS].[dbo].[CT_PatientLabs]
 				--WITH CTE AS   

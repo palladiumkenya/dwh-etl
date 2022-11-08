@@ -1,4 +1,12 @@
 BEGIN
+		DECLARE		@MaxDateCreated_Hist			DATETIME,
+				   @DateCreated					DATETIME
+				
+		SELECT @MaxDateCreated_Hist =  MAX(MaxDateCreated) FROM [ODS].[dbo].[CT_ContactListing_Log]  (NoLock)
+		SELECT @MaxDateCreated_Hist = MAX(Created) FROM [DWAPICentral].[dbo].[ContactListingExtract](NoLock)
+							
+		INSERT INTO  [ODS].[dbo].[CT_ContactListing_Log](MaxDateCreated,LoadStartDateTime)
+		VALUES(@MaxDateCreated_Hist,GETDATE())
 			--CREATE INDEX CT_ContactListing ON [ODS].[dbo].[CT_ContactListing] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_ContactListing]
 			MERGE [ODS].[dbo].[CT_ContactListing] AS a
@@ -32,6 +40,11 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.PatientUnique_ID =b.ContactListingUnique_ID)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.PatientID						=b.PatientID,						
@@ -54,11 +67,14 @@ BEGIN
 						a.ContactPatientPK				=b.ContactPatientPK	,
 						a.DateCreated					=b.DateCreated
 
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID);
-				
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;		
+
+				UPDATE [ODS].[dbo].[CT_ContactListing_Log]
+					SET LoadEndDateTime = GETDATE()
+				WHERE MaxDateCreated = @MaxDateCreated_Hist;
 				--DROP INDEX CT_ContactListing ON [ODS].[dbo].[CT_ContactListing];
 				---Remove any duplicate from [ODS].[dbo].[CT_ContactListing]
 				WITH CTE AS   

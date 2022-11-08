@@ -1,4 +1,14 @@
 BEGIN
+			DECLARE @MaxVisitDate_Hist			DATETIME,
+				   @VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Ipt_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
+	
+					
+		INSERT INTO  [ODS].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@VisitDate,GETDATE())
+
 			--CREATE INDEX CT_Patient ON [ODS].[dbo].[CT_Ipt] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_Ipt]
 			MERGE [ODS].[dbo].[CT_Ipt] AS a
@@ -32,6 +42,11 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID =b.IptVisitUnique_ID )
+					
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.PatientID				=b.PatientID,
@@ -59,11 +74,22 @@ BEGIN
 						a.IndicationForIPT		=b.IndicationForIPT,
 						a.DateImported			=b.DateImported,
 						a.CKV					=b.CKV
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID);
-				
+						
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+					UPDATE [ODS].[dbo].[CT_Ipt_Log]
+						SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @VisitDate;
+
+					INSERT INTO [ODS].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS IptCount 
+					FROM [ODS].[dbo].[CT_Ipt] 
+					--WHERE @MaxCreatedDate  > @MaxCreatedDate
+					GROUP BY SiteCode;
+			
 					--DROP INDEX CT_Patient ON [ODS].[dbo].[CT_Ipt];
 					---Remove any duplicate from [ODS].[dbo].[CT_Ipt]
 					--WITH CTE AS   

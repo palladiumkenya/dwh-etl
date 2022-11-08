@@ -1,4 +1,12 @@
 BEGIN
+		DECLARE	@MaxVisitDate_Hist			DATETIME,
+					@VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_DefaulterTracing_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock)		
+					
+		INSERT INTO  [ODS].[dbo].[CT_DefaulterTracing_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@MaxVisitDate_Hist,GETDATE())
 			--CREATE INDEX CT_DefaulterTracing ON [ODS].[dbo].[CT_DefaulterTracing] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_DefaulterTracing]
 			MERGE [ODS].[dbo].[CT_DefaulterTracing] AS a
@@ -34,6 +42,11 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.PatientUnique_ID =b.DefaulterTracingUnique_ID)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
+						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 						
 						a.Emr			=b.Emr,
@@ -50,11 +63,23 @@ BEGIN
 						a.BookingDate	=b.BookingDate,
 						a.CKV			=b.CKV,
 						a.DateImported	=b.DateImported
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
-						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID);
+
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;	
 				
+				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]---
+					SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @MaxVisitDate_Hist;
+
+				INSERT INTO [ODS].[dbo].[CT_DefaulterTracingCount_Log]([SiteCode],[CreatedDate],[DefaulterTracingCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS DefaulterTracingCount 
+				FROM [ODS].[dbo].CT_DefaulterTracing
+				--WHERE @MaxCreatedDate  > @MaxCreatedDate
+				GROUP BY SiteCode;
+
+
 				--DROP INDEX CT_DefaulterTracing ON [ODS].[dbo].[CT_DefaulterTracing];
 				---Remove any duplicate from [ODS].[dbo].[CT_DefaulterTracing]
 				WITH CTE AS   

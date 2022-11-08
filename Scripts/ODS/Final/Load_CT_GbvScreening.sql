@@ -1,4 +1,14 @@
 BEGIN
+		 DECLARE	@MaxVisitDate_Hist			DATETIME,
+					@VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_GbvScreening_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock)
+		
+					
+		INSERT INTO  [ODS].[dbo].[CT_GbvScreening_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@MaxVisitDate_Hist,GETDATE())
+
 			--CREATE INDEX CT_GbvScreening ON [ODS].[dbo].[CT_GbvScreening] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_GbvScreening]
 			MERGE [ODS].[dbo].[CT_GbvScreening] AS a
@@ -27,6 +37,11 @@ BEGIN
 						and a.VisitID			=b.VisitID
 						and a.VisitDate			=b.VisitDate
 						and a.PatientUnique_ID =b.GbvScreeningUnique_ID)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,CKV,PatientUnique_ID,GbvScreeningUnique_ID) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,CKV,PatientUnique_ID,GbvScreeningUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.PatientID			=b.PatientID,
@@ -40,11 +55,22 @@ BEGIN
 						a.IPVRelationship	=b.IPVRelationship,
 						a.DateImported		=b.DateImported,
 						a.CKV				=b.CKV
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,CKV,PatientUnique_ID,GbvScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,CKV,PatientUnique_ID,GbvScreeningUnique_ID);
-				
+					
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;		
+					
+					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]
+						SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @MaxVisitDate_Hist;
+
+					INSERT INTO [ODS].[dbo].[CT_GbvScreeningCount_Log]([SiteCode],[CreatedDate],[GbvScreeningCount])
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS GbvScreeningCount 
+					FROM [ODS].[dbo].[CT_GbvScreening] 
+					--WHERE @MaxCreatedDate  > @MaxCreatedDate
+					GROUP BY SiteCode;
+
 				--DROP INDEX CT_GbvScreening ON [ODS].[dbo].[CT_GbvScreening];
 				---Remove any duplicate from [ODS].[dbo].[CT_GbvScreening]
 				--WITH CTE AS   

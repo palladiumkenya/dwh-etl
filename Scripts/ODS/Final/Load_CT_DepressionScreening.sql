@@ -1,4 +1,13 @@
 BEGIN
+		DECLARE		@MaxVisitDate_Hist			DATETIME,
+					@VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_DepressionScreening_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock)		
+					
+		INSERT INTO  [ODS].[dbo].[CT_DepressionScreening_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@MaxVisitDate_Hist,GETDATE())
+
 			--CREATE INDEX CT_DepressionScreening ON [ODS].[dbo].[CT_DepressionScreening](sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_DepressionScreening]
 			MERGE [ODS].[dbo].[CT_DepressionScreening]AS a
@@ -31,6 +40,11 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.PatientUnique_ID =b.DepressionScreeningUnique_ID)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.PatientID					=b.PatientID,
@@ -50,11 +64,22 @@ BEGIN
 						a.DepressionAssesmentScore	=b.DepressionAssesmentScore,
 						a.DateImported				=b.DateImported,
 						a.CKV						=b.CKV
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID);
-				
+					
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+					UPDATE [ODS].[dbo].[CT_DepressionScreening_Log]
+						SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @MaxVisitDate_Hist;
+
+				INSERT INTO [ODS].[dbo].[CT_DepressionScreeningCount_Log]([SiteCode],[CreatedDate],[DepressionScreeningCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS DepressionScreeningCount 
+				FROM [ODS].[dbo].[CT_DepressionScreening] 
+				--WHERE @MaxCreatedDate  > @MaxCreatedDate
+				GROUP BY SiteCode;
+
 				--DROP INDEX CT_DepressionScreening ON [ODS].[dbo].[CT_DepressionScreening];
 				---Remove any duplicate from [ODS].[dbo].[CT_DepressionScreening]
 				WITH CTE AS   

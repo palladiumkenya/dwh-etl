@@ -1,4 +1,13 @@
 BEGIN
+		DECLARE		@MaxVisitDate_Hist			DATETIME,
+					@VisitDate					DATETIME
+				
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_DrugAlcoholScreening_Log]  (NoLock)
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DrugAlcoholScreeningExtract] WITH (NOLOCK) 		
+					
+		INSERT INTO  [ODS].[dbo].[CT_DrugAlcoholScreening_Log](MaxVisitDate,LoadStartDateTime)
+		VALUES(@VisitDate,GETDATE())
+
 			--CREATE INDEX CT_DrugAlcoholScreening ON [ODS].[dbo].[CT_DrugAlcoholScreening] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_DrugAlcoholScreening]
 			MERGE [ODS].[dbo].[CT_DrugAlcoholScreening] AS a
@@ -27,6 +36,11 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID =b.DrugAlcoholScreeningUnique_ID)
+					
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.PatientID			=b.PatientID,
@@ -38,11 +52,20 @@ BEGIN
 						a.DrugUse			=b.DrugUse,
 						a.DateImported		=b.DateImported,
 						a.CKV				=b.CKV
-							
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID);
-				
+					
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;	
+					
+					UPDATE [ODS].[dbo].[CT_DrugAlcoholScreening_Log]
+						SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @VisitDate;
+
+				INSERT INTO [ODS].[dbo].[CT_DrugAlcoholScreeningCount_Log]([SiteCode],[CreatedDate],[DrugAlcoholScreeningCount])
+				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS DrugAlcoholScreeningCount 
+				FROM [ODS].[dbo].[CT_DrugAlcoholScreening] ;
+
 					--DROP INDEX CT_DrugAlcoholScreening ON [ODS].[dbo].[CT_DrugAlcoholScreening];
 					---Remove any duplicate from [ODS].[dbo].[CT_DrugAlcoholScreening]
 					WITH CTE AS   

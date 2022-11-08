@@ -128,7 +128,7 @@ BEGIN
 			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
 			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
 			FROM [ODS].[dbo].[CT_PatientVisits] 
-			WHERE @MaxCreatedDate  > @MaxCreatedDate
+			---WHERE @MaxCreatedDate  > @MaxCreatedDate
 			GROUP BY SiteCode;
 
 

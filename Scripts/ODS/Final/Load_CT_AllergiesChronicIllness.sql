@@ -1,4 +1,14 @@
 BEGIN
+ 
+	 DECLARE		@MaxVisitDate_Hist			DATETIME,
+					@VisitDate					DATETIME
+				
+			SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_AllergiesChronicIllness_Log]  (NoLock)
+			SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] WITH (NOLOCK) 					
+					
+			INSERT INTO  [ODS].[dbo].[CT_AllergiesChronicIllness_Log](MaxVisitDate,LoadStartDateTime)
+			VALUES(@VisitDate,GETDATE())
+
 			--CREATE INDEX CT_AllergiesChronicIllness ON [ODS].[dbo].[CT_AllergiesChronicIllness] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_AllergiesChronicIllness]
 			MERGE [ODS].[dbo].[CT_AllergiesChronicIllness] AS a
@@ -26,6 +36,11 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID)
+
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV)
+				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.PatientID				=b.PatientID,
@@ -50,11 +65,21 @@ BEGIN
 							a.DateImported			=b.DateImported,
 							a.CKV					=b.CKV
 
-				
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV);
-				
+					WHEN NOT MATCHED BY SOURCE 
+						THEN
+						/* The Record is in the target table but doen't exit on the source table*/
+							Delete;
+
+					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]
+						SET LoadEndDateTime = GETDATE()
+					WHERE MaxVisitDate = @VisitDate;
+					
+					INSERT INTO [ODS].[dbo].[CT_AllergiesChronicIllnessCount_Log]([SiteCode],[CreatedDate],[AllergiesChronicIllnessCount])
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientPharmacyCount 
+					FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
+					--WHERE @MaxCreatedDate  > @MaxCreatedDate
+					GROUP BY SiteCode;
+
 					--DROP INDEX CT_AllergiesChronicIllness ON [ODS].[dbo].[CT_AllergiesChronicIllness];
 					---Remove any duplicate from [ODS].[dbo].[CT_AllergiesChronicIllness]
 					WITH CTE AS   
