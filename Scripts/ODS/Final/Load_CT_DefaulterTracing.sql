@@ -1,0 +1,70 @@
+BEGIN
+			--CREATE INDEX CT_DefaulterTracing ON [ODS].[dbo].[CT_DefaulterTracing] (sitecode,PatientPK);
+	       ---- Refresh [ODS].[dbo].[CT_DefaulterTracing]
+			MERGE [ODS].[dbo].[CT_DefaulterTracing] AS a
+				USING(SELECT P.[PatientPID] AS PatientPK
+						  ,P.[PatientCccNumber] AS PatientID
+						  ,P.[Emr]
+						  ,P.[Project]
+						  ,F.Code AS SiteCode
+						  ,F.Name AS FacilityName 
+						  ,[VisitID]
+						  ,Cast([VisitDate] As Date)[VisitDate]
+						  ,[EncounterId]
+						  ,[TracingType]
+						  ,[TracingOutcome]
+						  ,[AttemptNumber]
+						  ,[IsFinalTrace]
+						  ,[TrueStatus]
+						  ,[CauseOfDeath]
+						  ,[Comments]
+						  ,Cast([BookingDate] As Date)[BookingDate]
+						  ,LTRIM(RTRIM(STR(F.[Code])))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
+					 ,getdate() as [DateImported] 
+					 ,P.ID as PatientUnique_ID
+					 ,C.ID as DefaulterTracingUnique_ID
+					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
+					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+					WHERE P.gender != 'Unknown' ) AS b 
+						ON(
+						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
+						 a.PatientPK  = b.PatientPK 
+						and a.SiteCode = b.SiteCode
+						and a.VisitID = b.VisitID
+						and a.VisitDate = b.VisitDate
+						and a.PatientUnique_ID =b.DefaulterTracingUnique_ID)
+					WHEN MATCHED THEN
+						UPDATE SET 						
+						a.Emr			=b.Emr,
+						a.Project		=b.Project,
+						a.FacilityName	=b.FacilityName,
+						a.EncounterId	=b.EncounterId,
+						a.TracingType	=b.TracingType,
+						a.TracingOutcome=b.TracingOutcome,
+						a.AttemptNumber	=b.AttemptNumber,
+						a.IsFinalTrace	=b.IsFinalTrace,
+						a.TrueStatus	=b.TrueStatus,
+						a.CauseOfDeath	=b.CauseOfDeath,
+						a.Comments		=b.Comments,
+						a.BookingDate	=b.BookingDate,
+						a.CKV			=b.CKV,
+						a.DateImported	=b.DateImported
+							
+					WHEN NOT MATCHED THEN 
+						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
+						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID);
+				
+				--DROP INDEX CT_DefaulterTracing ON [ODS].[dbo].[CT_DefaulterTracing];
+				---Remove any duplicate from [ODS].[dbo].[CT_DefaulterTracing]
+				WITH CTE AS   
+					(  
+						SELECT [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID
+						ORDER BY [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID) AS dump_ 
+						FROM [ODS].[dbo].[CT_DefaulterTracing] 
+						)  
+			
+				DELETE FROM CTE WHERE dump_ >1;
+
+	END
