@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2022-11-08T06:58:05.10598Z</LastWriteTime>
+    <LastWriteTime>2022-11-08T18:52:22.5358893Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -23,7 +23,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_ODS_CT_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-08T14:35:36.4060458Z</LastWriteTime>
+      <LastWriteTime>2022-11-09T12:53:04.5710301Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>

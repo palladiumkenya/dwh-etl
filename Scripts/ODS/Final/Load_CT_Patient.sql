@@ -4,7 +4,7 @@ BEGIN
 					 @RegistrationDate					DATETIME
 				
 			SELECT @MaxRegistrationDate_Hist	= MAX(MaxRegistrationDate) FROM [ODS].[dbo].[CT_Patient_Log]  (NoLock)
-			SELECT @RegistrationDate			= MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
+			SELECT @RegistrationDate			= MAX(RegistrationDate) FROM [DWAPICentral].[dbo].[PatientExtract] (NoLock)
 									
 			INSERT INTO  [ODS].[dbo].[CT_Patient_Log](MaxRegistrationDate,LoadStartDateTime)
 			VALUES(@RegistrationDate,GETDATE())
@@ -21,7 +21,8 @@ BEGIN
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						and a.RegistrationDate =b.RegistrationDate)
+						and a.RegistrationDate =b.RegistrationDate
+						and a.id = b.id)
 
 						WHEN NOT MATCHED THEN 
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV) 
@@ -76,7 +77,7 @@ BEGIN
 					WHERE MaxRegistrationDate = @RegistrationDate;
 
 					INSERT INTO [ODS].[dbo].[CT_PatientCount_Log]([SiteCode],[CreatedDate],[PatientCount])
-					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
+					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientCount 
 					FROM [ODS].[dbo].[CT_Patient] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;

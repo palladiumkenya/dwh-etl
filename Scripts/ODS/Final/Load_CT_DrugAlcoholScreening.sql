@@ -64,7 +64,8 @@ BEGIN
 
 				INSERT INTO [ODS].[dbo].[CT_DrugAlcoholScreeningCount_Log]([SiteCode],[CreatedDate],[DrugAlcoholScreeningCount])
 				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS DrugAlcoholScreeningCount 
-				FROM [ODS].[dbo].[CT_DrugAlcoholScreening] ;
+				FROM [ODS].[dbo].[CT_DrugAlcoholScreening] 
+				GROUP BY [SiteCode];
 
 					--DROP INDEX CT_DrugAlcoholScreening ON [ODS].[dbo].[CT_DrugAlcoholScreening];
 					---Remove any duplicate from [ODS].[dbo].[CT_DrugAlcoholScreening]
