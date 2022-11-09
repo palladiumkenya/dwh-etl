@@ -5,8 +5,8 @@ select
 from HIS_Implementation.dbo.All_EMRSites
 where [SDP Agency] <> 'NULL'
 )
-insert into dbo.DimAgency
 select
- source_agency.*,
- cast(getdate() as date) as LoadDate
+	source_agency.*,
+	cast(getdate() as date) as LoadDate
+into dbo.DimAgency
 from source_agency;

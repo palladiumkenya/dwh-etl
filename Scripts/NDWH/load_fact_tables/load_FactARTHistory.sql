@@ -6,7 +6,6 @@ with MFL_partner_agency_combination as (
 		[SDP Agency] as Agency
 	from HIS_Implementation.dbo.All_EMRSites
 )
-insert into dbo.FactARTHistory
 select 	
 	facility.FacilityKey,
 	partner.PartnerKey,
@@ -19,7 +18,8 @@ select
 	end as IsTXCurr,
 	art_outcome.ARTOutcomeKey,
 	cast(getdate() as date) as LoadDate
-from dbo.ARTOutcomes_202008_202208 as txcurr_report
+into dbo.FactARTHistory
+from dbo.HistoricalARTOutcomesBaseTable as txcurr_report
 left join dbo.DimDate as as_of on as_of.Date = txcurr_report.AsOfDate
 left join dbo.DimFacility as facility on facility.MFLCode = txcurr_report.MFLCode
 left join dbo.DimPatient as patient on patient.PatientPK =  CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(txcurr_report.PatientPK as NVARCHAR(36))), 2)          
