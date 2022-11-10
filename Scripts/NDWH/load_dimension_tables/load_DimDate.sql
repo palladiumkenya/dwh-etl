@@ -11,6 +11,7 @@ with dates_cte(date) as (
     where date < @edate
 )
 select 
+	DateKey = IDENTITY(INT, 1, 1),
 	format(date, 'yyyyMMdd') as DateKey,
 	Date,
 	year(date) as Year,
@@ -26,3 +27,4 @@ select
 into dbo.DimDate
 from dates_CTE
 option (maxrecursion 0);
+ALTER TABLE dbo.DimDate ADD PRIMARY KEY(DateKey);

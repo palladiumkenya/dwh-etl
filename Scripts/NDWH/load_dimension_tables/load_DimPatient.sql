@@ -22,6 +22,8 @@ with patient_source as (
 		and patients.SiteCode = wabwhocd4.SiteCode
 )
 select
+	PatientKey = IDENTITY(INT, 1, 1),
 	patient_source.*
 into dbo.DimPatient
 from patient_source;
+ALTER TABLE dbo.DimPatient ADD PRIMARY KEY(PatientKey);
