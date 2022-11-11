@@ -6,7 +6,8 @@ with MFL_partner_agency_combination as (
 		[SDP Agency] as Agency
 	from HIS_Implementation.dbo.All_EMRSites
 )
-select 	
+select
+	FactKey = IDENTITY(INT, 1, 1),
 	facility.FacilityKey,
 	partner.PartnerKey,
 	agency.AgencyKey,
@@ -27,4 +28,6 @@ left join dbo.DimPatient as patient on patient.PatientPK =  CONVERT(NVARCHAR(64)
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = txcurr_report.MFLCode
 left join dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome
+left join dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome;
+
+alter table dbo.FactARTHistory add primary key(FactKey);
