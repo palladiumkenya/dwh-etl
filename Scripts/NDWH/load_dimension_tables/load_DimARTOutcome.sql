@@ -17,6 +17,7 @@ with distinct_ARTOutcomes as (
 	select'uL' as ARTOutcome
 )
 select 
+	ARTOutcomeKey = IDENTITY(INT, 1, 1),
 	ARTOutcome,
 	case
 		when ARTOutcome = 'S' then 'Stopped'
@@ -31,3 +32,4 @@ select
 	cast(getdate() as date) as LoadDate
 into dbo.DimARTOutcome
 from distinct_ARTOutcomes;
+ALTER TABLE dbo.DimARTOutcome ADD PRIMARY KEY(ARTOutcomeKey);
