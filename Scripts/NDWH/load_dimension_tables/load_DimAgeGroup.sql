@@ -122,8 +122,8 @@ with source_agegroup as (
     select 120 as Age,  '25+' as MOHAgeGroup,   '65+' as DATIMAgeGroup  
 )
 select 
-    AgeGroupKey = IDENTITY(INT, 1, 1)
-    source_agegroup.*,
+    AgeGroupKey = IDENTITY(INT, 1, 1),
+    source_agegroup.*
 into dbo.DimAgeGroup
 from source_agegroup;
 
