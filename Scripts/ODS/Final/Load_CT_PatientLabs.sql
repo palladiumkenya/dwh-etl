@@ -26,7 +26,11 @@ BEGIN
 						  
 					-------------------- Added by Dennis as missing columns
 						,PL.DateSampleTaken,
-						PL.SampleType
+						PL.SampleType,
+						p.ID as PatientUnique_ID,
+						PL.ID as PatientLabsUnique_ID
+
+
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
@@ -40,7 +44,7 @@ BEGIN
 						and a.OrderedbyDate	=b.OrderedbyDate
 						and  a.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS						
 						and  a.TestName COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestName COLLATE SQL_Latin1_General_CP1_CI_AS
-						--and a.TestResult		=b.TestResult
+						and a.PatientUnique_ID		=b.PatientLabsUnique_ID
 						)
 
 												
