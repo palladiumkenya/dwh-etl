@@ -122,8 +122,9 @@ with source_agegroup as (
     select 120 as Age,  '25+' as MOHAgeGroup,   '65+' as DATIMAgeGroup  
 )
 select 
-    AgeGroupKey = IDENTITY(INT, 1, 1)
+    AgeGroupKey = IDENTITY(INT, 1, 1),
     source_agegroup.*,
+    cast(getdate() as date) as LoadDate
 into dbo.DimAgeGroup
 from source_agegroup;
 
