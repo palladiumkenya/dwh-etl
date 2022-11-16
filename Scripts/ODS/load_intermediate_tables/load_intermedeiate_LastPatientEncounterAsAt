@@ -1,0 +1,25 @@
+--Load_LastPatientEncounterAsAt
+With LastPatientEncounterAsAt AS ( 
+
+ SELECT 
+	coalesce (LV.PatientID,LD.PatientID) AS PatientID,
+	 coalesce(LV.SiteCode,LD.SiteCode) AS SiteCode,
+	 coalesce(LV.PatientPK,LD.PatientPK) AS PatientPK ,
+	
+	 CASE
+	 WHEN LV.VisitDateAsAt > LD.LastDispenseDate
+		THEN LV.VisitDateAsAt ELSE coalesce (LD.LastDispenseDate, LV.VisitDateAsAt)
+		END AS EncounterDateAsAt,
+	CASE 
+		WHEN LV.[AppointmentDateAsAt]>LD.ExpectedReturn
+		THEN LV.[AppointmentDateAsAt] ELSE coalesce(LD.ExpectedReturn,LV.AppointmentDateAsAt)  END AS AppointmentDateAsAt
+	
+ FROM NDWH.dbo.Intermediate_LastVisitAsAt  LV
+ FULL JOIN NDWH.dbo.Intermediate_PharmacyDispenseAsAtDate  LD
+ ON  LV.PatientID=LD.PatientID AND LV.SiteCode=LD.SiteCode AND LV.PatientPK =LD.PatientPK
+
+)
+
+ Select LastPatientEncounterAsAt.* INTO NDWH.dbo.Intermediate_LastPatientEncounterAsAt
+ from LastPatientEncounterAsAt
+
