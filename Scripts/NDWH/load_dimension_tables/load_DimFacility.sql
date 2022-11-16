@@ -15,7 +15,7 @@ site_abstraction as (
 	select
 		SiteCode,
 		max(VisitDate) as DateSiteAbstraction
-	from All_Staging.dbo.stg_PatientVisits
+	from ODS.dbo.CT_PatientVisits
 	group by SiteCode
 ),
 latest_upload as (
