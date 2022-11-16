@@ -123,7 +123,8 @@ with source_agegroup as (
 )
 select 
     AgeGroupKey = IDENTITY(INT, 1, 1),
-    source_agegroup.*
+    source_agegroup.*,
+    cast(getdate() as date) as LoadDate
 into dbo.DimAgeGroup
 from source_agegroup;
 

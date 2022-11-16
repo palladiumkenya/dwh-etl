@@ -1,5 +1,4 @@
 
-
 with source_FamilyPlanning as (
 select 
 	distinct FamilyPlanningMethod as FamilyPlanning
