@@ -2,21 +2,21 @@
 With LastPatientEncounterAsAt AS ( 
 
  SELECT 
-	coalesce (LV.PatientID,LD.PatientID) AS PatientID,
-	 coalesce(LV.SiteCode,LD.SiteCode) AS SiteCode,
-	 coalesce(LV.PatientPK,LD.PatientPK) AS PatientPK ,
+	coalesce (LastVisit.PatientID,LastDispense.PatientID) AS PatientID,
+	 coalesce(LastVisit.SiteCode,LastDispense.SiteCode) AS SiteCode,
+	 coalesce(LastVisit.PatientPK,LastDispense.PatientPK) AS PatientPK ,
 	
 	 CASE
-	 WHEN LV.VisitDateAsAt > LD.LastDispenseDate
-		THEN LV.VisitDateAsAt ELSE coalesce (LD.LastDispenseDate, LV.VisitDateAsAt)
+	 WHEN LastVisit.VisitDateAsAt > LastDispense.LastDispenseDate
+		THEN LastVisit.VisitDateAsAt ELSE coalesce (LastDispense.LastDispenseDate, LastVisit.VisitDateAsAt)
 		END AS EncounterDateAsAt,
 	CASE 
-		WHEN LV.[AppointmentDateAsAt]>LD.ExpectedReturn
-		THEN LV.[AppointmentDateAsAt] ELSE coalesce(LD.ExpectedReturn,LV.AppointmentDateAsAt)  END AS AppointmentDateAsAt
+		WHEN LastVisit.[AppointmentDateAsAt]>LastDispense.ExpectedReturn
+		THEN LastVisit.[AppointmentDateAsAt] ELSE coalesce(LastDispense.ExpectedReturn,LastVisit.AppointmentDateAsAt)  END AS AppointmentDateAsAt
 	
- FROM NDWH.dbo.Intermediate_LastVisitAsAt  LV
- FULL JOIN NDWH.dbo.Intermediate_PharmacyDispenseAsAtDate  LD
- ON  LV.PatientID=LD.PatientID AND LV.SiteCode=LD.SiteCode AND LV.PatientPK =LD.PatientPK
+ FROM NDWH.dbo.Intermediate_LastVisitAsAt  LastVisit
+ FULL JOIN NDWH.dbo.Intermediate_PharmacyDispenseAsAtDate  LastDispense
+ ON  LastVisit.PatientID=LastDispense.PatientID AND LastVisit.SiteCode=LastDispense.SiteCode AND LastVisit.PatientPK =LastDispense.PatientPK
 
 )
 
