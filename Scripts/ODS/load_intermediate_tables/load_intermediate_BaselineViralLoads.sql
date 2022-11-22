@@ -1,5 +1,3 @@
-use NDWH;
-
 with source_BaseLineViralLoads as (
 	select
 		row_number() over(partition by PatientID, SiteCode, PatientPK order by OrderedbyDate asc) as rank, 
