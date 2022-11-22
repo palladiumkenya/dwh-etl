@@ -75,8 +75,9 @@ BEGIN
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;
 
+				--truncate table [ODS].[dbo].[CT_AdverseEventCount_Log]
 				INSERT INTO [ODS].[dbo].[CT_AdverseEventCount_Log]([SiteCode],[CreatedDate],[AdverseEventCount])
-				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS AdverseEventCount 
+				SELECT SiteCode,GETDATE(),COUNT(CKV) AS AdverseEventCount 
 				FROM [ODS].[dbo].[CT_AdverseEvents] 
 				--WHERE @MaxCreatedDate  > @MaxCreatedDate
 				GROUP BY SiteCode;

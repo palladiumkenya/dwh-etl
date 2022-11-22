@@ -1,65 +1,50 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\Checkpoint.xml"
-  DTS:CheckpointUsage="1"
-  DTS:CreationDate="11/21/2022 11:31:47 AM"
+  DTS:CreationDate="11/15/2022 4:05:03 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
   DTS:CreatorName="WIN-LQ135V1RIG4\Dmugo"
-  DTS:DTSID="{A5EFB05D-928F-4540-9B52-D5633B77FE43}"
+  DTS:DTSID="{2C2851EB-F7A3-48D2-8F74-A1C2907D2AA6}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="16.0.845.0"
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{11BC8DD1-DC24-45E1-A333-8B601A5585C9}">
+  DTS:VersionBuild="4"
+  DTS:VersionGUID="{F4B6EA0A-83E0-4D0F-AE2E-B75907839A8A}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[NDWH_SQL_Dim_FileConn.sql]"
+      DTS:refId="Package.ConnectionManagers[LocalHost.SSISErrorHandling]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{53591823-A25A-4D99-A272-048679FF5F3D}"
+      DTS:ObjectName="LocalHost.SSISErrorHandling">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=SSISErrorHandling;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{53591823-A25A-4D99-A272-048679FF5F3D}LocalHost.SSISErrorHandling;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SQL_FileConn.sql]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{3FB4F5C6-C0D4-4251-902F-8D12E2A7E89E}"
-      DTS:ObjectName="NDWH_SQL_Dim_FileConn.sql">
+      DTS:DTSID="{85FFD300-DFF2-45C5-9817-48ABA87A8802}"
+      DTS:ObjectName="SQL_FileConn.sql">
       <DTS:PropertyExpression
-        DTS:Name="ConnectionString">@[User::FilePath] +"\\"+ @[User::FileName]</DTS:PropertyExpression>
+        DTS:Name="ConnectionString">@[User::ODS_SQL_FilesPath] +"\\"+ @[User::FileName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\load_dimension_tables_Revised\" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[OLE_DB.NDWH_Dest]"
-      DTS:CreationName="OLEDB"
-      DTS:DTSID="{DA515452-CD0F-4876-87B1-DFD0BE0B847E}"
-      DTS:ObjectName="OLE_DB.NDWH_Dest">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectRetryCount="1"
-          DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=NDWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package1-{DA515452-CD0F-4876-87B1-DFD0BE0B847E}LocalHost.ODS;" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[OLE_DB.ODS_Src]"
-      DTS:CreationName="OLEDB"
-      DTS:DTSID="{8E679852-B2C3-4111-BD72-9A17DBB76F44}"
-      DTS:ObjectName="OLE_DB.ODS_Src">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectRetryCount="1"
-          DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{8E679852-B2C3-4111-BD72-9A17DBB76F44}LocalHost.ODS;Auto Translate=False;" />
+          DTS:ConnectionString="C:\LoopTest\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{A9943748-61F3-4DF9-B484-D98C52272C92}"
+      DTS:DTSID="{06645250-CCA2-474E-AED2-64BC820000D9}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
       DTS:ObjectName="FileName">
@@ -69,33 +54,35 @@
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{63B82633-E637-4B7E-AACD-69EAA1FE6BE5}"
+      DTS:DTSID="{F3CE6D06-41FF-4173-9C07-DBC65EAA8B88}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
-      DTS:ObjectName="FilePath">
+      DTS:ObjectName="ODS_SQL_FilesPath">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\load_dimension_tables_Revised</DTS:VariableValue>
+        DTS:DataType="8">C:\LoopTest</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\Load Dimensions Container Loop"
+      DTS:refId="Package\Foreach Loop Container"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
-      DTS:DTSID="{6E1BBBB6-871E-4D80-A5E7-0E9E2FE61E33}"
+      DTS:DTSID="{33DD03FC-2D9A-41DB-BFC9-0CC6B3EA68BD}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Load Dimensions Container Loop">
+      DTS:ObjectName="Foreach Loop Container">
       <DTS:ForEachEnumerator
         DTS:CreationName="Microsoft.ForEachFileEnumerator"
-        DTS:DTSID="{236A9A1B-B6B4-49F4-A25B-6A40C700DE2D}"
-        DTS:ObjectName="{236A9A1B-B6B4-49F4-A25B-6A40C700DE2D}">
+        DTS:DTSID="{1DE16653-F191-4C15-9A9E-A2E0F074C1AF}"
+        DTS:ObjectName="{1DE16653-F191-4C15-9A9E-A2E0F074C1AF}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::ODS_SQL_FilesPath]</DTS:PropertyExpression>
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\load_dimension_tables_Revised" />
+              Folder="C:\LoopTest" />
             <FEFEProperty
-              FileSpec="*.SQL" />
+              FileSpec="*.sql" />
             <FEFEProperty
               FileNameRetrievalType="1" />
             <FEFEProperty
@@ -106,28 +93,28 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\Load Dimensions Container Loop\Loop through Dim Files"
+          DTS:refId="Package\Foreach Loop Container\Execute SQL Task"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
-          DTS:DTSID="{8044C860-E66E-4DC5-B600-298397925618}"
+          DTS:DTSID="{2A6E8160-D854-4ADE-9881-B795CC6D34E4}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
-          DTS:ObjectName="Loop through Dim Files"
+          DTS:ObjectName="Execute SQL Task"
           DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
-              SQLTask:Connection="{DA515452-CD0F-4876-87B1-DFD0BE0B847E}"
+              SQLTask:Connection="{53591823-A25A-4D99-A272-048679FF5F3D}"
               SQLTask:SqlStmtSourceType="FileConnection"
-              SQLTask:SqlStatementSource="NDWH_SQL_Dim_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+              SQLTask:SqlStatementSource="SQL_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
       </DTS:Executables>
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{88F503F5-DC74-461C-B56B-30BDACB9A732}"
-          DTS:ObjectName="{88F503F5-DC74-461C-B56B-30BDACB9A732}"
+          DTS:DTSID="{72B20AF8-F8A9-4CAD-B8FE-9CC6973BC903}"
+          DTS:ObjectName="{72B20AF8-F8A9-4CAD-B8FE-9CC6973BC903}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -146,16 +133,16 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="189.333333333334,42.6666666666667"
-          Id="Package\Load Dimensions Container Loop\Loop through Dim Files"
-          TopLeft="45.7083307349434,16.166665388147" />
+          Size="164,42.6666666666667"
+          Id="Package\Foreach Loop Container\Execute SQL Task"
+          TopLeft="51.2499965541065,20.5333318456014" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="325.333333333334,115.333333333334"
-          Size="325.333333333334,158"
-          Id="Package\Load Dimensions Container Loop"
-          TopLeft="128.749998081476,12.3499997791648" />
+          PanelSize="286.666666666667,121.333333333334"
+          Size="286.666666666667,164.666666666667"
+          Id="Package\Foreach Loop Container"
+          TopLeft="179.999997317791,23.3999995815754" />
       </GraphLayout>
     </LayoutInfo>
   </Package>

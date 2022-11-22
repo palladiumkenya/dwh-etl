@@ -125,8 +125,9 @@ BEGIN
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxVisitDate = @VisitDate;
 
+				  --truncate table [CT_VisitCount_Log]
 			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
-			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS VisitCount 
+			SELECT SiteCode,GETDATE(),COUNT(CKV) AS VisitCount 
 			FROM [ODS].[dbo].[CT_PatientVisits] 
 			---WHERE @MaxCreatedDate  > @MaxCreatedDate
 			GROUP BY SiteCode;
