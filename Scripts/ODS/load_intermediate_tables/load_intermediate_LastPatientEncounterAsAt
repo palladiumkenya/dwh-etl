@@ -8,7 +8,7 @@ With LastPatientEncounterAsAt AS (
 	
 	 CASE
 	 WHEN LastVisit.VisitDateAsAt > LastDispense.LastDispenseDate
-		THEN LastVisit.VisitDateAsAt ELSE coalesce (LastDispense.LastDispenseDate, LastVisit.VisitDateAsAt)
+		THEN LastVisit.VisitDateAsAt 
 		END AS EncounterDateAsAt,
 	CASE 
 		WHEN LastVisit.[AppointmentDateAsAt]>LastDispense.ExpectedReturn
