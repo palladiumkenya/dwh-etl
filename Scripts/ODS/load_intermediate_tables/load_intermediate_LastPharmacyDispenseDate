@@ -5,7 +5,8 @@ SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY D
     SiteCode,
     PatientPK,
     DispenseDate as LastDispenseDate,
-CASE WHEN ExpectedReturn IS NULL THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End AS ExpectedReturn 
+CASE WHEN ExpectedReturn IS NULL THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End AS ExpectedReturn,
+cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientPharmacy
  )
  Select LastPharmacyDispenseDate.* INTO NDWH.dbo.Intermediate_LastPharmacyDispenseDate

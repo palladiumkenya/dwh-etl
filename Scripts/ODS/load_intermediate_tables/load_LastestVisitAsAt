@@ -5,7 +5,8 @@ SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY V
     SiteCode,
     PatientPK,
     VisitDate AS VisitDateAsAt,
-CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End AS AppointmentDateAsAt 
+CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End AS AppointmentDateAsAt ,
+cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientVisits
  )
  Select LastVisitAsAt.* INTO NDWH.dbo.Intermediate_LastVisitAsAt

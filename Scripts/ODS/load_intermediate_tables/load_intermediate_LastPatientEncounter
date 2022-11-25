@@ -32,7 +32,8 @@ ART_expected_dates_logic AS (
 	tbl.SiteCode,
 	tbl.PatientPK,
     tbl.LastEncounterDate,
-    tbl.NextAppointmentDate
+    tbl.NextAppointmentDate,
+	cast(getdate() as date) as LoadDate
    INTO NDWH.dbo.Intermediate_LastPatientEncounter
 	FROM tbl AS tbl 
 	LEFT JOIN ART_expected_dates_logic ON  ART_expected_dates_logic.SiteCode = tbl.SiteCode

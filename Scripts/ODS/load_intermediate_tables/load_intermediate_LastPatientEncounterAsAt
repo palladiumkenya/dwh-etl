@@ -12,7 +12,8 @@ With LastPatientEncounterAsAt AS (
 		END AS EncounterDateAsAt,
 	CASE 
 		WHEN LastVisit.[AppointmentDateAsAt]>LastDispense.ExpectedReturn
-		THEN LastVisit.[AppointmentDateAsAt] ELSE coalesce(LastDispense.ExpectedReturn,LastVisit.AppointmentDateAsAt)  END AS AppointmentDateAsAt
+		THEN LastVisit.[AppointmentDateAsAt] ELSE coalesce(LastDispense.ExpectedReturn,LastVisit.AppointmentDateAsAt)  END AS AppointmentDateAsAt,
+		cast(getdate() as date) as LoadDate
 	
  FROM NDWH.dbo.Intermediate_LastVisitAsAt  LastVisit
  FULL JOIN NDWH.dbo.Intermediate_PharmacyDispenseAsAtDate  LastDispense
