@@ -1,6 +1,6 @@
 --Load_LastPharmacyDispenseDate
 With LastPharmacyDispenseDate AS (
-SELECT distinct row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
+SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
     PatientID ,
     SiteCode,
     PatientPK,

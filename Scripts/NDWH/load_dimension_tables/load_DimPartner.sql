@@ -1,7 +1,7 @@
 ---DimPartner Load
 with source_partner as (
 select
-	distinct SDP as AgencyName
+	distinct SDP as PartnerName
 from HIS_Implementation.dbo.All_EMRSites
 )
 select 
