@@ -79,8 +79,9 @@ BEGIN
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxDispenseDate = @DispenseDate;
 
+			--truncate table [ODS].[dbo].[CT_PatientPharmacyCount_Log]
 			INSERT INTO [ODS].[dbo].[CT_PatientPharmacyCount_Log]([SiteCode],[CreatedDate],[PatientPharmacyCount])
-			SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientPharmacyCount 
+			SELECT SiteCode,GETDATE(),COUNT(CKV) AS PatientPharmacyCount 
 			FROM [ODS].[dbo].[CT_PatientPharmacy] 
 			--WHERE @MaxCreatedDate  > @MaxCreatedDate
 			GROUP BY SiteCode;

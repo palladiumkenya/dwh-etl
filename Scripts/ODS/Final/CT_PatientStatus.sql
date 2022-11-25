@@ -82,8 +82,10 @@ BEGIN
 							SET LoadEndDateTime = GETDATE()
 						WHERE MaxExitDate = @ExitDate;
 
+						--truncate table [ODS].[dbo].[CT_PatientStatusCount_Log]
+
 						INSERT INTO [ODS].[dbo].[CT_PatientStatusCount_Log]([SiteCode],[CreatedDate],[PatientStatusCount])
-						SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientStatusCount 
+						SELECT SiteCode,GETDATE(),COUNT(CKV) AS PatientStatusCount 
 						FROM [ODS].[dbo].[CT_PatientStatus]  
 						--WHERE @MaxCreatedDate  > @MaxCreatedDate
 						GROUP BY SiteCode;

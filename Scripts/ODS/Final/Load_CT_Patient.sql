@@ -77,7 +77,7 @@ BEGIN
 					WHERE MaxRegistrationDate = @RegistrationDate;
 
 					INSERT INTO [ODS].[dbo].[CT_PatientCount_Log]([SiteCode],[CreatedDate],[PatientCount])
-					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientCount 
+					SELECT SiteCode,GETDATE(),COUNT(CKV) AS PatientCount 
 					FROM [ODS].[dbo].[CT_Patient] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;

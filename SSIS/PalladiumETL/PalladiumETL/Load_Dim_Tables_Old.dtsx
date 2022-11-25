@@ -1,29 +1,26 @@
 <?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="D:\SSIS_Checkpoint\Chekpoint.xml"
-  DTS:CheckpointUsage="1"
   DTS:CreationDate="9/27/2022 3:16:31 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="DENNIS"
   DTS:CreatorName="DENNIS\DENO"
-  DTS:DTSID="{C0C9647D-D83B-4F20-BC62-F6305E2F25B7}"
+  DTS:DTSID="{5DC603F7-DC1C-4C3E-AB55-AB66141F8391}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:FailParentOnFailure="True"
   DTS:LastModifiedProductVersion="15.0.2000.170"
   DTS:LocaleID="1033"
   DTS:ObjectName="Load_Dim_Tables"
   DTS:PackageType="5"
-  DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="39"
-  DTS:VersionGUID="{6A980280-2B36-4372-82DB-55D4AB1499C5}">
+  DTS:VersionBuild="37"
+  DTS:VersionGUID="{CAE72C45-A1E8-4448-AFD7-F372E42F02A7}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB_Destination]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{A8CD9087-D14A-44C6-AF39-327325B7CA43}"
+      DTS:DTSID="{E29862BB-E11B-490C-82D3-CDF56E9BC837}"
       DTS:ObjectName="OLE_DB_Destination">
       <DTS:PropertyExpression
         DTS:Name="ConnectByProxy">@[$Project::OLE_DB_Destination_ConnectByProxy]</DTS:PropertyExpression>
@@ -53,13 +50,18 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=sa;Initial Catalog=STAGING_DB;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=sa;Initial Catalog=STAGING_DB;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAf2Tn0+bxsUOTiWVPrtGpTQAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACsndlut5rNrwusJDS35115uNRkXUZwo+WdOrWVK18PjgAAAAAOgAAAAAIAACAAAABgMO8DMPjll/1xb5WZ8AAvuMlUG50d+h2k/XYFDcBVejAAAADdcosOZ693ReZG6Gc9BOo0dz14tuoLlKw1iDJPaxWnRQZPiU4xim1VO/gLO0jfoA5AAAAAAdt9e++o3m9GwRAofXcF7p/OLinhYxi7Kw+pk6xw7LoPlluKx63KeBi+RtM4X7iSVDbGlmr1Y+j1G24WpYbjnA</DTS:Password>
+        </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB_DWAPICental_Src]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{7CAD0D59-5BDC-4F5F-BC08-A7EEFA332DA8}"
+      DTS:DTSID="{77E93A79-8983-438B-A657-F3303C76D521}"
       DTS:ObjectName="OLE_DB_DWAPICental_Src">
       <DTS:PropertyExpression
         DTS:Name="ConnectByProxy">@[$Project::OLE_DB_DWAPICental_Src_ConnectByProxy]</DTS:PropertyExpression>
@@ -89,13 +91,13 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB_NDWH]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{BE74B2BC-0DB0-4920-828D-BF404BECFAF3}"
+      DTS:DTSID="{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}"
       DTS:ObjectName="OLE_DB_NDWH">
       <DTS:PropertyExpression
         DTS:Name="ConnectByProxy">@[$Project::OLE_DB_NDWH_ConnectByProxy]</DTS:PropertyExpression>
@@ -125,13 +127,13 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB_ODS_Src]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{D42C5D23-BE4B-44B2-AE19-FFCFFBEAACAA}"
+      DTS:DTSID="{7A6481E5-3F75-4159-87BE-355C10B593C3}"
       DTS:ObjectName="OLE_DB_ODS_Src">
       <DTS:PropertyExpression
         DTS:Name="ConnectByProxy">@[$Project::OLE_DB_ODS_Src_ConnectByProxy]</DTS:PropertyExpression>
@@ -161,7 +163,7 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DENNIS\SQL2017;User ID=;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=DENNIS\SQL2017;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -241,9 +243,8 @@
       DTS:refId="Package\Load DimAgency"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{6D5C6AE0-5D7D-4A55-9735-BC657810B7BE}"
+      DTS:DTSID="{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load DimAgency"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
@@ -664,7 +665,7 @@
       [SDP Agency] AgencyID,
      [SDP Agency]
      
- FROM [ODS].[dbo].[ALL_EMRSites]</property>
+  FROM [ODS].[dbo].[ALL_EMRSites]</property>
                 <property
                   dataType="System.String"
                   description="The variable that contains the SQL command to be executed."
@@ -963,9 +964,9 @@
       DTS:refId="Package\Load DimDrug"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{D607A18A-4487-45CC-B812-C35C2BBD5915}"
+      DTS:DTSID="{73f349c4-6e09-4d0a-86a7-6c2fb922263c}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:LocaleID="1033"
+      DTS:LocaleID="-1"
       DTS:ObjectName="Load DimDrug"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
@@ -1016,9 +1017,8 @@
       DTS:refId="Package\Load DimFacility"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{B6AF95EE-E296-4D30-8938-E0F252EDE017}"
+      DTS:DTSID="{C34BB403-DA2F-43C9-B63F-444FCAA89D59}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load DimFacility"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
@@ -3651,10 +3651,8 @@
       DTS:refId="Package\Load DimPatient"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:Disabled="True"
-      DTS:DTSID="{E2CD5BB0-EFD7-497D-9672-D9403781ACC2}"
+      DTS:DTSID="{FCC67859-03F8-49B7-9B5E-D4C842A52A39}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load DimPatient"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
@@ -6808,10 +6806,9 @@
       DTS:refId="Package\Load DimTreatmentType"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{534F9B29-0C32-4CAC-A271-E45324AB2C74}"
+      DTS:DTSID="{374019a3-e157-4900-b5bc-b31842845f03}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="1033"
+      DTS:LocaleID="-1"
       DTS:ObjectName="Load DimTreatmentType"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
@@ -6862,9 +6859,8 @@
       DTS:refId="Package\Load Dim_Partner"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{9B5FF1D4-6292-471A-8A26-9DAA3F0F52D1}"
+      DTS:DTSID="{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1}"
       DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load Dim_Partner"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
@@ -7585,7 +7581,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint]"
       DTS:CreationName=""
-      DTS:DTSID="{A67CA24E-81CC-4DC0-96A7-A7BA587EFAD4}"
+      DTS:DTSID="{2BA4C111-6361-423C-8F9A-7017A4980767}"
       DTS:From="Package\Load DimPatient"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
@@ -7593,7 +7589,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
       DTS:CreationName=""
-      DTS:DTSID="{576442FA-1146-4182-95F0-B82C21D87D1F}"
+      DTS:DTSID="{4C87309B-7BE2-494E-9A37-23BA33BF3C8A}"
       DTS:From="Package\Load DimFacility"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
@@ -7601,7 +7597,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
       DTS:CreationName=""
-      DTS:DTSID="{58891BF0-9E56-4C0D-B83B-58D6B04BBC30}"
+      DTS:DTSID="{32FB59D4-B18E-4E7B-9776-AB919A50DFF3}"
       DTS:From="Package\Load DimAgency"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 2"
@@ -7609,7 +7605,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
       DTS:CreationName=""
-      DTS:DTSID="{83776416-55DC-4F1C-B37C-75A4DDB69F4F}"
+      DTS:DTSID="{46A4CB3A-0235-49A1-BA05-2F6D3A54758C}"
       DTS:From="Package\Load DimDrug"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 3"
@@ -7617,7 +7613,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
       DTS:CreationName=""
-      DTS:DTSID="{5D059431-B1F8-40F5-AC05-CAB8B139F67B}"
+      DTS:DTSID="{A57E508F-AE09-4025-A37C-37A73273FDD2}"
       DTS:From="Package\Load Dim_Partner"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 4"
@@ -7638,41 +7634,41 @@
         <NodeLayout
           Size="164,42.6666666666667"
           Id="Package\Load Dim_Partner"
-          TopLeft="21.8333333333334,416.166666666667" />
+          TopLeft="761.874988647178,90.9999983727932" />
         <NodeLayout
           Size="158.666666666667,42.6666666666667"
           Id="Package\Load DimAgency"
-          TopLeft="24.5,210.833333333333" />
+          TopLeft="531.874992074445,16.2166682125131" />
         <NodeLayout
           Size="146.666666666667,42.6666666666667"
           Id="Package\Load DimDrug"
-          TopLeft="30.5,313.5" />
+          TopLeft="770.624988516793,14.8833367388446" />
         <NodeLayout
           Size="156,42.6666666666667"
           Id="Package\Load DimFacility"
-          TopLeft="25.8333333333333,108.166666666667" />
+          TopLeft="269.374995986,15.5999997210503" />
         <NodeLayout
           Size="157.333333333334,42.6666666666667"
           Id="Package\Load DimPatient"
-          TopLeft="25.1666666666667,5.49999999999993" />
+          TopLeft="19.9999997019768,11.0499998024106" />
         <NodeLayout
           Size="196.666666666667,42.6666666666667"
           Id="Package\Load DimTreatmentType"
-          TopLeft="5.50000000000006,518.833333333333" />
+          TopLeft="535.624992018566,90.9000038820503" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="103.833333333333,48.1666666666666">
+          TopLeft="177.33333303531,34.6583330950638">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,60"
+              EndConnector="92.0416629506897,0"
               Start="0,0"
-              End="0,52.5">
+              End="84.5416629506897,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.5" />
+                    End="84.5416629506897,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7683,18 +7679,18 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="103.833333333333,150.833333333333">
+          TopLeft="425.374995986,37.241667300115">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,60.0000000000001"
+              EndConnector="106.499996088445,0"
               Start="0,0"
-              End="0,52.5000000000001">
+              End="98.9999960884452,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.5000000000001" />
+                    End="98.9999960884452,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7705,18 +7701,18 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="103.833333333333,253.5">
+          TopLeft="690.541658741112,36.8833358090122">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,60.0000000000001"
+              EndConnector="80.0833297756815,0"
               Start="0,0"
-              End="0,52.5000000000001">
+              End="72.5833297756815,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.5000000000001" />
+                    End="72.5833297756815,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7727,18 +7723,18 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="103.833333333333,356.166666666667">
+          TopLeft="843.916655248652,57.5500034055113">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,60.0000000000001"
+              EndConnector="0,33.449994967282"
               Start="0,0"
-              End="0,52.5000000000001">
+              End="0,25.949994967282">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.5000000000001" />
+                    End="0,25.949994967282" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7749,18 +7745,18 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="103.833333333333,458.833333333333">
+          TopLeft="761.874988647178,112.283334460755">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,60"
+              EndConnector="-29.5833299619453,0"
               Start="0,0"
-              End="0,52.5">
+              End="-22.0833299619453,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.5" />
+                    End="-22.0833299619453,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7778,96 +7774,136 @@
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="NaN,NaN"
+          Size="209.333333333334,42.6666666666667"
           Id="Package\Load Dim_Partner\Slowly Changing Dimension"
-          TopLeft="NaN,NaN" />
+          TopLeft="208.833333333333,108.166666666667" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="166.666666666667,42.6666666666667"
           Id="Package\Load Dim_Partner\OLE DB Command"
-          TopLeft="NaN,NaN" />
+          TopLeft="230.166666666667,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="176,42.6666666666667"
           Id="Package\Load Dim_Partner\OLE DB Command 1"
-          TopLeft="NaN,NaN" />
+          TopLeft="457.5,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="150.666666666667,42.6666666666667"
           Id="Package\Load Dim_Partner\OLE DB Source"
-          TopLeft="NaN,NaN" />
+          TopLeft="238.166666666667,5.49999999999993" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="164,42.6666666666667"
           Id="Package\Load Dim_Partner\Insert Destination"
-          TopLeft="NaN,NaN" />
+          TopLeft="5.50000000000006,210.833333333333" />
         <EdgeLayout
           Id="Package\Load Dim_Partner.Paths[New Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="263.166666666667,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="-175.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Dim_Partner.Paths[Inferred Member Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Dim_Partner.Paths[Changing Attribute Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="363.833333333333,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="181.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Dim_Partner.Paths[OLE DB Source Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,48.1666666666666">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
@@ -7880,6 +7916,71 @@
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim_Partner\Slowly Changing Dimension">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionID&gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[Dim_Partner]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDPID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PartnerAlternateID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP ]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PartnerName&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;false&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;false&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim_Partner\Insert Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim_Partner\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <TaskHost
     design-time-name="Package\Load DimAgency">
     <LayoutInfo>
@@ -8020,12 +8121,71 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimAgency\Slowly Changing Dimension">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionID&gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[Dim_Agency]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[AgencyID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;AgencyAlternateID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP Agency]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;AgencyName&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;false&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;false&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimAgency\Insert Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load DimAgency\OLE DB Source">
     <Properties>
@@ -8040,40 +8200,56 @@
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="NaN,NaN"
+          Size="209.333333333334,42.6666666666667"
           Id="Package\Load DimFacility\Slowly Changing Dimension"
-          TopLeft="NaN,NaN" />
+          TopLeft="208.833333333333,108.166666666667" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="166.666666666667,42.6666666666667"
           Id="Package\Load DimFacility\OLE DB Command"
-          TopLeft="NaN,NaN" />
+          TopLeft="230.166666666667,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="164,42.6666666666667"
           Id="Package\Load DimFacility\Insert Destination"
-          TopLeft="NaN,NaN" />
+          TopLeft="5.50000000000006,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="176,42.6666666666667"
           Id="Package\Load DimFacility\OLE DB Command 1"
-          TopLeft="NaN,NaN" />
+          TopLeft="457.5,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="150.666666666667,42.6666666666667"
           Id="Package\Load DimFacility\OLE DB Source"
-          TopLeft="NaN,NaN" />
+          TopLeft="238.166666666667,5.49999999999993" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="157.333333333334,42.6666666666667"
           Id="Package\Load DimFacility\Data Conversion"
-          TopLeft="NaN,NaN" />
+          TopLeft="546,73" />
         <EdgeLayout
           Id="Package\Load DimFacility.Paths[OLE DB Source Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,48.1666666666666">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="311.166666666667,24.8333333333334"
               Start="0,0"
-              End="0,0">
+              End="311.166666666667,17.3333333333334">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,8.41666666666671" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,8.41666666666671"
+                    Point2="0,12.4166666666667"
+                    Point3="4,12.4166666666667" />
+                  <mssgle:LineSegment
+                    End="307.166666666667,12.4166666666667" />
+                  <mssgle:CubicBezierSegment
+                    Point1="307.166666666667,12.4166666666667"
+                    Point2="311.166666666667,12.4166666666667"
+                    Point3="311.166666666667,16.4166666666667" />
+                  <mssgle:LineSegment
+                    End="311.166666666667,17.3333333333334" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
@@ -8085,55 +8261,91 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimFacility.Paths[New Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="263.166666666667,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="-175.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimFacility.Paths[Inferred Member Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimFacility.Paths[Data Conversion Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="546,94.3333333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="-127.833333333333,35.1666666666667"
               Start="0,0"
-              End="0,0">
+              End="-120.333333333333,35.1666666666667">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-59.9166666666667,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-59.9166666666667,0"
+                    Point2="-63.9166666666667,0"
+                    Point3="-63.9166666666667,4" />
+                  <mssgle:LineSegment
+                    End="-63.9166666666667,31.1666666666667" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-63.9166666666667,31.1666666666667"
+                    Point2="-63.9166666666667,35.1666666666667"
+                    Point3="-67.9166666666667,35.1666666666667" />
+                  <mssgle:LineSegment
+                    End="-120.333333333333,35.1666666666667" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
@@ -8145,67 +8357,343 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimFacility.Paths[Changing Attribute Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="363.833333333333,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="181.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimFacility\Slowly Changing Dimension">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionID&gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[Dim_Facility]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[3PM]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;3PM&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[AIR]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;AIR&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Appointment Management IE]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Appointment Management IE&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Comments]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Comments&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[County]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;County&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[EMR]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;EMR&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[EMR Status]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;EMR Status&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Facility Name]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Facility Name&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Deployment]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;HTS Deployment&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Status]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;HTS Status&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Use]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;HTS Use&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[IL Status]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;IL Status&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Implementation]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Implementation&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[KP]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;KP&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Lab Manifest]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Lab Manifest&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Latitude]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Latitude&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Longitude]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Longitude&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[MCH]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;MCH&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[MFL_Code]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;MFL_Code&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[mlab]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;mlab&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Nishauri]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Nishauri&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[OTZ]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;OTZ&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[OVC]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;OVC&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Owner]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Owner&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Phamarmacy IE]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Phamarmacy IE&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[PrEP]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PrEP&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Project]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Project&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Registration IE]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Registration IE&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;SDP&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP Agency]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;SDP Agency&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SubCounty]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;SubCounty&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[TB]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;TB&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Ushauri]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Ushauri&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;false&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;false&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimFacility\Insert Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimFacility\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <TaskHost
     design-time-name="Package\Load DimPatient">
     <LayoutInfo>
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="NaN,NaN"
+          Size="164,42.6666666666667"
           Id="Package\Load DimPatient\Insert Destination"
-          TopLeft="NaN,NaN" />
+          TopLeft="5.50000000000006,313.5" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="166.666666666667,42.6666666666667"
           Id="Package\Load DimPatient\OLE DB Command"
-          TopLeft="NaN,NaN" />
+          TopLeft="230.166666666667,313.5" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="176,42.6666666666667"
           Id="Package\Load DimPatient\OLE DB Command 1"
-          TopLeft="NaN,NaN" />
+          TopLeft="457.5,313.5" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="209.333333333334,42.6666666666667"
           Id="Package\Load DimPatient\Slowly Changing Dimension"
-          TopLeft="NaN,NaN" />
+          TopLeft="208.833333333333,210.833333333333" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="157.333333333334,42.6666666666667"
           Id="Package\Load DimPatient\Data Conversion"
-          TopLeft="NaN,NaN" />
+          TopLeft="234.833333333333,108.166666666667" />
         <NodeLayout
-          Size="NaN,NaN"
+          Size="112,42.6666666666667"
           Id="Package\Load DimPatient\Patient"
-          TopLeft="NaN,NaN" />
+          TopLeft="257.5,5.49999999999993" />
         <EdgeLayout
           Id="Package\Load DimPatient.Paths[OLE DB Source Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,48.1666666666666">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
@@ -8217,55 +8705,79 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimPatient.Paths[New Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="263.166666666667,253.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="-175.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimPatient.Paths[Inferred Member Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,253.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-74.40298828125,20.4208984375001,148.8059765625,11.658203125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimPatient.Paths[Data Conversion Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="313.5,150.833333333333">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
@@ -8277,26 +8789,352 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load DimPatient.Paths[Changing Attribute Updates Output]"
-          TopLeft="NaN,NaN">
+          TopLeft="363.833333333333,253.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
               Start="0,0"
-              End="0,0">
+              End="181.666666666667,52.5000000000001">
               <mssgle:Curve.Segments>
-                <assembly:Null />
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" />
+                  <mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" />
+                  <mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" />
+                  <mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" />
+                </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimPatient\Insert Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimPatient\Slowly Changing Dimension">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionID&gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[Dim_Patient]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[ContactRelation]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;ContactRelation&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[DateConfirmedHIVPositive]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;DateConfirmedHIVPositive&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[DateImported]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;DateImported&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[District]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;District&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[DOB]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;DOB&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[EducationLevel]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;EducationLevel&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Emr]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Emr&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[FacilityName]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;FacilityName&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Gender]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Gender&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Inschool]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Inschool&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[KeyPopulationType]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;KeyPopulationType&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[LastVisit]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;LastVisit&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[MaritalStatus]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;MaritalStatus&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[MPIPKV]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;MPIPKV&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[NUPI]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;NUPI&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Occupation]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Occupation&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Orphan]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Orphan&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientPK&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentCounty]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentCounty&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentLocation]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentLocation&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentSubCounty]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentSubCounty&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentSubLocation]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentSubLocation&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentVillage]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentVillage&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentWard]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientResidentWard&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientSource]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientSource&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientType]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientType&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PatientUID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PatientUID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PKV]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PKV&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PopulationType]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PopulationType&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PreviousARTExposure]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PreviousARTExposure&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[PreviousARTStartDate]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;PreviousARTStartDate&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Project]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Project&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Region]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Region&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtCCC]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;RegistrationAtCCC&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtPMTCT]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;RegistrationAtPMTCT&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtTBClinic]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;RegistrationAtTBClinic&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationDate]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;RegistrationDate&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationYear]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;RegistrationYear&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[SiteCode]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;SiteCode&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[TransferInDate]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;TransferInDate&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Patient.Outputs[OLE DB Source Output].Columns[Village]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Village&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;false&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;false&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimPatient\Patient">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
 </Objects>]]></DTS:DesignTimeProperties>
 </DTS:Executable>
