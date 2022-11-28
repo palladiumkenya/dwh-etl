@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{11BC8DD1-DC24-45E1-A333-8B601A5585C9}">
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{E4D3446B-F23E-456F-9E30-BEF96B9CD8B2}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -153,7 +153,7 @@
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="325.333333333334,115.333333333334"
-          Size="325.333333333334,158"
+          Size="325.333333333334,158.666666666667"
           Id="Package\Load Dimensions Container Loop"
           TopLeft="128.749998081476,12.3499997791648" />
       </GraphLayout>

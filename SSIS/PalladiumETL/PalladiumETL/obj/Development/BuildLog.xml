@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2022-11-21T09:48:49.7938184Z</LastWriteTime>
+    <LastWriteTime>2022-11-24T11:29:10.2624682Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -37,11 +37,6 @@
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
-      <Name>LoopTest.dtsx</Name>
-      <LastWriteTime>2022-11-16T06:52:33.6382946Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
-    <ProjectBuildItemInfo>
       <Name>Load_ODS_CT_Tables_Old.dtsx</Name>
       <LastWriteTime>2022-11-15T12:31:07.4907292Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
@@ -58,12 +53,17 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Dim_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-21T09:47:31.2608948Z</LastWriteTime>
+      <LastWriteTime>2022-11-24T11:29:10.2324677Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2022-11-21T08:12:34.1677631Z</LastWriteTime>
+      <LastWriteTime>2022-11-24T08:17:08.3733798Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_Fact_Tables.dtsx</Name>
+      <LastWriteTime>2022-11-24T11:29:26.5549837Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>
