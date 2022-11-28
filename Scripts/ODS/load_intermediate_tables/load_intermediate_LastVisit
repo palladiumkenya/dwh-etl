@@ -11,7 +11,7 @@ cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientVisits
  )
  Select LatestVisit.* INTO dbo.Intermediate_LastVisitDate
- from LatestVisit
+ from ODS.dbo.LatestVisit
  where NUM=1
 
 

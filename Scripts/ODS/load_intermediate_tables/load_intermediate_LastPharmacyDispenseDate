@@ -10,5 +10,5 @@ cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientPharmacy
  )
  Select LastPharmacyDispenseDate.* INTO dbo.Intermediate_LastPharmacyDispenseDate
- from LastPharmacyDispenseDate
+ from ODS.dbo.LastPharmacyDispenseDate
  where NUM=1
