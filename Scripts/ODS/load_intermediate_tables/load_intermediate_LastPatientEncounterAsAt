@@ -21,6 +21,6 @@ With LastPatientEncounterAsAt AS (
 
 )
 
- Select LastPatientEncounterAsAt.* INTO NDWH.dbo.Intermediate_LastPatientEncounterAsAt
- from LastPatientEncounterAsAt
+ Select LastPatientEncounterAsAt.* INTO dbo.Intermediate_LastPatientEncounterAsAt
+ from ODS.dbo.LastPatientEncounterAsAt
 

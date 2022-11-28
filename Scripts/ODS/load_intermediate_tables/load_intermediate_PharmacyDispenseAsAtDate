@@ -8,6 +8,6 @@ CASE WHEN ExpectedReturn IS NULL THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedR
 cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientPharmacy
  )
- Select PharmacyDispenseAsAtDate.* INTO NDWH.dbo.Intermediate_PharmacyDispenseAsAtDate
+ Select PharmacyDispenseAsAtDate.* INTO dbo.Intermediate_PharmacyDispenseAsAtDate
  from PharmacyDispenseAsAtDate
  where NUM=1 and  LastDispenseDate<=EOMONTH(DATEADD(mm,-1,GETDATE())) 

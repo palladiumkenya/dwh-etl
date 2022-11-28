@@ -9,6 +9,6 @@ CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextApp
 cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientVisits
  )
- Select LastVisitAsAt.* INTO NDWH.dbo.Intermediate_LastVisitAsAt
+ Select LastVisitAsAt.* INTO dbo.Intermediate_LastVisitAsAt
  from LastVisitAsAt
  where NUM=1 and VisitDateAsAt<=EOMONTH(DATEADD(mm,-1,GETDATE()))
