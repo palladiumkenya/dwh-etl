@@ -73,7 +73,7 @@ Select
         LatestUpload.DateUploaded,
         LatestVisits.SiteAbstractionDate,
         cast(getdate() as date) as LoadDate
-  INTO  NDWH.dbo.Intermediate_ARTOutcomes
+  INTO  dbo.Intermediate_ARTOutcomes
  from ARTOutcomes
  left join LatestUpload ON LatestUpload.SiteCode = ARTOutcomes.SiteCode 
  left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
