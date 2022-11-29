@@ -14,11 +14,11 @@ With PregnancyAsATInitiation As (
 )
 
 Select 
-        PregnancyAsAT.PatientID ,
-        PregnancyAsAT.PatientPK ,
-        PregnancyAsAT.SiteCode,
-        PregnancyAsAT.PregnantARTStart,
-        PregnancyAsAT.PregnantDuringART,
-        PregnancyAsAT.LoadDate
- INTO dbo.PregnancyAsAT
-FROM   PregnancyAsAT
+        PregnancyAsATInitiation.PatientID ,
+        PregnancyAsATInitiation.PatientPK ,
+        PregnancyAsATInitiation.SiteCode,
+        PregnancyAsATInitiation.PregnantARTStart,
+        PregnancyAsATInitiation.PregnantDuringART,
+        PregnancyAsATInitiation.LoadDate
+ INTO dbo.PregnancyAsATInitiation
+FROM   PregnancyAsATInitiation
