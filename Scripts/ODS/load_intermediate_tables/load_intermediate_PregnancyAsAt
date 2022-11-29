@@ -1,11 +1,10 @@
 
-With PregnancyAsAT As (
+With PregnancyAsATInitiation As (
     SELECT 
 
         DISTINCT Patients.PatientID ,Patients.PatientPK ,Patients.SiteCode, 
-        CASE WHEN SUM(CASE WHEN YEAR(ART.StartARTDate) = YEAR(VisitDate) THEN 1 ELSE 0 END) > 1 THEN 1 ELSE 0 END  AS PregnantARTStart , 
-        CASE WHEN SUM(CASE WHEN YEAR(Patients.RegistrationAtCCC) = YEAR(VisitDate) THEN 1  ELSE 0 END) > 1 THEN 1 ELSE 0 END  AS PregnantAtEnrol,
-        CASE WHEN VisitDate >= ART.StartARTDate THEN 1 ELSE 0 END AS PregnantDuringART,
+     CASE WHEN SUM(CASE WHEN YEAR(ART.StartARTDate) = YEAR(VisitDate) THEN 1 ELSE 0 END) > 1 THEN 1 ELSE 0 END  AS PregnantARTStart , 
+	CASE WHEN SUM(CASE WHEN YEAR(Patients.RegistrationAtCCC) = YEAR(VisitDate) THEN 1  ELSE 0 END) > 1 THEN 1 ELSE 0 END  AS PregnantAtEnrol,
         cast(getdate() as date) as LoadDate
  FROM ODS.dbo.CT_PatientVisits Visits
  INNER JOIN ODS.dbo.CT_Patient Patients ON Visits.PatientID=Patients.PatientID AND Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
