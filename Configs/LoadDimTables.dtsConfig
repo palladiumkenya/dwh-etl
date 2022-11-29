@@ -1,0 +1,1517 @@
+<?xml version="1.0"?><DTSConfiguration><DTSConfigurationHeading><DTSConfigurationFileInfo GeneratedBy="DENNIS\DENO" GeneratedFromPackageName="Load_Dim_Tables" GeneratedFromPackageID="{5DC603F7-DC1C-4C3E-AB55-AB66141F8391}" GeneratedDate="9/29/2022 9:12:37 PM"/></DTSConfigurationHeading><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ConnectByProxy]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ConnectionString]" ValueType="String"><ConfiguredValue>Data Source=DENNIS\SQL2017;User ID=sa;Initial Catalog=STAGING_DB;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ConnectRetryCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ConnectRetryInterval]" ValueType="Int32"><ConfiguredValue>5</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ConnectUsingManagedIdentity]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[Description]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[InitialCatalog]" ValueType="String"><ConfiguredValue>STAGING_DB</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[Name]" ValueType="String"><ConfiguredValue>OLE_DB_Destination</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[Password]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ProtectionLevel]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[RetainSameConnection]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[Scope]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[ServerName]" ValueType="String"><ConfiguredValue>DENNIS\SQL2017</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_Destination].Properties[UserName]" ValueType="String"><ConfiguredValue>sa</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ConnectByProxy]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ConnectionString]" ValueType="String"><ConfiguredValue>Data Source=DENNIS\SQL2017;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ConnectRetryCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ConnectRetryInterval]" ValueType="Int32"><ConfiguredValue>5</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ConnectUsingManagedIdentity]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[Description]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[InitialCatalog]" ValueType="String"><ConfiguredValue>DWAPICentral</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[Name]" ValueType="String"><ConfiguredValue>OLE_DB_DWAPICental_Src</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[Password]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ProtectionLevel]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[RetainSameConnection]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[Scope]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[ServerName]" ValueType="String"><ConfiguredValue>DENNIS\SQL2017</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_DWAPICental_Src].Properties[UserName]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ConnectByProxy]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ConnectionString]" ValueType="String"><ConfiguredValue>Data Source=DENNIS\SQL2017;Initial Catalog=NDWH_DB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ConnectRetryCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ConnectRetryInterval]" ValueType="Int32"><ConfiguredValue>5</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ConnectUsingManagedIdentity]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[Description]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[InitialCatalog]" ValueType="String"><ConfiguredValue>NDWH_DB</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[Name]" ValueType="String"><ConfiguredValue>OLE_DB_NDWH</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[Password]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ProtectionLevel]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[RetainSameConnection]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[Scope]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[ServerName]" ValueType="String"><ConfiguredValue>DENNIS\SQL2017</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_NDWH].Properties[UserName]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ConnectByProxy]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ConnectionString]" ValueType="String"><ConfiguredValue>Data Source=DENNIS\SQL2017;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ConnectRetryCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ConnectRetryInterval]" ValueType="Int32"><ConfiguredValue>5</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ConnectUsingManagedIdentity]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[Description]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[InitialCatalog]" ValueType="String"><ConfiguredValue>ODS</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[Name]" ValueType="String"><ConfiguredValue>OLE_DB_ODS_Src</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[Password]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ProtectionLevel]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[RetainSameConnection]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[Scope]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[ServerName]" ValueType="String"><ConfiguredValue>DENNIS\SQL2017</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Connections[OLE_DB_ODS_Src].Properties[UserName]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[CheckpointFileName]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[CheckpointUsage]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[CreationDate]" ValueType="DateTime"><ConfiguredValue>9/27/2022 3:16:31 PM</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[CreatorComputerName]" ValueType="String"><ConfiguredValue>DENNIS</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[CreatorName]" ValueType="String"><ConfiguredValue>DENNIS\DENO</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[DelayValidation]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[Description]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[DesignTimeProperties]" ValueType="String"><ConfiguredValue>&lt;!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.--&gt;
+&lt;!--If you manually edit this section and make a mistake, you can delete it. --&gt;
+&lt;!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.--&gt;
+&lt;Objects
+  Version="8"&gt;
+  &lt;!--Each node below will contain properties that do not affect runtime behavior.--&gt;
+  &lt;Package
+    design-time-name="package-diagram"&gt;
+    &lt;LayoutInfo&gt;
+      &lt;GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml"&gt;
+        &lt;NodeLayout
+          Size="164,42.6666666666667"
+          Id="{}{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1}"
+          TopLeft="761.874988647178,90.9999983727932" /&gt;
+        &lt;NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="{}{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69}"
+          TopLeft="531.874992074445,16.2166682125131" /&gt;
+        &lt;NodeLayout
+          Size="146.666666666667,42.6666666666667"
+          Id="{}{73f349c4-6e09-4d0a-86a7-6c2fb922263c}"
+          TopLeft="770.624988516793,14.8833367388446" /&gt;
+        &lt;NodeLayout
+          Size="156,42.6666666666667"
+          Id="{}{C34BB403-DA2F-43C9-B63F-444FCAA89D59}"
+          TopLeft="269.374995986,15.5999997210503" /&gt;
+        &lt;NodeLayout
+          Size="157.333333333334,42.6666666666667"
+          Id="{}{FCC67859-03F8-49B7-9B5E-D4C842A52A39}"
+          TopLeft="19.9999997019768,11.0499998024106" /&gt;
+        &lt;NodeLayout
+          Size="196.666666666667,42.6666666666667"
+          Id="{}{374019a3-e157-4900-b5bc-b31842845f03}"
+          TopLeft="535.624992018566,90.9000038820503" /&gt;
+        &lt;EdgeLayout
+          Id="{}{2BA4C111-6361-423C-8F9A-7017A4980767}"
+          TopLeft="177.33333303531,34.6583330950638"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="92.0416629506897,0"
+              Start="0,0"
+              End="84.5416629506897,0"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="84.5416629506897,0" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;EdgeLabelCollection /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="{}{4C87309B-7BE2-494E-9A37-23BA33BF3C8A}"
+          TopLeft="425.374995986,37.241667300115"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="106.499996088445,0"
+              Start="0,0"
+              End="98.9999960884452,0"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="98.9999960884452,0" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;EdgeLabelCollection /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="{}{32FB59D4-B18E-4E7B-9776-AB919A50DFF3}"
+          TopLeft="690.541658741112,36.8833358090122"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="80.0833297756815,0"
+              Start="0,0"
+              End="72.5833297756815,0"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="72.5833297756815,0" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;EdgeLabelCollection /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="{}{46A4CB3A-0235-49A1-BA05-2F6D3A54758C}"
+          TopLeft="843.916655248652,57.5500034055113"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,33.449994967282"
+              Start="0,0"
+              End="0,25.949994967282"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,25.949994967282" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;EdgeLabelCollection /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="{}{A57E508F-AE09-4025-A37C-37A73273FDD2}"
+          TopLeft="761.874988647178,112.283334460755"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-29.5833299619453,0"
+              Start="0,0"
+              End="-22.0833299619453,0"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="-22.0833299619453,0" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;EdgeLabelCollection /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+      &lt;/GraphLayout&gt;
+    &lt;/LayoutInfo&gt;
+  &lt;/Package&gt;
+  &lt;TaskHost
+    design-time-name="{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1}"&gt;
+    &lt;LayoutInfo&gt;
+      &lt;GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph"&gt;
+        &lt;NodeLayout
+          Size="209.333333333334,42.6666666666667"
+          Id="78"
+          TopLeft="208.833333333333,108.166666666667" /&gt;
+        &lt;NodeLayout
+          Size="166.666666666667,42.6666666666667"
+          Id="25"
+          TopLeft="230.166666666667,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="176,42.6666666666667"
+          Id="41"
+          TopLeft="457.5,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="57"
+          TopLeft="238.166666666667,5.49999999999993" /&gt;
+        &lt;NodeLayout
+          Size="164,42.6666666666667"
+          Id="2"
+          TopLeft="5.50000000000006,210.833333333333" /&gt;
+        &lt;EdgeLayout
+          Id="104"
+          TopLeft="263.166666666667,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
+              Start="0,0"
+              End="-175.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="103"
+          TopLeft="313.5,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="102"
+          TopLeft="363.833333333333,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
+              Start="0,0"
+              End="181.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="105"
+          TopLeft="313.5,48.1666666666666"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+      &lt;/GraphLayout&gt;
+    &lt;/LayoutInfo&gt;
+  &lt;/TaskHost&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1};78"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;SCDMetadata&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;&amp;lt;?xml version="1.0" encoding="utf-16"?&amp;gt;
+&amp;lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&amp;gt;
+  &amp;lt;ConnectionID&amp;gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&amp;lt;/ConnectionID&amp;gt;
+  &amp;lt;TableName&amp;gt;[dbo].[Dim_Partner]&amp;lt;/TableName&amp;gt;
+  &amp;lt;InputToColumnsCollection&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDPID]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PartnerAlternateID&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP ]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PartnerName&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+  &amp;lt;/InputToColumnsCollection&amp;gt;
+  &amp;lt;GeneratedComponentsIdentificationStrings&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;Insert Destination&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command 1&amp;lt;/anyType&amp;gt;
+  &amp;lt;/GeneratedComponentsIdentificationStrings&amp;gt;
+  &amp;lt;FailFixedAttribute&amp;gt;false&amp;lt;/FailFixedAttribute&amp;gt;
+  &amp;lt;FailChangeAttribute&amp;gt;false&amp;lt;/FailChangeAttribute&amp;gt;
+  &amp;lt;UseStartEndDate&amp;gt;false&amp;lt;/UseStartEndDate&amp;gt;
+  &amp;lt;CurrentIndicatorColumn /&amp;gt;
+  &amp;lt;InferredIndicatorColumn /&amp;gt;
+  &amp;lt;ValueCurrent /&amp;gt;
+  &amp;lt;ValueExpired /&amp;gt;
+  &amp;lt;StartDateColumn /&amp;gt;
+  &amp;lt;EndDateColumn /&amp;gt;
+  &amp;lt;DateVariable /&amp;gt;
+  &amp;lt;EnableInferredSupport&amp;gt;true&amp;lt;/EnableInferredSupport&amp;gt;
+&amp;lt;/SCDWizardMetadata&amp;gt;&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1};2"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{2daeaf0c-0924-4c5f-a2dd-4b467f3f9db1};57"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;TaskHost
+    design-time-name="{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69}"&gt;
+    &lt;LayoutInfo&gt;
+      &lt;GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph"&gt;
+        &lt;NodeLayout
+          Size="209.333333333334,42.6666666666667"
+          Id="78"
+          TopLeft="208.833333333333,108.166666666667" /&gt;
+        &lt;NodeLayout
+          Size="166.666666666667,42.6666666666667"
+          Id="25"
+          TopLeft="230.166666666667,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="176,42.6666666666667"
+          Id="41"
+          TopLeft="457.5,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="57"
+          TopLeft="238.166666666667,5.49999999999993" /&gt;
+        &lt;NodeLayout
+          Size="164,42.6666666666667"
+          Id="2"
+          TopLeft="5.50000000000006,210.833333333333" /&gt;
+        &lt;EdgeLayout
+          Id="104"
+          TopLeft="263.166666666667,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
+              Start="0,0"
+              End="-175.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="103"
+          TopLeft="313.5,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="102"
+          TopLeft="363.833333333333,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
+              Start="0,0"
+              End="181.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="105"
+          TopLeft="313.5,48.1666666666666"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+      &lt;/GraphLayout&gt;
+    &lt;/LayoutInfo&gt;
+  &lt;/TaskHost&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69};78"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;SCDMetadata&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;&amp;lt;?xml version="1.0" encoding="utf-16"?&amp;gt;
+&amp;lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&amp;gt;
+  &amp;lt;ConnectionID&amp;gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&amp;lt;/ConnectionID&amp;gt;
+  &amp;lt;TableName&amp;gt;[dbo].[Dim_Agency]&amp;lt;/TableName&amp;gt;
+  &amp;lt;InputToColumnsCollection&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[AgencyID]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;AgencyAlternateID&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP Agency]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;AgencyName&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+  &amp;lt;/InputToColumnsCollection&amp;gt;
+  &amp;lt;GeneratedComponentsIdentificationStrings&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;Insert Destination&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command 1&amp;lt;/anyType&amp;gt;
+  &amp;lt;/GeneratedComponentsIdentificationStrings&amp;gt;
+  &amp;lt;FailFixedAttribute&amp;gt;false&amp;lt;/FailFixedAttribute&amp;gt;
+  &amp;lt;FailChangeAttribute&amp;gt;false&amp;lt;/FailChangeAttribute&amp;gt;
+  &amp;lt;UseStartEndDate&amp;gt;false&amp;lt;/UseStartEndDate&amp;gt;
+  &amp;lt;CurrentIndicatorColumn /&amp;gt;
+  &amp;lt;InferredIndicatorColumn /&amp;gt;
+  &amp;lt;ValueCurrent /&amp;gt;
+  &amp;lt;ValueExpired /&amp;gt;
+  &amp;lt;StartDateColumn /&amp;gt;
+  &amp;lt;EndDateColumn /&amp;gt;
+  &amp;lt;DateVariable /&amp;gt;
+  &amp;lt;EnableInferredSupport&amp;gt;true&amp;lt;/EnableInferredSupport&amp;gt;
+&amp;lt;/SCDWizardMetadata&amp;gt;&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69};2"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{e1d3a6b6-d5a5-4f3f-9824-6740b31f6e69};57"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;TaskHost
+    design-time-name="{C34BB403-DA2F-43C9-B63F-444FCAA89D59}"&gt;
+    &lt;LayoutInfo&gt;
+      &lt;GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph"&gt;
+        &lt;NodeLayout
+          Size="209.333333333334,42.6666666666667"
+          Id="339"
+          TopLeft="208.833333333333,108.166666666667" /&gt;
+        &lt;NodeLayout
+          Size="166.666666666667,42.6666666666667"
+          Id="100"
+          TopLeft="230.166666666667,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="164,42.6666666666667"
+          Id="12"
+          TopLeft="5.50000000000006,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="176,42.6666666666667"
+          Id="209"
+          TopLeft="457.5,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="225"
+          TopLeft="238.166666666667,5.49999999999993" /&gt;
+        &lt;NodeLayout
+          Size="157.333333333334,42.6666666666667"
+          Id="2"
+          TopLeft="546,73" /&gt;
+        &lt;EdgeLayout
+          Id="367"
+          TopLeft="313.5,48.1666666666666"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="311.166666666667,24.8333333333334"
+              Start="0,0"
+              End="311.166666666667,17.3333333333334"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,8.41666666666671" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,8.41666666666671"
+                    Point2="0,12.4166666666667"
+                    Point3="4,12.4166666666667" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="307.166666666667,12.4166666666667" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="307.166666666667,12.4166666666667"
+                    Point2="311.166666666667,12.4166666666667"
+                    Point3="311.166666666667,16.4166666666667" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="311.166666666667,17.3333333333334" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="366"
+          TopLeft="263.166666666667,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
+              Start="0,0"
+              End="-175.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="365"
+          TopLeft="313.5,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="364"
+          TopLeft="546,94.3333333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-127.833333333333,35.1666666666667"
+              Start="0,0"
+              End="-120.333333333333,35.1666666666667"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="-59.9166666666667,0" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-59.9166666666667,0"
+                    Point2="-63.9166666666667,0"
+                    Point3="-63.9166666666667,4" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-63.9166666666667,31.1666666666667" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-63.9166666666667,31.1666666666667"
+                    Point2="-63.9166666666667,35.1666666666667"
+                    Point3="-67.9166666666667,35.1666666666667" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-120.333333333333,35.1666666666667" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="363"
+          TopLeft="363.833333333333,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
+              Start="0,0"
+              End="181.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+      &lt;/GraphLayout&gt;
+    &lt;/LayoutInfo&gt;
+  &lt;/TaskHost&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{C34BB403-DA2F-43C9-B63F-444FCAA89D59};339"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;SCDMetadata&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;&amp;lt;?xml version="1.0" encoding="utf-16"?&amp;gt;
+&amp;lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&amp;gt;
+  &amp;lt;ConnectionID&amp;gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&amp;lt;/ConnectionID&amp;gt;
+  &amp;lt;TableName&amp;gt;[dbo].[Dim_Facility]&amp;lt;/TableName&amp;gt;
+  &amp;lt;InputToColumnsCollection&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[3PM]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;3PM&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[AIR]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;AIR&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Appointment Management IE]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Appointment Management IE&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Comments]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Comments&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[County]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;County&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[EMR]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;EMR&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[EMR Status]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;EMR Status&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Facility Name]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Facility Name&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Deployment]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;HTS Deployment&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Status]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;HTS Status&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[HTS Use]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;HTS Use&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[IL Status]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;IL Status&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Implementation]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Implementation&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[KP]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;KP&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Lab Manifest]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Lab Manifest&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Latitude]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Latitude&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Longitude]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Longitude&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[MCH]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;MCH&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[MFL_Code]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;MFL_Code&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[mlab]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;mlab&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Nishauri]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Nishauri&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[OTZ]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;OTZ&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[OVC]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;OVC&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Owner]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Owner&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Phamarmacy IE]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Phamarmacy IE&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[PrEP]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PrEP&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Project]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Project&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Registration IE]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Registration IE&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;SDP&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SDP Agency]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;SDP Agency&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[SubCounty]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;SubCounty&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[TB]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;TB&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Ushauri]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Ushauri&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+  &amp;lt;/InputToColumnsCollection&amp;gt;
+  &amp;lt;GeneratedComponentsIdentificationStrings&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;Insert Destination&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command 1&amp;lt;/anyType&amp;gt;
+  &amp;lt;/GeneratedComponentsIdentificationStrings&amp;gt;
+  &amp;lt;FailFixedAttribute&amp;gt;false&amp;lt;/FailFixedAttribute&amp;gt;
+  &amp;lt;FailChangeAttribute&amp;gt;false&amp;lt;/FailChangeAttribute&amp;gt;
+  &amp;lt;UseStartEndDate&amp;gt;false&amp;lt;/UseStartEndDate&amp;gt;
+  &amp;lt;CurrentIndicatorColumn /&amp;gt;
+  &amp;lt;InferredIndicatorColumn /&amp;gt;
+  &amp;lt;ValueCurrent /&amp;gt;
+  &amp;lt;ValueExpired /&amp;gt;
+  &amp;lt;StartDateColumn /&amp;gt;
+  &amp;lt;EndDateColumn /&amp;gt;
+  &amp;lt;DateVariable /&amp;gt;
+  &amp;lt;EnableInferredSupport&amp;gt;true&amp;lt;/EnableInferredSupport&amp;gt;
+&amp;lt;/SCDWizardMetadata&amp;gt;&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{C34BB403-DA2F-43C9-B63F-444FCAA89D59};12"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{C34BB403-DA2F-43C9-B63F-444FCAA89D59};225"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;TaskHost
+    design-time-name="{FCC67859-03F8-49B7-9B5E-D4C842A52A39}"&gt;
+    &lt;LayoutInfo&gt;
+      &lt;GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph"&gt;
+        &lt;NodeLayout
+          Size="164,42.6666666666667"
+          Id="12"
+          TopLeft="5.50000000000006,313.5" /&gt;
+        &lt;NodeLayout
+          Size="166.666666666667,42.6666666666667"
+          Id="125"
+          TopLeft="230.166666666667,313.5" /&gt;
+        &lt;NodeLayout
+          Size="176,42.6666666666667"
+          Id="261"
+          TopLeft="457.5,313.5" /&gt;
+        &lt;NodeLayout
+          Size="209.333333333334,42.6666666666667"
+          Id="430"
+          TopLeft="208.833333333333,210.833333333333" /&gt;
+        &lt;NodeLayout
+          Size="157.333333333334,42.6666666666667"
+          Id="2"
+          TopLeft="234.833333333333,108.166666666667" /&gt;
+        &lt;NodeLayout
+          Size="112,42.6666666666667"
+          Id="289"
+          TopLeft="257.5,5.49999999999993" /&gt;
+        &lt;EdgeLayout
+          Id="470"
+          TopLeft="313.5,48.1666666666666"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="469"
+          TopLeft="263.166666666667,253.5"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-175.666666666667,60.0000000000001"
+              Start="0,0"
+              End="-175.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="-4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-171.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="-171.666666666667,20.5031446540881"
+                    Point2="-175.666666666667,20.5031446540881"
+                    Point3="-175.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="-175.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-114.924720052083,25.5031446540881,54.1827734375,11.43359375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="468"
+          TopLeft="313.5,253.5"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="-74.40298828125,20.4208984375001,148.8059765625,11.658203125"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="467"
+          TopLeft="313.5,150.833333333333"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+        &lt;EdgeLayout
+          Id="466"
+          TopLeft="363.833333333333,253.5"&gt;
+          &lt;EdgeLayout.Curve&gt;
+            &lt;mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="181.666666666667,60.0000000000001"
+              Start="0,0"
+              End="181.666666666667,52.5000000000001"&gt;
+              &lt;mssgle:Curve.Segments&gt;
+                &lt;mssgle:SegmentCollection
+                  Capacity="5"&gt;
+                  &lt;mssgle:LineSegment
+                    End="0,16.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="0,16.5031446540881"
+                    Point2="0,20.5031446540881"
+                    Point3="4,20.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="177.666666666667,20.5031446540881" /&gt;
+                  &lt;mssgle:CubicBezierSegment
+                    Point1="177.666666666667,20.5031446540881"
+                    Point2="181.666666666667,20.5031446540881"
+                    Point3="181.666666666667,24.5031446540881" /&gt;
+                  &lt;mssgle:LineSegment
+                    End="181.666666666667,52.5000000000001" /&gt;
+                &lt;/mssgle:SegmentCollection&gt;
+              &lt;/mssgle:Curve.Segments&gt;
+            &lt;/mssgle:Curve&gt;
+          &lt;/EdgeLayout.Curve&gt;
+          &lt;EdgeLayout.Labels&gt;
+            &lt;mssgm:EdgeLabel
+              BoundingBox="12.2994270833333,25.5031446540881,157.0678125,11.6630859375"
+              RelativePosition="Any" /&gt;
+          &lt;/EdgeLayout.Labels&gt;
+        &lt;/EdgeLayout&gt;
+      &lt;/GraphLayout&gt;
+    &lt;/LayoutInfo&gt;
+  &lt;/TaskHost&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{FCC67859-03F8-49B7-9B5E-D4C842A52A39};12"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{FCC67859-03F8-49B7-9B5E-D4C842A52A39};430"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;SCDMetadata&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;&amp;lt;?xml version="1.0" encoding="utf-16"?&amp;gt;
+&amp;lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&amp;gt;
+  &amp;lt;ConnectionID&amp;gt;{BFB686BE-E8CB-457C-8B06-5DA4DE8813D6}&amp;lt;/ConnectionID&amp;gt;
+  &amp;lt;TableName&amp;gt;[dbo].[Dim_Patient]&amp;lt;/TableName&amp;gt;
+  &amp;lt;InputToColumnsCollection&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[ContactRelation]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;ContactRelation&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[DateConfirmedHIVPositive]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;DateConfirmedHIVPositive&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[DateImported]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;DateImported&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[District]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;District&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[DOB]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;DOB&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[EducationLevel]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;EducationLevel&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Emr]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Emr&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[FacilityName]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;FacilityName&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;ChangingAttribute&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Gender]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Gender&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Inschool]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Inschool&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[KeyPopulationType]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;KeyPopulationType&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[LastVisit]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;LastVisit&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[MaritalStatus]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;MaritalStatus&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[MPIPKV]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;MPIPKV&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[NUPI]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;NUPI&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Occupation]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Occupation&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Orphan]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Orphan&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientID]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientID&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Data Conversion.Outputs[Data Conversion Output].Columns[_PatientPK]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientPK&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentCounty]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentCounty&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentLocation]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentLocation&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentSubCounty]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentSubCounty&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentSubLocation]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentSubLocation&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentVillage]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentVillage&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientResidentWard]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientResidentWard&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientSource]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientSource&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientType]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientType&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PatientUID]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PatientUID&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PKV]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PKV&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PopulationType]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PopulationType&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PreviousARTExposure]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PreviousARTExposure&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[PreviousARTStartDate]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;PreviousARTStartDate&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Project]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Project&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Region]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Region&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtCCC]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;RegistrationAtCCC&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtPMTCT]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;RegistrationAtPMTCT&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationAtTBClinic]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;RegistrationAtTBClinic&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationDate]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;RegistrationDate&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[RegistrationYear]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;RegistrationYear&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[SiteCode]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;SiteCode&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;BusinessKey&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[TransferInDate]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;TransferInDate&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+    &amp;lt;InputColumnToDBColumn&amp;gt;
+      &amp;lt;IdentificationString&amp;gt;Patient.Outputs[OLE DB Source Output].Columns[Village]&amp;lt;/IdentificationString&amp;gt;
+      &amp;lt;ColumnName&amp;gt;Village&amp;lt;/ColumnName&amp;gt;
+      &amp;lt;KeyType&amp;gt;None&amp;lt;/KeyType&amp;gt;
+      &amp;lt;ChangeType&amp;gt;None&amp;lt;/ChangeType&amp;gt;
+    &amp;lt;/InputColumnToDBColumn&amp;gt;
+  &amp;lt;/InputToColumnsCollection&amp;gt;
+  &amp;lt;GeneratedComponentsIdentificationStrings&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;Insert Destination&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command&amp;lt;/anyType&amp;gt;
+    &amp;lt;anyType xsi:type="xsd:string"&amp;gt;OLE DB Command 1&amp;lt;/anyType&amp;gt;
+  &amp;lt;/GeneratedComponentsIdentificationStrings&amp;gt;
+  &amp;lt;FailFixedAttribute&amp;gt;false&amp;lt;/FailFixedAttribute&amp;gt;
+  &amp;lt;FailChangeAttribute&amp;gt;false&amp;lt;/FailChangeAttribute&amp;gt;
+  &amp;lt;UseStartEndDate&amp;gt;false&amp;lt;/UseStartEndDate&amp;gt;
+  &amp;lt;CurrentIndicatorColumn /&amp;gt;
+  &amp;lt;InferredIndicatorColumn /&amp;gt;
+  &amp;lt;ValueCurrent /&amp;gt;
+  &amp;lt;ValueExpired /&amp;gt;
+  &amp;lt;StartDateColumn /&amp;gt;
+  &amp;lt;EndDateColumn /&amp;gt;
+  &amp;lt;DateVariable /&amp;gt;
+  &amp;lt;EnableInferredSupport&amp;gt;true&amp;lt;/EnableInferredSupport&amp;gt;
+&amp;lt;/SCDWizardMetadata&amp;gt;&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+  &lt;PipelineComponentMetadata
+    design-time-name="{FCC67859-03F8-49B7-9B5E-D4C842A52A39};289"&gt;
+    &lt;Properties&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;DataSourceViewID&lt;/Name&gt;
+      &lt;/Property&gt;
+      &lt;Property&gt;
+        &lt;Name&gt;TableInfoObjectType&lt;/Name&gt;
+        &lt;Value
+          type="q2:string"&gt;Table&lt;/Value&gt;
+      &lt;/Property&gt;
+    &lt;/Properties&gt;
+  &lt;/PipelineComponentMetadata&gt;
+&lt;/Objects&gt;</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[Disable]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[DisableEventHandlers]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[DumpDescriptor]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[DumpOnAnyError]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[EnableDump]" ValueType="Boolean"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[EncryptCheckpoints]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[FailPackageOnFailure]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[FailParentOnFailure]" ValueType="Boolean"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[ForcedExecutionValue]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[ForceExecutionResult]" ValueType="Int32"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[ForceExecutionValue]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[IgnoreConfigurationsOnLoad]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[InteractiveMode]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[IsolationLevel]" ValueType="Int32"><ConfiguredValue>1048576</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[LocaleID]" ValueType="Int32"><ConfiguredValue>1033</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[LoggingMode]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[MaxConcurrentExecutables]" ValueType="Int32"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[MaximumErrorCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[Name]" ValueType="String"><ConfiguredValue>Load_Dim_Tables</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[OfflineMode]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[PackagePassword]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[PackagePriorityClass]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[PackageType]" ValueType="Int32"><ConfiguredValue>5</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[ProtectionLevel]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[SafeRecursiveProjectPackageExecution]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[SaveCheckpoints]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[SQLFolder]" ValueType="String"><ConfiguredValue>\</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[SuppressConfigurationWarnings]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[TransactionOption]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[UpdateObjects]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[UpdatePackage]" ValueType="Boolean"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[VersionBuild]" ValueType="Int32"><ConfiguredValue>36</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[VersionComments]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[VersionMajor]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package.Properties[VersionMinor]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load Dim_Partner.Properties[[OLE DB Command 1].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Partner] SET [PartnerAlternateID] = ? WHERE [PartnerName] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load Dim_Partner.Properties[[OLE DB Command].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Partner] SET [PartnerAlternateID] = ? WHERE [PartnerName] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimAgency.Properties[[OLE DB Command 1].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Agency] SET [AgencyAlternateID] = ? WHERE [AgencyName] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimAgency.Properties[[OLE DB Command].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Agency] SET [AgencyAlternateID] = ? WHERE [AgencyName] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[AutoAdjustBufferSize]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[BLOBTempStoragePath]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[BufferTempStoragePath]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[DefaultBufferMaxRows]" ValueType="Int32"><ConfiguredValue>10000</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[DefaultBufferSize]" ValueType="Int32"><ConfiguredValue>10485760</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[DelayValidation]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[Description]" ValueType="String"><ConfiguredValue>Data Flow Task</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[Disable]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[DisableEventHandlers]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[EngineThreads]" ValueType="Int32"><ConfiguredValue>10</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[FailPackageOnFailure]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[FailParentOnFailure]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[ForcedExecutionValue]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[ForceExecutionResult]" ValueType="Int32"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[ForceExecutionValue]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[IsolationLevel]" ValueType="Int32"><ConfiguredValue>1048576</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[LocaleID]" ValueType="Int32"><ConfiguredValue>1033</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[LoggingMode]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[MaximumErrorCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[Name]" ValueType="String"><ConfiguredValue>Load DimDrug</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[RunInOptimizedMode]" ValueType="Boolean"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimDrug.Properties[TransactionOption]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimFacility.Properties[[OLE DB Command 1].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Facility] SET [SDP] = ? WHERE [MFL_Code] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimFacility.Properties[[OLE DB Command].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Facility] SET [3PM] = ?,[AIR] = ?,[Appointment Management IE] = ?,[Comments] = ?,[County] = ?,[EMR] = ?,[EMR Status] = ?,[Facility Name] = ?,[HTS Deployment] = ?,[HTS Status] = ?,[HTS Use] = ?,[IL Status] = ?,[Implementation] = ?,[KP] = ?,[Lab Manifest] = ?,[Latitude] = ?,[Longitude] = ?,[MCH] = ?,[mlab] = ?,[Nishauri] = ?,[OTZ] = ?,[OVC] = ?,[Owner] = ?,[Phamarmacy IE] = ?,[PrEP] = ?,[Project] = ?,[Registration IE] = ?,[SDP] = ?,[SDP Agency] = ?,[SubCounty] = ?,[TB] = ?,[Ushauri] = ? WHERE [MFL_Code] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimPatient.Properties[[OLE DB Command 1].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Patient] SET [District] = ?,[DOB] = ?,[FacilityName] = ? WHERE [PatientID] = ? AND [PatientPK] = ? AND [SiteCode] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimPatient.Properties[[OLE DB Command].[SqlCommand]]" ValueType="String"><ConfiguredValue>UPDATE [dbo].[Dim_Patient] SET [ContactRelation] = ?,[DateConfirmedHIVPositive] = ?,[DateImported] = ?,[District] = ?,[DOB] = ?,[EducationLevel] = ?,[Emr] = ?,[FacilityName] = ?,[Gender] = ?,[Inschool] = ?,[KeyPopulationType] = ?,[LastVisit] = ?,[MaritalStatus] = ?,[MPIPKV] = ?,[NUPI] = ?,[Occupation] = ?,[Orphan] = ?,[PatientResidentCounty] = ?,[PatientResidentLocation] = ?,[PatientResidentSubCounty] = ?,[PatientResidentSubLocation] = ?,[PatientResidentVillage] = ?,[PatientResidentWard] = ?,[PatientSource] = ?,[PatientType] = ?,[PatientUID] = ?,[PKV] = ?,[PopulationType] = ?,[PreviousARTExposure] = ?,[PreviousARTStartDate] = ?,[Project] = ?,[Region] = ?,[RegistrationAtCCC] = ?,[RegistrationAtPMTCT] = ?,[RegistrationAtTBClinic] = ?,[RegistrationDate] = ?,[RegistrationYear] = ?,[TransferInDate] = ?,[Village] = ? WHERE [PatientID] = ? AND [PatientPK] = ? AND [SiteCode] = ?</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[AutoAdjustBufferSize]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[BLOBTempStoragePath]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[BufferTempStoragePath]" ValueType="String"><ConfiguredValue></ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[DefaultBufferMaxRows]" ValueType="Int32"><ConfiguredValue>10000</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[DefaultBufferSize]" ValueType="Int32"><ConfiguredValue>10485760</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[DelayValidation]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[Description]" ValueType="String"><ConfiguredValue>Data Flow Task</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[Disable]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[DisableEventHandlers]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[EngineThreads]" ValueType="Int32"><ConfiguredValue>10</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[FailPackageOnFailure]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[FailParentOnFailure]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[ForcedExecutionValue]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[ForceExecutionResult]" ValueType="Int32"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[ForceExecutionValue]" ValueType="Boolean"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[IsolationLevel]" ValueType="Int32"><ConfiguredValue>1048576</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[LocaleID]" ValueType="Int32"><ConfiguredValue>1033</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[LoggingMode]" ValueType="Int32"><ConfiguredValue>0</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[MaximumErrorCount]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[Name]" ValueType="String"><ConfiguredValue>Load DimTreatmentType</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[RunInOptimizedMode]" ValueType="Boolean"><ConfiguredValue>-1</ConfiguredValue></Configuration><Configuration ConfiguredType="Property" Path="\Package\Load DimTreatmentType.Properties[TransactionOption]" ValueType="Int32"><ConfiguredValue>1</ConfiguredValue></Configuration></DTSConfiguration>
