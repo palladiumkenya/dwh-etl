@@ -12,7 +12,7 @@ SELECT DISTINCT
     Patients.PatientID ,
     Patients.PatientPK ,
     Patients.SiteCode, 
-    VisitDate,
+    VisitDategit ad,
     StartARTDate,
 		CASE WHEN VisitDate >= ART.StartARTDate THEN 1 ELSE 0 END AS PregnantDuringART,
          cast(getdate() as date) as LoadDate
