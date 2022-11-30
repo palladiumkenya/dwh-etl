@@ -11,8 +11,7 @@ with dates_cte(date) as (
     where date < @edate
 )
 select 
-	DateKey = IDENTITY(INT, 1, 1),
-	format(date, 'yyyyMMdd') as DateKey,
+	isnull(format(date, 'yyyyMMdd'), '') as DateKey,
 	Date,
 	year(date) as Year,
 	month(date) Month,

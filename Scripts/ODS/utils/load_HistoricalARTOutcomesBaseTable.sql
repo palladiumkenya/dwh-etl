@@ -1,8 +1,6 @@
 use tmp_and_adhoc;
 
--- first you need to create the table that everything will go into
---truncate table Agg_ARTOutcomes
--- select * from Agg_ARTOutcomes
+-- first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 
 declare 
 @start_date date = <>,
@@ -54,7 +52,7 @@ with clinical_visits_as_of_date as (
         KeyPopulationType,
         CurrentRegimen,
         Emr
-    from  ODS.dbo.CT_Patinet
+    from  ODS.dbo.CT_PatientVisits
     where SiteCode > 0 and VisitDate <= @as_of_date
 ),
 pharmacy_visits_as_of_date as (
