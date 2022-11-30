@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{A9764C11-8592-40E9-8C8E-0C2E1B3B1670}">
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{10A9BC44-D561-4513-ABEA-FBA2AA35C7F8}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -111,7 +111,6 @@
                       cachedDataType="wstr"
                       cachedLength="100"
                       cachedName="PatientID"
-                      cachedSortKeyPosition="1"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[PatientID]">
                       <properties>
                         <property
@@ -125,7 +124,7 @@
                       refId="Package\Data Flow Task\Merge.Inputs[Merge Input 1].Columns[PatientPK]"
                       cachedDataType="i4"
                       cachedName="PatientPK"
-                      cachedSortKeyPosition="2"
+                      cachedSortKeyPosition="1"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[PatientPK]">
                       <properties>
                         <property
@@ -153,7 +152,7 @@
                       refId="Package\Data Flow Task\Merge.Inputs[Merge Input 1].Columns[SiteCode]"
                       cachedDataType="i4"
                       cachedName="SiteCode"
-                      cachedSortKeyPosition="3"
+                      cachedSortKeyPosition="2"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[SiteCode]">
                       <properties>
                         <property
@@ -167,7 +166,7 @@
                       refId="Package\Data Flow Task\Merge.Inputs[Merge Input 1].Columns[VisitID]"
                       cachedDataType="i4"
                       cachedName="VisitID"
-                      cachedSortKeyPosition="4"
+                      cachedSortKeyPosition="3"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[VisitID]">
                       <properties>
                         <property
@@ -182,7 +181,7 @@
                       cachedDataType="dbTimeStamp2"
                       cachedName="VisitDate"
                       cachedScale="7"
-                      cachedSortKeyPosition="5"
+                      cachedSortKeyPosition="4"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[VisitDate]">
                       <properties>
                         <property
@@ -1880,7 +1879,6 @@
                       refId="Package\Data Flow Task\Merge.Inputs[Merge Input 2].Columns[PatientUnique_ID]"
                       cachedDataType="guid"
                       cachedName="PatientUnique_ID"
-                      cachedSortKeyPosition="5"
                       lineageId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientUnique_ID]">
                       <properties>
                         <property
@@ -1894,7 +1892,6 @@
                       refId="Package\Data Flow Task\Merge.Inputs[Merge Input 2].Columns[PatientVisitUnique_ID]"
                       cachedDataType="guid"
                       cachedName="PatientVisitUnique_ID"
-                      cachedSortKeyPosition="6"
                       lineageId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientVisitUnique_ID]">
                       <properties>
                         <property
@@ -1938,7 +1935,8 @@
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[PatientPK]"
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[PatientPK]"
-                      name="PatientPK" />
+                      name="PatientPK"
+                      sortKeyPosition="1" />
                     <outputColumn
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[FacilityName]"
                       dataType="wstr"
@@ -1949,18 +1947,21 @@
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[SiteCode]"
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[SiteCode]"
-                      name="SiteCode" />
+                      name="SiteCode"
+                      sortKeyPosition="2" />
                     <outputColumn
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[VisitID]"
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[VisitID]"
-                      name="VisitID" />
+                      name="VisitID"
+                      sortKeyPosition="3" />
                     <outputColumn
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[VisitDate]"
                       dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[VisitDate]"
                       name="VisitDate"
-                      scale="7" />
+                      scale="7"
+                      sortKeyPosition="4" />
                     <outputColumn
                       refId="Package\Data Flow Task\Merge.Outputs[Merge Output 1].Columns[SERVICE]"
                       dataType="wstr"
@@ -2370,7 +2371,7 @@
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT   P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT  top 5 P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
 						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
 						  ,PV.[SubstitutionFirstlineRegimenDate] SubstitutionFirstlineRegimenDate,PV.[SubstitutionFirstlineRegimenReason] SubstitutionFirstlineRegimenReason,PV.[SubstitutionSecondlineRegimenDate] SubstitutionSecondlineRegimenDate,PV.[SubstitutionSecondlineRegimenReason] SubstitutionSecondlineRegimenReason
 						  ,PV.[SecondlineRegimenChangeDate] SecondlineRegimenChangeDate,PV.[SecondlineRegimenChangeReason] SecondlineRegimenChangeReason,PV.[Adherence] Adherence,PV.[AdherenceCategory] AdherenceCategory,PV.[FamilyPlanningMethod] FamilyPlanningMethod
@@ -3927,29 +3928,33 @@
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT  [PatientVisitUnique_ID],[PatientUnique_ID],cast([PatientID] as nvarchar(100))PatientID,
-	cast([FacilityName] as nvarchar(100))FacilityName,[SiteCode],[PatientPK]
-      ,[VisitID],[VisitDate],
-	  cast([SERVICE] as nvarchar(20))SERVICE,
-	  cast([VisitType] as nvarchar(20))VisitType,[WHOStage],
-	  cast([WABStage] as nvarchar(20))WABStage,
-	  cast([Pregnant]  as nvarchar(20))Pregnant,[LMP],[EDD],[Height]
-      ,[Weight],
-	  cast([BP] as nvarchar(20))BP,
-	  cast([OI]as nvarchar(20))OI,[OIDate],
-	  cast([Adherence] as nvarchar(20))Adherence,
-	  cast([AdherenceCategory]as nvarchar(20))AdherenceCategory,
-	  cast([FamilyPlanningMethod]as nvarchar(20))FamilyPlanningMethod,
-	  cast([PwP]as nvarchar(20))PwP,[GestationAge]
-      ,[NextAppointmentDate],[SecondLineRegChange],[SecondLineRegChangeReason],
-	  cast([Emr]as nvarchar(20))Emr,
-	  cast([Project]as nvarchar(20))Project,[DateImported]
-      ,[CKV],[DeletedFlag],[DifferentiatedCare],[StabilityAssessment],[KeyPopulationType],[PopulationType],[VisitBy]
-      ,[Temp],[PulseRate],[RespiratoryRate],[OxygenSaturation],[Muac],[NutritionalStatus],[EverHadMenses],[Breastfeeding]
-      ,[Menopausal],[NoFPReason],[ProphylaxisUsed],[CTXAdherence],[CurrentRegimen],[HCWConcern],[TCAReason]
-      ,[ClinicalNotes],[GeneralExamination],[SystemExamination],[Skin],[Eyes],[ENT],[Chest],[CVS],[Abdomen]
-      ,[CNS],[Genitourinary]
-  FROM [ODS].[dbo].[CT_PatientVisits]</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT distinct  top 5 P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
+						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
+						  ,PV.[SubstitutionFirstlineRegimenDate] SubstitutionFirstlineRegimenDate,PV.[SubstitutionFirstlineRegimenReason] SubstitutionFirstlineRegimenReason,PV.[SubstitutionSecondlineRegimenDate] SubstitutionSecondlineRegimenDate,PV.[SubstitutionSecondlineRegimenReason] SubstitutionSecondlineRegimenReason
+						  ,PV.[SecondlineRegimenChangeDate] SecondlineRegimenChangeDate,PV.[SecondlineRegimenChangeReason] SecondlineRegimenChangeReason,PV.[Adherence] Adherence,PV.[AdherenceCategory] AdherenceCategory,PV.[FamilyPlanningMethod] FamilyPlanningMethod
+						  ,PV.[PwP] PwP,PV.[GestationAge] GestationAge,PV.[NextAppointmentDate] NextAppointmentDate,P.[Emr] Emr
+						  ,CASE P.[Project]
+									WHEN 'I-TECH' THEN 'Kenya HMIS II' 
+									WHEN 'HMIS' THEN 'Kenya HMIS II'
+								ELSE P.[Project] 
+							END AS [Project] 
+						  ,PV.[Voided] Voided,pv.[StabilityAssessment] StabilityAssessment,pv.[DifferentiatedCare] DifferentiatedCare,pv.[PopulationType] PopulationType,pv.[KeyPopulationType] KeyPopulationType,PV.[Processed] Processed
+						  ,PV.[Created] Created
+						  ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS PKV, 
+						  0 AS knockout,[GeneralExamination],[SystemExamination],[Skin],[Eyes],[ENT],[Chest],[CVS],[Abdomen],[CNS],[Genitourinary]
+							-----Missing columns Added later by Dennis
+						  ,PV.VisitBy VisitBy,PV.Temp Temp,PV.PulseRate PulseRate,PV.RespiratoryRate RespiratoryRate,PV.OxygenSaturation OxygenSaturation,PV.Muac Muac,PV.NutritionalStatus NutritionalStatus,PV.EverHadMenses EverHadMenses,PV.Menopausal Menopausal
+						  ,PV.Breastfeeding Breastfeeding,PV.NoFPReason NoFPReason,PV.ProphylaxisUsed ProphylaxisUsed,PV.CTXAdherence CTXAdherence,PV.CurrentRegimen CurrentRegimen,PV.HCWConcern HCWConcern,PV.TCAReason TCAReason,PV.ClinicalNotes ClinicalNotes
+						  ,P.ID as PatientUnique_ID
+						  ,PV.ID as PatientVisitUnique_ID
+						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
+						LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
+						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+						---INNER JOIN [DWAPICentral].[dbo].[FacilityManifest_MaxDateRecieved](NoLock) a ON F.Code = a.SiteCode
+						----LEFT JOIN All_Staging_2016_2.dbo.stg_Patients TPat ON TPat.PKV=LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID])))
+						--ORDER BY F.Id, PV.[PatientId],PV.[VisitDate],PV.[VisitId]
+						WHERE p.gender!='Unknown'</property>
                 <property
                   dataType="System.String"
                   description="The variable that contains the SQL command to be executed."
@@ -4562,57 +4567,6 @@
                       name="PatientVisitUnique_ID"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]"
-                      codePage="1252"
-                      dataType="str"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChange]"
-                      length="100"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]"
-                      name="SecondLineRegChange"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]"
-                      codePage="1252"
-                      dataType="str"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChangeReason]"
-                      length="150"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]"
-                      name="SecondLineRegChangeReason"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DateImported]"
-                      dataType="dbDate"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[DateImported]"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DateImported]"
-                      name="DateImported"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[CKV]"
-                      codePage="1252"
-                      dataType="str"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[CKV]"
-                      length="150"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[CKV]"
-                      name="CKV"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DeletedFlag]"
-                      dataType="bool"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[DeletedFlag]"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DeletedFlag]"
-                      name="DeletedFlag"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PatientID]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -4622,159 +4576,258 @@
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PatientID]"
                       name="PatientID"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineRegimenDate]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineRegimenDate]"
+                      name="SubstitutionFirstlineRegimenDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineRegimenReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineRegimenReason]"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionFirstlineRegimenReason]"
+                      name="SubstitutionFirstlineRegimenReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionSecondlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondlineRegimenDate]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionSecondlineRegimenDate]"
+                      name="SubstitutionSecondlineRegimenDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionSecondlineRegimenReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondlineRegimenReason]"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SubstitutionSecondlineRegimenReason]"
+                      name="SubstitutionSecondlineRegimenReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondlineRegimenChangeDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondlineRegimenChangeDate]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondlineRegimenChangeDate]"
+                      name="SecondlineRegimenChangeDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondlineRegimenChangeReason]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondlineRegimenChangeReason]"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondlineRegimenChangeReason]"
+                      name="SecondlineRegimenChangeReason"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Voided]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Voided]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Voided]"
+                      name="Voided"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Processed]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Processed]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Processed]"
+                      name="Processed"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Created]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Created]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Created]"
+                      name="Created"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PKV]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PKV]"
+                      length="122"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PKV]"
+                      name="PKV"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[knockout]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[knockout]"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[knockout]"
+                      name="knockout"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PatientPK]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       name="PatientPK" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[FacilityName]"
                       dataType="wstr"
-                      length="100"
+                      length="150"
                       name="FacilityName" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SiteCode]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       name="SiteCode" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[VisitID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       name="VisitID" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[VisitDate]"
-                      dataType="dbDate"
-                      name="VisitDate" />
+                      dataType="dbTimeStamp2"
+                      name="VisitDate"
+                      scale="7" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SERVICE]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="SERVICE" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[VisitType]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="VisitType" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[WHOStage]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="i4"
                       name="WHOStage" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[WABStage]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="WABStage" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Pregnant]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="Pregnant" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[LMP]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="LMP" />
+                      dataType="dbTimeStamp2"
+                      name="LMP"
+                      scale="7" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[EDD]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="EDD" />
+                      dataType="dbTimeStamp2"
+                      name="EDD"
+                      scale="7" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Height]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="Height" />
+                      dataType="numeric"
+                      name="Height"
+                      precision="18"
+                      scale="2" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Weight]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="Weight" />
+                      dataType="numeric"
+                      name="Weight"
+                      precision="18"
+                      scale="2" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[BP]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="BP" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[OI]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="OI" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[OIDate]"
-                      dataType="dbDate"
-                      name="OIDate" />
+                      dataType="dbTimeStamp2"
+                      name="OIDate"
+                      scale="7" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Adherence]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="Adherence" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[AdherenceCategory]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="AdherenceCategory" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[FamilyPlanningMethod]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="FamilyPlanningMethod" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PwP]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       name="PwP" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[GestationAge]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="GestationAge" />
+                      dataType="numeric"
+                      name="GestationAge"
+                      precision="18"
+                      scale="2" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[NextAppointmentDate]"
-                      dataType="dbDate"
-                      name="NextAppointmentDate" />
+                      dataType="dbTimeStamp2"
+                      name="NextAppointmentDate"
+                      scale="7" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Emr]"
                       dataType="wstr"
-                      length="20"
+                      length="100"
                       name="Emr" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Project]"
                       dataType="wstr"
-                      length="20"
+                      length="100"
                       name="Project" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[StabilityAssessment]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       name="StabilityAssessment" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[DifferentiatedCare]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       name="DifferentiatedCare" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PopulationType]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       name="PopulationType" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[KeyPopulationType]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       name="KeyPopulationType" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[GeneralExamination]"
@@ -4912,47 +4965,68 @@
                       name="ClinicalNotes" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PatientUnique_ID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="guid"
                       name="PatientUnique_ID" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PatientVisitUnique_ID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="guid"
                       name="PatientVisitUnique_ID" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChange]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
-                      name="SecondLineRegChange" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondLineRegChangeReason]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="SecondLineRegChangeReason" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[DateImported]"
-                      dataType="dbDate"
-                      name="DateImported" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[CKV]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      name="CKV" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[DeletedFlag]"
-                      dataType="bool"
-                      name="DeletedFlag" />
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PatientID]"
                       dataType="wstr"
                       length="100"
                       name="PatientID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      name="SubstitutionFirstlineRegimenDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionFirstlineRegimenReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SubstitutionFirstlineRegimenReason" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      name="SubstitutionSecondlineRegimenDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SubstitutionSecondlineRegimenReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SubstitutionSecondlineRegimenReason" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondlineRegimenChangeDate]"
+                      dataType="dbTimeStamp2"
+                      name="SecondlineRegimenChangeDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[SecondlineRegimenChangeReason]"
+                      dataType="wstr"
+                      length="250"
+                      name="SecondlineRegimenChangeReason" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Voided]"
+                      dataType="bool"
+                      name="Voided" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Processed]"
+                      dataType="bool"
+                      name="Processed" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Created]"
+                      dataType="dbTimeStamp"
+                      name="Created" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PKV]"
+                      dataType="wstr"
+                      length="122"
+                      name="PKV" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[knockout]"
+                      dataType="i4"
+                      name="knockout" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -4962,213 +5036,216 @@
                   <outputColumns>
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientPK]"
                       name="PatientPK" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
                       dataType="wstr"
-                      length="100"
+                      length="150"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[FacilityName]"
                       name="FacilityName" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SiteCode]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SiteCode]"
                       name="SiteCode" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="i4"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitID]"
                       name="VisitID" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitDate]"
-                      dataType="dbDate"
+                      dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitDate]"
-                      name="VisitDate" />
+                      name="VisitDate"
+                      scale="7" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SERVICE]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SERVICE]"
                       name="SERVICE" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitType]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[VisitType]"
                       name="VisitType" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[WHOStage]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="i4"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[WHOStage]"
                       name="WHOStage" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[WABStage]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[WABStage]"
                       name="WABStage" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Pregnant]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Pregnant]"
                       name="Pregnant" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[LMP]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[LMP]"
-                      name="LMP" />
+                      name="LMP"
+                      scale="7" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[EDD]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[EDD]"
-                      name="EDD" />
+                      name="EDD"
+                      scale="7" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Height]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="numeric"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Height]"
-                      name="Height" />
+                      name="Height"
+                      precision="18"
+                      scale="2" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Weight]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="numeric"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Weight]"
-                      name="Weight" />
+                      name="Weight"
+                      precision="18"
+                      scale="2" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[BP]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[BP]"
                       name="BP" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[OI]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[OI]"
                       name="OI" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[OIDate]"
-                      dataType="dbDate"
+                      dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[OIDate]"
-                      name="OIDate" />
+                      name="OIDate"
+                      scale="7" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Adherence]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Adherence]"
                       name="Adherence" />
                     <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineRegimenDate]"
+                      name="SubstitutionFirstlineRegimenDate"
+                      scale="7" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineRegimenReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionFirstlineRegimenReason]"
+                      name="SubstitutionFirstlineRegimenReason" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondlineRegimenDate]"
+                      dataType="dbTimeStamp2"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondlineRegimenDate]"
+                      name="SubstitutionSecondlineRegimenDate"
+                      scale="7" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondlineRegimenReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SubstitutionSecondlineRegimenReason]"
+                      name="SubstitutionSecondlineRegimenReason" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondlineRegimenChangeDate]"
+                      dataType="dbTimeStamp2"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondlineRegimenChangeDate]"
+                      name="SecondlineRegimenChangeDate"
+                      scale="7" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondlineRegimenChangeReason]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondlineRegimenChangeReason]"
+                      name="SecondlineRegimenChangeReason" />
+                    <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[AdherenceCategory]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[AdherenceCategory]"
                       name="AdherenceCategory" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[FamilyPlanningMethod]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[FamilyPlanningMethod]"
                       name="FamilyPlanningMethod" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PwP]"
                       dataType="wstr"
-                      length="20"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PwP]"
                       name="PwP" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[GestationAge]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
+                      dataType="numeric"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[GestationAge]"
-                      name="GestationAge" />
+                      name="GestationAge"
+                      precision="18"
+                      scale="2" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
-                      dataType="dbDate"
+                      dataType="dbTimeStamp2"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[NextAppointmentDate]"
-                      name="NextAppointmentDate" />
+                      name="NextAppointmentDate"
+                      scale="7" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Emr]"
                       dataType="wstr"
-                      length="20"
+                      length="100"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Emr]"
                       name="Emr" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Project]"
                       dataType="wstr"
-                      length="20"
+                      length="100"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Project]"
                       name="Project" />
                     <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChange]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChange]"
-                      name="SecondLineRegChange" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChangeReason]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SecondLineRegChangeReason]"
-                      name="SecondLineRegChangeReason" />
-                    <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[StabilityAssessment]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[StabilityAssessment]"
                       name="StabilityAssessment" />
                     <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Voided]"
+                      dataType="bool"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Voided]"
+                      name="Voided" />
+                    <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DifferentiatedCare]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DifferentiatedCare]"
                       name="DifferentiatedCare" />
                     <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DateImported]"
-                      dataType="dbDate"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DateImported]"
-                      name="DateImported" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[CKV]"
-                      codePage="1252"
-                      dataType="str"
-                      length="150"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[CKV]"
-                      name="CKV" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DeletedFlag]"
-                      dataType="bool"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[DeletedFlag]"
-                      name="DeletedFlag" />
-                    <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PopulationType]"
                       name="PopulationType" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
                       dataType="wstr"
-                      length="150"
+                      length="250"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[KeyPopulationType]"
                       name="KeyPopulationType" />
                     <outputColumn
@@ -5177,6 +5254,27 @@
                       length="150"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[GeneralExamination]"
                       name="GeneralExamination" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Processed]"
+                      dataType="bool"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Processed]"
+                      name="Processed" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Created]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Created]"
+                      name="Created" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PKV]"
+                      dataType="wstr"
+                      length="122"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PKV]"
+                      name="PKV" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[knockout]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[knockout]"
+                      name="knockout" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[SystemExamination]"
                       dataType="wstr"
@@ -5334,16 +5432,12 @@
                       name="ClinicalNotes" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientUnique_ID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="guid"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientUnique_ID]"
                       name="PatientUnique_ID" />
                     <outputColumn
                       refId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientVisitUnique_ID]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="guid"
                       lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PatientVisitUnique_ID]"
                       name="PatientVisitUnique_ID" />
                     <outputColumn
@@ -5406,7 +5500,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">1</property>
+                          name="NewSortKeyPosition">0</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -5422,7 +5516,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">2</property>
+                          name="NewSortKeyPosition">1</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -5455,7 +5549,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">3</property>
+                          name="NewSortKeyPosition">2</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -5471,7 +5565,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">4</property>
+                          name="NewSortKeyPosition">3</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -5488,7 +5582,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">5</property>
+                          name="NewSortKeyPosition">4</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -6589,8 +6683,7 @@
                       dataType="wstr"
                       length="100"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[PatientID]"
-                      name="PatientID"
-                      sortKeyPosition="1">
+                      name="PatientID">
                       <properties>
                         <property
                           containsID="true"
@@ -6604,7 +6697,7 @@
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[PatientPK]"
                       name="PatientPK"
-                      sortKeyPosition="2">
+                      sortKeyPosition="1">
                       <properties>
                         <property
                           containsID="true"
@@ -6632,7 +6725,7 @@
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[SiteCode]"
                       name="SiteCode"
-                      sortKeyPosition="3">
+                      sortKeyPosition="2">
                       <properties>
                         <property
                           containsID="true"
@@ -6646,7 +6739,7 @@
                       dataType="i4"
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[VisitID]"
                       name="VisitID"
-                      sortKeyPosition="4">
+                      sortKeyPosition="3">
                       <properties>
                         <property
                           containsID="true"
@@ -6661,7 +6754,7 @@
                       lineageId="Package\Data Flow Task\Sort.Outputs[Sort Output].Columns[VisitDate]"
                       name="VisitDate"
                       scale="7"
-                      sortKeyPosition="5">
+                      sortKeyPosition="4">
                       <properties>
                         <property
                           containsID="true"
@@ -8552,7 +8645,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">5</property>
+                          name="NewSortKeyPosition">0</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -8568,7 +8661,7 @@
                         <property
                           dataType="System.Int32"
                           description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">6</property>
+                          name="NewSortKeyPosition">0</property>
                       </properties>
                     </inputColumn>
                     <inputColumn
@@ -8577,7 +8670,7 @@
                       cachedDataType="str"
                       cachedLength="100"
                       cachedName="SecondLineRegChange"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]">
+                      lineageId="Package\Data Flow Task\635:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -8595,7 +8688,7 @@
                       cachedDataType="str"
                       cachedLength="150"
                       cachedName="SecondLineRegChangeReason"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]">
+                      lineageId="Package\Data Flow Task\636:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -8611,7 +8704,7 @@
                       refId="Package\Data Flow Task\Sort 1.Inputs[Sort Input].Columns[DateImported]"
                       cachedDataType="dbDate"
                       cachedName="DateImported"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DateImported]">
+                      lineageId="Package\Data Flow Task\637:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -8629,7 +8722,7 @@
                       cachedDataType="str"
                       cachedLength="150"
                       cachedName="CKV"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[CKV]">
+                      lineageId="Package\Data Flow Task\638:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -8645,7 +8738,7 @@
                       refId="Package\Data Flow Task\Sort 1.Inputs[Sort Input].Columns[DeletedFlag]"
                       cachedDataType="bool"
                       cachedName="DeletedFlag"
-                      lineageId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DeletedFlag]">
+                      lineageId="Package\Data Flow Task\639:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -9474,8 +9567,7 @@
                       refId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientUnique_ID]"
                       dataType="guid"
                       lineageId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientUnique_ID]"
-                      name="PatientUnique_ID"
-                      sortKeyPosition="5">
+                      name="PatientUnique_ID">
                       <properties>
                         <property
                           containsID="true"
@@ -9488,8 +9580,7 @@
                       refId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientVisitUnique_ID]"
                       dataType="guid"
                       lineageId="Package\Data Flow Task\Sort 1.Outputs[Sort Output].Columns[PatientVisitUnique_ID]"
-                      name="PatientVisitUnique_ID"
-                      sortKeyPosition="6">
+                      name="PatientVisitUnique_ID">
                       <properties>
                         <property
                           containsID="true"
@@ -9510,7 +9601,7 @@
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChange]}</property>
+                          name="SortColumnId">#{Package\Data Flow Task\635:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -9525,7 +9616,7 @@
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[SecondLineRegChangeReason]}</property>
+                          name="SortColumnId">#{Package\Data Flow Task\636:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -9538,7 +9629,7 @@
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DateImported]}</property>
+                          name="SortColumnId">#{Package\Data Flow Task\637:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -9553,7 +9644,7 @@
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[CKV]}</property>
+                          name="SortColumnId">#{Package\Data Flow Task\638:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -9566,7 +9657,7 @@
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[DeletedFlag]}</property>
+                          name="SortColumnId">#{Package\Data Flow Task\639:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -9607,14 +9698,14 @@
               startId="Package\Data Flow Task\OLE DB Source 1.Outputs[OLE DB Source Output]" />
             <path
               refId="Package\Data Flow Task.Paths[Sort Output]"
-              endId="Package\Data Flow Task\Merge.Inputs[Merge Input 1]"
-              name="Sort Output"
-              startId="Package\Data Flow Task\Sort.Outputs[Sort Output]" />
-            <path
-              refId="Package\Data Flow Task.Paths[Sort Output1]"
               endId="Package\Data Flow Task\Merge.Inputs[Merge Input 2]"
               name="Sort Output"
               startId="Package\Data Flow Task\Sort 1.Outputs[Sort Output]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Sort Output1]"
+              endId="Package\Data Flow Task\Merge.Inputs[Merge Input 1]"
+              name="Sort Output"
+              startId="Package\Data Flow Task\Sort.Outputs[Sort Output]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -9643,23 +9734,19 @@
     design-time-name="Package\Data Flow Task">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="150.666666666667,42.6666666666667"
-          Id="Package\Data Flow Task\OLE DB Source"
-          TopLeft="78.7499988265336,45.4999991863966" />
-        <NodeLayout
-          Size="160,42.6666666666667"
-          Id="Package\Data Flow Task\OLE DB Source 1"
-          TopLeft="420.624993732199,41.5666677592198" />
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="98.6666666666667,42.6666666666667"
           Id="Package\Data Flow Task\Sort"
           TopLeft="97.4999985471368,122.199997814894" />
         <NodeLayout
-          Size="108,42.6666666666667"
-          Id="Package\Data Flow Task\Sort 1"
-          TopLeft="445.62499335967,134.549997594059" />
+          Size="160,42.6666666666667"
+          Id="Package\Data Flow Task\OLE DB Source 1"
+          TopLeft="420.624993732199,41.5666677592198" />
+        <NodeLayout
+          Size="150.666666666667,42.6666666666667"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="78.7499988265336,45.4999991863966" />
         <EdgeLayout
           Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
           TopLeft="150.458332020169,88.1666658530633">
@@ -9682,20 +9769,44 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <NodeLayout
+          Size="154.666666666667,42.6666666666667"
+          Id="Package\Data Flow Task\Derived Column"
+          TopLeft="278.749995846301,292.499994769692" />
+        <NodeLayout
+          Size="108,42.6666666666667"
+          Id="Package\Data Flow Task\Sort 1"
+          TopLeft="445.62499335967,134.549997594059" />
+        <NodeLayout
+          Size="109.333333333334,42.6666666666667"
+          Id="Package\Data Flow Task\Merge"
+          TopLeft="293.749995622784,198.899996443391" />
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[OLE DB Source Output1]"
-          TopLeft="500.124993545935,84.2333344258865">
+          Id="Package\Data Flow Task.Paths[Sort Output]"
+          TopLeft="445.62499335967,155.883330927392">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,50.3166631681721"
+              EndConnector="-42.5416644035529,64.3499988493324"
               Start="0,0"
-              End="0,42.8166631681721">
+              End="-35.0416644035529,64.3499988493324">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,42.8166631681721" />
+                    End="-17.2708322017764,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-17.2708322017764,0"
+                    Point2="-21.2708322017764,0"
+                    Point3="-21.2708322017764,4" />
+                  <mssgle:LineSegment
+                    End="-21.2708322017764,60.3499988493324" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-21.2708322017764,60.3499988493324"
+                    Point2="-21.2708322017764,64.3499988493324"
+                    Point3="-25.2708322017764,64.3499988493324" />
+                  <mssgle:LineSegment
+                    End="-35.0416644035529,64.3499988493324" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -9704,12 +9815,8 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="109.333333333334,42.6666666666667"
-          Id="Package\Data Flow Task\Merge"
-          TopLeft="293.749995622784,198.899996443391" />
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[Sort Output]"
+          Id="Package\Data Flow Task.Paths[Sort Output1]"
           TopLeft="146.83333188047,164.86666448156">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -9743,44 +9850,6 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[Sort Output1]"
-          TopLeft="445.62499335967,155.883330927392">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-42.5416644035529,64.3499988493324"
-              Start="0,0"
-              End="-35.0416644035529,64.3499988493324">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-17.2708322017764,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-17.2708322017764,0"
-                    Point2="-21.2708322017764,0"
-                    Point3="-21.2708322017764,4" />
-                  <mssgle:LineSegment
-                    End="-21.2708322017764,60.3499988493324" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-21.2708322017764,60.3499988493324"
-                    Point2="-21.2708322017764,64.3499988493324"
-                    Point3="-25.2708322017764,64.3499988493324" />
-                  <mssgle:LineSegment
-                    End="-35.0416644035529,64.3499988493324" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="154.666666666667,42.6666666666667"
-          Id="Package\Data Flow Task\Derived Column"
-          TopLeft="278.749995846301,292.499994769692" />
-        <EdgeLayout
           Id="Package\Data Flow Task.Paths[Merge Output 1]"
           TopLeft="352.249995734543,241.566663110058">
           <EdgeLayout.Curve>
@@ -9802,11 +9871,35 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output1]"
+          TopLeft="500.124993545935,84.2333344258865">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,50.3166631681725"
+              Start="0,0"
+              End="0,42.8166631681725">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,42.8166631681725" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-8,13.4083315840863,16,16"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Source">
+    design-time-name="Package\Data Flow Task\OLE DB Source 1">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -9814,7 +9907,7 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Source 1">
+    design-time-name="Package\Data Flow Task\OLE DB Source">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
