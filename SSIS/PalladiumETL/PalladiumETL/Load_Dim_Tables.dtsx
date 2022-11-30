@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="9"
-  DTS:VersionGUID="{E4D3446B-F23E-456F-9E30-BEF96B9CD8B2}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{4EF01D77-5906-46E6-A29A-73D47BBD3622}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -111,6 +111,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{8044C860-E66E-4DC5-B600-298397925618}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Loop through Dim Files"
           DTS:ThreadHint="0">
@@ -152,7 +153,7 @@
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="325.333333333334,115.333333333334"
+          PanelSize="325.333333333334,116"
           Size="325.333333333334,158.666666666667"
           Id="Package\Load Dimensions Container Loop"
           TopLeft="128.749998081476,12.3499997791648" />

@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\Checkpoint.xml"
+  DTS:CheckpointUsage="1"
   DTS:CreationDate="11/24/2022 11:51:39 AM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -11,8 +13,9 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="7"
-  DTS:VersionGUID="{1D59EFAC-62FF-4B4D-AA54-91B9FC279F2D}">
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="8"
+  DTS:VersionGUID="{CEE893F1-1C09-4310-B247-E3DFA9318535}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -96,6 +99,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{0C508EAA-3815-4393-B6BF-D43EA04F9055}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Loop through Fact tables Folder"
           DTS:ThreadHint="0">

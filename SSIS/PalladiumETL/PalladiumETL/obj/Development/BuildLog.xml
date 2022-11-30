@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2022-11-24T11:29:10.2624682Z</LastWriteTime>
+    <LastWriteTime>2022-11-30T15:20:59.6027856Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -33,7 +33,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>OptimizedTest_Load.dtsx</Name>
-      <LastWriteTime>2022-11-29T09:54:20.1779011Z</LastWriteTime>
+      <LastWriteTime>2022-11-30T12:41:40.7432672Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -53,17 +53,22 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Dim_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-24T11:29:10.2324677Z</LastWriteTime>
+      <LastWriteTime>2022-11-30T15:19:18.7227405Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2022-11-29T09:50:20.1076774Z</LastWriteTime>
+      <LastWriteTime>2022-11-30T15:20:48.4000385Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Fact_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-24T11:29:26.5549837Z</LastWriteTime>
+      <LastWriteTime>2022-11-30T15:19:49.2567076Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_Intermediate_CT_Tables.dtsx</Name>
+      <LastWriteTime>2022-11-30T15:18:31.1348332Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>
