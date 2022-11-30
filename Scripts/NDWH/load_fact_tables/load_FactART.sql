@@ -33,7 +33,8 @@
         las.NextAppointmentDate,
         StartARTDate.DateKey  as StartARTDateKey,
         Sites.SDP,
-        sites.[SDP Agency]
+        sites.[SDP Agency],
+        outcome.ARTOutcome
         INTO FACTART
 from 
 ODS.dbo.CT_Patient Patient
@@ -47,7 +48,9 @@ left join NDWH.dbo.DimRegimen lastreg on lastreg.Regimen=ART.LastRegimen
 left join NDWH.dbo.DimRegimen firstreg on firstreg.Regimen=ART.StartRegimen
 left join NDWH.dbo.DimRegimenLine lastregline on lastregline.RegimenLine=ART.LastRegimenLine
 left join NDWH.dbo.DimRegimenLine firstregline on firstregline.RegimenLine=ART.StartRegimenLine
-left join ODS.dbo.ALL_EMRSites sites on sites.MFL_Code=Patient.SiteCode;
+left join ODS.dbo.ALL_EMRSites sites on sites.MFL_Code=Patient.SiteCode
+left join NDWH.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
+
 
  
 alter table dbo.FactART add primary key(FactKey);
