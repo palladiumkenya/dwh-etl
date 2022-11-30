@@ -37,7 +37,8 @@ select
 	CPIMSUniqueIdentifier,
 	PartnerOfferingOVCServices,
 	OVCExitReason,
-	exit_date.DateKey as OVCExitDateKey
+	exit_date.DateKey as OVCExitDateKey,
+	cast(getdate() as date) as LoadDate
 into dbo.FactOVC
 from source_ovc
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_ovc.PatientPK as nvarchar(36))), 2)

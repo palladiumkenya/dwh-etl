@@ -141,7 +141,8 @@ select
 	combined_table.DifferentiatedCare,
 	combined_table.onMMD,
 	combined_table.StabilityAssessment,
-	combined_table.Pregnant
+	combined_table.Pregnant,
+	cast(getdate() as date) as LoadDate
 into dbo.FactLatestObs
 from combined_table 
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_table.PatientPK as nvarchar(36))), 2)

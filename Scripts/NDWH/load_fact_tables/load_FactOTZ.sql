@@ -47,7 +47,8 @@ select
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Transition,
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_TreatmentLiteracy,
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_SRH,
-	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Beyond
+	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Beyond,
+	cast(getdate() as date) as LoadDate
 into dbo.FactOTZ
 from otz_and_last_encounter_combined
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(otz_and_last_encounter_combined.PatientPK as nvarchar(36))), 2)
