@@ -18,7 +18,7 @@ SELECT
    facilities_hts_info.status As `HTS Status`,
    facilities_il_info.status as 'IL Status',
    facilities_il_info.webADT_registration as 'Registration IE',
-   facilities_il_info.webADT_pharmacy as 'Phamarmacy IE',
+   facilities_il_info.webADT_pharmacy as 'Pharmacy IE',
    facilities_il_info.Mlab as `mlab`,
    facilities_il_info.Ushauri,
    facilities_mhealth_info.Nishauri,
