@@ -121,7 +121,8 @@ group by
         SupplementalOxygenReceived,
         PatientVentilated,
         TracingFinalOutcome ,
-        CauseOfDeath
+        CauseOfDeath,
+        cast(getdate() as date) as LoadDate
 INTO FACTCOVID
  from Covid
  left join NDWH.dbo.DimPatient as patient on patient.PatientPK = Covid.PatientPK and patient.SiteCode = Covid.SiteCode
