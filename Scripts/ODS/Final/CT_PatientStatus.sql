@@ -39,6 +39,7 @@ BEGIN
 						PS.TOVerifiedDate TOVerifiedDate,
 						PS.ReEnrollmentDate ReEnrollmentDate
 						,P.ID as PatientUnique_ID
+						,PS.PatientId as UniquePatientStatusId
 						,PS.ID as PatientStatusUnique_ID
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
@@ -50,8 +51,8 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.exitdate = b.exitdate
-						and a.PatientUnique_ID =b.PatientStatusUnique_ID 
-						)
+						and a.PatientUnique_ID = b.UniquePatientStatusId 
+						and a.PatientStatusUnique_ID = b.PatientStatusUnique_ID)
 					WHEN NOT MATCHED THEN 
 							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID )--/*,SpecificDeathReason,DeathDate,EffectiveDiscontinuationDate */) 
 							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID) --/*ReasonForDeath,SpecificDeathReason,DeathDate /*EffectiveDiscontinuationDate/*);

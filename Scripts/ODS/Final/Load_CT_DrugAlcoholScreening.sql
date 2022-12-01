@@ -25,6 +25,7 @@ BEGIN
 							LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 							,DAS.ID as DrugAlcoholScreeningUnique_ID
 							,P.ID as PatientUnique_ID
+							,DAS.PatientId as uniquePatientDAndAScreeningID
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[DrugAlcoholScreeningExtract](NoLock) DAS ON DAS.[PatientId] = P.ID AND DAS.Voided = 0
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -35,7 +36,8 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID =b.DrugAlcoholScreeningUnique_ID)
+						and a.PatientUnique_ID =b.uniquePatientDAndAScreeningID
+						and a.PatientUnique_ID = b.PatientUnique_ID)
 					
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) 

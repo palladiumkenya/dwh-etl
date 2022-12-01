@@ -35,6 +35,7 @@ BEGIN
 							LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber])) +'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV,
 							GETDATE() AS dateimported
 							,P.ID as PatientUnique_ID
+							,PA.PatientId as UniqueAdverseEventsID
 							,PA.ID as AdverseEventsUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
@@ -44,7 +45,8 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID = b.AdverseEventsUnique_ID )
+						and a.PatientUnique_ID = b.UniqueAdverseEventsID
+						and a.AdverseEventsUnique_ID = b.AdverseEventsUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID) 

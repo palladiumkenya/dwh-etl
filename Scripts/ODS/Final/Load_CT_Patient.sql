@@ -16,7 +16,7 @@ BEGIN
 						FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F with (NoLock)  
 						ON P.[FacilityId]  = F.Id  AND F.Voided=0 						
-						WHERE P.Voided=0 and P.[Gender] is NOT NULL and p.gender!='Unknown' and P.Processed =1 ) AS b 
+						WHERE P.Voided=0 and P.[Gender] is NOT NULL and p.gender!='Unknown'/* and P.Processed =1*/ ) AS b 
 						ON(
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 

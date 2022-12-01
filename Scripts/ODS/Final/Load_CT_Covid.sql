@@ -44,6 +44,7 @@ BEGIN
 						,[Sequence]
 						,COVID19TestResult
 						,P.ID as PatientUnique_ID
+						,C.PatientId as UniquePatientCovidId
 						,C.ID as CovidUnique_ID
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID AND C.Voided=0
@@ -54,8 +55,8 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
-						and a.PatientUnique_ID =b.CovidUnique_ID
-						)
+						and a.PatientUnique_ID =b.UniquePatientCovidId
+						and a.CovidUnique_ID = b.CovidUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID) 

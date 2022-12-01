@@ -33,6 +33,7 @@ BEGIN
 					  0 AS IsRegimenFlag, 
 					  0 AS KnockOutDrug
 					  ,P.ID as PatientUnique_ID
+					  ,PP.PatientId as UniquePatientPharmacyId
 					  ,PP.ID as PatientPharmacyUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract] P 
 						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
@@ -45,8 +46,8 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.visitID = b.visitID
 						and a.DispenseDate = b.DispenseDate
-						and a.PatientUnique_ID =b.PatientPharmacyUnique_ID
-						)
+						and a.PatientUnique_ID =b.UniquePatientPharmacyId
+						and a.PatientPharmacyUnique_ID = b.PatientPharmacyUnique_ID)
 
 				WHEN NOT MATCHED THEN 
 					INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID) 

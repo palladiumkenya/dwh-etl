@@ -2,30 +2,10 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2022-11-30T15:20:59.6027856Z</LastWriteTime>
+    <LastWriteTime>2022-12-01T08:25:15.2018044Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
-    <ProjectBuildItemInfo>
-      <Name>Load_Landing_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-08T06:58:09.9088482Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
-    <ProjectBuildItemInfo>
-      <Name>Load_Fact_Covid.dtsx</Name>
-      <LastWriteTime>2022-11-08T06:58:11.2548875Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
-    <ProjectBuildItemInfo>
-      <Name>Load_Fact_ARTOutcome.dtsx</Name>
-      <LastWriteTime>2022-11-08T06:48:01.9700542Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
-    <ProjectBuildItemInfo>
-      <Name>Load_ARTOutcome.dtsx</Name>
-      <LastWriteTime>2022-11-08T06:48:01.9620512Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>DQS.dtsx</Name>
       <LastWriteTime>2022-11-08T06:48:01.9620512Z</LastWriteTime>
