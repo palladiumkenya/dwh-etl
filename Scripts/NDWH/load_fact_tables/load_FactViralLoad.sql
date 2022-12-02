@@ -298,3 +298,5 @@ left join NDWH.dbo.DimDate as last_VL_date on last_VL_date.Date = combined_viral
 left join NDWH.dbo.DimDate as lastest_VL_date1 on lastest_VL_date1.Date = combined_viral_load_dataset.LatestVLDate1
 left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combined_viral_load_dataset.LatestVLDate2
 left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3;
+
+alter table dbo.FactViralLoads add primary key(FactKey);
