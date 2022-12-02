@@ -28,6 +28,7 @@ BEGIN
 						-- DS.[Created],
 						LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 						,P.ID as PatientUnique_ID
+						,DS.PatientId as PatientDepressionScreeningID
 						,DS.ID as DepressionScreeningUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) DS ON DS.[PatientId] = P.ID AND DS.Voided = 0
@@ -39,7 +40,8 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
-						and a.PatientUnique_ID =b.DepressionScreeningUnique_ID)
+						and a.PatientUnique_ID =b.PatientDepressionScreeningID
+						and a.DepressionScreeningUnique_ID = b.DepressionScreeningUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID) 

@@ -30,6 +30,7 @@ BEGIN
 						  ,LTRIM(RTRIM(STR(F.[Code])))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 					 ,getdate() as [DateImported] 
 					 ,P.ID as PatientUnique_ID
+					 ,C.PatientID as UniquePatientDTracingID
 					 ,C.ID as DefaulterTracingUnique_ID
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
@@ -41,7 +42,8 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
-						and a.PatientUnique_ID =b.DefaulterTracingUnique_ID)
+						and a.PatientUnique_ID =b.UniquePatientDTracingID
+						and a.DefaulterTracingUnique_ID = b.DefaulterTracingUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 

@@ -25,6 +25,7 @@ BEGIN
 							GETDATE() AS DateImported,
 							LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 							,P.ID as PatientUnique_ID
+							,GSE.PatientID as UniquePatientGbvScreeningID
 							,GSE.ID GbvScreeningUnique_ID
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID AND GSE.Voided = 0
@@ -36,7 +37,9 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID			=b.VisitID
 						and a.VisitDate			=b.VisitDate
-						and a.PatientUnique_ID =b.GbvScreeningUnique_ID)
+						and a.PatientUnique_ID =b.UniquePatientGbvScreeningID
+						and a.GbvScreeningUnique_ID = b.GbvScreeningUnique_ID
+						and a.GbvScreeningUnique_ID = b.GbvScreeningUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,CKV,PatientUnique_ID,GbvScreeningUnique_ID) 

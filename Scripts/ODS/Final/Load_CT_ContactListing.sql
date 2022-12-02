@@ -30,6 +30,7 @@ BEGIN
 					  ContactPatientPK,
 					  CL.Created as DateCreated
 					  ,P.ID as  PatientUnique_ID
+					  ,CL.PatientId as UniquePatientContactListingId
 					  ,CL.ID as  ContactListingUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
@@ -39,7 +40,8 @@ BEGIN
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						and a.PatientUnique_ID =b.ContactListingUnique_ID)
+						and a.PatientUnique_ID =b.UniquePatientContactListingId
+						and a.ContactListingUnique_ID = b.ContactListingUnique_ID)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID) 
