@@ -5,8 +5,8 @@ BEGIN
 		select 
 			distinct MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 
 	   Patient As ( Select    
@@ -89,6 +89,6 @@ BEGIN
 	left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join NDWH.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
  
-	alter table dbo.FactART add primary key(FactKey);
+	alter table [ODS].[Dbo].[FactArt] add primary key(FactKey);
 END
 

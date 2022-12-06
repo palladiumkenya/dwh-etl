@@ -5,8 +5,8 @@ BEGIN
 		select 
 			MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 	latest_weight_height as (
 	select 
@@ -157,5 +157,5 @@ BEGIN
 	left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_table.AgeLastVisit
 	left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = combined_table.DifferentiatedCare;
 
-	alter table dbo.FactLatestObs add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactLatestObs] add primary key(FactKey);
 END

@@ -137,5 +137,5 @@ BEGIN
 	 left join NDWH.dbo.DimDate as AdmissionEndDate  on AdmissionEndDate.Date = Covid.AdmissionEndDate
 	 where RowNumber=1;
  
-	alter table dbo.FactCOVID add primary key(FactKey);
+	alter table [ODS].[Dbo].[FactCovid] add primary key(FactKey);
 END
