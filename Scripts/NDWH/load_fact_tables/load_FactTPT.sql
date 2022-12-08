@@ -84,7 +84,7 @@ select
     tb_diagnosis.DateKey as TBDiagnosisDateKey,
     combined_ipt_data.OnIPT,
     combined_ipt_data.hasTB
-into NDWH.dbo.FactIPT
+into NDWH.dbo.FactTPT
 from combined_ipt_data
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_ipt_data.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = combined_ipt_data.SiteCode
@@ -96,5 +96,5 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_ipt_data.AgeLastVisit;
 
-alter table dbo.FactIPT add primary key(FactKey);
+alter table dbo.FactTPT add primary key(FactKey);
 
