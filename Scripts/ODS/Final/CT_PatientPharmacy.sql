@@ -11,7 +11,7 @@ BEGIN
 			VALUES(@DispenseDate,GETDATE())
 
 			MERGE [ODS].[dbo].[CT_PatientPharmacy] AS a
-				USING(SELECT 
+				USING(SELECT
 					  P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PP.[VisitID] VisitID,PP.[Drug] Drug
 					  ,PP.[DispenseDate] DispenseDate,PP.[Duration] Duration,PP.[ExpectedReturn] ExpectedReturn,PP.[TreatmentType] TreatmentType
 					  ,PP.[PeriodTaken] PeriodTaken,PP.[ProphylaxisType] ProphylaxisType,P.[Emr] Emr
@@ -36,7 +36,7 @@ BEGIN
 					  ,PP.PatientId as UniquePatientPharmacyId
 					  ,PP.ID as PatientPharmacyUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract] P 
-						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
+						--INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
 						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
 					WHERE p.gender!='Unknown' ) AS b 
@@ -47,7 +47,11 @@ BEGIN
 						and a.visitID = b.visitID
 						and a.DispenseDate = b.DispenseDate
 						and a.PatientUnique_ID =b.UniquePatientPharmacyId
-						and a.PatientPharmacyUnique_ID = b.PatientPharmacyUnique_ID)
+						and a.drug COLLATE SQL_Latin1_General_CP1_CI_AS = b.drug COLLATE SQL_Latin1_General_CP1_CI_AS
+						and a.TreatmentType COLLATE SQL_Latin1_General_CP1_CI_AS = b.TreatmentType COLLATE SQL_Latin1_General_CP1_CI_AS
+						--and a.PatientPharmacyUnique_ID = b.PatientPharmacyUnique_ID
+						--and a.Drug COLLATE SQL_Latin1_General_CP1_CI_AS =b.Drug COLLATE SQL_Latin1_General_CP1_CI_AS
+						)
 
 				WHEN NOT MATCHED THEN 
 					INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID) 
@@ -55,12 +59,12 @@ BEGIN
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
-						a.PatientID					=b.PatientID,
+						--a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
-						a.Drug						=b.Drug,
+						--a.Drug						=b.Drug,
 						a.Duration					=b.Duration,
 						a.ExpectedReturn			=b.ExpectedReturn,
-						a.TreatmentType				=b.TreatmentType,
+						--a.TreatmentType				=b.TreatmentType,
 						a.PeriodTaken				=b.PeriodTaken,
 						a.ProphylaxisType			=b.ProphylaxisType,
 						a.Emr						=b.Emr,
@@ -90,9 +94,9 @@ BEGIN
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientPharmacy] 
 			--WITH CTE AS   
 			--	(  
-			--		SELECT [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID,ROW_NUMBER() 
-			--		OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,PatientUnique_ID,PatientPharmacyUnique_ID
-			--		ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,PatientUnique_ID,PatientPharmacyUnique_ID) AS dump_ 
+			--		SELECT [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType
+			--		ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,drug,TreatmentType) AS dump_ 
 			--		FROM [ODS].[dbo].[CT_PatientPharmacy] 
 			--		)  
 			

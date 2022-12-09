@@ -1,4 +1,6 @@
 ---DimFacility Load
+IF OBJECT_ID(N'[NDWH].[dbo].[DimFacility]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[DimFacility];
 with source_facility as (
 	select
 		cast(MFL_Code as nvarchar) as MFLCode,
@@ -31,7 +33,7 @@ select
 	cast(format(site_abstraction.DateSiteAbstraction,'yyyyMMdd') as int) as DateSiteAbstractionKey,
 	cast(format(latest_upload.LatestDateUploaded, 'yyyyMMdd') as int) as LatestDateUploadedKey,
 	cast(getdate() as date) as LoadDate
-into dbo.DimFacility
+into [NDWH].[dbo].[DimFacility]
 from source_facility
 left join site_abstraction on site_abstraction.SiteCode = source_facility.MFLCode
 left join latest_upload on latest_upload.SiteCode = source_facility.MFLCode;

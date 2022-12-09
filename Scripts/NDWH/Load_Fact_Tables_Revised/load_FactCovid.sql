@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[ODS].[Dbo].[FactCovid]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[Dbo].[FactCovid];
+IF OBJECT_ID(N'[NDWH].[Dbo].[FactCovid]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[Dbo].[FactCovid];
 BEGIN
 	With Covid As  (
 	SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientID,Covid.PatientPK,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
@@ -81,8 +81,8 @@ BEGIN
 		select 
 			MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	 )
 	 Select 
 			Factkey = IDENTITY(INT, 1, 1),
@@ -120,7 +120,7 @@ BEGIN
 			TracingFinalOutcome ,
 			CauseOfDeath,
 			cast(getdate() as date) as LoadDate
-		INTO [ODS].[Dbo].[FactCovid]
+		INTO [NDWH].[Dbo].[FactCovid]
 	 from Covid
 	 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = Covid.PatientPK and patient.SiteCode = Covid.SiteCode
 	 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Covid.SiteCode
@@ -137,5 +137,5 @@ BEGIN
 	 left join NDWH.dbo.DimDate as AdmissionEndDate  on AdmissionEndDate.Date = Covid.AdmissionEndDate
 	 where RowNumber=1;
  
-	alter table [ODS].[Dbo].[FactCovid] add primary key(FactKey);
+	alter table [NDWH].[Dbo].[FactCovid] add primary key(FactKey);
 END

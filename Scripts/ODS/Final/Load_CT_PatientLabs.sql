@@ -44,7 +44,7 @@ BEGIN
 						and  a.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS						
 						and  a.TestName COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestName COLLATE SQL_Latin1_General_CP1_CI_AS
 						and a.PatientUnique_ID		=b.UniquePatientLabID
-						and a.PatientLabsUnique_ID = b.PatientLabsUnique_ID
+						--and a.PatientLabsUnique_ID = b.PatientLabsUnique_ID
 						)
 
 												

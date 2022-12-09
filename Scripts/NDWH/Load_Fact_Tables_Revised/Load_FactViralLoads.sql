@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[ODS].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[FactViralLoads];
+IF OBJECT_ID(N'[NDWH].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactViralLoads];
 BEGIN
 	with MFL_partner_agency_combination as (
 		select 
@@ -282,7 +282,7 @@ BEGIN
 		combined_viral_load_dataset.LastVL,
 		combined_viral_load_dataset.TimetoFirstVL,
 		combined_viral_load_dataset.TimeToFirstVLGrp
-	into [ODS].[dbo].[FactViralLoads]
+	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_viral_load_dataset.PatientPK as nvarchar(36))), 2)
 		and patient.SiteCode = combined_viral_load_dataset.SiteCode
