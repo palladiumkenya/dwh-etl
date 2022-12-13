@@ -2,8 +2,8 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 source_ovc as (
 	select
@@ -39,7 +39,7 @@ select
 	OVCExitReason,
 	exit_date.DateKey as OVCExitDateKey,
 	cast(getdate() as date) as LoadDate
-into dbo.FactOVC
+into NDWH.dbo.FactOVC
 from source_ovc
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_ovc.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = source_ovc.SiteCode
@@ -52,4 +52,4 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_ovc.AgeLastVisit
 left join NDWH.dbo.DimRelationshipWithPatient as relationship_client on relationship_client.RelationshipWithPatient = source_ovc.RelationshipToClient;
 
-alter table dbo.FactOVC add primary key(FactKey);
+alter table NDWH.dbo.FactOVC add primary key(FactKey);

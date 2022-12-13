@@ -1,9 +1,9 @@
 with MFL_partner_agency_combination as (
-    select 
-        MFL_Code collate Latin1_General_CI_AS as MFL_Code,
-        SDP collate Latin1_General_CI_AS as SDP,
-        [SDP Agency] collate Latin1_General_CI_AS as Agency
-    from HIS_Implementation.dbo.All_EMRSites
+	select 
+		distinct MFL_Code,
+		SDP,
+	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 distinct_patients as (
     select 
@@ -96,5 +96,5 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_ipt_data.AgeLastVisit;
 
-alter table dbo.FactTPT add primary key(FactKey);
+alter table NDWH.dbo.FactTPT add primary key(FactKey);
 

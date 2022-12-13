@@ -1,9 +1,9 @@
 with MFL_partner_agency_combination as (
 	select 
-		MFL_Code collate Latin1_General_CI_AS as MFL_Code,
-		SDP collate Latin1_General_CI_AS as SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+		distinct MFL_Code,
+		SDP  collate Latin1_General_CI_AS as SDP,
+	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 source_CD4 as (
 	select
@@ -32,7 +32,7 @@ select
 	source_CD4.CD4atEnrollmentDate,
 	source_CD4.LastCD4,
 	source_CD4.LastCD4Date
-into dbo.FactCD4
+into NDWH.dbo.FactCD4
 from source_CD4 as source_CD4
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_CD4.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = source_CD4.SiteCode
@@ -44,4 +44,4 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_CD4.AgeLastVisit;
 
-alter table dbo.FactCD4 add primary key(FactKey);
+alter table NDWH.dbo.FactCD4 add primary key(FactKey);

@@ -8,7 +8,7 @@ select
     VaccinationStatusKey = IDENTITY(INT, 1, 1),
     source_vaccination_status.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimVaccinationStatus
+into NDWH.dbo.DimVaccinationStatus
 from source_vaccination_status;
 
-alter table dbo.DimVaccinationStatus add primary key(VaccinationStatusKey);
+alter table NDWH.dbo.DimVaccinationStatus add primary key(VaccinationStatusKey);
