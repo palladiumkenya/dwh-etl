@@ -125,7 +125,7 @@ select
     AgeGroupKey = IDENTITY(INT, 1, 1),
     source_agegroup.*,
     cast(getdate() as date) as LoadDate
-into dbo.DimAgeGroup
+into NDWH.dbo.DimAgeGroup
 from source_agegroup;
 
-alter table dbo.DimAgeGroup add primary key(AgeGroupKey);
+alter table NDWH.dbo.DimAgeGroup add primary key(AgeGroupKey);

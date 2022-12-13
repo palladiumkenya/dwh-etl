@@ -1,9 +1,9 @@
 with MFL_partner_agency_combination as (
 	select 
-		MFL_Code,
+		distinct MFL_Code,
 		SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 latest_weight_height as (
 select 
@@ -143,7 +143,7 @@ select
 	combined_table.StabilityAssessment,
 	combined_table.Pregnant,
 	cast(getdate() as date) as LoadDate
-into dbo.FactLatestObs
+into NDWH.dbo.FactLatestObs
 from combined_table 
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_table.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = combined_table.SiteCode
@@ -154,4 +154,4 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_table.AgeLastVisit
 left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = combined_table.DifferentiatedCare;
 
-alter table dbo.FactLatestObs add primary key(FactKey);
+alter table NDWH.dbo.FactLatestObs add primary key(FactKey);

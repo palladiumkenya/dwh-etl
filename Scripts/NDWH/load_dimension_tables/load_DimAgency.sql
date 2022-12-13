@@ -9,6 +9,7 @@ select
 	AgencyKey = IDENTITY(INT, 1, 1),
 	source_agency.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimAgency
+into NDWH.dbo.DimAgency
 from source_agency;
-ALTER TABLE dbo.DimAgency ADD PRIMARY KEY(AgencyKey);
+
+ALTER TABLE NDWH.dbo.DimAgency ADD PRIMARY KEY(AgencyKey);
