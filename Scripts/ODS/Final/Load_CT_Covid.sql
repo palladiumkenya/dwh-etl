@@ -54,9 +54,11 @@ BEGIN
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.visitID = b.visitID
 						AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
 						and a.PatientUnique_ID =b.UniquePatientCovidId
-						and a.CovidUnique_ID = b.CovidUnique_ID)
+						--and a.CovidUnique_ID = b.CovidUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,CKV,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID) 
@@ -118,11 +120,11 @@ BEGIN
 
 				--DROP INDEX CT_Covid ON [ODS].[dbo].[CT_Covid];
 				---Remove any duplicate from [ODS].[dbo].[CT_Covid]
-				WITH CTE AS   
+		WITH CTE AS   
 					(  
-						SELECT [PatientPK],[SiteCode],Covid19AssessmentDate,PatientUnique_ID,CovidUnique_ID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],Covid19AssessmentDate,PatientUnique_ID,CovidUnique_ID
-						ORDER BY [PatientPK],[SiteCode],Covid19AssessmentDate,PatientUnique_ID,CovidUnique_ID) AS dump_ 
+						SELECT [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate
+						ORDER BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate) AS dump_ 
 						FROM [ODS].[dbo].[CT_Covid] 
 						)  
 			

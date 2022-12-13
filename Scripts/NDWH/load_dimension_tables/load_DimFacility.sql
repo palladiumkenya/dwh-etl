@@ -1,4 +1,6 @@
 ---DimFacility Load
+IF OBJECT_ID(N'[NDWH].[dbo].[DimFacility]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[DimFacility];
 with source_facility as (
 	select
 		cast(MFL_Code as nvarchar) as MFLCode,

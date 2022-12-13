@@ -1,7 +1,7 @@
 ---Load_LatestVisit
 With LatestVisit AS (
 SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY VisitDate DESC) AS NUM,
-    PatientID ,
+    PatientID,
     SiteCode,
     PatientPK,
     VisitDate as LastVisitDate,
@@ -11,7 +11,7 @@ cast(getdate() as date) as LoadDate
 FROM ODS.dbo.CT_PatientVisits
  )
  Select LatestVisit.* INTO dbo.Intermediate_LastVisitDate
- from ODS.dbo.LatestVisit
+ from LatestVisit
  where NUM=1
 
 

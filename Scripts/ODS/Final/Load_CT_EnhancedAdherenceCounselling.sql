@@ -44,8 +44,9 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID =b.UniquePatientEnhancedAdherenceCounsellingID
-						and a.EnhancedAdherenceCounsellingUnique_ID =b.EnhancedAdherenceCounsellingUnique_ID
-						and a.EnhancedAdherenceCounsellingUnique_ID = b.EnhancedAdherenceCounsellingUnique_ID)
+						--and a.EnhancedAdherenceCounsellingUnique_ID =b.EnhancedAdherenceCounsellingUnique_ID
+						--and a.EnhancedAdherenceCounsellingUnique_ID = b.EnhancedAdherenceCounsellingUnique_ID
+						)
 					
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,SessionNumber,DateOfFirstSession,PillCountAdherence,MMAS4_1,MMAS4_2,MMAS4_3,MMAS4_4,MMSA8_1,MMSA8_2,MMSA8_3,MMSA8_4,MMSAScore,EACRecievedVL,EACVL,EACVLConcerns,EACVLThoughts,EACWayForward,EACCognitiveBarrier,EACBehaviouralBarrier_1,EACBehaviouralBarrier_2,EACBehaviouralBarrier_3,EACBehaviouralBarrier_4,EACBehaviouralBarrier_5,EACEmotionalBarriers_1,EACEmotionalBarriers_2,EACEconBarrier_1,EACEconBarrier_2,EACEconBarrier_3,EACEconBarrier_4,EACEconBarrier_5,EACEconBarrier_6,EACEconBarrier_7,EACEconBarrier_8,EACReviewImprovement,EACReviewMissedDoses,EACReviewStrategy,EACReferral,EACReferralApp,EACReferralExperience,EACHomevisit,EACAdherencePlan,EACFollowupDate,DateImported,CKV,PatientUnique_ID,EnhancedAdherenceCounsellingUnique_ID) 
@@ -112,7 +113,7 @@ BEGIN
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
 					INSERT INTO [ODS].[dbo].[CT_EnhancedAdherenceCounsellingCount_Log]([SiteCode],[CreatedDate],[EnhancedAdherenceCounsellingCount])
-					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS EnhancedAdherenceCounsellingCount 
+					SELECT SiteCode,GETDATE(),COUNT(CKV) AS EnhancedAdherenceCounsellingCount 
 					FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
@@ -122,12 +123,13 @@ BEGIN
 					---Remove any duplicate from [ODS].[dbo].[CT_EnhancedAdherenceCounselling]
 					WITH CTE AS   
 						(  
-							SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,EnhancedAdherenceCounsellingUnique_ID,ROW_NUMBER() 
-							OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,EnhancedAdherenceCounsellingUnique_ID
-							ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,EnhancedAdherenceCounsellingUnique_ID) AS dump_ 
+							SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
+							OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
+							ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate) AS dump_ 
 							FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling] 
 							)  
 			
 					DELETE FROM CTE WHERE dump_ >1;
 
 	END
+ 

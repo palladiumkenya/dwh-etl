@@ -12,13 +12,12 @@ With PregnancyAsATInitiation As (
   WHERE (Visits.Pregnant = 'YES' or Visits.Pregnant = 'Y')  AND Patients.Gender= 'F' 
   GROUP BY Patients.PatientID ,Patients.PatientPK ,Patients.SiteCode, ART.StartARTDate, Visits.VisitDate
 )
-
 Select 
         PregnancyAsATInitiation.PatientID ,
         PregnancyAsATInitiation.PatientPK ,
         PregnancyAsATInitiation.SiteCode,
         PregnancyAsATInitiation.PregnantARTStart,
-        PregnancyAsATInitiation.PregnantDuringART,
+        PregnancyAsATInitiation.PregnantAtEnrol,
         PregnancyAsATInitiation.LoadDate
- INTO dbo.PregnancyAsATInitiation
-FROM   PregnancyAsATInitiation
+ INTO dbo.Intermediate_PregnancyAsATInitiation
+FROM  PregnancyAsATInitiation
