@@ -1,3 +1,4 @@
+TRUNCATE table [ODS].[dbo].[CT_FacilityManifest];
 MERGE [ODS].[dbo].[CT_FacilityManifest] AS a
 	USING( SELECT DISTINCT 
 			Emr,Project,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag
@@ -5,13 +6,11 @@ MERGE [ODS].[dbo].[CT_FacilityManifest] AS a
 		) AS b 
 	ON(a.SiteCode =b.SiteCode)
 		WHEN NOT MATCHED THEN 
-	INSERT(Emr,Project,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,CreatedOn)
-	VALUES(Emr,Project,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,Getdate())
+	INSERT(Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,CreatedOn)
+	VALUES(Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,Getdate())
 	
 	WHEN MATCHED THEN
-    UPDATE SET 
-		a.[Emr]			=b.[Emr],							
-		a.[Project]		=b.[Project],		
+    UPDATE SET 		
 		a.[Voided]		=b.[Voided]	,	
 		a.[Processed]	=b.[Processed],	
 		a.[PatientCount]=b.[PatientCount],
