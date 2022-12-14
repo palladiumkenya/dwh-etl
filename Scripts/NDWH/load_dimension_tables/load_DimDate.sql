@@ -23,7 +23,7 @@ select
 		when month(date) between 7 and 9 then 4
 	end as CDCFinancialQuarter,
 	cast(getdate() as date) as LoadDate
-into dbo.DimDate
+into NDWH.dbo.DimDate
 from dates_CTE
 option (maxrecursion 0);
-ALTER TABLE dbo.DimDate ADD PRIMARY KEY(DateKey);
+ALTER TABLE NDWH.dbo.DimDate ADD PRIMARY KEY(DateKey);

@@ -26,7 +26,7 @@ select
     RegimenLineKey = IDENTITY(INT, 1, 1),
     enrcihed_source_regimen_line.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimRegimenLine
+into NDWH.dbo.DimRegimenLine
 from enrcihed_source_regimen_line;
 
-alter table dbo.DimRegimenLine add primary key(RegimenLineKey);
+alter table NDWH.dbo.DimRegimenLine add primary key(RegimenLineKey);
