@@ -1,4 +1,3 @@
-
 	--Pick the highest LastVisit and Next Appointment from Pharmacy
     WITH tbl AS (
 	
@@ -6,9 +5,9 @@
 		 PatientID,
 		 SiteCode,
 		 PatientPK ,
-         EncounterDateAsAt As LastEncounterDate,
-         AppointmentDateAsAt As NextAppointmentDate
-	 FROM NDWH.dbo.Intermediate_LastPatientEncounterAsAt As LastEncounter
+         DispenseDate As LastEncounterDate,
+         ExpectedReturn As NextAppointmentDate
+	 FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
 	 		
 ),
 --Pick Expected return and Lastvisit from ARTPatient only if Expected return is <365days and add 30 days to Last visit if it is null
@@ -25,20 +24,58 @@ ART_expected_dates_logic AS (
 		case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
  
-)
+),
+--Pick latestVisit and TCA from the visits Table
+LatestVisit As (
+    Select ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY VisitDate Desc ) As NUM,
+        PatientID,
+		SiteCode,
+		PatientPK ,
+        VisitDate as LastVisitDate,
+        Case When NextAppointmentDate is NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End as NextAppointmentDate
+        from ODS.dbo.CT_PatientVisits
+),
+UnionsAppoinmentDates AS (
 
- SELECT 
-	tbl.PatientID,
-	tbl.SiteCode,
-	tbl.PatientPK,
-    tbl.LastEncounterDate,
-    tbl.NextAppointmentDate,
-	cast(getdate() as date) as LoadDate
-   INTO dbo.Intermediate_LastPatientEncounter
-	FROM ODS.dbo.tbl AS tbl 
-	LEFT JOIN ART_expected_dates_logic ON  ART_expected_dates_logic.SiteCode = tbl.SiteCode
-		AND ART_expected_dates_logic.PatientID = tbl.PatientID
-		AND ART_expected_dates_logic.PatientPK = tbl.PatientPK
-	
-	
+	Select
+		PatientID,
+		SiteCode,
+		PatientPK ,
+        tbl.LastencounterDate,
+		tbl.NextAppointmentDate
+	FROM tbl
+		UNION ALL
+	Select 
+		PatientID,
+		SiteCode,
+		PatientPK ,
+        ART_expected_dates_logic.last_visit_plus_30_days As LastEncounterDate,
+		ART_expected_dates_logic.expected_return_on_365 AS NextAppointmentDate
+	FROM ART_expected_dates_logic
+	UNION ALL
+	Select 
+		PatientID,
+		SiteCode,
+		PatientPK ,
+		LatestVisit.LastVisitDate as LastEncounterDate,
+        LatestVisit.NextAppointmentDate
+	FROM LatestVisit
+    where NUM=1
+
+)
+	Select 
+		PatientID,
+		SiteCode,
+	    PatientPK ,
+        Max (LastEncounterDate) As LastEncounterDate,
+	    Max (NextAppointmentDate) As NextAppointmentDate,
+        cast (getdate() as DATE) as LoadDate
+       INTO ODS.dbo.Intermediate_LastPatientEncounter
+	from UnionsAppoinmentDates
+    	--where LastEncounterDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))
+	Group by 
+		PatientID,
+		SiteCode,
+		PatientPK 
+
 	
