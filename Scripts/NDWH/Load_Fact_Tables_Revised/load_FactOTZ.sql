@@ -5,8 +5,8 @@ BEGIN
 		select 
 			MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 	otz_and_last_encounter_combined as (
 	select
@@ -64,5 +64,5 @@ BEGIN
 	left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = otz_and_last_encounter_combined.AgeLastVisit;
 
-	alter table dbo.FactOTZ add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactOTZ] add primary key(FactKey);
 END

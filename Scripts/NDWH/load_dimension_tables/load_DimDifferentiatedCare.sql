@@ -9,6 +9,6 @@ select
 	DifferentiatedCareKey = IDENTITY(INT, 1, 1),
 	source_DifferentiatedCare.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimDifferentiatedCare
+into NDWH.dbo.DimDifferentiatedCare
 from source_DifferentiatedCare;
-ALTER TABLE dbo.DimDifferentiatedCare ADD PRIMARY KEY(DifferentiatedCareKey);
+ALTER TABLE NDWH.dbo.DimDifferentiatedCare ADD PRIMARY KEY(DifferentiatedCareKey);

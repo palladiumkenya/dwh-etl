@@ -24,6 +24,7 @@ with patient_source as (
 select
 	PatientKey = IDENTITY(INT, 1, 1),
 	patient_source.*
-into dbo.DimPatient
+into NDWH.dbo.DimPatient
 from patient_source;
-ALTER TABLE dbo.DimPatient ADD PRIMARY KEY(PatientKey);
+
+ALTER TABLE NDWH.dbo.DimPatient ADD PRIMARY KEY(PatientKey);

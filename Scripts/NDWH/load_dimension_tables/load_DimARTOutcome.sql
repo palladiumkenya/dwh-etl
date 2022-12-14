@@ -30,6 +30,6 @@ select
 		when ARTOutcome = 'uL' then 'Undocumented Loss'
 	end as ARTOutcomeDescription,
 	cast(getdate() as date) as LoadDate
-into dbo.DimARTOutcome
+into NDWH.dbo.DimARTOutcome
 from distinct_ARTOutcomes;
-ALTER TABLE dbo.DimARTOutcome ADD PRIMARY KEY(ARTOutcomeKey);
+ALTER TABLE NDWH.dbo.DimARTOutcome ADD PRIMARY KEY(ARTOutcomeKey);

@@ -8,7 +8,7 @@ select
     KeyPopulationTypeKey = IDENTITY(INT, 1, 1),
     source_key_population_type.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimKeyPopulationType
+into NDWH.dbo.DimKeyPopulationType
 from source_key_population_type;
 
-alter table dbo.DimKeyPopulationType add primary key(KeyPopulationTypeKey);
+alter table NDWH.dbo.DimKeyPopulationType add primary key(KeyPopulationTypeKey);

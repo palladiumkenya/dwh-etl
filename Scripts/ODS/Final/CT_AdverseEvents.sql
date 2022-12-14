@@ -46,7 +46,8 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID = b.UniquePatienAdverseEventsID
-						and a.AdverseEventsUnique_ID = b.AdverseEventsUnique_ID)
+						--and a.AdverseEventsUnique_ID = b.AdverseEventsUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,CKV,PatientUnique_ID,AdverseEventsUnique_ID) 
@@ -89,14 +90,16 @@ BEGIN
 
 					--DROP INDEX CT_AdverseEvents ON [ODS].[dbo].[CT_AdverseEvents];
 					---Remove any duplicate from [ODS].[dbo].[CT_Patient]
-					WITH CTE AS   
-						(  
-							SELECT [PatientPK],[SiteCode],VisitDate,PatientUnique_ID,AdverseEventsUnique_ID,ROW_NUMBER() 
-							OVER (PARTITION BY [PatientPK],[SiteCode] ,VisitDate,PatientUnique_ID,AdverseEventsUnique_ID
-							ORDER BY [PatientPK],[SiteCode],VisitDate,PatientUnique_ID,AdverseEventsUnique_ID) AS dump_ 
-							FROM [ODS].[dbo].[CT_AdverseEvents] 
-							)  
-			
-					DELETE FROM CTE WHERE dump_ >1;
+			--	with cte AS (
+			--	Select
+			--	Patientpk,
+			--	SiteCode
+			--	,VisitDate,
+			--	 ROW_NUMBER() OVER (PARTITION BY Patientpk,SiteCode,VisitDate ORDER BY
+			--	Patientpk,SiteCode,VisitDate ) Row_Num
+			--	FROM [ODS].[dbo].[CT_AdverseEvents]
+			--	)
+			--delete  from cte 
+			--	Where Row_Num >1
 
 	END

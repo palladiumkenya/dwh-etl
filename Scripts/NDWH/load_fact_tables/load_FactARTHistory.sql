@@ -4,10 +4,10 @@ IF OBJECT_ID(N'[NDWH].[dbo].[FactARTHistory]', N'U') IS NOT NULL
 BEGIN
 	with MFL_partner_agency_combination as (
 		select 
-			MFL_Code,
+			distinct MFL_Code,
 			SDP,
-			[SDP Agency] as Agency
-		from HIS_Implementation.dbo.All_EMRSites
+			SDP_Agency collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	)
 	select
 		FactKey = IDENTITY(INT, 1, 1),
@@ -22,7 +22,7 @@ BEGIN
 		end as IsTXCurr,
 		art_outcome.ARTOutcomeKey,
 		cast(getdate() as date) as LoadDate
-	into [NDWH].[dbo].[FactARTHistory]
+	into NDWH.dbo.FactARTHistory
 	from dbo.HistoricalARTOutcomesBaseTable as txcurr_report
 	left join dbo.DimDate as as_of on as_of.Date = txcurr_report.AsOfDate
 	left join dbo.DimFacility as facility on facility.MFLCode = txcurr_report.MFLCode
@@ -33,5 +33,5 @@ BEGIN
 	left join dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome;
 
-	alter table dbo.FactARTHistory add primary key(FactKey);
+	alter table NDWH.dbo.FactARTHistory add primary key(FactKey);
 END

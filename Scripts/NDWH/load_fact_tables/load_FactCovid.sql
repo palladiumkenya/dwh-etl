@@ -82,10 +82,10 @@ group by
 
  MFL_partner_agency_combination as (
 	select 
-		MFL_Code,
-		SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+            distinct MFL_Code,
+            SDP,
+            SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
  )
  Select 
         Factkey = IDENTITY(INT, 1, 1),
@@ -123,7 +123,7 @@ group by
         TracingFinalOutcome ,
         CauseOfDeath,
         cast(getdate() as date) as LoadDate
-INTO FACTCOVID
+INTO NDWH.dbo.FactCovid
  from Covid
  left join NDWH.dbo.DimPatient as patient on patient.PatientPK = Covid.PatientPK and patient.SiteCode = Covid.SiteCode
  left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Covid.SiteCode
@@ -141,4 +141,4 @@ INTO FACTCOVID
  where RowNumber=1;
  
 
-alter table dbo.FactCOVID add primary key(FactKey);
+alter table NDWH.dbo.FactCOVID add primary key(FactKey);

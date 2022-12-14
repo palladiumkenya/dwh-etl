@@ -37,7 +37,8 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID =b.uniquePatientDAndAScreeningID
-						and a.PatientUnique_ID = b.PatientUnique_ID)
+						--and a.PatientUnique_ID = b.PatientUnique_ID
+						)
 					
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,CKV,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) 
@@ -45,7 +46,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.PatientID			=b.PatientID,
+						--a.PatientID			=b.PatientID,
 						a.FacilityName		=b.FacilityName,
 						a.Emr				=b.Emr,
 						a.Project			=b.Project,
@@ -65,7 +66,7 @@ BEGIN
 					WHERE MaxVisitDate = @VisitDate;
 
 				INSERT INTO [ODS].[dbo].[CT_DrugAlcoholScreeningCount_Log]([SiteCode],[CreatedDate],[DrugAlcoholScreeningCount])
-				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS DrugAlcoholScreeningCount 
+				SELECT SiteCode,GETDATE(),COUNT(CKV) AS DrugAlcoholScreeningCount 
 				FROM [ODS].[dbo].[CT_DrugAlcoholScreening] 
 				GROUP BY [SiteCode];
 
