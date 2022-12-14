@@ -1,4 +1,3 @@
---DimPatient Load
 with patient_source as (
 	select
 		distinct
@@ -11,15 +10,21 @@ with patient_source as (
 		Nupi,
 		PatientType,
 		PatientSource,
-		wabwhocd4.eWHO as EnrollmentWHOKey,
+		baselines.eWHO as EnrollmentWHOKey,
 		cast(format(eWHODate,'yyyyMMdd') as int) as DateEnrollmentWHOKey,
 		bWHO as BaseLineWHOKey,
 		cast(format(bWHODate,'yyyyMMdd') as int) as DateBaselineWHOKey,
+		case 
+			when outcomes.ARTOutcome =  'V' then 1
+			else 0
+		end as IsTXCurr,
 		cast(getdate() as date) as LoadDate
 	from 
 	ODS.dbo.CT_Patient as patients
-	left join ODS.dbo.CT_PatientsWABWHOCD4 as wabwhocd4 on patients.PatientPK = wabwhocd4.PatientPK
-		and patients.SiteCode = wabwhocd4.SiteCode
+	left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPK = baselines.PatientPK
+		and patients.SiteCode = baselines.SiteCode
+	left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPK = patients.PatientPK
+		and outcomes.SiteCode = patients.SiteCode
 )
 select
 	PatientKey = IDENTITY(INT, 1, 1),
