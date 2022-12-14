@@ -2,8 +2,8 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+		SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 
    Patient As ( Select    
@@ -16,7 +16,7 @@ with MFL_partner_agency_combination as (
       ART.StartARTAtThisfacility,
       ART.PreviousARTStartDate,
       ART.PreviousARTRegimen,
-      StartARTDate,
+      ART.StartARTDate,
       LastARTDate,
   CASE WHEN [DateConfirmedHIVPositive] IS NOT NULL AND ART.StartARTDate IS NOT NULL
 				 THEN CASE WHEN DateConfirmedHIVPositive<= ART.StartARTDate THEN DATEDIFF(DAY,DateConfirmedHIVPositive,ART.StartARTDate)
@@ -34,13 +34,15 @@ with MFL_partner_agency_combination as (
         lastRegimen,
         StartRegimen,
         lastRegimenline,
-        StartRegimenline
+        StartRegimenline,
+        outcome.ARTOutcome
        
 from 
 ODS.dbo.CT_Patient Patient
-left join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
+inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
 left join ODS.dbo.PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK collate Latin1_General_CI_AS=Patient.PatientPK collate Latin1_General_CI_AS and las.SiteCode collate Latin1_General_CI_AS=Patient.SiteCode collate Latin1_General_CI_AS
+left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
    )
 
    Select 
@@ -53,41 +55,37 @@ left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK collate
             StartARTDate.Date As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
             lastRegimen As CurrentRegimen,
-            lastregline.RegimenLineKey As CurrentRegimenLine,
-             StartRegimen,
-            firstregline.RegimenLineKey As StartRegimenLine,
+            LastRegimenLine As CurrentRegimenline,
+            StartRegimen,
+            StartRegimenLine,
             AgeAtEnrol,
             AgeAtARTStart,
             TimetoARTDiagnosis,
             TimetoARTEnrollment,
             PregnantARTStart,
             PregnantAtEnrol,
-            LastEncounterDate As LastVisitDate,
+            LastVisitDate,
             Patient.NextAppointmentDate,
             StartARTAtThisfacility,
             PreviousARTStartDate,
             PreviousARTRegimen,
-            outcome.ARTOutcome,
+            ARTOutcome,
             cast(getdate() as date) as LoadDate
 
- INTO FACTART
+ INTO NDWH.dbo.FACTART
    from  Patient
-left join NDWH.dbo.DimPatient as Pat on pat.PatientPK=Patient.PatientPk
+left join NDWH.dbo.DimPatient as Pat on pat.PatientPK=Patient.PatientPk and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
-left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Patient.SiteCode
-left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
+left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code collate Latin1_General_CI_AS = Patient.SiteCode collate Latin1_General_CI_AS
+left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVisit
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date= Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
-left join NDWH.dbo.DimDrug lastreg on lastreg.drug=Patient.LastRegimen
-left join NDWH.dbo.DimDrug firstreg on firstreg.drug=Patient.StartRegimen
-left join NDWH.dbo.DimRegimenLine lastregline on lastregline.RegimenLine=Patient.LastRegimenLine
-left join NDWH.dbo.DimRegimenLine firstregline on firstregline.RegimenLine=Patient.StartRegimenLine
-left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join NDWH.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
+left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency;
+
+
 
 
  
 alter table dbo.FactART add primary key(FactKey);
-
 
