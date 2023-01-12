@@ -6,17 +6,17 @@ GO
 INSERT INTO NDWH.dbo.AggregateTimeToARTGrp
 select 
 MFLCode,
-FacilityName,
---County,
---Subcounty,
+f.FacilityName,
+County,
+Subcounty,
 p.PartnerName as CTPartner,
 a.AgencyName as CTAgency,
---Gender,
+Gender,
 g.DATIMAgeGroup as AgeGroup,
 Year(StartARTDateKey) StartART_Year,
 DateName(Month,StartARTDateKey) StartART_Month,
 --TimeToARTDiagnosis_Grp,
-Count(*)NumPatients,
+Count(*) as NumPatients,
 SUM(Count(*)) OVER (PARTITION BY MFLCode,Year(StartARTDateKey),DateName(Month,StartARTDateKey)) AS TotalBySite,
 cast((cast(Count(*) as decimal (9,2))/
 	SUM(Count(*)) OVER (PARTITION BY MFLCode,Year(StartARTDateKey),DateName(Month,StartARTDateKey))*100) 
@@ -26,6 +26,7 @@ INNER join NDWH.dbo.DimAgeGroup g on g.Age=it.AgeAtEnrol
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
+INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 where MFLCode>1
-Group BY MFLCode,FacilityName,County,Subcounty,a.AgencyName,g.DATIMAgeGroup,Year(StartARTDateKey),DateName(Month,StartARTDateKey)
+Group BY MFLCode,f.FacilityName,County,Subcounty,p.PartnerName,a.AgencyName,Gender,g.DATIMAgeGroup,Year(StartARTDateKey),DateName(Month,StartARTDateKey)
 order by MFLCode,Year(StartARTDateKey)
