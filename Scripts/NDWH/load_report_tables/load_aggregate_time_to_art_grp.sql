@@ -15,7 +15,7 @@ Gender,
 g.DATIMAgeGroup as AgeGroup,
 Year(StartARTDateKey) StartART_Year,
 DateName(Month,StartARTDateKey) StartART_Month,
---TimeToARTDiagnosis_Grp,
+--TimeToARTDiagnosis_Grp, TODO: This column has to be included in the FactART script
 Count(*) as NumPatients,
 SUM(Count(*)) OVER (PARTITION BY MFLCode,Year(StartARTDateKey),DateName(Month,StartARTDateKey)) AS TotalBySite,
 cast((cast(Count(*) as decimal (9,2))/
