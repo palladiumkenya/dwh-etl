@@ -19,7 +19,7 @@ BEGIN
 	       ---- Refresh [ODS].[dbo].[CT_PatientVisits]
 		   --truncate table [ODS].[dbo].[CT_PatientVisits]
 			MERGE [ODS].[dbo].[CT_PatientVisits] AS a
-				USING(SELECT distinct P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
+				USING(SELECT distinct  P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
 						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
 						  ,PV.[SubstitutionFirstlineRegimenDate] SubstitutionFirstlineRegimenDate,PV.[SubstitutionFirstlineRegimenReason] SubstitutionFirstlineRegimenReason,PV.[SubstitutionSecondlineRegimenDate] SubstitutionSecondlineRegimenDate,PV.[SubstitutionSecondlineRegimenReason] SubstitutionSecondlineRegimenReason
 						  ,PV.[SecondlineRegimenChangeDate] SecondlineRegimenChangeDate,PV.[SecondlineRegimenChangeReason] SecondlineRegimenChangeReason,PV.[Adherence] Adherence,PV.[AdherenceCategory] AdherenceCategory,PV.[FamilyPlanningMethod] FamilyPlanningMethod
@@ -54,7 +54,8 @@ BEGIN
 							AND a.visitID = b.[VisitId]
 							and a.visitDate = b.visitDate
 							and a.PatientUnique_ID = b.UniquePatientVisitId						
-							and a.PatientVisitUnique_ID = b.PatientVisitUnique_ID)
+							--and a.PatientVisitUnique_ID = b.PatientVisitUnique_ID
+							)
 					WHEN NOT MATCHED THEN 
 							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,CKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID) 
 							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,PKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID)
@@ -138,9 +139,9 @@ BEGIN
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
 			--WITH CTE AS   
 			--	(  
-			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID,ROW_NUMBER() 
-			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID
-			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate,PatientUnique_ID,PatientVisitUnique_ID) AS dump_ 
+			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
+			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
 			--		FROM [ODS].[dbo].[CT_PatientVisits] 
 			--		)  
 			

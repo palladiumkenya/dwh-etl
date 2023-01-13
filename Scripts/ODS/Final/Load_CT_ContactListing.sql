@@ -1,3 +1,4 @@
+
 BEGIN
 		DECLARE		@MaxDateCreated_Hist			DATETIME,
 				   @DateCreated					DATETIME
@@ -41,7 +42,10 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.PatientUnique_ID =b.UniquePatientContactListingId
-						and a.ContactListingUnique_ID = b.ContactListingUnique_ID)
+						and a.Contactage COLLATE SQL_Latin1_General_CP1_CI_AS= b.Contactage COLLATE SQL_Latin1_General_CP1_CI_AS
+						and a.RelationshipWithPatient COLLATE SQL_Latin1_General_CP1_CI_AS =b.RelationshipWithPatient COLLATE SQL_Latin1_General_CP1_CI_AS
+						--and a.ContactListingUnique_ID = b.ContactListingUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID) 
@@ -81,9 +85,9 @@ BEGIN
 				---Remove any duplicate from [ODS].[dbo].[CT_ContactListing]
 				WITH CTE AS   
 					(  
-						SELECT [PatientPK],[SiteCode],PatientUnique_ID,ContactListingUnique_ID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],PatientUnique_ID,ContactListingUnique_ID 
-						ORDER BY [PatientPK],[SiteCode],PatientUnique_ID,ContactListingUnique_ID) AS dump_ 
+						SELECT [PatientPK],[SiteCode],Contactage,RelationshipWithPatient,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient
+						ORDER BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient) AS dump_ 
 						FROM [ODS].[dbo].[CT_ContactListing] 
 						)  
 			

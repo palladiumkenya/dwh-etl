@@ -43,7 +43,8 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.PatientUnique_ID =b.UniquePatientDTracingID
-						and a.DefaulterTracingUnique_ID = b.DefaulterTracingUnique_ID)
+						--and a.DefaulterTracingUnique_ID = b.DefaulterTracingUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
@@ -86,9 +87,9 @@ BEGIN
 				---Remove any duplicate from [ODS].[dbo].[CT_DefaulterTracing]
 				WITH CTE AS   
 					(  
-						SELECT [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID
-						ORDER BY [PatientPK],[SiteCode],VisitID,PatientUnique_ID,DefaulterTracingUnique_ID) AS dump_ 
+						SELECT [PatientPK],[SiteCode],VisitID,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode]
+						ORDER BY [PatientPK],[SiteCode],VisitID) AS dump_ 
 						FROM [ODS].[dbo].[CT_DefaulterTracing] 
 						)  
 			

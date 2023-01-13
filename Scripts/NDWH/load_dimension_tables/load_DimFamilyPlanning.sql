@@ -9,6 +9,6 @@ select
 	FamilyPlanningKey = IDENTITY(INT, 1, 1),
 	source_FamilyPlanning.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimFamilyPlanning
+into NDWH.dbo.DimFamilyPlanning
 from source_FamilyPlanning;
-ALTER TABLE dbo.DimFamilyPlanning ADD PRIMARY KEY(FamilyPlanningKey);
+ALTER TABLE NDWH.dbo.DimFamilyPlanning ADD PRIMARY KEY(FamilyPlanningKey);

@@ -1,3 +1,4 @@
+
 BEGIN
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
@@ -29,7 +30,7 @@ BEGIN
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
-					WHERE P.gender != 'Unknown' ) AS b 
+					WHERE P.gender != 'Unknown' ) AS b	
 						ON(
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
@@ -37,7 +38,8 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID =b.UniquePatientOtzID
-						and a.OtzUnique_ID =b.OtzUnique_ID)
+						--and a.OtzUnique_ID =b.OtzUnique_ID
+						)
 					
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,DateImported,CKV,PatientUnique_ID,OtzUnique_ID) 
@@ -75,16 +77,16 @@ BEGIN
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
 
-					--DROP INDEX CT_Otz ON [ODS].[dbo].[CT_Otz];
-					---Remove any duplicate from [ODS].[dbo].[CT_Otz]
-					--WITH CTE AS   
-					--	(  
-					--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID,ROW_NUMBER() 
-					--		OVER (PARTITION BY [PatientPK],[SiteCode], VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID
-					--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OtzUnique_ID) AS dump_ 
-					--		FROM [ODS].[dbo].[CT_Otz] 
-					--		)  
-			
-					--DELETE FROM CTE WHERE dump_ >1;
+					with cte AS (
+				Select
+				PatientPK,
+				SiteCode,
+				VisitID,VisitDate,
+				 ROW_NUMBER() OVER (PARTITION BY PatientPK,SiteCode,VisitID,VisitDate ORDER BY
+				PatientPK,SiteCode,VisitID,VisitDate ) Row_Num
+				FROM [ODS].[dbo].[CT_Otz]
+				)
+			delete from cte 
+				Where Row_Num >1
 
 	END
