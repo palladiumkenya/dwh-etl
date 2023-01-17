@@ -1,6 +1,6 @@
 MERGE [NDWH].[dbo].[DimAgency] AS a
-	USING(SELECT DISTINCT [SDP Agency] as Agency 
-		  FROM [ODS].[dbo].[ALL_EMRSites] WHERE [SDP Agency] <>'NULL' OR [SDP Agency] IS NOT NULL  OR [SDP Agency]<>''
+	USING(SELECT DISTINCT [SDP_Agency] as Agency 
+		  FROM [ODS].[dbo].[ALL_EMRSites] WHERE [SDP_Agency] <>'NULL' OR [SDP_Agency] IS NOT NULL  OR [SDP_Agency]<>''
 		 ) AS b 
 	ON(a.AgencyName =b.Agency)
 	WHEN NOT MATCHED THEN 

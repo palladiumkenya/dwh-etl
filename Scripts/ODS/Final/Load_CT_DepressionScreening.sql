@@ -41,7 +41,8 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.PatientUnique_ID =b.PatientDepressionScreeningID
-						and a.DepressionScreeningUnique_ID = b.DepressionScreeningUnique_ID)
+						--and a.DepressionScreeningUnique_ID = b.DepressionScreeningUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID) 
@@ -86,11 +87,11 @@ BEGIN
 				---Remove any duplicate from [ODS].[dbo].[CT_DepressionScreening]
 				WITH CTE AS   
 					(  
-						SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DepressionScreeningUnique_ID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DepressionScreeningUnique_ID
-						ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DepressionScreeningUnique_ID) AS dump_ 
+						SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
+						ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate) AS dump_ 
 						FROM [ODS].[dbo].[CT_DepressionScreening]
-						)  
+					)  
 			
 				DELETE FROM CTE WHERE dump_ >1;
 

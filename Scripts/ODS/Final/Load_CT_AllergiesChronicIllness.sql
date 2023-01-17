@@ -1,3 +1,4 @@
+
 BEGIN
  
 	 DECLARE		@MaxVisitDate_Hist			DATETIME,
@@ -41,7 +42,8 @@ BEGIN
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID
 						and a.PatientUnique_ID = b.UniquePatientAllergiesChronicIllnessId
-						and a.AllergiesChronicIllnessUnique_ID = b.AllergiesChronicIllnessUnique_ID)
+						--and a.AllergiesChronicIllnessUnique_ID = b.AllergiesChronicIllnessUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientUnique_ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV) 

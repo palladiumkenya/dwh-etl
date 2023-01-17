@@ -5,8 +5,8 @@ BEGIN
 		select 
 			distinct MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 	source_ovc as (
 		select
@@ -55,5 +55,5 @@ BEGIN
 	left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_ovc.AgeLastVisit
 	left join NDWH.dbo.DimRelationshipWithPatient as relationship_client on relationship_client.RelationshipWithPatient = source_ovc.RelationshipToClient;
 
-	alter table dbo.FactOVC add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactOVC] add primary key(FactKey);
 END

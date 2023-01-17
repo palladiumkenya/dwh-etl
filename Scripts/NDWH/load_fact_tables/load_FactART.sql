@@ -2,7 +2,7 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-		SDP_Agency collate Latin1_General_CI_AS as Agency
+	  SDP_Agency collate Latin1_General_CI_AS as Agency
 	from ODS.dbo.All_EMRSites 
 ),
 
@@ -18,11 +18,11 @@ with MFL_partner_agency_combination as (
       ART.PreviousARTRegimen,
       ART.StartARTDate,
       LastARTDate,
-  CASE WHEN [DateConfirmedHIVPositive] IS NOT NULL AND ART.StartARTDate IS NOT NULL
+      CASE WHEN [DateConfirmedHIVPositive] IS NOT NULL AND ART.StartARTDate IS NOT NULL
 				 THEN CASE WHEN DateConfirmedHIVPositive<= ART.StartARTDate THEN DATEDIFF(DAY,DateConfirmedHIVPositive,ART.StartARTDate)
 					ELSE NULL END
 				ELSE NULL END AS TimetoARTDiagnosis,
-    CASE WHEN Patient.RegistrationAtCCC IS NOT NULL AND ART.StartARTDate IS NOT NULL
+      CASE WHEN Patient.RegistrationAtCCC IS NOT NULL AND ART.StartARTDate IS NOT NULL
 				THEN CASE WHEN Patient.RegistrationAtCCC<=ART.StartARTDate  THEN DATEDIFF(DAY,Patient.[RegistrationAtCCC],ART.StartARTDate)
 				ELSE NULL END
 				ELSE NULL END AS TimetoARTEnrollment,
@@ -71,9 +71,8 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             PreviousARTStartDate,
             PreviousARTRegimen,
             cast(getdate() as date) as LoadDate
-
  INTO NDWH.dbo.FACTART
-   from  Patient
+from  Patient
 left join NDWH.dbo.DimPatient as Pat on pat.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(Patient.PatientPk  as nvarchar(36))), 2)and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code collate Latin1_General_CI_AS = Patient.SiteCode collate Latin1_General_CI_AS
@@ -85,7 +84,7 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(Patient.PatientPk  as nvarchar(36))), 2)and IOutcomes.SiteCode=Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcomeID=IOutcomes.ARTOutcome;
 
-alter table dbo.FactART add primary key(FactKey);
+alter table NDWH.dbo.FactART add primary key(FactKey)
 
 
 

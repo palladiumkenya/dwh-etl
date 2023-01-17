@@ -39,7 +39,8 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.PatientUnique_ID = b.UniquePatientOVCID
-						and a.OvcUnique_ID = b.OvcUnique_ID)
+						--and a.OvcUnique_ID = b.OvcUnique_ID
+						)
 
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID) 
@@ -81,9 +82,9 @@ BEGIN
 				---Remove any duplicate from [ODS].[dbo].[CT_Ovc]
 				--WITH CTE AS   
 				--	(  
-				--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OvcUnique_ID,ROW_NUMBER() 
-				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OvcUnique_ID
-				--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,OvcUnique_ID ) AS dump_ 
+				--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
+				--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate ) AS dump_ 
 				--		FROM [ODS].[dbo].[CT_Ovc] 
 				--		)  
 			

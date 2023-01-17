@@ -1,12 +1,12 @@
-IF OBJECT_ID(N'[ODS].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[FactViralLoads];
+IF OBJECT_ID(N'[NDWH].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactViralLoads];
 BEGIN
 	with MFL_partner_agency_combination as (
 		select 
 			distinct MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 	 eligible_for_VL as (
 		 select 
@@ -282,7 +282,7 @@ BEGIN
 		combined_viral_load_dataset.LastVL,
 		combined_viral_load_dataset.TimetoFirstVL,
 		combined_viral_load_dataset.TimeToFirstVLGrp
-	into [ODS].[dbo].[FactViralLoads]
+	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_viral_load_dataset.PatientPK as nvarchar(36))), 2)
 		and patient.SiteCode = combined_viral_load_dataset.SiteCode
@@ -302,5 +302,5 @@ BEGIN
 	left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combined_viral_load_dataset.LatestVLDate2
 	left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3;
 
-	alter table dbo.FactViralLoads add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END

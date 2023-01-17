@@ -21,7 +21,7 @@ BEGIN
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						and a.RegistrationDate =b.RegistrationDate
+						--and a.RegistrationDate =b.RegistrationDate
 						and a.id = b.id)
 
 						WHEN NOT MATCHED THEN 

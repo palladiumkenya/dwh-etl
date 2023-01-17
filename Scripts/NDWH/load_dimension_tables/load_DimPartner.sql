@@ -8,6 +8,6 @@ select
 	PartnerKey = IDENTITY(INT, 1, 1),
 	source_partner.*,
 	cast(getdate() as date) as LoadDate
-into dbo.DimPartner
+into NDWH.dbo.DimPartner
 from source_partner;
-ALTER TABLE dbo.DimPartner ADD PRIMARY KEY(PartnerKey);
+ALTER TABLE NDWH.dbo.DimPartner ADD PRIMARY KEY(PartnerKey);

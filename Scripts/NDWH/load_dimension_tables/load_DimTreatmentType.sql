@@ -11,6 +11,6 @@
 		TreatmentTypeKey = IDENTITY(INT, 1, 1),
 		source_TreatmentType.*,
 		cast(getdate() as date) as LoadDate
-	into dbo.DimTreatmentType
+	into NDWH.dbo.DimTreatmentType
 	from source_TreatmentType;
-	ALTER TABLE dbo.DimTreatmentType ADD PRIMARY KEY(TreatmentTypeKey);
+	ALTER TABLE NDWH.dbo.DimTreatmentType ADD PRIMARY KEY(TreatmentTypeKey);
