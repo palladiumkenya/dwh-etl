@@ -14,6 +14,7 @@ a.AgencyName as CTAgency,
 Gender,
 g.DATIMAgeGroup as AgeGroup,
 year(StartARTDateKey) as StartARTYear,
+convert(varchar(7),StartARTDateKey,126) as StartARTYearMonth,
 PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
         OVER (PARTITION BY Year(StartARTDateKey)) AS MedianTimeToARTDiagnosis_year,
