@@ -1,9 +1,9 @@
 Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateTimeToARTLast12M]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[AggregateTimeToARTLast12M]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTLast12M]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToARTLast12M]
 GO
 
-INSERT INTO NDWH.dbo.AggregateTimeToARTLast12M
+INSERT INTO [REPORTING].dbo.AggregateTimeToARTLast12M
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,

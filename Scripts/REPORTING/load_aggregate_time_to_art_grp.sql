@@ -1,9 +1,9 @@
 GO
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateTimeToARTGrp]') AND type in (N'U'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTGrp]') AND type in (N'U'))
 TRUNCATE TABLE [dbo].AggregateTimeToARTGrp
 GO
 
-INSERT INTO NDWH.dbo.AggregateTimeToARTGrp
+INSERT INTO [REPORTING].dbo.AggregateTimeToARTGrp
 select 
 MFLCode,
 f.FacilityName,

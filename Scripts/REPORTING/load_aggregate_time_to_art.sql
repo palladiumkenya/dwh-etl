@@ -1,9 +1,9 @@
 Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateTimeToART]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[AggregateTimeToART]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToART]
 GO
 
-INSERT INTO NDWH.dbo.AggregateTimeToART
+INSERT INTO [REPORTING].dbo.AggregateTimeToART
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
@@ -30,7 +30,7 @@ PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
         OVER (PARTITION BY Year(StartARTDateKey),FacilityName) AS MedianTimeToARTDiagnosis_yearFacility,
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
-        OVER (PARTITION BY Year(StartARTDateKey), County, ,p.PartnerName) AS MedianTimeToARTDiagnosis_YearCountyPartner,	
+        OVER (PARTITION BY Year(StartARTDateKey), County,p.PartnerName) AS MedianTimeToARTDiagnosis_YearCountyPartner,	
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
         OVER (PARTITION BY Year(StartARTDateKey), a.AgencyName) AS MedianTimeToARTDiagnosis_yearCTAgency,
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
