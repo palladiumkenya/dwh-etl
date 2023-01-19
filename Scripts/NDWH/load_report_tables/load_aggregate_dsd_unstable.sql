@@ -1,0 +1,56 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateDSDUnstable]') AND type in (N'U'))
+TRUNCATE TABLE [dbo].[AggregateDSDUnstable]
+GO
+
+INSERT INTO REPORTING.dbo.AggregateDSDUnstable
+SELECT 
+MFLCode,
+FacilityName,
+County,
+SubCounty,
+CTPartner,
+CTAgency,
+Gender,
+AgeGroup, 
+Sum ([OnART<12Months]) as onARTlessthan12mnths,
+Sum(Agelessthan20Yrs) as Agelessthan20Yrs ,
+Sum(Adherence) As Adherence,
+Sum(HighVL) as HighVL,
+Sum(BMI) as BMI,
+Sum(LatestPregnancy)as LatestPregnancy,
+Sum (isTXCurr) patients_number
+
+FROM (
+    SELECT DISTINCT
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName as CTPartner,
+    a.AgencyName as CTAgency,
+    Gender,
+    age.DATIMAgeGroup as AgeGroup, 
+    CASE WHEN DATEDIFF(MONTH,A.StartARTDateKey,GETDATE())>=12 THEN 0
+        WHEN DATEDIFF(MONTH,A.StartARTDateKey,GETDATE())<12  THEN 1
+        ELSE NULL END AS [OnART<12Months],
+    case when AgeLastVisit < 20 then 1 else 0 end as Agelessthan20Yrs,
+    case when Adherence = 'Poor' then 1 else 0 end as Adherence,
+
+    Case when Pregnant= 'Yes' THEN 1 Else 0 End as LatestPregnancy,
+    Case when LatestWeight IS NOT NULL AND LatestHeight IS NOT NULL AND cast(LatestWeight as float) >0 and cast(LatestHeight as float) >0 AND cast(LatestWeight as float) / (cast(LatestHeight as float) * cast(LatestHeight as float)) <=18.5 THEN 1 
+        ELSE 0 END AS BMI,
+    Case when ISNumeric(Last12MonthVLResults)=1 and cast(Replace(Last12MonthVLResults,',','') as FLOAT) >=1000.00 THEN 1 ELSE 0 END AS HighVL
+    isTXCurr
+
+    FROM NDWH.dbo.FactLatestObs lob
+    INNER join NDWH.dbo.DimAgeGroup age on age.Age = lob.AgeAtARTStart
+    INNER join NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
+    INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = lob.AgencyKey
+    INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
+    INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey
+    INNER JOIN NDWH.dbo.FactART art on art.PatientKey = lob.PatientKey
+    LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = lob.PatientKey and vl.PatientKey IS NOT NULL
+    WHERE pat.isTXCurr = 1
+) A
+GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, DATIMAgeGroup
+GO
