@@ -15,7 +15,7 @@ Gender,
 age.DATIMAgeGroup as AgeGroup,
 CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23) as OTZEnrollmentYearMonth,
 TransitionAttritionReason as Outcome,
-COUNT(TransitionAttritionReason) as TotalOutcome
+COUNT(TransitionAttritionReason) as patients_totalOutcome
 
 FROM NDWH.dbo.FactOTZ otz
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
