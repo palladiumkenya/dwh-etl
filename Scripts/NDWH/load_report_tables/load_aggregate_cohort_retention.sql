@@ -19,7 +19,7 @@ CONVERT(char(7), cast(StartARTDateKey as datetime), 23) as StartARTYearMonth,
 -- Sum(M6Retained)M6Retained, Sum(M6NetCohort)M6NetCohort,
 -- Sum(M12Retained)M12Retained, Sum(M12NetCohort)M12NetCohort,
 -- Sum(M18Retained)M18Retained, Sum(M18NetCohort)M18NetCohort,
-COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as StartedART
+COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as patients_startedART
 
 FROM NDWH.dbo.FactART it
 INNER join NDWH.dbo.DimAgeGroup age on age.Age=it.AgeAtARTStart
