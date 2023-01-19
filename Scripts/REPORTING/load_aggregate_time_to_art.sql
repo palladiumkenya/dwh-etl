@@ -13,7 +13,7 @@ p.PartnerName as CTPartner,
 a.AgencyName as CTAgency,
 Gender,
 g.DATIMAgeGroup as AgeGroup,
-year(StartARTDateKey) as StartYr,
+year(StartARTDateKey) as StartARTYear,
 PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
         OVER (PARTITION BY Year(StartARTDateKey)) AS MedianTimeToARTDiagnosis_year,
