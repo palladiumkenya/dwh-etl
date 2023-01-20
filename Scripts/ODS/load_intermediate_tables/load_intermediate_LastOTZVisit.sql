@@ -31,6 +31,7 @@ select
 	VisitDate as LastVisitDate,
 	OTZEnrollmentDate,
 	TransferInStatus,
+	TransitionAttritionReason,
 	ModulesPreviouslyCovered,
 	ModulesCompletedToday_OTZ_Orientation,
 	ModulesCompletedToday_OTZ_Participation,
