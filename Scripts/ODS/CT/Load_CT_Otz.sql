@@ -77,7 +77,7 @@ BEGIN
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
 
-					with cte AS (
+				with cte AS (
 				Select
 				PatientPK,
 				SiteCode,

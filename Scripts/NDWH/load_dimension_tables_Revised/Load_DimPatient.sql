@@ -5,7 +5,8 @@ MERGE [NDWH].[dbo].[DimPatient] AS a
 				 WHERE patients.SiteCode >0
 				 
 ) AS b 
-	ON( a.PatientPK = b.PatientPK AND a.siteCode = b.SiteCode)
+	ON( a.PatientPK collate SQL_Latin1_General_CP1_CI_AS= b.PatientPK  collate SQL_Latin1_General_CP1_CI_AS
+	AND a.siteCode collate SQL_Latin1_General_CP1_CI_AS= b.SiteCode collate SQL_Latin1_General_CP1_CI_AS)
 	--WHEN MATCHED THEN
  --   UPDATE SET 
  --   a.Gender = B.Gender 

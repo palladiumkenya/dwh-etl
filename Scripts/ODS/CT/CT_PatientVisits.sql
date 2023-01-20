@@ -137,14 +137,14 @@ BEGIN
 
 			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
-			--WITH CTE AS   
-			--	(  
-			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
-			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
-			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
-			--		FROM [ODS].[dbo].[CT_PatientVisits] 
-			--		)  
+			WITH CTE AS   
+				(  
+					SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
+					OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
+					ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
+					FROM [ODS].[dbo].[CT_PatientVisits] 
+					)  
 			
-			--DELETE FROM CTE WHERE dump_ >1;
+			DELETE FROM CTE WHERE dump_ >1;
 			
 	END
