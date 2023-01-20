@@ -61,6 +61,7 @@ BEGIN
 				firstregline.RegimenLineKey As StartRegimenLine,
 				AgeAtEnrol,
 				AgeAtARTStart,
+				AgeLastVisit,
 				TimetoARTDiagnosis,
 				TimetoARTEnrollment,
 				PregnantARTStart,
