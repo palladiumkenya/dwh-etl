@@ -18,10 +18,9 @@ SUM(onMMD) as patients_onMMD,
 SUM(case when onMMD = 0 then 1 else 0 end) as patients_nonMMD,
 COUNT(StabilityAssessment) AS Stability
 
-
 FROM NDWH.dbo.FactLatestObs lob
-INNER join NDWH.dbo.DimAgeGroup age on age.Age = lob.AgeAtARTStart
-INNER join NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
+INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey
+INNER JOIN NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = lob.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey

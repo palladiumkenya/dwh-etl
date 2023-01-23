@@ -17,8 +17,8 @@ DifferentiatedCare,
 COUNT(DifferentiatedCare) as MMDModels
 
 FROM NDWH.dbo.FactLatestObs lob
-INNER join NDWH.dbo.DimAgeGroup age on age.Age = lob.AgeAtARTStart
-INNER join NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
+INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey
+INNER JOIN NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = lob.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey
