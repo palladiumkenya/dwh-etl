@@ -27,5 +27,5 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = cov.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = cov.PatientKey
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = cov.AgeGroupKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = cov.PartnerKey
-WHERE age.Age >= 12
+WHERE age.Age >= 12 AND pat.IsTXCurr = 1
 GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup,cov.VaccinationStatus, cov.PatientStatus, cov.AdmissionStatus, cov.AdmissionUnit, cov.EverCOVID19Positive, cov.MissedAppointmentDueToCOVID19
