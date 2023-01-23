@@ -95,15 +95,15 @@ BEGIN
 
 						--DROP INDEX CT_PatientStatus ON [ODS].[dbo].[CT_PatientStatus] ;
 						---Remove any duplicate from [ODS].[dbo].[CT_PatientStatus] 
-					--	WITH CTE AS   
-					--		(  
-					--			SELECT [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID,ROW_NUMBER() 
-					--			OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate ,PatientUnique_ID,PatientStatusUnique_ID
-					--			ORDER BY [PatientPK],[SiteCode],ExitDate,PatientUnique_ID,PatientStatusUnique_ID) AS dump_ 
-					--			FROM [ODS].[dbo].[CT_PatientStatus] 
-					--			)  
+						WITH CTE AS   
+							(  
+								SELECT [PatientPK],[SiteCode],ExitDate,ROW_NUMBER() 
+								OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate 
+								ORDER BY [PatientPK],[SiteCode],ExitDate) AS dump_ 
+								FROM [ODS].[dbo].[CT_PatientStatus] 
+								)  
 			
-					--DELETE FROM CTE WHERE dump_ >1;
+					DELETE FROM CTE WHERE dump_ >1;
 
 			
 	END

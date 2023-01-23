@@ -92,14 +92,14 @@ BEGIN
 			GROUP BY SiteCode;
 			--DROP INDEX CT_PatientPharmacy ON [ODS].[dbo].[CT_PatientPharmacy] ;
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientPharmacy] 
-			--WITH CTE AS   
-			--	(  
-			--		SELECT [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType,ROW_NUMBER() 
-			--		OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType
-			--		ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,drug,TreatmentType) AS dump_ 
-			--		FROM [ODS].[dbo].[CT_PatientPharmacy] 
-			--		)  
+			WITH CTE AS   
+				(  
+					SELECT [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType,ROW_NUMBER() 
+					OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType
+					ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,drug,TreatmentType) AS dump_ 
+					FROM [ODS].[dbo].[CT_PatientPharmacy] 
+					)  
 			
-			--DELETE FROM CTE WHERE dump_ >1;
+			DELETE FROM CTE WHERE dump_ >1;
 
 	END
