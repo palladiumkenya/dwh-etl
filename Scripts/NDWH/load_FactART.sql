@@ -1,14 +1,16 @@
-IF OBJECT_ID(N'[NDWH].[Dbo].[FactArt]', N'U') IS NOT NULL 
-	DROP TABLE [NDWH].[Dbo].[FactArt];
-BEGIN
+ BEGIN
+
+   TRUNCATE TABLE [NDWH].[Dbo].[FactArt];
+
 	with MFL_partner_agency_combination as (
 		select 
 			distinct MFL_Code,
 			SDP,
 			[SDP_Agency] collate Latin1_General_CI_AS as Agency
 		from ODS.dbo.All_EMRSites 
-	),
 
+	),
+	
 	   Patient As ( Select    
      
 		  Patient.PatientID,
@@ -41,13 +43,13 @@ BEGIN
        
 	from 
 	ODS.dbo.CT_Patient(NoLock) Patient
-	left join ODS.dbo.CT_ARTPatients(NoLock) ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
-	left join ODS.dbo.PregnancyAsATInitiation(NoLock)   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
+	left join ODS.dbo.CT_ARTPatients(NoLock) ART on ART.PatientPK collate Latin1_General_CI_AS=Patient.Patientpk collate Latin1_General_CI_AS and ART.SiteCode=Patient.SiteCode
+	left join ODS.dbo.PregnancyAsATInitiation(NoLock)   Pre on Pre.Patientpk collate Latin1_General_CI_AS= Patient.PatientPK collate Latin1_General_CI_AS and Pre.SiteCode=Patient.SiteCode
 	left join ODS.dbo.Intermediate_LastPatientEncounter(NoLock) las on las.PatientPK collate Latin1_General_CI_AS=Patient.PatientPK collate Latin1_General_CI_AS and las.SiteCode collate Latin1_General_CI_AS=Patient.SiteCode collate Latin1_General_CI_AS
 	   )
-
+	   INSERT INTO [NDWH].[DBO].[FACTART](PatientKey,FacilityKey,PartnerKey,AgencyKey,AgeGroupKey,StartARTDateKey,LastARTDateKey,CurrentRegimen,CurrentRegimenLine,StartRegimen,StartRegimenLine,AgeAtEnrol,AgeAtARTStart,TimetoARTDiagnosis,TimetoARTEnrollment,PregnantARTStart,PregnantAtEnrol,LastVisitDate,NextAppointmentDate,StartARTAtThisfacility,PreviousARTStartDate,PreviousARTRegimen,/*ARTOutcome,*/LoadDate
+)
 	   Select 
-				Factkey = IDENTITY(INT, 1, 1),
 				pat.PatientKey,
 				fac.FacilityKey,
 				partner.PartnerKey,
@@ -61,6 +63,7 @@ BEGIN
 				firstregline.RegimenLineKey As StartRegimenLine,
 				AgeAtEnrol,
 				AgeAtARTStart,
+				AgeLastVisit,
 				TimetoARTDiagnosis,
 				TimetoARTEnrollment,
 				PregnantARTStart,
@@ -70,12 +73,12 @@ BEGIN
 				StartARTAtThisfacility,
 				PreviousARTStartDate,
 				PreviousARTRegimen,
-				outcome.ARTOutcome,
+				--outcome.ARTOutcome,
 				cast(getdate() as date) as LoadDate
 
-	 INTO [NDWH].[Dbo].[FactArt]
+
 	   from  Patient
-	left join NDWH.dbo.DimPatient(NoLock) as Pat on pat.PatientPK=Patient.PatientPk
+	left join NDWH.dbo.DimPatient(NoLock) as Pat on pat.PatientPK collate Latin1_General_CI_AS=Patient.PatientPk collate Latin1_General_CI_AS
 	left join NDWH.dbo.Dimfacility(NoLock) fac on fac.MFLCode=Patient.SiteCode
 	left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Patient.SiteCode
 	left join NDWH.dbo.DimPartner(NoLock) as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
@@ -89,6 +92,7 @@ BEGIN
 	left join NDWH.dbo.DimAgency(NoLock) as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join ODS.dbo.Intermediate_ARTOutcomes(NoLock)  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
  
-	alter table [NDWH].[Dbo].[FactArt] add primary key(FactKey);
+    ---alter table [NDWH].[Dbo].[FactArt] ADD Factkey INT IDENTITY(1,1) primary key
+	--alter table [NDWH].[Dbo].[FactArt] add primary key(FactKey);
 END
 
