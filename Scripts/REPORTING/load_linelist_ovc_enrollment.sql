@@ -1,8 +1,8 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[OVCEnrollments]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].OVCEnrollments
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOVCEnrollments]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].LineListOVCEnrollments
 GO
 
-INSERT INTO [REPORTING].[dbo].OVCEnrollments
+INSERT INTO [REPORTING].[dbo].LineListOVCEnrollments
 SELECT 
 MFLCode,
 f.FacilityName,
