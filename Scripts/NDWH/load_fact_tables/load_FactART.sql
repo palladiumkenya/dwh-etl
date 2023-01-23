@@ -81,7 +81,8 @@ left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVi
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date= Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(Patient.PatientPk  as nvarchar(36))), 2)and IOutcomes.SiteCode=Patient.SiteCode
+left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK = Patient.PatientPk  
+  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcomeID=IOutcomes.ARTOutcome;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
