@@ -80,14 +80,15 @@ BEGIN
 
 				--DROP INDEX CT_Ovz ON [ODS].[dbo].[CT_Ovc];
 				---Remove any duplicate from [ODS].[dbo].[CT_Ovc]
-				--WITH CTE AS   
-				--	(  
-				--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
-				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
-				--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate ) AS dump_ 
-				--		FROM [ODS].[dbo].[CT_Ovc] 
-				--		)  
+				
+				WITH CTE AS   
+					(  
+						SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
+						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
+						ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate ) AS dump_ 
+						FROM [ODS].[dbo].[CT_Ovc] 
+						)  
 			
-				--DELETE FROM CTE WHERE dump_ >1;
+				DELETE FROM CTE WHERE dump_ >1;
 
 	END
