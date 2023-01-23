@@ -1,4 +1,3 @@
-Go
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateDSDStable]') AND type in (N'U'))
 TRUNCATE TABLE [dbo].[AggregateDSDStable]
 GO
@@ -24,3 +23,4 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey
 WHERE pat.isTXCurr = 1 and StabilityAssessment = 'Stable'
 GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, DifferentiatedCare
+GO
