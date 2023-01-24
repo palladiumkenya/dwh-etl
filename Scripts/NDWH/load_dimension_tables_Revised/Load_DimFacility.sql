@@ -1,11 +1,40 @@
-
-	MERGE [NDWH].[dbo].[DimFacility] AS a
-	USING(SELECT DISTINCT MFL_Code,[Facility Name],County,SubCounty,[owner],SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[Project]
-	FROM [ODS].[dbo].[All_EMRSites] WHERE MFL_Code !='') AS b 
-	ON(a.FacilityCode =b.MFL_Code)
-	--WHEN MATCHED THEN
- --   UPDATE SET 
- --   a.FacilityName = B.[Facility Name]
-	WHEN NOT MATCHED THEN 
-	INSERT(FacilityCode,FacilityName,County,District,owner,SDP,[SDP_Agency],Implementation,EMR,[EMR Status],[HTS Use],[Project]) 
-	VALUES(MFL_Code,[Facility Name],County,SubCounty,[owner],SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[Project]);
+---DimFacility Load
+IF OBJECT_ID(N'[NDWH].[dbo].[DimFacility]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[DimFacility];
+with source_facility as (
+	select
+		cast(MFL_Code as nvarchar) as MFLCode,
+		[Facility_Name] as [FacilityName],
+		SubCounty,
+		County,
+		EMR,
+		Project,
+		Longitude,
+		Latitude		
+	from ODS.dbo.All_EMRSites
+),
+site_abstraction as (
+	select
+		SiteCode,
+		max(VisitDate) as DateSiteAbstraction
+	from ODS.dbo.CT_PatientVisits
+	group by SiteCode
+),
+latest_upload as (
+	select  
+			SiteCode,
+			max(cast([DateRecieved] as date)) as LatestDateUploaded
+	from [DWAPICentral].[dbo].[FacilityManifest](NoLock) 
+	group by SiteCode
+)
+select 
+	FacilityKey = IDENTITY(INT, 1, 1),
+	source_facility.*,
+	cast(format(site_abstraction.DateSiteAbstraction,'yyyyMMdd') as int) as DateSiteAbstractionKey,
+	cast(format(latest_upload.LatestDateUploaded, 'yyyyMMdd') as int) as LatestDateUploadedKey,
+	cast(getdate() as date) as LoadDate
+into [NDWH].[dbo].[DimFacility]
+from source_facility
+left join site_abstraction on site_abstraction.SiteCode = source_facility.MFLCode
+left join latest_upload on latest_upload.SiteCode = source_facility.MFLCode;
+ALTER TABLE dbo.DimFacility ADD PRIMARY KEY(FacilityKey);

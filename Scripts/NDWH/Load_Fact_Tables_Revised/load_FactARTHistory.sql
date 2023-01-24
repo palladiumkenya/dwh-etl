@@ -12,15 +12,15 @@ BEGIN
 	select 
 		FactKey = IDENTITY(INT, 1, 1),
 		facility.FacilityKey,
-		--partner.PartnerKey,
-		--agency.AgencyKey,
+		partner.PartnerKey,
+		agency.AgencyKey,
 		patient.PatientKey,
 		as_of.DateKey as AsOfDateKey,
 		case 
 			when txcurr_report.ARTOutcome = 'V' then 1
 			else 0
 		end as IsTXCurr,
-		--art_outcome.ARTOutcomeKey,
+		art_outcome.ARTOutcomeKey,
 		cast(getdate() as date) as LoadDate
 	into [NDWH].[dbo].[FactARTHistory]
 	from [ODS].[dbo].[HistoricalARTOutcomesBaseTable] as txcurr_report
@@ -33,5 +33,5 @@ BEGIN
 	left join [NDWH].dbo.DimAgency as agency on agency.AgencyName COLLATE Latin1_General_CI_AS= MFL_partner_agency_combination.Agency COLLATE Latin1_General_CI_AS
 	left join [NDWH].[dbo].[DimARTOutcome] as art_outcome on art_outcome.ARTOutcomeName COLLATE Latin1_General_CI_AS= txcurr_report.ARTOutcome COLLATE Latin1_General_CI_AS;
 
-	alter table dbo.FactARTHistory add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactARTHistory] add primary key(FactKey);
 END

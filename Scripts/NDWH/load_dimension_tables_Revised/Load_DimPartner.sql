@@ -1,7 +1,7 @@
 	MERGE [NDWH].[dbo].[DimPartner] AS a
 	USING(SELECT 
 			  DISTINCT SDP AS PartnerName
-			  FROM HIS_Implementation.dbo.All_EMRSites
+			  FROM ODS.dbo.All_EMRSites
 		  ) AS b 
 	ON(a.PartnerName =b.PartnerName)
 	WHEN MATCHED THEN
