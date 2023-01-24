@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastPatientEncounter]', N'U') IS NOT NULL 
+	DROP TABLE [ODS].[dbo].[Intermediate_LastPatientEncounter];
+BEGIN
 	--Pick the latest LastVisit and Next Appointment dates from Pharmacy
     WITH Pharmacy AS (
 	
@@ -85,6 +88,7 @@ CombinedVisits As (
         LastEncounterDate,
 	    NextAppointmentDate,
         cast (getdate() as DATE) as LoadDate
-       INTO ODS.dbo.Intermediate_LastPatientEncounter
+       INTO [ODS].[dbo].[Intermediate_LastPatientEncounter]
 	from CombinedVisits
+END
 
