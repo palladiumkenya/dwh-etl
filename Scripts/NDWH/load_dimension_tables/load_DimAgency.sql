@@ -1,11 +1,11 @@
-IF OBJECT_ID(N' [NDWH].[dbo].[DimAgency]', N'U') IS NOT NULL 
+IF OBJECT_ID(N'[NDWH].[dbo].[DimAgency]', N'U') IS NOT NULL 
 	DROP TABLE  [NDWH].[dbo].[DimAgency];
 BEGIN--DimAgency Load
 	with source_agency as (
 	select 
-		distinct [SDP Agency] as PartnerName
-	from HIS_Implementation.dbo.All_EMRSites
-	where [SDP Agency] <> 'NULL'
+		distinct [SDP_Agency] as PartnerName
+	from ODS.dbo.All_EMRSites
+	where [SDP_Agency] <> 'NULL'
 	)
 	select
 		AgencyKey = IDENTITY(INT, 1, 1),
