@@ -37,7 +37,7 @@ BEGIN
      
 	FROM ODS.dbo.CT_Patient Patients(NoLock)
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
-	LEFT JOIN ODS.dbo.CT_LastPatientEncounter LastPatientEncounter ON   Patients.PatientPK COLLATE Latin1_General_CI_AS =LastPatientEncounter.PatientPK   AND Patients.SiteCode COLLATE Latin1_General_CI_AS  =LastPatientEncounter.SiteCode COLLATE Latin1_General_CI_AS
+	LEFT JOIN ODS.dbo.Intermediate_LastPatientEncounter LastPatientEncounter ON   Patients.PatientPK COLLATE Latin1_General_CI_AS =LastPatientEncounter.PatientPK   AND Patients.SiteCode COLLATE Latin1_General_CI_AS  =LastPatientEncounter.SiteCode COLLATE Latin1_General_CI_AS
 	LEFT JOIN ODS.dbo.CT_PatientStatus Exits   ON  Patients.PatientPK=Exits.PatientPK  and Patients.Sitecode=Exits.Sitecode
 
 

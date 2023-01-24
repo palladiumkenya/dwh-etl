@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2022-12-02T09:01:40.6828608Z</LastWriteTime>
+    <LastWriteTime>2023-01-23T10:14:15.9800737Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -13,7 +13,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>OptimizedTest_Load.dtsx</Name>
-      <LastWriteTime>2022-11-30T12:41:40.7432672Z</LastWriteTime>
+      <LastWriteTime>2022-12-06T09:44:44.8215177Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -23,37 +23,62 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_ODS_CT_Tables.dtsx</Name>
-      <LastWriteTime>2022-12-02T06:20:16.9236894Z</LastWriteTime>
-      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
-    </ProjectBuildItemInfo>
-    <ProjectBuildItemInfo>
-      <Name>Load_Dim_Tables_Old.dtsx</Name>
-      <LastWriteTime>2022-11-08T06:58:12.5581161Z</LastWriteTime>
+      <LastWriteTime>2023-01-13T10:17:32.1976574Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Dim_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-30T15:19:18.7227405Z</LastWriteTime>
+      <LastWriteTime>2023-01-19T08:05:26.3171489Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2022-12-02T06:20:35.6837286Z</LastWriteTime>
+      <LastWriteTime>2023-01-21T10:34:43.3297198Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Fact_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-30T15:19:49.2567076Z</LastWriteTime>
+      <LastWriteTime>2023-01-23T08:29:21.5939647Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Intermediate_CT_Tables.dtsx</Name>
-      <LastWriteTime>2022-11-30T15:18:31.1348332Z</LastWriteTime>
+      <LastWriteTime>2022-12-09T19:49:28.2957173Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>RoutineMaintenanceTask.dtsx</Name>
-      <LastWriteTime>2022-12-02T10:07:50.3510003Z</LastWriteTime>
+      <LastWriteTime>2022-12-02T11:51:43.5132836Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>OptimizedTest_Load 1.dtsx</Name>
+      <LastWriteTime>2022-12-06T10:16:50.1452658Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>OptimizedTest_Load 2.dtsx</Name>
+      <LastWriteTime>2022-12-06T11:51:27.7596973Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>OptimizedTest_Load 3.dtsx</Name>
+      <LastWriteTime>2022-12-06T11:55:27.3737625Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>RemoveDuplicatesOnDWAPICentral.dtsx</Name>
+      <LastWriteTime>2022-12-21T09:41:20.8780764Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_Aggregate_Tables.dtsx</Name>
+      <LastWriteTime>2023-01-21T11:01:10.7484258Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_ODS_HTS_Tables.dtsx</Name>
+      <LastWriteTime>2023-01-23T10:09:13.6329304Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>

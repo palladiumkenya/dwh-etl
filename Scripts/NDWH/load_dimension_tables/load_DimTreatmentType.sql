@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[DimTreatmentType]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[DimTreatmentType];
+BEGIN	
 	with source_TreatmentType as (
 	select 
 		distinct TreatmentType as TreatmentType,
@@ -11,6 +14,7 @@
 		TreatmentTypeKey = IDENTITY(INT, 1, 1),
 		source_TreatmentType.*,
 		cast(getdate() as date) as LoadDate
-	into dbo.DimTreatmentType
+	into [NDWH].[dbo].[DimTreatmentType]
 	from source_TreatmentType;
-	ALTER TABLE dbo.DimTreatmentType ADD PRIMARY KEY(TreatmentTypeKey);
+	ALTER TABLE NDWH.dbo.DimTreatmentType ADD PRIMARY KEY(TreatmentTypeKey);
+END

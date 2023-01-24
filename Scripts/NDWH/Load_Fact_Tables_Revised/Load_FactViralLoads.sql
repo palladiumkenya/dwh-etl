@@ -1,12 +1,12 @@
-IF OBJECT_ID(N'[ODS].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[FactViralLoads];
+IF OBJECT_ID(N'[NDWH].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactViralLoads];
 BEGIN
 	with MFL_partner_agency_combination as (
 		select 
 			distinct MFL_Code,
 			SDP,
-			[SDP Agency] collate Latin1_General_CI_AS as Agency
-		from HIS_Implementation.dbo.All_EMRSites 
+			[SDP_Agency] collate Latin1_General_CI_AS as Agency
+		from ODS.dbo.All_EMRSites 
 	),
 	 eligible_for_VL as (
 		 select 
@@ -61,59 +61,59 @@ BEGIN
 		select
 			distinct PatientPK,
 			SiteCode,
-	 		[6MonthVL],
-			[6MonthVLDate],
-			[12MonthVL],
-			[12MonthVLDate],
-			[18MonthVL],
-			[18MonthVLDate],
-			[24MonthVL],
-			[24MonthVLDate],
+	 		[_6MonthVL],
+			[_6MonthVLDate],
+			[_12MonthVL],
+			[_12MonthVLDate],
+			[_18MonthVL],
+			[_18MonthVLDate],
+			[_24MonthVL],
+			[_24MonthVLDate],
 			case 
-				when isnumeric([6MonthVL]) = 1 then 
+				when isnumeric([_6MonthVL]) = 1 then 
 					case 
-						when cast(replace([6MonthVL], ',', '') as  float) < 1000.00 then 1 
+						when cast(replace([_6MonthVL], ',', '') as  float) < 1000.00 then 1 
 						else 0 
 					end 
 				else 
 					case 
-						when [6MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						when [_6MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
 						else 0 
 					end  
 			end as	[6MonthVLSup],
 			case 
-				when isnumeric([12MonthVL]) = 1 then 
+				when isnumeric([_12MonthVL]) = 1 then 
 					case 
-						when cast(replace([12MonthVL], ',', '') as  float) < 1000.00 then 1 
+						when cast(replace([_12MonthVL], ',', '') as  float) < 1000.00 then 1 
 						else 0 
 					end 
 				else 
 					case 
-						when [12MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						when [_12MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
 						else 0 
 					end  
 			end as	[12MonthVLSup],
 			case 
-				when isnumeric([18MonthVL]) = 1 then 
+				when isnumeric([_18MonthVL]) = 1 then 
 					case 
-						when cast(replace([18MonthVL], ',', '') as  float) < 1000.00 then 1 
+						when cast(replace([_18MonthVL], ',', '') as  float) < 1000.00 then 1 
 						else 0 
 					end 
 				else 
 					case 
-						when [18MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						when [_18MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
 						else 0 
 					end  
 			end as	[18MonthVLSup],
 			case 
-				when isnumeric([24MonthVL]) = 1 then 
+				when isnumeric([_24MonthVL]) = 1 then 
 					case 
-						when cast(replace([24MonthVL], ',', '') as  float) < 1000.00 then 1 
+						when cast(replace([_24MonthVL], ',', '') as  float) < 1000.00 then 1 
 						else 0 
 					end 
 				else 
 					case 
-						when [24MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						when [_24MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
 						else 0 
 					end  
 			end as	[24MonthVLSup]
@@ -202,14 +202,14 @@ BEGIN
 			last_12M_VL_indicators.Last12MVLResult,
 			last_12M_VL_indicators.Last12MVLSup,
 			last_12M_VL_indicators.Last12MVLDate,
-			patient_baselines.[6MonthVLDate],
-			patient_baselines.[6MonthVL],
-			patient_baselines.[12MonthVLDate],
-			patient_baselines.[12MonthVL],
-			patient_baselines.[18MonthVLDate],
-			patient_baselines.[18MonthVL],
-			patient_baselines.[24MonthVLDate],
-			patient_baselines.[24MonthVL],
+			patient_baselines.[_6MonthVLDate],
+			patient_baselines.[_6MonthVL],
+			patient_baselines.[_12MonthVLDate],
+			patient_baselines.[_12MonthVL],
+			patient_baselines.[_18MonthVLDate],
+			patient_baselines.[_18MonthVL],
+			patient_baselines.[_24MonthVLDate],
+			patient_baselines.[_24MonthVL],
 			patient_baselines.[6MonthVLSup],
 			patient_baselines.[12MonthVLSup],
 			patient_baselines.[18MonthVLSup],
@@ -270,10 +270,10 @@ BEGIN
 		combined_viral_load_dataset.Last12MonthVL,
 		combined_viral_load_dataset.Last12MVLResult,
 		combined_viral_load_dataset.Last12MVLSup,
-		combined_viral_load_dataset.[6MonthVL],
-		combined_viral_load_dataset.[12MonthVL],
-		combined_viral_load_dataset.[18MonthVL],
-		combined_viral_load_dataset.[24MonthVL],
+		combined_viral_load_dataset.[_6MonthVL],
+		combined_viral_load_dataset.[_12MonthVL],
+		combined_viral_load_dataset.[_18MonthVL],
+		combined_viral_load_dataset.[_24MonthVL],
 		combined_viral_load_dataset.[6MonthVLSup],
 		combined_viral_load_dataset.[12MonthVLSup],
 		combined_viral_load_dataset.[18MonthVLSup],
@@ -282,7 +282,7 @@ BEGIN
 		combined_viral_load_dataset.LastVL,
 		combined_viral_load_dataset.TimetoFirstVL,
 		combined_viral_load_dataset.TimeToFirstVLGrp
-	into [ODS].[dbo].[FactViralLoads]
+	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_viral_load_dataset.PatientPK as nvarchar(36))), 2)
 		and patient.SiteCode = combined_viral_load_dataset.SiteCode
@@ -292,15 +292,15 @@ BEGIN
 	left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_viral_load_dataset.AgeLastVisit
 	left join NDWH.dbo.DimDate as last_12MVL_date on last_12MVL_date.Date = combined_viral_load_dataset.Last12MVLDate
-	left join NDWH.dbo.DimDate as _6_monthVL_date on _6_monthVL_date.Date = combined_viral_load_dataset.[6MonthVLDate]
-	left join NDWH.dbo.DimDate as _12_monthVL_date on _12_monthVL_date.Date = combined_viral_load_dataset.[12MonthVLDate]
-	left join NDWH.dbo.DimDate as _18_monthVL_date on _18_monthVL_date.Date = combined_viral_load_dataset.[18MonthVLDate]
-	left join NDWH.dbo.DimDate as _24_monthVL_date on _24_monthVL_date.Date = combined_viral_load_dataset.[24MonthVLDate]
+	left join NDWH.dbo.DimDate as _6_monthVL_date on _6_monthVL_date.Date = combined_viral_load_dataset.[_6MonthVLDate]
+	left join NDWH.dbo.DimDate as _12_monthVL_date on _12_monthVL_date.Date = combined_viral_load_dataset.[_12MonthVLDate]
+	left join NDWH.dbo.DimDate as _18_monthVL_date on _18_monthVL_date.Date = combined_viral_load_dataset.[_18MonthVLDate]
+	left join NDWH.dbo.DimDate as _24_monthVL_date on _24_monthVL_date.Date = combined_viral_load_dataset.[_24MonthVLDate]
 	left join NDWH.dbo.DimDate as first_VL_date on first_VL_date.Date = combined_viral_load_dataset.FirstVLDate
 	left join NDWH.dbo.DimDate as last_VL_date on last_VL_date.Date = combined_viral_load_dataset.LastVLDate
 	left join NDWH.dbo.DimDate as lastest_VL_date1 on lastest_VL_date1.Date = combined_viral_load_dataset.LatestVLDate1
 	left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combined_viral_load_dataset.LatestVLDate2
 	left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3;
 
-	alter table dbo.FactViralLoads add primary key(FactKey);
+	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END

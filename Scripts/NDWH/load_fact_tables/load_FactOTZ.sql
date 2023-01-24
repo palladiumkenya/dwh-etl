@@ -1,9 +1,9 @@
 with MFL_partner_agency_combination as (
 	select 
-		MFL_Code,
+		distinct MFL_Code,
 		SDP,
-		[SDP Agency] collate Latin1_General_CI_AS as Agency
-	from HIS_Implementation.dbo.All_EMRSites 
+	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	from ODS.dbo.All_EMRSites 
 ),
 otz_and_last_encounter_combined as (
 select
@@ -13,6 +13,7 @@ select
 	otz.OTZEnrollmentDate,
 	otz.LastVisitDate,
 	otz.TransferInStatus,
+	otz.TransitionAttritionReason,
 	otz.ModulesPreviouslyCovered,
 	otz.ModulesCompletedToday_OTZ_Orientation,
 	otz.ModulesCompletedToday_OTZ_Participation,
@@ -38,6 +39,7 @@ select
     age_group.AgeGroupKey,
     otz_enrollment.DateKey as OTZEnrollmentDateKey,
     last_visit.DateKey as LastVisitDateKey,
+	otz_and_last_encounter_combined.TransitionAttritionReason,
     otz_and_last_encounter_combined.TransferInStatus,
 	otz_and_last_encounter_combined.ModulesPreviouslyCovered,
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Orientation,
@@ -49,7 +51,7 @@ select
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_SRH,
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Beyond,
 	cast(getdate() as date) as LoadDate
-into dbo.FactOTZ
+into NDWH.dbo.FactOTZ
 from otz_and_last_encounter_combined
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(otz_and_last_encounter_combined.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = otz_and_last_encounter_combined.SiteCode
@@ -61,4 +63,4 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = otz_and_last_encounter_combined.AgeLastVisit;
 
-alter table dbo.FactOTZ add primary key(FactKey);
+alter table NDWH.dbo.FactOTZ add primary key(FactKey);
