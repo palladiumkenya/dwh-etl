@@ -12,15 +12,15 @@ BEGIN
 	select 
 		FactKey = IDENTITY(INT, 1, 1),
 		facility.FacilityKey,
-		--partner.PartnerKey,
-		--agency.AgencyKey,
+		partner.PartnerKey,
+		agency.AgencyKey,
 		patient.PatientKey,
 		as_of.DateKey as AsOfDateKey,
 		case 
 			when txcurr_report.ARTOutcome = 'V' then 1
 			else 0
 		end as IsTXCurr,
-		--art_outcome.ARTOutcomeKey,
+		art_outcome.ARTOutcomeKey,
 		cast(getdate() as date) as LoadDate
 	into [NDWH].[dbo].[FactARTHistory]
 	from [ODS].[dbo].[HistoricalARTOutcomesBaseTable] as txcurr_report
