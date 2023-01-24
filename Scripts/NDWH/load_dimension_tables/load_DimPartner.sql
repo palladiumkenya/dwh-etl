@@ -5,13 +5,13 @@ BEGIN
 	with source_partner as (
 	select
 		distinct SDP as PartnerName
-	from HIS_Implementation.dbo.All_EMRSites
+	from [ODS].[dbo].[All_EMRSites](NoLock)
 	)
 	select 
 		PartnerKey = IDENTITY(INT, 1, 1),
 		source_partner.*,
 		cast(getdate() as date) as LoadDate
-	into [NDWH].[dbo].[DimPartner]
+	INTO [NDWH].[dbo].[DimPartner]
 	from source_partner;
 
 	ALTER TABLE NDWH.dbo.DimPartner ADD PRIMARY KEY(PartnerKey);

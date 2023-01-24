@@ -31,11 +31,11 @@ Select
             PregnantARTStart,
             PregnantAtEnrol,
             LastVisitDate,
-            Ioutcomes.NextAppointmentDate,
+            NextAppointmentDate,
             StartARTAtThisfacility,
             PreviousARTStartDate,
             PreviousARTRegimen,
-            ARTOutcome,
+            outcome.ARTOutcomeDescription,
             pat.ISTxCurr
          
 INTO NDWH.dbo.Linelist_FACTART
@@ -46,10 +46,6 @@ left join NDWH.dbo.DimAgency agency on agency.AgencyKey=ART.AgencyKey
 left join NDWH.dbo.DimFacility fac on fac.FacilityKey=ART.FacilityKey
 left join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=ART.AgeGroupKey
 left join NDWH.dbo.DimDate startdate on startdate.[Date]=ART.StartARTDateKey
-left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(PAT.PatientPk  as nvarchar(36))), 2)and IOutcomes.SiteCode=PAT.SiteCode
-left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcomeID=IOutcomes.ARTOutcome;
-
-
-
+left join NDWH.dbo.DimARTOutcome as outcome   on outcome.ARTOutcomeKey=ART.ARTOutcomeKey;
 
 
