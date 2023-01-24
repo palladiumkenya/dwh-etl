@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FactCD4]', N'U') IS NOT NULL 
+	DROP TABLE  [NDWH].[dbo].[FactCD4];
+BEGIN
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -45,3 +48,4 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_CD4.AgeLastVisit;
 
 alter table NDWH.dbo.FactCD4 add primary key(FactKey);
+END

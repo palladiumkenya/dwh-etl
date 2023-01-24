@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FACTPatientExits]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FACTPatientExits];
+BEGIN
 With Exits As (
 select 
 	PatientID,
@@ -75,3 +78,4 @@ Select
 	left join NDWH.dbo.DimDate as dtDead on dtDead.Date= Died.dtDead;
 
 	alter table FACTPatientExits add primary key (FACTKey);
+END
