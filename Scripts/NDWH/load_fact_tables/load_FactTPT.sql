@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FactTPT]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactTPT];
+BEGIN
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -97,4 +100,4 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_ipt_data.AgeLastVisit;
 
 alter table NDWH.dbo.FactTPT add primary key(FactKey);
-
+END
