@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NDWH.dbo.Linelist_FACTART]') AND type in (N'U'))
-DROP TABLE [dbo].[NDWH.dbo.Linelist_FACTART]
+IF (SELECT count(1) FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[NDWH.dbo.Linelist_FACTART]') AND type in (N'U')) >0
+DROP TABLE [REPORTING].[dbo].[NDWH.dbo.Linelist_FACTART]
 GO
 
 Select 
@@ -38,7 +38,7 @@ Select
             outcome.ARTOutcomeDescription,
             pat.ISTxCurr
          
-INTO NDWH.dbo.Linelist_FACTART
+INTO REPORTING.dbo.Linelist_FACTART
 from  NDWH.dbo.FACTART As ART 
 left join NDWH.dbo.DimPatient pat on pat.PatientKey=ART.PatientKey
 left join NDWH.dbo.DimPartner partner on partner.PartnerKey=ART.PartnerKey
