@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{9244AA0A-7F47-4DA0-9236-64DE03DE30FC}">
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{0C8B5EF6-6B04-4006-9A86-3BDA4C2383C9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -91,13 +91,13 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\Load Reports tables Container Loop\Execute SQL Task"
+          DTS:refId="Package\Load Reports tables Container Loop\Load Aggregate tables Task"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{CB5E85EC-44E7-4E7F-81D1-3A041ACFE649}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
-          DTS:ObjectName="Execute SQL Task"
+          DTS:ObjectName="Load Aggregate tables Task"
           DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
@@ -131,14 +131,14 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="163.2,41.6"
-          Id="Package\Load Reports tables Container Loop\Execute SQL Task"
-          TopLeft="55.184623835073,27.0181850627764" />
+          Size="210.666666666667,42.6666666666667"
+          Id="Package\Load Reports tables Container Loop\Load Aggregate tables Task"
+          TopLeft="53.9346238536993,27.0181850627764" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="312,131.6"
-          Size="312,174.8"
+          PanelSize="312,132"
+          Size="312,174.666666666667"
           Id="Package\Load Reports tables Container Loop"
           TopLeft="175.000006418962,19.6969704085036" />
       </GraphLayout>
