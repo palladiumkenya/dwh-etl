@@ -1,5 +1,5 @@
-Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateOTZOutcome]') AND type in (N'U'))
+
+IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateOTZOutcome]') AND type in (N'U'))> 0
 TRUNCATE TABLE [dbo].[AggregateOTZOutcome]
 GO
 

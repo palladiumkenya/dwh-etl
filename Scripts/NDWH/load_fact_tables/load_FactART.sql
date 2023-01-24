@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FACTART];
+BEGIN
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -54,13 +57,14 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             age_group.AgeGroupKey,
             StartARTDate.Date As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
-            ARTOutcome.ARTOutcomeKey,
+            art_outcome.ARTOutcomeKey,
             lastRegimen As CurrentRegimen,
             LastRegimenLine As CurrentRegimenline,
             StartRegimen,
             StartRegimenLine,
             AgeAtEnrol,
             AgeAtARTStart,
+            AgeLastVisit,
             TimetoARTDiagnosis,
             TimetoARTEnrollment,
             PregnantARTStart,
@@ -86,6 +90,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK 
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcomeID=IOutcomes.ARTOutcome;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
+END
 
 
 
