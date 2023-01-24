@@ -48,7 +48,8 @@ select
     source_data.AdverseEventRegimen,
     source_data.AdverseEventActionTaken,
     source_data.AdverseEventClinicalOutcome,
-    source_data.AdverseEventIsPregnant
+    source_data.AdverseEventIsPregnant,
+    cast(getdate() as date) as LoadDate
 into [NDWH].[dbo].[FactAdverseEvents]
 from source_data
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode  = source_data.SiteCode
