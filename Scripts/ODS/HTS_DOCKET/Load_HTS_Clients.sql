@@ -1,9 +1,10 @@
 BEGIN
 
 			MERGE [ODS].[dbo].[HTS_clients] AS a
-				USING(SELECT  DISTINCT 
-					   [HtsNumber]
+				USING(SELECT  DISTINCT [HtsNumber]
 					  ,a.[Emr]
+					  ,a.PatientPK
+					  ,a.SiteCode
 					  ,a.[Project]
 					  ,[FacilityName]
 					  ,[Serial]   
@@ -17,8 +18,15 @@ BEGIN
 					  ,[SubCounty]
 					  ,[Ward]
 					  ,NUPI
-				  FROM [HTSCentral].[dbo].[Clients](NoLock) a
-					WHERE a.DateExtracted > '2019-09-08') AS b 
+					FROM [HTSCentral].[dbo].[Clients](NoLock) a
+				INNER JOIN (
+								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
+								FROM  [HTSCentral].[dbo].[Clients](NoLock)
+								GROUP BY SiteCode,PatientPK
+							) tm 
+				ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.datecreated = tm.Maxdatecreated
+				 WHERE a.DateExtracted > '2019-09-08'
+					) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode						

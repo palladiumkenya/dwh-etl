@@ -38,4 +38,5 @@ from source_facility
 left join site_abstraction on site_abstraction.SiteCode = source_facility.MFLCode
 left join latest_upload on latest_upload.SiteCode = source_facility.MFLCode;
 
-ALTER TABLE NDWH.dbo.DimFacility ADD PRIMARY KEY(FacilityKey);
+	ALTER TABLE NDWH.dbo.DimFacility ADD PRIMARY KEY(FacilityKey);
+END

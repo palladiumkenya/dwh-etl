@@ -23,15 +23,15 @@ BEGIN
 		art_outcome.ARTOutcomeKey,
 		cast(getdate() as date) as LoadDate
 	into NDWH.dbo.FactARTHistory
-	from dbo.HistoricalARTOutcomesBaseTable as txcurr_report
+	from ODS.dbo.HistoricalARTOutcomesBaseTable as txcurr_report
 	left join dbo.DimDate as as_of on as_of.Date = txcurr_report.AsOfDate
 	left join dbo.DimFacility as facility on facility.MFLCode = txcurr_report.MFLCode
 	left join dbo.DimPatient as patient on patient.PatientPK =  CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(txcurr_report.PatientPK as NVARCHAR(36))), 2)          
 		and patient.SiteCode = txcurr_report.MFLCode
-	left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = txcurr_report.MFLCode
-	left join dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
-	left join dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-	left join dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome;
+	left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code COLLATE Latin1_General_CI_AS = txcurr_report.MFLCode COLLATE Latin1_General_CI_AS
+	left join dbo.DimPartner as partner on partner.PartnerName COLLATE Latin1_General_CI_AS = MFL_partner_agency_combination.SDP COLLATE Latin1_General_CI_AS
+	left join dbo.DimAgency as agency on agency.AgencyName COLLATE Latin1_General_CI_AS= MFL_partner_agency_combination.Agency COLLATE Latin1_General_CI_AS
+	left join dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome COLLATE Latin1_General_CI_AS= txcurr_report.ARTOutcome COLLATE Latin1_General_CI_AS;
 
 	alter table NDWH.dbo.FactARTHistory add primary key(FactKey);
 END

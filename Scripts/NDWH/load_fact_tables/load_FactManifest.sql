@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FACTMANIFEST]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FACTMANIFEST];
+BEGIN
 with Uploads 
 As (
 Select 
@@ -5,7 +8,7 @@ Select
     [Start],
     [End],
     SiteCode
-from DWAPICentral.dbo.FacilityManifest
+from ODS.dbo.CT_FacilityManifest
 ),
 
 MFL_partner_agency_combination as (
@@ -13,13 +16,12 @@ MFL_partner_agency_combination as (
     SELECT distinct 
     MFL_Code,
     SDP,
-    [SDP Agency] collate Latin1_General_CI_AS as Agency
-    from HIS_Implementation.dbo.[All_EMRSites]
+    [SDP_Agency] collate Latin1_General_CI_AS as Agency
+    from ODS.dbo.[All_EMRSites]
 
 )
 
 Select 
-
         FACTKey= IDENTITY(INT,1,1),
         Uploaddates.DateKey as UploadsDateKey,
         facility.FacilityKey ,
@@ -36,3 +38,4 @@ left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_C
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName=MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
 left join NDWH.dbo.DimAgency as agency on Agency.AgencyName=MFL_partner_agency_combination.Agency collate Latin1_General_CI_AS
 left join NDWH.dbo.DimDate as UploadDates on UploadDates.[Date]=Uploads.Dateuploaded
+END

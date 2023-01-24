@@ -90,6 +90,7 @@ BEGIN
 			facility.FacilityKey,
 			partner.PartnerKey,
 			agency.AgencyKey,
+			age_group.AgeGroupKey,
 			VisitID, 
 			Covid19AssessmentDate.Datekey As Covid19AssessmentDateKey,
 			ReceivedCOVID19Vaccine ,
