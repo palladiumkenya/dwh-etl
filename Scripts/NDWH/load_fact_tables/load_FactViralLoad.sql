@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactViralLoads];
+BEGIN
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -300,3 +303,4 @@ left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combin
 left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3;
 
 alter table NDWH.dbo.FactViralLoads add primary key(FactKey);
+END
