@@ -1,5 +1,4 @@
-Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTLast12M]') AND type in (N'U'))
+IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTLast12M]') AND type in (N'U')) > 0
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToARTLast12M]
 GO
 
