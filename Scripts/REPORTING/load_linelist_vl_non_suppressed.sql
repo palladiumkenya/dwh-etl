@@ -18,7 +18,7 @@ StartARTDateKey as StartARTDate,
 Last12MonthVLResults,
 art.LastVisitDate,
 art.NextAppointmentDate,
-aro.ARTOutcomeName as ARTOutcome
+aro.ARTOutcome as ARTOutcome
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
