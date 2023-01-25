@@ -1,7 +1,7 @@
-IF (SELECT count(1) FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[NDWH.dbo.Linelist_FACTART]') AND type in (N'U')) >0
-DROP TABLE [REPORTING].[dbo].[NDWH.dbo.Linelist_FACTART]
-GO
 
+IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL 
+	DROP TABLE [REPORTING].[dbo].[Linelist_FACTART];
+BEGIN
 Select 
           
             pat.PatientID,
@@ -38,7 +38,7 @@ Select
             outcome.ARTOutcomeDescription,
             pat.ISTxCurr
          
-INTO REPORTING.dbo.Linelist_FACTART
+INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
 left join NDWH.dbo.DimPatient pat on pat.PatientKey=ART.PatientKey
 left join NDWH.dbo.DimPartner partner on partner.PartnerKey=ART.PartnerKey
@@ -48,4 +48,4 @@ left join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=ART.AgeGroupKey
 left join NDWH.dbo.DimDate startdate on startdate.[Date]=ART.StartARTDateKey
 left join NDWH.dbo.DimARTOutcome as outcome   on outcome.ARTOutcomeKey=ART.ARTOutcomeKey;
 
-
+END

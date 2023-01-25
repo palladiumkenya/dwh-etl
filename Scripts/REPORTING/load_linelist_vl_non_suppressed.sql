@@ -18,8 +18,12 @@ StartARTDateKey as StartARTDate,
 Last12MonthVLResults,
 art.LastVisitDate,
 art.NextAppointmentDate,
+<<<<<<< HEAD
 aro.ARTOutcome
  INTO REPORTING.[dbo].LineListVLNonsuppressed
+=======
+aro.ARTOutcome as ARTOutcome
+>>>>>>> 47ffb73ab5b49a143b43772b059b6766887de1e1
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

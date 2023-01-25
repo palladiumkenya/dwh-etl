@@ -5,6 +5,7 @@ BEGIN
 							  ,a.[PatientPk]
 							  ,a.[HtsNumber]
 							  ,a.[Emr]
+							  ,a.DateExtracted
 							  ,a.[Project]
 							  ,[EnrolledFacilityName]
 							  ,CAST (MAX([ReferralDate]) AS DATE) AS [ReferralDate]
@@ -30,12 +31,14 @@ BEGIN
 							,[FacilityReferredTo]
 							,[HandedOverTo]
 							,[HandedOverToCadre]
+							,a.DateExtracted
 							,[ReportedCCCNumber]
 							,CAST([ReportedStartARTDate] AS DATE)
 							) AS b 
 				ON(
 					a.PatientPK  = b.PatientPK 
-				and a.SiteCode = b.SiteCode						
+				and a.SiteCode = b.SiteCode	
+				and a.DateExtracted = b.DateExtracted
 				)
 		WHEN NOT MATCHED THEN 
 			INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EnrolledFacilityName,ReferralDate,DateEnrolled,DatePrefferedToBeEnrolled,FacilityReferredTo,HandedOverTo,HandedOverToCadre,ReportedCCCNumber,ReportedStartARTDate) 
