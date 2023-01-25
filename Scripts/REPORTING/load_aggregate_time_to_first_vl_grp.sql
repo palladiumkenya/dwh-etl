@@ -1,4 +1,4 @@
-IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToFirstVLGrp]') AND type in (N'U')) > 0
+IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToFirstVLGrp]') AND type in (N'U')) 
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToFirstVLGrp]
 GO
 

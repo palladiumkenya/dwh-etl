@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="7"
-  DTS:VersionGUID="{0C8B5EF6-6B04-4006-9A86-3BDA4C2383C9}">
+  DTS:VersionBuild="8"
+  DTS:VersionGUID="{E6EA07C6-8038-4FED-BB9C-7684D0BBDC51}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -82,7 +82,7 @@
             <FEFEProperty
               FileSpec="*.SQL" />
             <FEFEProperty
-              FileNameRetrievalType="0" />
+              FileNameRetrievalType="1" />
             <FEFEProperty
               Recurse="0" />
           </ForEachFileEnumeratorProperties>
@@ -111,8 +111,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{FD8AEB75-B409-474F-8BE1-E5D915D8F5FE}"
-          DTS:ObjectName="{FD8AEB75-B409-474F-8BE1-E5D915D8F5FE}"
+          DTS:DTSID="{E1CE7991-D92A-466A-9794-B0F893E70BCC}"
+          DTS:ObjectName="{E1CE7991-D92A-466A-9794-B0F893E70BCC}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -140,7 +140,7 @@
           PanelSize="312,132"
           Size="312,174.666666666667"
           Id="Package\Load Reports tables Container Loop"
-          TopLeft="175.000006418962,19.6969704085036" />
+          TopLeft="175.000006418962,19.0469704201265" />
       </GraphLayout>
     </LayoutInfo>
   </Package>

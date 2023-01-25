@@ -1,9 +1,8 @@
-
-IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U')) > 0
-TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToART]
+IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTLast12M]') AND type in (N'U')) 
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToARTLast12M]
 GO
 
-INSERT INTO [REPORTING].dbo.AggregateTimeToART
+INSERT INTO [REPORTING].dbo.AggregateTimeToARTLast12M
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
@@ -29,7 +28,7 @@ PERCENTILE_CONT(0.5)
         OVER (PARTITION BY Year(StartARTDateKey),Subcounty) AS MedianTimeToARTDiagnosis_yearSbCty,
 PERCENTILE_CONT(0.5)
         WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
-        OVER (PARTITION BY Year(StartARTDateKey),FacilityName) AS MedianTimeToARTDiagnosis_yearFacility,
+        OVER (PARTITION BY Year(StartARTDateKey),f.FacilityName) AS MedianTimeToARTDiagnosis_yearFacility,
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
         OVER (PARTITION BY Year(StartARTDateKey), County,p.PartnerName) AS MedianTimeToARTDiagnosis_YearCountyPartner,	
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
@@ -44,4 +43,4 @@ INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
-WHERE MFLCode >1 and Year(StartARTDateKey) between 2011 and Year(GetDate())
+WHERE MFLCode >1 and  DateDIFF(MONTH,StartARTDateKey,GETDATE())<=12

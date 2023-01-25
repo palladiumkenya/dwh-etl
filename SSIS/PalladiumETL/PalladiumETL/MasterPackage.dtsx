@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="34"
-  DTS:VersionGUID="{463F3E11-7EE6-496F-83B9-9F2C1EE69C33}">
+  DTS:VersionBuild="35"
+  DTS:VersionGUID="{0352E539-B798-484F-A52F-2D3628212B08}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -21,6 +21,7 @@
       DTS:refId="Package\Execute Intermediate Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{72252AEA-8487-44AE-9147-137C895112AE}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -39,6 +40,7 @@
       DTS:refId="Package\Execute Load_Dim_Tables Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{FD7F0D10-DFDF-4DBF-A712-69D79F817036}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -3243,7 +3245,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         <NodeLayout
           Size="245.333333333334,42.6666666666667"
           Id="Package\Execute Load_Dim_Tables Package"
-          TopLeft="841.29806758081,17.5499996861816" />
+          TopLeft="841.29806758081,18.1999996745587" />
         <NodeLayout
           Size="246.666666666667,42.6666666666667"
           Id="Package\Execute Load_Fact_Tables Package"
@@ -3322,18 +3324,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="967.423067534244,60.2166663528482">
+          TopLeft="967.423067534244,60.8666663412254">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,41.1166688401502"
+              EndConnector="0,40.4666688517726"
               Start="0,0"
-              End="0,33.6166688401502">
+              End="0,32.9666688517726">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,33.6166688401502" />
+                    End="0,32.9666688517726" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -3366,18 +3368,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="784.589738410488,42.4583329555889">
+          TopLeft="784.589738410488,42.7833329497775">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="56.7083291703223,0"
+              EndConnector="56.7083291703224,0"
               Start="0,0"
-              End="49.2083291703223,0">
+              End="49.2083291703224,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="49.2083291703223,0" />
+                    End="49.2083291703224,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

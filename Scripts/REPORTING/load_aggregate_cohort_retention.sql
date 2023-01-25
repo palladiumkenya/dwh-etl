@@ -1,4 +1,4 @@
-IF  (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateCohortRetention]') AND type in (N'U')) > 0
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateCohortRetention]') AND type in (N'U'))
 	TRUNCATE TABLE [dbo].[AggregateCohortRetention]
 GO
 

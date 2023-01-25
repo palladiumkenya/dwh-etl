@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateDSDUnstable]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[AggregateDSDUnstable]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDUnstable]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDUnstable]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateDSDUnstable
@@ -33,7 +33,7 @@ FROM (
     CASE WHEN DATEDIFF(MONTH,art.StartARTDateKey,GETDATE())>=12 THEN 0
         WHEN DATEDIFF(MONTH,art.StartARTDateKey,GETDATE())<12  THEN 1
         ELSE NULL END AS [OnART<12Months],
-    case when AgeLastVisit < 20 then 1 else 0 end as Agelessthan20Yrs,
+    case when lob.AgeLastVisit < 20 then 1 else 0 end as Agelessthan20Yrs,
     case when Adherence = 'Poor' then 1 else 0 end as Adherence,
     Case when Pregnant= 'Yes' THEN 1 Else 0 End as LatestPregnancy,
     Case when LatestWeight IS NOT NULL AND LatestHeight IS NOT NULL AND cast(LatestWeight as float) >0 and cast(LatestHeight as float) >0 AND cast(LatestWeight as float) / (cast(LatestHeight as float) * cast(LatestHeight as float)) <=18.5 THEN 1 
