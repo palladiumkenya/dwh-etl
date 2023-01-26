@@ -4,7 +4,7 @@ IF OBJECT_ID(N'[NDWH].[dbo].[DimFacility]', N'U') IS NOT NULL
 BEGIN
 	with source_facility as (
 		select
-			disitnct cast(MFL_Code as nvarchar) as MFLCode,
+			DISTINCT cast(MFL_Code as nvarchar) as MFLCode,
 			Facility_Name as [FacilityName],
 			SubCounty,
 			County,
