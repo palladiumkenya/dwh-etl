@@ -1,3 +1,4 @@
+
 BEGIN
 			
 			 DECLARE @MaxRegistrationDate_Hist			DATETIME,
@@ -30,7 +31,7 @@ BEGIN
 				
 						WHEN MATCHED THEN
 							UPDATE SET 
-							a.PatientID					=b.PatientID,
+							--a.PatientID					=b.PatientID,
 							a.FacilityName				=b.FacilityName	,
 							a.Gender					=b.Gender,
 							a.DOB						=b.DOB,						
@@ -64,12 +65,21 @@ BEGIN
 							a.TransferInDate			=b.TransferInDate,
 							a.Occupation				=b.Occupation,
 							a.NUPI						=b.NUPI,
-							a.CKV						=b.CKV
+							a.CKV						=b.CKV;
 							
-						WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+						--WHEN NOT MATCHED BY SOURCE 
+						--THEN
+						--/* The Record is in the target table but doen't exit on the source table*/
+						--	Delete;
+				--WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],RegistrationDate,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],RegistrationDate
+				--		ORDER BY [PatientPK],[SiteCode],RegistrationDate) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_Patient] 
+				--		)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
 							
 
 					UPDATE [ODS].[dbo].[CT_Patient_Log]
@@ -84,15 +94,6 @@ BEGIN
 
 				--DROP INDEX CT_Patient ON [ODS].[dbo].[CT_Patient];
 				---Remove any duplicate from [ODS].[dbo].[CT_Patient]
-				
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],RegistrationDate,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],RegistrationDate
-						ORDER BY [PatientPK],[SiteCode],RegistrationDate) AS dump_ 
-						FROM [ODS].[dbo].[CT_Patient] 
-						)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

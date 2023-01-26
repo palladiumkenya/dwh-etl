@@ -8,6 +8,7 @@ BEGIN
 						  ,a.[Project]
 						  ,a.[EncounterId]
 						  ,[TestDate]
+						  ,a.DateExtracted
 						  ,[EverTestedForHiv]
 						  ,[MonthsSinceLastTest]
 						  ,a.[ClientTestedAs]
@@ -23,17 +24,27 @@ BEGIN
 						  ,a.[TestType]
 						  ,[Consent]
 					  FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a
-					INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-					  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
-					   where a.FinalTestResult is not null
+					  INNER JOIN (
+								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
+								FROM  [HTSCentral].[dbo].[HtsClientTests](NoLock)
+								GROUP BY SiteCode,PatientPK
+							) tm 
+				ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.DateExtracted = tm.MaxDateExtracted
+				INNER JOIN (
+								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
+								FROM  [HTSCentral].[dbo].Clients(NoLock)
+								GROUP BY SiteCode,PatientPK
+							) tn 
+				ON a.[SiteCode] = tn.[SiteCode] and a.PatientPK=tn.PatientPK --and a.DateExtracted = tn.MaxDateExtracted
+				where a.FinalTestResult is not null
 					   ) AS b 
 				ON(
 					a.PatientPK  = b.PatientPK 
 				and a.SiteCode = b.SiteCode						
 				)
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent) 
-			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent)
+			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,DateExtracted) 
+			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,DateExtracted)
 		
 	   WHEN MATCHED THEN
 			UPDATE SET 
@@ -55,11 +66,26 @@ BEGIN
 					a.[ClientSelfTested]	=b.[ClientSelfTested],
 					a.[CoupleDiscordant]	=b.[CoupleDiscordant],
 					a.[TestType]			=b.[TestType],
-					a.[Consent]				=b.[Consent]
+					a.[Consent]				=b.[Consent];
 
 
-		WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+		--WHEN NOT MATCHED BY SOURCE 
+		--	THEN
+		--		/* The Record is in the target table but doen't exit on the source table*/
+		--	Delete;
+		--	with cte AS (
+		--	Select
+		--	PatientPK,
+		--	Sitecode,
+		--	DateExtracted,
+
+		--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,DateExtracted ORDER BY
+		--	PatientPK,Sitecode,DateExtracted) Row_Num
+		--	FROM [ODS].[dbo].[HTS_ClientTests](NoLock)
+		--	)
+		--delete from cte 
+		--	Where Row_Num >1 ;
+
+
+		
 END
