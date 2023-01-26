@@ -35,7 +35,7 @@ Select
             StartARTAtThisfacility,
             PreviousARTStartDate,
             PreviousARTRegimen,
-            outcome.ARTOutcomeDescription,
+            outcome.ARTOutcome,
             pat.ISTxCurr
          
 INTO [REPORTING].[dbo].[Linelist_FACTART]
