@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateDSD]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[AggregateDSD]
+IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSD]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSD]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateDSD
