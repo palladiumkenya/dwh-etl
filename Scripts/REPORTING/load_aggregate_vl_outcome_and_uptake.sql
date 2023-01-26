@@ -28,6 +28,6 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
-WHERE IsTXCurr=1 And MFLCode>0
+WHERE IsTXCurr=1
 Group by MFLCode, f.FacilityName, County, SubCounty, p.PartnerName,a.AgencyName,Gender,
   g.DATIMAgeGroup,art.StartARTDateKey, Last12MVLResult

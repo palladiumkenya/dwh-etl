@@ -27,4 +27,4 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimARTOutcome aro on aro.ARTOutcomeKey = art.ARTOutcomeKey
-WHERE MFLCode > 1 and Last12MVLResult = '>1000'
+WHERE Last12MVLResult = '>1000'

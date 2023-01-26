@@ -25,6 +25,5 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
-where MFLCode>1
 Group BY MFLCode,f.FacilityName,County,Subcounty,p.PartnerName,a.AgencyName,Year(StartARTDateKey),TimeToFirstVLGrp,DateName(Month,StartARTDateKey)
 order by MFLCode,Year(StartARTDateKey),TimeToFirstVLGrp
