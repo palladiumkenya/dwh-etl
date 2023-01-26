@@ -1,4 +1,4 @@
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL12M]') AND type in (N'U')) 
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL12M]') AND type in (N'U')) 
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToVL12M]
 GO
 INSERT INTO [REPORTING].dbo.AggregateTimeToVL12M
