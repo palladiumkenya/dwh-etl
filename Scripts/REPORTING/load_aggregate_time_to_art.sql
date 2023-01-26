@@ -1,5 +1,5 @@
 
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U')) 
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U')) 
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToART]
 GO
 
@@ -44,4 +44,4 @@ INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
-WHERE MFLCode >1 and Year(StartARTDateKey) between 2011 and Year(GetDate())
+WHERE Year(StartARTDateKey) between 2011 and Year(GetDate())
