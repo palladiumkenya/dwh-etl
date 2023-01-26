@@ -35,7 +35,7 @@ case
 	else 'non DTG' 
 end as LastRegimen,
  onMMD,
- ARTOutcome,
+ ao.ARTOutcome,
  EligibleVL,
 Last12MonthVL as VLDone,
 Last12MVLSup as VirallySuppressed
@@ -53,5 +53,6 @@ LEFT JOIN NDWH.dbo.DimDate lvd on lvd.DateKey = vl.LastVLDateKey
 LEFT JOIN NDWH.dbo.DimDate fvd on fvd.DateKey = vl.FirstVLDateKey
 LEFT JOIN NDWH.dbo.DimDate lv12md on lv12md.DateKey = vl.Last12MVLDateKey
 LEFT JOIN NDWH.dbo.DimRelationshipWithPatient rp on rp.RelationshipWithPatientKey = it.RelationshipWithPatientKey
+INNER JOIN NDWH.dbo.DimARTOutcome ao on ao.ARTOutcomeKey = art.ARTOutcomeKey
 LEFT JOIN NDWH.dbo.FactLatestObs lo on lo.PatientKey = it.PatientKey
-where AgeLastVisit between 0 and 17 and OVCExitReason is null
+where art.AgeLastVisit between 0 and 17 and OVCExitReason is null
