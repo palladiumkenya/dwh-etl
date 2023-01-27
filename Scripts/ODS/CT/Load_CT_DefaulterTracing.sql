@@ -65,12 +65,21 @@ BEGIN
 						a.Comments		=b.Comments,
 						a.BookingDate	=b.BookingDate,
 						a.CKV			=b.CKV,
-						a.DateImported	=b.DateImported
+						a.DateImported	=b.DateImported;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;	
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+				--				WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],VisitID,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode]
+				--		ORDER BY [PatientPK],[SiteCode],VisitID) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_DefaulterTracing] 
+				--		)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
 				
 				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]---
 					SET LoadEndDateTime = GETDATE()
@@ -85,14 +94,5 @@ BEGIN
 
 				--DROP INDEX CT_DefaulterTracing ON [ODS].[dbo].[CT_DefaulterTracing];
 				---Remove any duplicate from [ODS].[dbo].[CT_DefaulterTracing]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],VisitID,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode]
-						ORDER BY [PatientPK],[SiteCode],VisitID) AS dump_ 
-						FROM [ODS].[dbo].[CT_DefaulterTracing] 
-						)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
 
 	END

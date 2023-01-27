@@ -74,12 +74,22 @@ BEGIN
 								a.ReasonForDeath				=b.ReasonForDeath,
 								a.SpecificDeathReason			=b.SpecificDeathReason,
 								a.DeathDate						=b.DeathDate,
-								a.EffectiveDiscontinuationDate	=b.EffectiveDiscontinuationDate
+								a.EffectiveDiscontinuationDate	=b.EffectiveDiscontinuationDate;
 						
-						WHEN NOT MATCHED BY SOURCE 
-							THEN
-							/* The Record is in the target table but doen't exit on the source table*/
-								Delete;
+						--WHEN NOT MATCHED BY SOURCE 
+						--	THEN
+						--	/* The Record is in the target table but doen't exit on the source table*/
+						--		Delete;
+
+					--		WITH CTE AS   
+					--		(  
+					--			SELECT [PatientPK],[SiteCode],ExitDate,ROW_NUMBER() 
+					--			OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate 
+					--			ORDER BY [PatientPK],[SiteCode],ExitDate) AS dump_ 
+					--			FROM [ODS].[dbo].[CT_PatientStatus] 
+					--			)  
+			
+					--DELETE FROM CTE WHERE dump_ >1;
 
 						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
 							SET LoadEndDateTime = GETDATE()
@@ -95,15 +105,6 @@ BEGIN
 
 						--DROP INDEX CT_PatientStatus ON [ODS].[dbo].[CT_PatientStatus] ;
 						---Remove any duplicate from [ODS].[dbo].[CT_PatientStatus] 
-						WITH CTE AS   
-							(  
-								SELECT [PatientPK],[SiteCode],ExitDate,ROW_NUMBER() 
-								OVER (PARTITION BY [PatientPK],[SiteCode],ExitDate 
-								ORDER BY [PatientPK],[SiteCode],ExitDate) AS dump_ 
-								FROM [ODS].[dbo].[CT_PatientStatus] 
-								)  
-			
-					DELETE FROM CTE WHERE dump_ >1;
 
 			
 	END

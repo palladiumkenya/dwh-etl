@@ -101,12 +101,22 @@ BEGIN
 						a.DateImported						=b.DateImported,
 						a.BoosterDoseVerified				=b.BoosterDoseVerified,
 						a.[Sequence]						=b.[Sequence],
-						a.COVID19TestResult					=b.COVID19TestResult
+						a.COVID19TestResult					=b.COVID19TestResult;
 						
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+
+					--		WITH CTE AS   
+					--(  
+					--	SELECT [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate,ROW_NUMBER() 
+					--	OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate
+					--	ORDER BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate) AS dump_ 
+					--	FROM [ODS].[dbo].[CT_Covid] 
+					--	)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
 
 				UPDATE [ODS].[dbo].[CT_Covid_Log]
 					SET LoadEndDateTime = GETDATE()
@@ -120,14 +130,6 @@ BEGIN
 
 				--DROP INDEX CT_Covid ON [ODS].[dbo].[CT_Covid];
 				---Remove any duplicate from [ODS].[dbo].[CT_Covid]
-		WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate
-						ORDER BY [PatientPK],[SiteCode],VisitID,Covid19AssessmentDate) AS dump_ 
-						FROM [ODS].[dbo].[CT_Covid] 
-						)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

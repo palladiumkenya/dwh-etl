@@ -54,12 +54,21 @@ BEGIN
 						a.Smoking			=b.Smoking,
 						a.DrugUse			=b.DrugUse,
 						a.DateImported		=b.DateImported,
-						a.CKV				=b.CKV
+						a.CKV				=b.CKV;
 					
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;	
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;	
+					--					WITH CTE AS   
+					--	(  
+					--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID,ROW_NUMBER() 
+					--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID
+					--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) AS dump_ 
+					--		FROM [ODS].[dbo].[CT_DrugAlcoholScreening] 
+					--		)  
+			
+					--DELETE FROM CTE WHERE dump_ >1;
 					
 					UPDATE [ODS].[dbo].[CT_DrugAlcoholScreening_Log]
 						SET LoadEndDateTime = GETDATE()
@@ -72,14 +81,6 @@ BEGIN
 
 					--DROP INDEX CT_DrugAlcoholScreening ON [ODS].[dbo].[CT_DrugAlcoholScreening];
 					---Remove any duplicate from [ODS].[dbo].[CT_DrugAlcoholScreening]
-					WITH CTE AS   
-						(  
-							SELECT [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID,ROW_NUMBER() 
-							OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID
-							ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) AS dump_ 
-							FROM [ODS].[dbo].[CT_DrugAlcoholScreening] 
-							)  
-			
-					DELETE FROM CTE WHERE dump_ >1;
+
 
 	END
