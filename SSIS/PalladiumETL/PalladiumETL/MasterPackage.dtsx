@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="39"
-  DTS:VersionGUID="{52F43DCF-1C7E-48BE-9005-B6071C13CF2E}">
+  DTS:VersionBuild="40"
+  DTS:VersionGUID="{1CF5374E-3484-48D3-A49E-F09AFCB457A9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -39,7 +39,6 @@
       DTS:refId="Package\Execute Load_Dim_Tables Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{FD7F0D10-DFDF-4DBF-A712-69D79F817036}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -76,7 +75,6 @@
       DTS:refId="Package\Execute ODS Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{108DCBBB-2095-472B-B22E-99E00BF8A8BB}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:LocaleID="-1"
@@ -94,7 +92,6 @@
       DTS:refId="Package\Remove Duplicates On DWAPI"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{EE9BB335-2F1C-4488-AFD1-D60DC532536C}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:LocaleID="-1"
@@ -112,7 +109,6 @@
       DTS:refId="Package\Script_Task_To_Send_Emails_On_Start"
       DTS:CreationName="Microsoft.ScriptTask"
       DTS:Description="Script Task"
-      DTS:Disabled="True"
       DTS:DTSID="{2c2abcc8-23a9-4f98-9690-7ebe48eafefc}"
       DTS:ExecutableType="Microsoft.ScriptTask"
       DTS:FailPackageOnFailure="True"
@@ -3256,7 +3252,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         <NodeLayout
           Size="222.666666666667,42.6666666666667"
           Id="Package\Remove Duplicates On DWAPI"
-          TopLeft="130.048078179261,106.599998093843" />
+          TopLeft="130.048078179261,105.949998105466" />
         <NodeLayout
           Size="198,42.6666666666667"
           Id="Package\Script_Task_To_Send_Emails_On_Start"
@@ -3271,26 +3267,26 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="30.3055547546185,42.5166633076465"
+              EndConnector="30.3055547546189,41.8666633192694"
               Start="0,0"
-              End="30.3055547546185,35.0166633076465">
+              End="30.3055547546189,34.3666633192694">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,21.3280003770879" />
+                    End="0,20.9407827859144" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,21.3280003770879"
-                    Point2="0,25.3280003770879"
-                    Point3="4,25.3280003770879" />
+                    Point1="0,20.9407827859144"
+                    Point2="0,24.9407827859144"
+                    Point3="4,24.9407827859144" />
                   <mssgle:LineSegment
-                    End="26.3055547546185,25.3280003770879" />
+                    End="26.3055547546189,24.9407827859144" />
                   <mssgle:CubicBezierSegment
-                    Point1="26.3055547546185,25.3280003770879"
-                    Point2="30.3055547546185,25.3280003770879"
-                    Point3="30.3055547546185,29.3280003770879" />
+                    Point1="26.3055547546189,24.9407827859144"
+                    Point2="30.3055547546189,24.9407827859144"
+                    Point3="30.3055547546189,28.9407827859144" />
                   <mssgle:LineSegment
-                    End="30.3055547546185,35.0166633076465" />
+                    End="30.3055547546189,34.3666633192694" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -3389,30 +3385,30 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="277.159189290372,106.599998093843">
+          TopLeft="277.159189290372,105.949998105466">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="142.34721926993,-41.8333318223551"
+              EndConnector="142.347219269929,-41.183331833978"
               Start="0,0"
-              End="142.34721926993,-34.3333318223551">
+              End="142.347219269929,-33.683331833978">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,-12.9124052551733" />
+                    End="0,-12.6496228579697" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,-12.9124052551733"
-                    Point2="0,-16.9124052551733"
-                    Point3="4,-16.9124052551733" />
+                    Point1="0,-12.6496228579697"
+                    Point2="0,-16.6496228579697"
+                    Point3="4,-16.6496228579697" />
                   <mssgle:LineSegment
-                    End="138.34721926993,-16.9124052551733" />
+                    End="138.347219269929,-16.6496228579697" />
                   <mssgle:CubicBezierSegment
-                    Point1="138.34721926993,-16.9124052551733"
-                    Point2="142.34721926993,-16.9124052551733"
-                    Point3="142.34721926993,-20.9124052551733" />
+                    Point1="138.347219269929,-16.6496228579697"
+                    Point2="142.347219269929,-16.6496228579697"
+                    Point3="142.347219269929,-20.6496228579697" />
                   <mssgle:LineSegment
-                    End="142.34721926993,-34.3333318223551" />
+                    End="142.347219269929,-33.683331833978" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
