@@ -2,10 +2,10 @@ BEGIN
 		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
 				   @OrderedbyDate					DATETIME
 				
-		SELECT @MaxOrderedbyDate_Hist =  MAX(MaxOrderedbyDate) FROM [dbo].[CT_PatientLabs_Log]  (NoLock)
+		SELECT @MaxOrderedbyDate_Hist =  MAX(MaxOrderedbyDate) FROM [ODS].[dbo].[CT_PatientLabs_Log]  (NoLock)
 		SELECT  @OrderedbyDate = MAX(OrderedbyDate) FROM [DWAPICentral].[dbo].[PatientLaboratoryExtract] WITH (NOLOCK) 		
 					
-		INSERT INTO  [dbo].[CT_PatientLabs_Log](MaxOrderedbyDate,LoadStartDateTime)
+		INSERT INTO  [ODS].[dbo].[CT_PatientLabs_Log](MaxOrderedbyDate,LoadStartDateTime)
 		VALUES( @OrderedbyDate,GETDATE())
 	
 	       ---- Refresh [ODS].[dbo].[CT_PatientLabs]
@@ -67,14 +67,24 @@ BEGIN
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType		,
 							a.Created			=b.Created			,
-							a.CKV				=b.CKV	
+							a.CKV				=b.CKV	;
 							
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
 
-					UPDATE [dbo].[CT_PatientLabs_Log]
+				--	WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],VisitID,OrderedbyDate,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,OrderedbyDate
+				--		ORDER BY [PatientPK],[SiteCode],VisitID,OrderedbyDate) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_PatientLabs] 
+				--		)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
+
+					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;
 
@@ -86,14 +96,6 @@ BEGIN
 
 				--DROP INDEX CT_PatientLabs ON [ODS].[dbo].[CT_PatientLabs];
 				---Remove any duplicate from [ODS].[dbo].[CT_PatientLabs]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],VisitID,OrderedbyDate,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,OrderedbyDate
-						ORDER BY [PatientPK],[SiteCode],VisitID,OrderedbyDate) AS dump_ 
-						FROM [ODS].[dbo].[CT_PatientLabs] 
-						)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
+				
 
 	END

@@ -14,5 +14,5 @@ BEGIN
 		cast(getdate() as date) as LoadDate
 	into [NDWH].[dbo].[DimDrug]
 	from source_Drug;
-	ALTER TABLE dbo.DimDrug ADD PRIMARY KEY(DrugKey);
+	ALTER TABLE [NDWH].dbo.DimDrug ADD PRIMARY KEY(DrugKey);
 END

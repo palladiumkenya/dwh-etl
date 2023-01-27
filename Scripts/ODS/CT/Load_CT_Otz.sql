@@ -59,12 +59,24 @@ BEGIN
 						a.TransitionAttritionReason	=b.TransitionAttritionReason,
 						a.OutcomeDate				=b.OutcomeDate,
 						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV
+						a.CKV						=b.CKV;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+			--			with cte AS (
+			--	Select
+			--	PatientPK,
+			--	SiteCode,
+			--	VisitID,VisitDate,
+			--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,SiteCode,VisitID,VisitDate ORDER BY
+			--	PatientPK,SiteCode,VisitID,VisitDate ) Row_Num
+			--	FROM [ODS].[dbo].[CT_Otz]
+			--	)
+			--delete from cte 
+			--	Where Row_Num >1
+
 							
 
 					UPDATE [ODS].[dbo].[CT_Otz_Log]
@@ -77,16 +89,5 @@ BEGIN
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
 
-				with cte AS (
-				Select
-				PatientPK,
-				SiteCode,
-				VisitID,VisitDate,
-				 ROW_NUMBER() OVER (PARTITION BY PatientPK,SiteCode,VisitID,VisitDate ORDER BY
-				PatientPK,SiteCode,VisitID,VisitDate ) Row_Num
-				FROM [ODS].[dbo].[CT_Otz]
-				)
-			delete from cte 
-				Where Row_Num >1
-
+			
 	END

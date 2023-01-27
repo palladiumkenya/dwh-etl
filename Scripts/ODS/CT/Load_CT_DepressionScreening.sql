@@ -66,12 +66,22 @@ BEGIN
 						a.PHQ_9_rating				=b.PHQ_9_rating,
 						a.DepressionAssesmentScore	=b.DepressionAssesmentScore,
 						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV
+						a.CKV						=b.CKV;
 					
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+
+				--				WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
+				--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_DepressionScreening]
+				--	)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
 
 					UPDATE [ODS].[dbo].[CT_DepressionScreening_Log]
 						SET LoadEndDateTime = GETDATE()
@@ -85,14 +95,6 @@ BEGIN
 
 				--DROP INDEX CT_DepressionScreening ON [ODS].[dbo].[CT_DepressionScreening];
 				---Remove any duplicate from [ODS].[dbo].[CT_DepressionScreening]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
-						ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate) AS dump_ 
-						FROM [ODS].[dbo].[CT_DepressionScreening]
-					)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

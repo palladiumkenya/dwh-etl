@@ -73,7 +73,7 @@ BEGIN
 					and a.SiteCode = b.SiteCode						
 				)
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,Dob,Gender,PatientPK,dead,death_date,visit_id,encounter_id,TestDate,TestType,population_type,key_population_type,ever_tested_for_hiv,months_since_last_test,patient_disabled,disability_type,patient_consented,client_tested_as,test_strategy,test_1_kit_name,test_1_kit_expiry,test_1_result,test_2_kit_name,test_2_kit_expiry,test_2_result,final_test_result,patient_given_result,couple_discordant,tb_screening,patient_had_hiv_self_test,tracing_status,tracing_type,ReportedCCCNumber,facility_linked_to,PKV,LinkedCCC_Number) 
+			INSERT(FacilityName,SiteCode,Dob,Gender,PatientPK,dead,death_date,visit_id,encounter_id,TestDate,TestType,population_type,key_population_type,ever_tested_for_hiv,months_since_last_test,patient_disabled,disability_type,patient_consented,client_tested_as,test_strategy,test_1_kit_name,test_1_kit_expiry,test_1_result,test_2_kit_name,test_2_kit_expiry,test_2_result,final_test_result,patient_given_result,couple_discordant,tb_screening,patient_had_hiv_self_test,tracing_status,tracing_type,ReportedCCCNumber,facility_linked_to,CKV,LinkedCCC_Number) 
 			VALUES([Name],SiteCode,Dob,Gender,PatientPK,dead,death_date,visit_id,encounter_id,TestDate,TestType,population_type,key_population_type,ever_tested_for_hiv,months_since_last_test,patient_disabled,disability_type,patient_consented,client_tested_as,test_strategy,test_1_kit_name,test_1_kit_expiry,test_1_result,test_2_kit_name,test_2_kit_expiry,test_2_result,final_test_result,patient_given_result,couple_discordant,tb_screening,patient_had_hiv_self_test,tracing_status,tracing_type,ReportedCCCNumber,facility_linked_to,CKV,LinkedCCC_Number)
 		
 		WHEN MATCHED THEN
