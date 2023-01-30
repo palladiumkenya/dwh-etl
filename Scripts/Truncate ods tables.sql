@@ -1,0 +1,65 @@
+TRUNCATE TABLE ALL_EMRSites
+TRUNCATE TABLE CT_AdverseEvents
+TRUNCATE TABLE CT_AdverseEventCount_Log
+TRUNCATE TABLE CT_AdverseEvent_Log
+TRUNCATE TABLE CT_AllergiesChronicIllness
+TRUNCATE TABLE CT_AllergiesChronicIllness_Log
+TRUNCATE TABLE CT_AllergiesChronicIllnessCount_Log
+
+TRUNCATE TABLE CT_ARTPatients
+TRUNCATE TABLE CT_ARTPatient_Log
+
+TRUNCATE TABLE CT_ContactListing
+TRUNCATE TABLE CT_ContactListing_Log
+TRUNCATE TABLE CT_ContactListingCount_Log
+TRUNCATE TABLE CT_Covid
+TRUNCATE TABLE CT_Covid_Log
+TRUNCATE TABLE CT_CovidCount_Log
+TRUNCATE TABLE CT_DefaulterTracing
+TRUNCATE TABLE CT_DefaulterTracing_Log
+TRUNCATE TABLE CT_DefaulterTracingCount_Log
+TRUNCATE TABLE CT_DepressionScreening
+TRUNCATE TABLE CT_DepressionScreening_Log
+TRUNCATE TABLE CT_DepressionScreeningCount_Log
+TRUNCATE TABLE CT_DrugAlcoholScreening
+TRUNCATE TABLE CT_DrugAlcoholScreening_Log
+TRUNCATE TABLE CT_DrugAlcoholScreeningCount_Log
+TRUNCATE TABLE CT_EnhancedAdherenceCounselling
+TRUNCATE TABLE CT_EnhancedAdherenceCounselling_Log
+TRUNCATE TABLE CT_EnhancedAdherenceCounsellingCount_Log
+TRUNCATE TABLE CT_FacilityManifest
+TRUNCATE TABLE CT_GbvScreening
+TRUNCATE TABLE CT_GbvScreening_Log
+TRUNCATE TABLE CT_GbvScreeningCount_Log
+TRUNCATE TABLE CT_Ipt
+TRUNCATE TABLE CT_Ipt_Log
+TRUNCATE TABLE CT_IptCount_Log
+TRUNCATE TABLE CT_Otz
+TRUNCATE TABLE CT_Otz_Log
+TRUNCATE TABLE CT_OtzCount_Log
+TRUNCATE TABLE CT_Ovc
+TRUNCATE TABLE CT_Ovc_Log
+TRUNCATE TABLE CT_OvcCount_Log
+
+TRUNCATE TABLE CT_Patient
+TRUNCATE TABLE CT_Patient_Log
+TRUNCATE TABLE CT_PatientCount_Log
+
+TRUNCATE TABLE CT_PatientPharmacy
+TRUNCATE TABLE CT_PharmacyVisit_Log
+TRUNCATE TABLE CT_PatientPharmacyCount_Log
+
+TRUNCATE TABLE CT_PatientStatus
+TRUNCATE TABLE CT_patientStatus_Log
+TRUNCATE TABLE CT_PatientStatusCount_Log
+
+TRUNCATE TABLE CT_PatientVisits
+TRUNCATE TABLE CT_PatientVisits_Opt
+TRUNCATE TABLE CT_VisitCount_Log
+TRUNCATE TABLE [ODS].[dbo].[CT_Visit_Log]
+
+TRUNCATE TABLE CT_PatientBaselines
+TRUNCATE TABLE CT_PatientLabs
+TRUNCATE TABLE CT_PatientLabs_Log
+TRUNCATE TABLE CT_PatientLabsCount_Log
+TRUNCATE TABLE CT_PatientsWABWHOCD4_Log

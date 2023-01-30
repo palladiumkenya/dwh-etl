@@ -124,7 +124,7 @@ group by
         cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FactCovid
  from Covid
- left join NDWH.dbo.DimPatient as patient on patient.PatientPK = Covid.PatientPK and patient.SiteCode = Covid.SiteCode
+ left join NDWH.dbo.DimPatient as patient on patient.PatientPK =  convert(nvarchar(64), hashbytes('SHA2_256', cast(Covid.PatientPK  as nvarchar(36))), 2) and patient.SiteCode = Covid.SiteCode
  left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Covid.SiteCode
  left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Covid.SiteCode
  left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP

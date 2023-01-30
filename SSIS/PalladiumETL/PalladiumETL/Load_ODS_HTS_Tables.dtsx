@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
-  DTS:VersionBuild="10"
-  DTS:VersionGUID="{C83DA09B-5BB0-41C3-B76B-40C85AC0674C}">
+  DTS:VersionBuild="12"
+  DTS:VersionGUID="{DBCEC3DC-77D0-454E-A8FE-FBAAD321BC14}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -208,8 +208,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{FF1A929E-FEF6-4B6C-9322-12329B91860A}"
-          DTS:ObjectName="{FF1A929E-FEF6-4B6C-9322-12329B91860A}"
+          DTS:DTSID="{93044047-BB27-4B99-A0BC-04317B30D3C4}"
+          DTS:ObjectName="{93044047-BB27-4B99-A0BC-04317B30D3C4}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::DuplicateFileName" />
       </DTS:ForEachVariableMappings>
@@ -247,7 +247,7 @@
           PanelSize="268.666666666667,120"
           Size="268.666666666667,163.333333333334"
           Id="Package\Load HTS tables Container Loop"
-          TopLeft="513.124992353841,36.3999993491173" />
+          TopLeft="513.749992344528,37.6999993258715" />
         <NodeLayout
           Size="164,42.6666666666667"
           Id="Package\Remove HTSCentral Duplicates Loop\Execute SQL Task"
@@ -258,21 +258,21 @@
           PanelSize="378,100"
           Size="378,142.666666666667"
           Id="Package\Remove HTSCentral Duplicates Loop"
-          TopLeft="24.3749996367842,46.3666664574543" />
+          TopLeft="26.2499996088445,48.9666664109627" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="402.374999636784,117.883332903286">
+          TopLeft="404.249999608845,119.833332868417">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="110.749992717057,0"
+              EndConnector="109.499992735683,0"
               Start="0,0"
-              End="103.249992717057,0">
+              End="101.999992735683,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="103.249992717057,0" />
+                    End="101.999992735683,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

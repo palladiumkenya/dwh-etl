@@ -1,5 +1,5 @@
-IF  (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateCohortRetention]') AND type in (N'U')) > 0
-	TRUNCATE TABLE [dbo].[AggregateCohortRetention]
+IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateCohortRetention]') AND type in (N'U'))
+	TRUNCATE TABLE [REPORTING].[dbo].[AggregateCohortRetention]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateCohortRetention

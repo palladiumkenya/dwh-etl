@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="18"
-  DTS:VersionGUID="{A458AF49-49DE-41AB-9297-BA379499289E}">
+  DTS:VersionBuild="19"
+  DTS:VersionGUID="{5495006E-67E7-436F-8080-8C5CC5F01074}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -94,14 +94,14 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\Load Fact tables Container Loop\Loop through Fact tables Folder"
+          DTS:refId="Package\Load Fact tables Container Loop\Loop through Fact tables Folder Task"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{0C508EAA-3815-4393-B6BF-D43EA04F9055}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
-          DTS:ObjectName="Loop through Fact tables Folder"
+          DTS:ObjectName="Loop through Fact tables Folder Task"
           DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
@@ -1378,7 +1378,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
           Size="229.333333333334,42.6666666666667"
-          Id="Package\Load Fact tables Container Loop\Loop through Fact tables Folder"
+          Id="Package\Load Fact tables Container Loop\Loop through Fact tables Folder Task"
           TopLeft="20.499995790422,26.083331531783" />
         <ContainerLayout
           HeaderHeight="43"
