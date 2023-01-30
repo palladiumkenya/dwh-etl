@@ -42,7 +42,7 @@ BEGIN
 	LEFT JOIN ODS.dbo.CT_PatientStatus Exits   ON  Patients.PatientPK=Exits.PatientPK  and Patients.Sitecode=Exits.Sitecode
 
 
-	  WHERE  ART.startARTDate IS NOT NULL and LastEncounterDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))
+	  WHERE  ART.startARTDate IS NOT NULL 
 	),
 	LatestUpload AS (
 	select 
