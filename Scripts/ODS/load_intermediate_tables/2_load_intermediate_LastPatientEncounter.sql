@@ -11,6 +11,7 @@ BEGIN
          DispenseDate As LastEncounterDate,
          ExpectedReturn As NextAppointmentDate
 	 FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
+     where DispenseDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))
      	 		
 ),
 --Pick Expected return and Lastvisit  dates from ARTPatient only if Expected return is <365days and add 30 days to Last visit if it is null
@@ -26,6 +27,7 @@ ART_expected_dates_logic AS (
 		END AS expected_return_on_365,
 		case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
+  where LastVisit <=EOMONTH(DATEADD(mm,-1,GETDATE()))
   
 ),
 --Pick latestVisit and TCA from the visits Table
@@ -36,7 +38,8 @@ LatestVisit As (
 		PatientPK ,
         VisitDate as LastVisitDate,
         Case When NextAppointmentDate is NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End as NextAppointmentDate
-        from ODS.dbo.CT_PatientVisits     
+        from ODS.dbo.CT_PatientVisits   
+        where VisitDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))  
 ),
 Patients As (
     Select 
