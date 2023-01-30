@@ -1,4 +1,5 @@
 BEGIN
+--truncate table [ODS].[dbo].[HTS_ClientLinkages]
 		MERGE [ODS].[dbo].[HTS_ClientLinkages] AS a
 			USING(SELECT 	DISTINCT a.[FacilityName]
 							  ,a.[SiteCode]
@@ -17,6 +18,12 @@ BEGIN
 							  ,[ReportedCCCNumber]
 							  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]	  
 						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
+						INNER JOIN (
+								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
+								FROM  [HTSCentral].[dbo].[ClientLinkages](NoLock)
+								GROUP BY SiteCode,PatientPK
+							) tm 
+				     ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.DateExtracted = tm.MaxDateExtracted
 						INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 						on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
 						WHERE a.DateExtracted > '2019-09-08'

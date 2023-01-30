@@ -1,4 +1,4 @@
-ALTER TABLE HtsClientTests NOCHECK CONSTRAINT ALL;
+ALTER TABLE [HTSCentral].[dbo].[HtsClientTests] NOCHECK CONSTRAINT ALL;
 	with cte AS (
 	Select
 	a.PatientPK,
@@ -25,4 +25,4 @@ ALTER TABLE HtsClientTests NOCHECK CONSTRAINT ALL;
 delete from cte 
 	Where Row_Num >1 
 
-	ALTER TABLE HtsClientTests WITH CHECK CHECK CONSTRAINT ALL;
+	ALTER TABLE [HTSCentral].[dbo].[HtsClientTests] WITH CHECK CHECK CONSTRAINT ALL;
