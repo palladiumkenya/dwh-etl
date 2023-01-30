@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LineListOTZ]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[LineListOTZ]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZ]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[LineListOTZ]
 GO
 
 INSERT INTO REPORTING.dbo.LineListOTZ
