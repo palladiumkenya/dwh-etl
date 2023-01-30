@@ -89,7 +89,9 @@ CombinedVisits As (
 		SiteCode,
 	    PatientPK ,
         LastEncounterDate,
-	    NextAppointmentDate,
+       	CASE 
+			WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <=365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
+		END AS  NextAppointmentDate,
         cast (getdate() as DATE) as LoadDate
        INTO [ODS].[dbo].[Intermediate_LastPatientEncounter]
 	from CombinedVisits
