@@ -16,6 +16,7 @@ BEGIN
 		THEN
 		(CASE 
 					WHEN  Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and Exits.EffectiveDiscontinuationDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
+					WHEN  Exits.ExitReason<>'DIED' and Exits.EffectiveDiscontinuationDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1)  THEN SUBSTRING(Exits.ExitReason,1,1)--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
 					WHEN  Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
 					When Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and LastPatientEncounter.NextAppointmentDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'
                     When Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and Exits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'
