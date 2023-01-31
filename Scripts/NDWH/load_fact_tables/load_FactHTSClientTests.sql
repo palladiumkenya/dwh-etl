@@ -19,7 +19,8 @@ client_linkage_data as (
         row_number() over(partition by Sitecode,PatientPK order by DateEnrolled desc) as row_num 
     from ODS.dbo.HTS_ClientLinkages 
 )
-select     
+select 
+    Factkey = IDENTITY(INT, 1, 1),    
     patient.PatientKey,
     facility.FacilityKey,
     partner.PartnerKey,
@@ -58,7 +59,8 @@ select
     end as MonthsLastTest,
     case 
         when (hts_encounter.EverTestedForHiv = 'Yes' and hts_encounter.MonthsSinceLastTest < 12) then 'Retest' 
-    else 'New' end as TestedBefore
+    else 'New' end as TestedBefore,
+    cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactHTSClientTests
 from ODS.dbo.Intermediate_EncounterHTSTests as hts_encounter
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(hts_encounter.PatientPK as nvarchar(36))), 2)
@@ -71,6 +73,8 @@ left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age =  datediff(yy, pat
 left join NDWH.dbo.DimDate as testing on testing.Date = cast(hts_encounter.TestDate as date)
 left join  client_linkage_data on client_linkage_data.PatientPk = hts_encounter.PatientPK
     and client_linkage_data.SiteCode = hts_encounter.SiteCode
-    and client_linkage_data.row_num = 1
+    and client_linkage_data.row_num = 1;
+
+alter table NDWH.dbo.FactHTSClientTests add primary key(FactKey);
 
 END
