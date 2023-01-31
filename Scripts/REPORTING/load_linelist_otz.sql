@@ -16,6 +16,7 @@ SELECT DISTINCT
 	LastVisitDateKey,
 	TransitionAttritionReason,
 	TransferInStatus,
+	case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end as CompletedTraining,
 	ModulesPreviouslyCovered,
 	ModulesCompletedToday_OTZ_Orientation,
 	ModulesCompletedToday_OTZ_Participation,
