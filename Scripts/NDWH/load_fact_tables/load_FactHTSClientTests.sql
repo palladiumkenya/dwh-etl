@@ -60,7 +60,7 @@ select
         when (EverTestedForHiv = 'Yes' and MonthsSinceLastTest < 12) then 'Retest' 
     else 'New' end as TestedBefore
 into NDWH.dbo.FactHTSClientTests
-from ODS.dbo.Intermediate_LastEncounterHTSTests as last_encounter
+from ODS.dbo.Intermediate_EncounterHTSTests as last_encounter
 left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(last_encounter.PatientPK as nvarchar(36))), 2)
     and patient.SiteCode = last_encounter.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = last_encounter.SiteCode

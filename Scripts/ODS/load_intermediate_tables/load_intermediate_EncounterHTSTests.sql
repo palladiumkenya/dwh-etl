@@ -1,11 +1,11 @@
-IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastEncounterHTSTests]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[Intermediate_LastEncounterHTSTests];
+IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_EncounterHTSTests]', N'U') IS NOT NULL 
+	DROP TABLE [ODS].[dbo].[Intermediate_EncounterHTSTests];
 
 BEGIN
     with source_data as (
         select
             /* partition for the same SiteCode & PatientPK and pick the latest Encounter ID */
-            distinct row_number() over (partition by SiteCode,PatientPK order by EncounterId desc) as num,
+            row_number() over (partition by SiteCode,PatientPK,TestDate order by EncounterId desc) as num,
             TestDate,
             EncounterId,
             SiteCode,
@@ -29,11 +29,11 @@ BEGIN
             Consent  
         from ODS.dbo.HTS_ClientTests
         where FinalTestResult is not null and TestDate is not null and EncounterId is not null
-            and  TestDate >= cast('2015-01-01' as date) AND TestDate <= getdate()
+            and  TestDate >= cast('2015-01-01' as date) and TestDate <= getdate()
     )
     select 
         source_data.*
-    into ODS.dbo.Intermediate_LastEncounterHTSTests
+    into ODS.dbo.Intermediate_EncounterHTSTests
     from source_data
     where num = 1
 
