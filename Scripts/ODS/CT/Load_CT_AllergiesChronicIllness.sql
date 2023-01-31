@@ -71,12 +71,21 @@ BEGIN
 							a.CNS					=b.CNS,
 							a.Genitourinary			=b.Genitourinary,
 							a.DateImported			=b.DateImported,
-							a.CKV					=b.CKV
+							a.CKV					=b.CKV;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+					--					WITH CTE AS   
+					--	(  
+					--		SELECT [PatientPK],[SiteCode],VisitDate,VisitID,ROW_NUMBER() 
+					--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitDate,VisitID
+					--		ORDER BY [PatientPK],[SiteCode],VisitDate,VisitID) AS dump_ 
+					--		FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
+					--		)  
+			
+					--DELETE FROM CTE WHERE dump_ >1;
 
 					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]
 						SET LoadEndDateTime = GETDATE()
@@ -90,14 +99,6 @@ BEGIN
 
 					--DROP INDEX CT_AllergiesChronicIllness ON [ODS].[dbo].[CT_AllergiesChronicIllness];
 					---Remove any duplicate from [ODS].[dbo].[CT_AllergiesChronicIllness]
-					WITH CTE AS   
-						(  
-							SELECT [PatientPK],[SiteCode],VisitDate,VisitID,ROW_NUMBER() 
-							OVER (PARTITION BY [PatientPK],[SiteCode],VisitDate,VisitID
-							ORDER BY [PatientPK],[SiteCode],VisitDate,VisitID) AS dump_ 
-							FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
-							)  
-			
-					DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

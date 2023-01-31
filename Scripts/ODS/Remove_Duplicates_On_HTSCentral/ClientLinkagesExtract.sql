@@ -8,7 +8,7 @@
 	PatientPK,Sitecode,DateExtracted) Row_Num
 	FROM [HTSCentral].[dbo].[ClientLinkages](NoLock)
 	)
-select *  from cte 
+delete from cte 
 	Where Row_Num >1 
 
 

@@ -1,6 +1,5 @@
-Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LineListCovid]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[LineListCovid]
+IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[LineListCovid]') AND type in (N'U')) 
+TRUNCATE TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
 INSERT INTO REPORTING.dbo.LineListCovid

@@ -73,12 +73,21 @@ BEGIN
 						a.RegimenChangedSwitched	=b.RegimenChangedSwitched,
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
 						a.StopRegimenReason			=b.StopRegimenReason,
-						a.StopRegimenDate			=b.StopRegimenDate
+						a.StopRegimenDate			=b.StopRegimenDate;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+			--				WITH CTE AS   
+			--	(  
+			--		SELECT [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType
+			--		ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,drug,TreatmentType) AS dump_ 
+			--		FROM [ODS].[dbo].[CT_PatientPharmacy] 
+			--		)  
+			
+			--DELETE FROM CTE WHERE dump_ >1;
 			
 				UPDATE [ODS].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()
@@ -92,14 +101,6 @@ BEGIN
 			GROUP BY SiteCode;
 			--DROP INDEX CT_PatientPharmacy ON [ODS].[dbo].[CT_PatientPharmacy] ;
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientPharmacy] 
-			WITH CTE AS   
-				(  
-					SELECT [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType,ROW_NUMBER() 
-					OVER (PARTITION BY [PatientPK],[SiteCode],visitID,DispenseDate,Drug,TreatmentType
-					ORDER BY [PatientPK],[SiteCode],visitID,DispenseDate ,drug,TreatmentType) AS dump_ 
-					FROM [ODS].[dbo].[CT_PatientPharmacy] 
-					)  
-			
-			DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

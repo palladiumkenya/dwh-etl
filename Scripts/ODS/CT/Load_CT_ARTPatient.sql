@@ -29,14 +29,14 @@ BEGIN
 				WHERE p.gender!='Unknown';
 				
 				---Remove any duplicate from [ODS].[dbo].[CT_ARTPatients]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode] 
-						ORDER BY [PatientPK],[SiteCode]) AS dump_ 
-						FROM [ODS].[dbo].[CT_ARTPatients] 
-						)  
+				--WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode] 
+				--		ORDER BY [PatientPK],[SiteCode]) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_ARTPatients] 
+				--		)  
 			
-				DELETE FROM CTE WHERE dump_ >1;
+				--DELETE FROM CTE WHERE dump_ >1;
 
 	END

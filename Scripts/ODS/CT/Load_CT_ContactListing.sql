@@ -71,26 +71,27 @@ BEGIN
 						a.DateImported					=b.DateImported	,
 						a.CKV							=b.CKV,
 						a.ContactPatientPK				=b.ContactPatientPK	,
-						a.DateCreated					=b.DateCreated
+						a.DateCreated					=b.DateCreated;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;		
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;	
+				--					WITH CTE AS   
+				--	(  
+				--		SELECT [PatientPK],[SiteCode],Contactage,RelationshipWithPatient,ROW_NUMBER() 
+				--		OVER (PARTITION BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient
+				--		ORDER BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient) AS dump_ 
+				--		FROM [ODS].[dbo].[CT_ContactListing] 
+				--		)  
+			
+				--DELETE FROM CTE WHERE dump_ >1;
 
 				UPDATE [ODS].[dbo].[CT_ContactListing_Log]
 					SET LoadEndDateTime = GETDATE()
 				WHERE MaxDateCreated = @MaxDateCreated_Hist;
 				--DROP INDEX CT_ContactListing ON [ODS].[dbo].[CT_ContactListing];
 				---Remove any duplicate from [ODS].[dbo].[CT_ContactListing]
-				WITH CTE AS   
-					(  
-						SELECT [PatientPK],[SiteCode],Contactage,RelationshipWithPatient,ROW_NUMBER() 
-						OVER (PARTITION BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient
-						ORDER BY [PatientPK],[SiteCode],Contactage,RelationshipWithPatient) AS dump_ 
-						FROM [ODS].[dbo].[CT_ContactListing] 
-						)  
-			
-				DELETE FROM CTE WHERE dump_ >1;
+
 
 	END

@@ -1,89 +1,56 @@
 BEGIN
+ --truncate table [ODS].[dbo].[HTS_EligibilityExtract]
 		MERGE [ODS].[dbo].[HTS_EligibilityExtract] AS a
-			USING(SELECT DISTINCT  a.[FacilityName]
-							,a.[SiteCode]
-							,a.[PatientPk]
-							,a.[HtsNumber]
-							,a.[Emr]
-							,a.[Project]
-							,a.[Processed]
-							,a.[QueueId]
-							,a.[Status]
-							,a.[StatusDate]
-							,a.[EncounterId]
-							,[VisitID]
-							,a.[VisitDate]
-							,a.[PopulationType]
-							,[KeyPopulation]
-							,[PriorityPopulation]
-							,[Department]
-							,[PatientType]
-							,[IsHealthWorker]
-							,[RelationshipWithContact]
-							,[TestedHIVBefore]
-							,[WhoPerformedTest]
-							,[ResultOfHIV]
-							,[DateTestedSelf]
-							,[StartedOnART]
-							,[CCCNumber]
-							,[EverHadSex]
-							,[SexuallyActive]
-							,[NewPartner]
-							,[PartnerHIVStatus]
-							,a.[CoupleDiscordant]
-							,[MultiplePartners]
-							,[NumberOfPartners]
-							,[AlcoholSex]
-							,[MoneySex]
-							,[CondomBurst]
-							,[UnknownStatusPartner]
-							,[KnownStatusPartner]
-							,[Pregnant]
-							,[BreastfeedingMother]
-							,[ExperiencedGBV]
-							,[ContactWithTBCase]
-							,[Lethargy]
-							,[EverOnPrep]
-							,[CurrentlyOnPrep]
-							,[EverOnPep]
-							,[CurrentlyOnPep]
-							,[EverHadSTI]
-							,[CurrentlyHasSTI]
-							,[EverHadTB]
-							,[SharedNeedle]
-							,[NeedleStickInjuries]
-							,[TraditionalProcedures]
-							,[ChildReasonsForIneligibility]
-							,[EligibleForTest]
-							,[ReasonsForIneligibility]
-							,[SpecificReasonForIneligibility]
-							,a.[FacilityId]
-							,[Cough]
-							,[DateTestedProvider]
-							,[Fever]
-							,[MothersStatus]
-							,[NightSweats]
-							,[ReferredForTesting]
-							,[ResultOfHIVSelf]
-							,[ScreenedTB]
-							,[TBStatus]
-							,[WeightLoss]
-							,[AssessmentOutcome]
-							,[ForcedSex]
-							,[ReceivedServices]
-							,[TypeGBV]
-							,[DateLastModified]
+			USING(SELECT DISTINCT  a.[FacilityName],a.[SiteCode],a.[PatientPk],a.[HtsNumber],a.[Emr],a.[Project],a.[Processed],a.[QueueId],a.[Status]
+							,a.[StatusDate],a.[EncounterId],[VisitID],a.[VisitDate],a.[PopulationType],[KeyPopulation],[PriorityPopulation],[Department]
+							,[PatientType],[IsHealthWorker],[RelationshipWithContact],[TestedHIVBefore],[WhoPerformedTest],[ResultOfHIV],[DateTestedSelf]
+							,[StartedOnART],[CCCNumber],[EverHadSex],[SexuallyActive],[NewPartner],[PartnerHIVStatus],a.[CoupleDiscordant],[MultiplePartners]
+							,[NumberOfPartners],[AlcoholSex],[MoneySex],[CondomBurst],[UnknownStatusPartner],[KnownStatusPartner],[Pregnant],[BreastfeedingMother]
+							,[ExperiencedGBV],[ContactWithTBCase],[Lethargy],[EverOnPrep],[CurrentlyOnPrep],[EverOnPep],[CurrentlyOnPep],[EverHadSTI],[CurrentlyHasSTI]
+							,[EverHadTB],[SharedNeedle],[NeedleStickInjuries],[TraditionalProcedures],[ChildReasonsForIneligibility],[EligibleForTest]
+							,[ReasonsForIneligibility],[SpecificReasonForIneligibility],a.[FacilityId],[Cough],[DateTestedProvider],[Fever],[MothersStatus]
+							,[NightSweats],[ReferredForTesting],[ResultOfHIVSelf],[ScreenedTB],[TBStatus],[WeightLoss],[AssessmentOutcome],[ForcedSex]
+							,[ReceivedServices],[TypeGBV]
 						FROM [HTSCentral].[dbo].[HtsEligibilityExtract] (NoLock)a
 						INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-						on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+						on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode					
+					
 				) AS b 
 				ON(
 					a.PatientPK  = b.PatientPK 
-					and a.SiteCode = b.SiteCode						
+					and a.SiteCode = b.SiteCode	
+					and a.EncounterId COLLATE Latin1_General_CI_AS = b.EncounterId
+					and a.EverHadSex COLLATE Latin1_General_CI_AS = b.EverHadSex
+					and a.PartnerHIVStatus COLLATE Latin1_General_CI_AS = b.PartnerHIVStatus
+					and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber
+					and a.CurrentlyOnPep COLLATE Latin1_General_CI_AS = b.CurrentlyOnPep
+					and a.CurrentlyHasSTI COLLATE Latin1_General_CI_AS = b.CurrentlyHasSTI
+					and a.AlcoholSex COLLATE Latin1_General_CI_AS = b.AlcoholSex
+					--and a.DateTestedProvider COLLATE Latin1_General_CI_AS = b.DateTestedProvider
+					and a.ExperiencedGBV COLLATE Latin1_General_CI_AS = b.ExperiencedGBV
+					and a.IsHealthWorker COLLATE Latin1_General_CI_AS = b.IsHealthWorker
+					and a.ResultOfHIV COLLATE Latin1_General_CI_AS = b.ResultOfHIV
+					and a.KnownStatusPartner COLLATE Latin1_General_CI_AS = b.KnownStatusPartner
+					and a.TestedHIVBefore COLLATE Latin1_General_CI_AS = b.TestedHIVBefore
+					and a.RelationshipWithContact COLLATE Latin1_General_CI_AS = b.RelationshipWithContact
+					and a.WeightLoss COLLATE Latin1_General_CI_AS = b.WeightLoss
+					and a.Cough COLLATE Latin1_General_CI_AS = b.Cough
+					--and a.NumberOfPartners COLLATE Latin1_General_CI_AS = b.NumberOfPartners
+					and a.ReferredForTesting COLLATE Latin1_General_CI_AS = b.ReferredForTesting					
+					and a.PopulationType COLLATE Latin1_General_CI_AS = b.PopulationType
+					and a.KeyPopulation COLLATE Latin1_General_CI_AS = b.KeyPopulation
+					and a.CurrentlyOnPrep COLLATE Latin1_General_CI_AS = b.CurrentlyOnPrep
+					and a.ReceivedServices COLLATE Latin1_General_CI_AS = b.ReceivedServices
+					and a.EligibleForTest COLLATE Latin1_General_CI_AS = b.EligibleForTest
+					and a.PatientType COLLATE Latin1_General_CI_AS = b.PatientType
+					and a.Fever COLLATE Latin1_General_CI_AS = b.Fever
+					and a.NightSweats COLLATE Latin1_General_CI_AS = b.NightSweats
+					and a.Department COLLATE Latin1_General_CI_AS = b.Department
+
 				)
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,Processed,QueueId,Status,StatusDate,EncounterId,VisitID,VisitDate,PopulationType,KeyPopulation,PriorityPopulation,Department,PatientType,IsHealthWorker,RelationshipWithContact,TestedHIVBefore,WhoPerformedTest,ResultOfHIV,DateTestedSelf,StartedOnART,CCCNumber,EverHadSex,SexuallyActive,NewPartner,PartnerHIVStatus,CoupleDiscordant,MultiplePartners,NumberOfPartners,AlcoholSex,MoneySex,CondomBurst,UnknownStatusPartner,KnownStatusPartner,Pregnant,BreastfeedingMother,ExperiencedGBV,ContactWithTBCase,Lethargy,EverOnPrep,CurrentlyOnPrep,EverOnPep,CurrentlyOnPep,EverHadSTI,CurrentlyHasSTI,EverHadTB,SharedNeedle,NeedleStickInjuries,TraditionalProcedures,ChildReasonsForIneligibility,EligibleForTest,ReasonsForIneligibility,SpecificReasonForIneligibility,Cough,DateTestedProvider,Fever,MothersStatus,NightSweats,ReferredForTesting,ResultOfHIVSelf,ScreenedTB,TBStatus,WeightLoss,AssessmentOutcome,ForcedSex,ReceivedServices,TypeGBV,DateLastModified) 
-			VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,Processed,QueueId,Status,StatusDate,EncounterId,VisitID,VisitDate,PopulationType,KeyPopulation,PriorityPopulation,Department,PatientType,IsHealthWorker,RelationshipWithContact,TestedHIVBefore,WhoPerformedTest,ResultOfHIV,DateTestedSelf,StartedOnART,CCCNumber,EverHadSex,SexuallyActive,NewPartner,PartnerHIVStatus,CoupleDiscordant,MultiplePartners,NumberOfPartners,AlcoholSex,MoneySex,CondomBurst,UnknownStatusPartner,KnownStatusPartner,Pregnant,BreastfeedingMother,ExperiencedGBV,ContactWithTBCase,Lethargy,EverOnPrep,CurrentlyOnPrep,EverOnPep,CurrentlyOnPep,EverHadSTI,CurrentlyHasSTI,EverHadTB,SharedNeedle,NeedleStickInjuries,TraditionalProcedures,ChildReasonsForIneligibility,EligibleForTest,ReasonsForIneligibility,SpecificReasonForIneligibility,Cough,DateTestedProvider,Fever,MothersStatus,NightSweats,ReferredForTesting,ResultOfHIVSelf,ScreenedTB,TBStatus,WeightLoss,AssessmentOutcome,ForcedSex,ReceivedServices,TypeGBV,DateLastModified)
+			INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,Processed,QueueId,Status,StatusDate,EncounterId,VisitID,VisitDate,PopulationType,KeyPopulation,PriorityPopulation,Department,PatientType,IsHealthWorker,RelationshipWithContact,TestedHIVBefore,WhoPerformedTest,ResultOfHIV,DateTestedSelf,StartedOnART,CCCNumber,EverHadSex,SexuallyActive,NewPartner,PartnerHIVStatus,CoupleDiscordant,MultiplePartners,NumberOfPartners,AlcoholSex,MoneySex,CondomBurst,UnknownStatusPartner,KnownStatusPartner,Pregnant,BreastfeedingMother,ExperiencedGBV,ContactWithTBCase,Lethargy,EverOnPrep,CurrentlyOnPrep,EverOnPep,CurrentlyOnPep,EverHadSTI,CurrentlyHasSTI,EverHadTB,SharedNeedle,NeedleStickInjuries,TraditionalProcedures,ChildReasonsForIneligibility,EligibleForTest,ReasonsForIneligibility,SpecificReasonForIneligibility,Cough,DateTestedProvider,Fever,MothersStatus,NightSweats,ReferredForTesting,ResultOfHIVSelf,ScreenedTB,TBStatus,WeightLoss,AssessmentOutcome,ForcedSex,ReceivedServices,TypeGBV) 
+			VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,Processed,QueueId,Status,StatusDate,EncounterId,VisitID,VisitDate,PopulationType,KeyPopulation,PriorityPopulation,Department,PatientType,IsHealthWorker,RelationshipWithContact,TestedHIVBefore,WhoPerformedTest,ResultOfHIV,DateTestedSelf,StartedOnART,CCCNumber,EverHadSex,SexuallyActive,NewPartner,PartnerHIVStatus,CoupleDiscordant,MultiplePartners,NumberOfPartners,AlcoholSex,MoneySex,CondomBurst,UnknownStatusPartner,KnownStatusPartner,Pregnant,BreastfeedingMother,ExperiencedGBV,ContactWithTBCase,Lethargy,EverOnPrep,CurrentlyOnPrep,EverOnPep,CurrentlyOnPep,EverHadSTI,CurrentlyHasSTI,EverHadTB,SharedNeedle,NeedleStickInjuries,TraditionalProcedures,ChildReasonsForIneligibility,EligibleForTest,ReasonsForIneligibility,SpecificReasonForIneligibility,Cough,DateTestedProvider,Fever,MothersStatus,NightSweats,ReferredForTesting,ResultOfHIVSelf,ScreenedTB,TBStatus,WeightLoss,AssessmentOutcome,ForcedSex,ReceivedServices,TypeGBV)
 		
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -155,11 +122,11 @@ BEGIN
 					a.[AssessmentOutcome]				=b.[AssessmentOutcome],
 					a.[ForcedSex]						=b.[ForcedSex],
 					a.[ReceivedServices]				=b.[ReceivedServices],
-					a.[TypeGBV]							=b.[TypeGBV]
+					a.[TypeGBV]							=b.[TypeGBV];
 
 
-		WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+		--WHEN NOT MATCHED BY SOURCE 
+		--	THEN
+		--		/* The Record is in the target table but doen't exit on the source table*/
+		--	Delete;
 END

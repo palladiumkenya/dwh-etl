@@ -1,6 +1,6 @@
 Go
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AggregateOTZ]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].[AggregateOTZ]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateOTZ]') AND type in (N'U'))
+TRUNCATE TABLE [REPORTING].[dbo].[AggregateOTZ]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateOTZ

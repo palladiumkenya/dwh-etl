@@ -113,12 +113,22 @@ BEGIN
 						a.CVS						=b.CVS,
 						a.Abdomen					=b.Abdomen,
 						a.CNS						=b.CNS,
-						a.Genitourinary				=b.Genitourinary
+						a.Genitourinary				=b.Genitourinary;
 
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
+
+			--				WITH CTE AS   
+			--	(  
+			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
+			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
+			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
+			--		FROM [ODS].[dbo].[CT_PatientVisits] 
+			--		)  
+			
+			--DELETE FROM CTE WHERE dump_ >1;
 
 
 			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
@@ -137,14 +147,5 @@ BEGIN
 
 			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
 			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
-			WITH CTE AS   
-				(  
-					SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
-					OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
-					ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
-					FROM [ODS].[dbo].[CT_PatientVisits] 
-					)  
-			
-			DELETE FROM CTE WHERE dump_ >1;
 			
 	END

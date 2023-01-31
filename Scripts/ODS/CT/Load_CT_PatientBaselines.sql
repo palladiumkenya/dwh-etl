@@ -1,5 +1,5 @@
 BEGIN
-		MERGE INTO CT_PatientBaselines AS a
+		MERGE INTO [ODS].[DBO].CT_PatientBaselines AS a
 		USING(SELECT  P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,PB.ID
 			  ,PB.[eCD4],PB.[eCD4Date],PB.[eWHO],PB.[eWHODate],PB.[bCD4],PB.[bCD4Date]
 			  ,PB.[bWHO],PB.[bWHODate],PB.[lastWHO],PB.[lastWHODate],PB.[lastCD4],PB.[lastCD4Date],PB.[m12CD4]
@@ -52,9 +52,9 @@ BEGIN
 						a.eWAB			= b.eWAB,
 						a.eWABDate		= b.eWABDate,
 						a.lastWAB		= b.lastWAB	,
-						a.lastWABDate	= b.lastWABDate
-	WHEN NOT MATCHED BY SOURCE 
-		THEN
-		/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+						a.lastWABDate	= b.lastWABDate;
+	--WHEN NOT MATCHED BY SOURCE 
+	--	THEN
+	--	/* The Record is in the target table but doen't exit on the source table*/
+	--		Delete;
 END

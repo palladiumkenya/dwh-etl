@@ -69,10 +69,10 @@ BEGIN
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
 							a.CKV							=b.CKV		
 					
-					WHEN NOT MATCHED BY SOURCE 
-						THEN
-						/* The Record is in the target table but doen't exit on the source table*/
-							Delete;
+					--WHEN NOT MATCHED BY SOURCE 
+					--	THEN
+					--	/* The Record is in the target table but doen't exit on the source table*/
+					--		Delete;
 
 				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
 				  SET LoadEndDateTime = GETDATE()

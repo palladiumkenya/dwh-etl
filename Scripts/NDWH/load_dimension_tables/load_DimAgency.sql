@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[NDWH].[dbo].[DimAgency]', N'U') IS NOT NULL
 BEGIN--DimAgency Load
 	with source_agency as (
 	select 
-		distinct [SDP_Agency] as PartnerName
+		distinct [SDP_Agency] as AgencyName
 	from ODS.dbo.All_EMRSites
 	where [SDP_Agency] <> 'NULL'
 	)
