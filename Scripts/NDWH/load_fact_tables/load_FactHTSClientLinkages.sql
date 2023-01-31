@@ -50,7 +50,7 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimDate as referral on referral.Date = source_data.ReferralDate
 left join NDWH.dbo.DimDate as enrolled on enrolled.Date = source_data.DateEnrolled
 left join NDWH.dbo.DimDate as preferred on preferred.Date = source_data.DatePrefferedToBeEnrolled
-where row_num = 1
+where row_num = 1;
 
 alter table NDWH.dbo.FactHTSClientLinkages add primary key(FactKey);
 
