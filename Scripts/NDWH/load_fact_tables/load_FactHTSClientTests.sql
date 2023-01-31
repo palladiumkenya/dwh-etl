@@ -22,8 +22,8 @@ client_linkage_data as (
 select     
     patient.PatientKey,
     facility.FacilityKey,
-	partner.PartnerKey,
-	agency.AgencyKey,
+    partner.PartnerKey,
+    agency.AgencyKey,
     age_group.AgeGroupKey,
     datediff(yy, patient.DOB, hts_encounter.TestDate) as AgeAtTesting,
     testing.DateKey as DateTestedKey,
