@@ -27,7 +27,7 @@ SELECT DISTINCT
 	FirstVL,
 	LastVL,
 	vl.EligibleVL,
-	Last12MVLResult as Last12MonthVLResults,
+	Last12MonthVLResults,
 	CASE 
 		WHEN ISNUMERIC(vl.Last12MonthVLResults) = 1 
 			THEN CASE WHEN CAST(Replace(vl.Last12MonthVLResults,',','')AS FLOAT) < 400.00 THEN 'VL' 
@@ -47,5 +47,5 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = otz.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
-WHERE age.Age BETWEEN 10 AND 24
+WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
 GO
