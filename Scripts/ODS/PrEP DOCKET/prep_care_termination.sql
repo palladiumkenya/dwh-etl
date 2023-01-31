@@ -1,6 +1,6 @@
 BEGIN
---truncate table [ODS].[dbo].[PrEP_CareTermination]
-MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
+--truncate table [ODS].[dbo].[PrEP_CareTerminations]
+MERGE [ODS].[dbo].[PrEP_CareTerminations] AS a
 	USING(SELECT a.[Id]
       ,a.[RefId]
       ,a.[Created]
@@ -24,8 +24,20 @@ MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
       ,a.[Date_Last_Modified]
 	  ,a.SiteCode +'-'+ a.PatientPK AS CKV
   FROM [PREPCentral].[dbo].[PrepCareTerminations](NoLock)a
-  inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
-on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk)
+
+ inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
+
+on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk 
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepCareTerminations]
+              group by PatientPk,SiteCode) tn
+ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted from [PREPCentral].[dbo].[PrepCareTerminations]
+              group by PatientPk,SiteCode) tm
+ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+
+)
 AS b 
 	 
 						ON(
@@ -64,41 +76,10 @@ AS b
 							a.Date_Created=b.Date_Created,
 							a.DateOfLastPrepDose=b.DateOfLastPrepDose,
 							a.Date_Last_Modified=b.Date_Last_Modified,
-							a.EMR							=b.EMR;						
+							a.EMR							=b.EMR;				
 						
 							
-							--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-				--	--		Delete;
-
-				--UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
-				--  SET LoadEndDateTime = GETDATE()
-				--  WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;
-
-				----truncate table [ODS].[dbo].[CT_AdverseEventCount_Log]
-				--INSERT INTO [ODS].[dbo].[CT_AdverseEventCount_Log]([SiteCode],[CreatedDate],[AdverseEventCount])
-				--SELECT SiteCode,GETDATE(),COUNT(CKV) AS AdverseEventCount 
-				--FROM [ODS].[dbo].[CT_AdverseEvents] 
-				----WHERE @MaxCreatedDate  > @MaxCreatedDate
-				--GROUP BY SiteCode;
-
-
-							
-
-					--DROP INDEX CT_AdverseEvents ON [ODS].[dbo].[CT_AdverseEvents];
-					---Remove any duplicate from [ODS].[dbo].[CT_Patient]
-			--	with cte AS (
-			--	Select
-			--	Patientpk,
-			--	SiteCode
-			--	,VisitDate,
-			--	 ROW_NUMBER() OVER (PARTITION BY Patientpk,SiteCode,VisitDate ORDER BY
-			--	Patientpk,SiteCode,VisitDate ) Row_Num
-			--	FROM [ODS].[dbo].[CT_AdverseEvents]
-			--	)
-			--delete  from cte 
-			--	Where Row_Num >1
+						
 
 	END
 

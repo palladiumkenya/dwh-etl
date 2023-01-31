@@ -1,9 +1,9 @@
 BEGIN
---truncate table [ODS].[dbo].[PrEP_BehaviourRisk]
-MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
+--truncate table [ODS].[dbo].[PrEP_BehaviourRisks]
+MERGE [ODS].[dbo].[PrEP_BehaviourRisks] AS a
 	USING(SELECT distinct
-	   a.[Id]
-      ,a.[RefId]
+	   
+      a.[RefId]
       ,a.[Created]
       ,a.[PatientPk]
       ,a.[SiteCode]
@@ -44,13 +44,23 @@ MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
 
   inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
 
-on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk
+on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk 
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepBehaviourRisks]
+              group by PatientPk,SiteCode) tn
+ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted from [PREPCentral].[dbo].[PrepBehaviourRisks]
+              group by PatientPk,SiteCode) tm
+ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+
 )
 AS b    			ON(
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK						
 						and a.SiteCode = b.SiteCode
 						) 
+
 
 
 	 WHEN NOT MATCHED THEN 

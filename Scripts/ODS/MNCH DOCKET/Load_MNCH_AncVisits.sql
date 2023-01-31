@@ -2,25 +2,6 @@
 BEGIN
 --truncate table [ODS].[dbo].[MNCH_AncVisits]
 
---;with cte AS  (
---	Select 
---	a.PatientPK
---	,a.Sitecode,
---	[PatientMnchID],
---	[ANCClinicNumber],
---	DateExtracted,
---	VisitID,
---	VisitDate,
---	ChronicIllness,
-
---	 ROW_NUMBER() OVER (PARTITION BY a.PatientPK,a.Sitecode,[PatientMnchID],[ANCClinicNumber],DateExtracted,VisitID,VisitDate,ChronicIllness ORDER BY  ---111,909
---	a.PatientPK,a.Sitecode) Row_Num
---	FROM  [MNCHCentral].[dbo].[AncVisits] (nolock)a
---	)
---delete  from cte 
---	Where Row_Num >1
-
---truncate table [ODS].[dbo].[MNCH_AncVisits]
 	MERGE [ODS].[dbo].[MNCH_AncVisits] AS a
 		USING(
 				SELECT  Distinct [PatientMnchID],[ANCClinicNumber],[PatientPk],F.[SiteCode],[FacilityName],P.[EMR],[Project],cast([DateExtracted] as date)[DateExtracted]

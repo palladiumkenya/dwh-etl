@@ -1,5 +1,5 @@
 BEGIN
---truncate table [ODS].[dbo].[PrEP_Patients]
+--truncate table [ODS].[dbo].[PrEP_Pharmacys]
 MERGE [ODS].[dbo].[PrEP_Pharmacys] AS a
 	USING(SELECT distinct
        a.[Id]
@@ -25,9 +25,17 @@ MERGE [ODS].[dbo].[PrEP_Pharmacys] AS a
       ,a.[Date_Created]
       ,a.[Date_Last_Modified]
 	  ,a.SiteCode +'-'+ a.PatientPK AS CKV
+
   FROM [PREPCentral].[dbo].[PrepPharmacys](NoLock) a
-  inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
-on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepPharmacys]
+              group by PatientPk,SiteCode) tn
+ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted from [PREPCentral].[dbo].[PrepPharmacys]
+              group by PatientPk,SiteCode) tm
+ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+
 )
 AS b 
 	 

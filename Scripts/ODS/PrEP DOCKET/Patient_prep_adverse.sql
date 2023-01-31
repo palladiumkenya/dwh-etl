@@ -1,6 +1,6 @@
 BEGIN
---truncate table [ODS].[dbo].[PrEP_AdverseEvent]
-MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
+--truncate table [ODS].[dbo].[PrEP_AdverseEvents]
+MERGE [ODS].[dbo].[PrEP_AdverseEvents] AS a
 	USING(SELECT 
 	  a.[Id]
       ,a.[RefId]
@@ -31,11 +31,16 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
       ,a.[Date_Last_Modified]
 	  ,a.SiteCode +'-'+ a.PatientPK AS CKV
   FROM [PREPCentral].[dbo].[PrepAdverseEvents](NoLock) a
-       INNER JOIN 
-           [PREPCentral].[dbo].[PrepPatients](NoLock) b
-	         on 		 
-		    a.SiteCode = b.SiteCode 
-			and a.PatientPk =  b.PatientPk
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepAdverseEvents]
+              group by PatientPk,SiteCode) tn
+ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+
+INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted from [PREPCentral].[dbo].[PrepAdverseEvents]
+              group by PatientPk,SiteCode) tm
+ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+
+
 			)
 			AS b 
 	 
