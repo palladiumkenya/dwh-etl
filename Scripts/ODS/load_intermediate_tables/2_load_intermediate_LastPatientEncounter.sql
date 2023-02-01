@@ -1,48 +1,39 @@
-IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastPatientEncounter]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[Intermediate_LastPatientEncounter];
-BEGIN
-	--Pick the latest LastVisit and Next Appointment dates from Pharmacy
+--Pick the latest LastVisit and Next Appointment dates from Pharmacy
     WITH Pharmacy AS (
-	
-	SELECT   ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY DispenseDate Desc ) As NUM ,
-		 PatientID,
-		 SiteCode,
-		 PatientPK ,
+    SELECT   ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY DispenseDate Desc ) As NUM ,
+         PatientID,
+         SiteCode,
+         PatientPK ,
          DispenseDate As LastEncounterDate,
          ExpectedReturn As NextAppointmentDate
-	 FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
-     where DispenseDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))
-     	 		
+     FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
 ),
 --Pick Expected return and Lastvisit  dates from ARTPatient only if Expected return is <365days and add 30 days to Last visit if it is null
 ART_expected_dates_logic AS (
-  SELECT 
+  SELECT
         PatientID,
-		SiteCode,
-		PatientPK ,
-		LastVisit,
-		ExpectedReturn,
-		CASE 
-			WHEN DATEDIFF(dd,GETDATE(),ExpectedReturn) <= 365 THEN ExpectedReturn Else DATEADD(day, 30, LastVisit)
-		END AS expected_return_on_365,
-		case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
+        SiteCode,
+        PatientPK ,
+        LastVisit,
+        ExpectedReturn,
+        CASE 
+            WHEN DATEDIFF(dd,GETDATE(),ExpectedReturn) <= 365 THEN ExpectedReturn Else DATEADD(day, 30, LastVisit)
+        END AS expected_return_on_365,
+        case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
-  where LastVisit <=EOMONTH(DATEADD(mm,-1,GETDATE()))
-  
 ),
 --Pick latestVisit and TCA from the visits Table
 LatestVisit As (
     Select ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY VisitDate Desc ) As NUM,
         PatientID,
-		SiteCode,
-		PatientPK ,
+        SiteCode,
+        PatientPK ,
         VisitDate as LastVisitDate,
         Case When NextAppointmentDate is NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End as NextAppointmentDate
-        from ODS.dbo.CT_PatientVisits   
-        where VisitDate <=EOMONTH(DATEADD(mm,-1,GETDATE()))  
+        from ODS.dbo.CT_PatientVisits     
 ),
 Patients As (
-    Select 
+    Select
     PatientId,
     PatientPK,
     sitecode
@@ -71,9 +62,8 @@ PharmacyART_Combined As (
     from OrderedVisits
     left join ART_expected_dates_logic on OrderedVisits.PatientId=ART_expected_dates_logic.PatientId and OrderedVisits.PatientPk=ART_expected_dates_logic.PatientPk and OrderedVisits.Sitecode=ART_expected_dates_logic.Sitecode
 ),
-
 CombinedVisits As (
-    Select 
+    Select
         PharmacyART_Combined.PatientID,
         PharmacyART_Combined.PatientPK,
         PharmacyART_Combined.Sitecode ,
@@ -81,19 +71,13 @@ CombinedVisits As (
     Case When PharmacyART_Combined.NextappointmentDate>=LatestVisit.NextappointmentDate then PharmacyART_Combined.NextappointmentDate Else LatestVisit.NextappointmentDate end as NextAppointmentDate
   from PharmacyART_Combined
     left join LatestVisit on PharmacyART_Combined.PatientId=LatestVisit.PatientId and PharmacyART_Combined.PatientPk=LatestVisit.PatientPk and PharmacyART_Combined.Sitecode=LatestVisit.Sitecode and Num=1
-
 )
-
-	Select 
-		PatientID,
-		SiteCode,
-	    PatientPK ,
+    Select distinct 
+        PatientID,
+        SiteCode,
+        PatientPK ,
         LastEncounterDate,
-       	CASE 
-			WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <=365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
-		END AS  NextAppointmentDate,
+        NextAppointmentDate,
         cast (getdate() as DATE) as LoadDate
-       INTO [ODS].[dbo].[Intermediate_LastPatientEncounter]
-	from CombinedVisits
-END
-
+       INTO ODS.dbo.Intermediate_LastPatientEncounter
+    from CombinedVisits
