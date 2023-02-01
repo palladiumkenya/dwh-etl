@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 	TRUNCATE TABLE [REPORTING].[dbo].[AggregateOTZEligibilityAndEnrollments]
 GO
 
-INSERT INTO AggregateOTZEligibilityAndEnrollments 
+INSERT INTO REPORTING.dbo.AggregateOTZEligibilityAndEnrollments 
 
 SELECT DISTINCT
 	MFLCode,
