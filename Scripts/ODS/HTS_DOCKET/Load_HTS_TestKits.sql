@@ -20,7 +20,20 @@ BEGIN
 	  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) AS b 
 	ON(
 		a.PatientPK  = b.PatientPK 
-	and a.SiteCode = b.SiteCode						
+	and a.SiteCode = b.SiteCode	
+	
+	and a.EncounterId  = b.EncounterId 
+	and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber 
+	and a.TestKitExpiry1 COLLATE Latin1_General_CI_AS = b.TestKitExpiry1 
+	and a.TestKitExpiry2 COLLATE Latin1_General_CI_AS = b.TestKitExpiry2 
+	and a.FacilityName COLLATE Latin1_General_CI_AS = b.FacilityName 
+	and a.TestKitName1 COLLATE Latin1_General_CI_AS = b.TestKitName1 
+	and a.TestKitName2 COLLATE Latin1_General_CI_AS = b.TestKitName2 
+	and a.TestKitLotNumber1 COLLATE Latin1_General_CI_AS = b.TestKitLotNumber1 
+	and a.TestKitLotNumber2 COLLATE Latin1_General_CI_AS = b.TestKitLotNumber2 
+	and a.TestResult1 COLLATE Latin1_General_CI_AS = b.TestResult1 
+	and a.TestResult2 COLLATE Latin1_General_CI_AS = b.TestResult2 
+	and a.Project COLLATE Latin1_General_CI_AS = b.Project 
 	)
 	WHEN NOT MATCHED THEN 
 		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 

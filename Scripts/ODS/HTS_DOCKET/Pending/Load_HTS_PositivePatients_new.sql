@@ -42,11 +42,11 @@ BEGIN
 					  --,lnk.[PatientUID]
 					  ,lnk.CCCNumber AS [LinkedCCC_Number]
 					  --INTO stg_HTS_PositivePatients_new
-				  FROM hts_clients c 
-				  inner join CT_FacilityManifest f on c.SiteCode =F.SiteCode
-				  INNER JOIN hts_ClientTests ct ON ct.PatientPk=c.PatientPk AND ct.SiteCode=c.SiteCode
+				  FROM [ODS].[dbo].hts_clients c 
+				  inner join [ODS].[dbo].CT_FacilityManifest f on c.SiteCode =F.SiteCode
+				  INNER JOIN [ODS].[dbo].hts_ClientTests ct ON ct.PatientPk=c.PatientPk AND ct.SiteCode=c.SiteCode
 				  --inner join temp_new_ids cnew ON cnew.PatientPk=c.PatientPk AND cnew.SiteCode=c.SiteCode
-				  LEFT JOIN vw_hts_ClientLinkages lnk on lnk.PatientPk=c.PatientPk AND ct.SiteCode = lnk.SiteCode
+				  LEFT JOIN [ODS].[dbo].vw_hts_ClientLinkages lnk on lnk.PatientPk=c.PatientPk AND ct.SiteCode = lnk.SiteCode
 				  left join (select * from (
 				  SELECT ROW_NUMBER() OVER(PARTITION BY sitecode, patientpk ORDER BY TracingDate desc) as Num, [SiteCode]
 					  ,[PatientPk]
