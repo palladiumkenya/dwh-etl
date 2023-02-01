@@ -1,8 +1,8 @@
 BEGIN
---truncate table [ODS].[dbo].[PrEP_BehaviourRisks]
-MERGE [ODS].[dbo].[PrEP_BehaviourRisks] AS a
+--truncate table [ODS].[dbo].[PrEP_BehaviourRisk]
+MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
 	USING(SELECT distinct
-	   
+
       a.[RefId]
       ,a.[Created]
       ,a.[PatientPk]
@@ -41,7 +41,6 @@ MERGE [ODS].[dbo].[PrEP_BehaviourRisks] AS a
       ,a.[Date_Last_Modified]
 	  ,a.SiteCode +'-'+ a.PatientPK AS CKV
   FROM [PREPCentral].[dbo].[PrepBehaviourRisks](NoLock)a
-
   inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
 
 on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk 
