@@ -1,3 +1,7 @@
+IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastPatientEncounter]', N'U') IS NOT NULL 
+	DROP TABLE [ODS].[dbo].[Intermediate_LastPatientEncounter]
+BEGIN
+
 --Pick the latest LastVisit and Next Appointment dates from Pharmacy
     WITH Pharmacy AS (
     SELECT   ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY DispenseDate Desc ) As NUM ,
@@ -77,7 +81,11 @@ CombinedVisits As (
         SiteCode,
         PatientPK ,
         LastEncounterDate,
-        NextAppointmentDate,
+          CASE 
+            WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <= 365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
+        END AS NextAppointmentDate,
         cast (getdate() as DATE) as LoadDate
        INTO ODS.dbo.Intermediate_LastPatientEncounter
     from CombinedVisits
+   where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
+   END
