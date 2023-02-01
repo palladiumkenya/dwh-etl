@@ -12,11 +12,11 @@ BEGIN
     ),
     source_data as (
         select
-        SiteCode,
-        PatientPk,
-        TracingType,
-        TracingDate,
-        TracingOutcome
+            SiteCode,
+            PatientPk,
+            TracingType,
+            cast(TracingDate as date) as TracingDate,
+            TracingOutcome
     from ODS.dbo.HTS_ClientTracing
     )
     select 
