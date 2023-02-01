@@ -26,8 +26,8 @@ BEGIN
         partner.PartnerKey,
         agency.AgencyKey,
         tracing.DateKey as TracingDateKey,
-        source_data.TracingType,
-        source_data.TracingOutcome,
+        outcome.TraceOutcomeKey,
+        trace_type.TraceTypeKey,
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactHTSClientTracing
     from source_data
@@ -37,7 +37,9 @@ BEGIN
     left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = source_data.SiteCode
     left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-    left join NDWH.dbo.DimDate as tracing on tracing.Date = source_data.TracingDate;
+    left join NDWH.dbo.DimDate as tracing on tracing.Date = source_data.TracingDate
+    left join NDWH.dbo.DimHTSTraceOutcome as outcome on outcome.TraceOutcome = source_data.TracingOutcome
+    left join NDWH.dbo.DimHTSTraceType as trace_type on trace_type.TraceType = source_data.TracingType
 
     alter table NDWH.dbo.FactHTSClientTracing add primary key(FactKey);
 
