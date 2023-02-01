@@ -13,10 +13,10 @@ a.AgencyName as CTAgency,
 Gender,
 age.DATIMAgeGroup as AgeGroup, 
 StabilityAssessment,
-SUM(isTXCurr) as patients_TXCurr,
 SUM(onMMD) as patients_onMMD,
 SUM(case when onMMD = 0 then 1 else 0 end) as patients_nonMMD,
-COUNT(StabilityAssessment) AS Stability
+COUNT(StabilityAssessment) AS Stability,
+Sum(pat.isTXCurr) As TXCurr
 
 FROM NDWH.dbo.FactLatestObs lob
 INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey

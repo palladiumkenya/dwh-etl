@@ -2,7 +2,7 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [REPORTING].[dbo].[Linelist_FACTART];
 BEGIN
-Select 
+Select distinct 
           
             pat.PatientID,
             pat.PatientPK,
@@ -35,7 +35,7 @@ Select
             StartARTAtThisfacility,
             PreviousARTStartDate,
             PreviousARTRegimen,
-            outcome.ARTOutcomeDescription,
+            outcome.ARTOutcome,
             pat.ISTxCurr
          
 INTO [REPORTING].[dbo].[Linelist_FACTART]
