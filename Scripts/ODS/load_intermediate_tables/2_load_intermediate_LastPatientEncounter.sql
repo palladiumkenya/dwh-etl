@@ -11,6 +11,7 @@ BEGIN
          DispenseDate As LastEncounterDate,
          ExpectedReturn As NextAppointmentDate
      FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
+     where DispenseDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 ),
 --Pick Expected return and Lastvisit  dates from ARTPatient only if Expected return is <365days and add 30 days to Last visit if it is null
 ART_expected_dates_logic AS (
@@ -25,6 +26,7 @@ ART_expected_dates_logic AS (
         END AS expected_return_on_365,
         case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
+  where LastVisit <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 ),
 --Pick latestVisit and TCA from the visits Table
 LatestVisit As (
@@ -34,7 +36,8 @@ LatestVisit As (
         PatientPK ,
         VisitDate as LastVisitDate,
         Case When NextAppointmentDate is NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End as NextAppointmentDate
-        from ODS.dbo.CT_PatientVisits     
+        from ODS.dbo.CT_PatientVisits
+        where VisitDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 ),
 Patients As (
     Select
@@ -48,9 +51,9 @@ OrderedVisits As (
         Patients.PatientID,
         Patients.PatientPK,
         Patients.SiteCode,
-    Case when Pharmacy.LastencounterDate >=ART_expected_dates_logic.Lastvisit
+    Case when Pharmacy.LastencounterDate >=ART_expected_dates_logic.Lastvisit or ART_expected_dates_logic.Lastvisit is null
     Then Pharmacy.LastEncounterDate Else ART_expected_dates_logic.Lastvisit End As LastVisitART_Pharmacy,
-     Case when Pharmacy.NextAppointmentdate>=ART_expected_dates_logic.expectedReturn Then Pharmacy.NextAppointmentdate else ART_expected_dates_logic.expectedReturn End as NextappointmentDate
+     Case when Pharmacy.NextAppointmentdate>=ART_expected_dates_logic.expectedReturn or ART_expected_dates_logic.expectedReturn is null  Then Pharmacy.NextAppointmentdate else ART_expected_dates_logic.expectedReturn End as NextappointmentDate
     from Patients
     left join Pharmacy on Patients.PatientId=Pharmacy.PatientId and Patients.PatientPk=Pharmacy.PatientPk and Patients.Sitecode=Pharmacy.Sitecode and Num=1
     left join ART_expected_dates_logic on Patients.PatientId=ART_expected_dates_logic.PatientId and Patients.PatientPk=ART_expected_dates_logic.PatientPk and Patients.Sitecode=ART_expected_dates_logic.Sitecode
