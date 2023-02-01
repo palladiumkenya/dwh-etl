@@ -13,7 +13,8 @@ a.AgencyName as CTAgency,
 Gender,
 age.DATIMAgeGroup as AgeGroup,
 DifferentiatedCare, 
-COUNT(DifferentiatedCare) as MMDModels
+COUNT(DifferentiatedCare) as MMDModels,
+Sum(pat.isTXCurr) As TXCurr
 
 FROM NDWH.dbo.FactLatestObs lob
 INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey
