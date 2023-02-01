@@ -72,7 +72,9 @@ CombinedVisits As (
   from PharmacyART_Combined
     left join LatestVisit on PharmacyART_Combined.PatientId=LatestVisit.PatientId and PharmacyART_Combined.PatientPk=LatestVisit.PatientPk and PharmacyART_Combined.Sitecode=LatestVisit.Sitecode and Num=1
 )
-    Select
+
+    Select distinct 
+
         PatientID,
         SiteCode,
         PatientPK ,
