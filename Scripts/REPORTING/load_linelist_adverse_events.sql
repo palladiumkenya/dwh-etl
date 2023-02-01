@@ -4,16 +4,16 @@ IF EXISTS (
     FROM
         [REPORTING].sys.objects
     WHERE
-        object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateAdverseEvents]')
+        object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListAdverseEvents]')
         AND type in (N'U')
-) TRUNCATE TABLE [REPORTING].[dbo].AggregateAdverseEvents
+) TRUNCATE TABLE [REPORTING].[dbo].LineListAdverseEvents
 
 GO
 
 with AdverseEvents as (
  SELECT
             MFLCode,
-            pat.PatientKey,
+			pat.PatientKey,
             g.DATIMAgeGroup,
             Gender,
             f.FacilityName,
@@ -37,27 +37,10 @@ with AdverseEvents as (
         WHERE
             pat.IsTXCurr = 1
 )
-
-INSERT INTO [REPORTING].[dbo].AggregateAdverseEvents
+INSERT INTO [REPORTING].[dbo].LineListAdverseEvents
 SELECT
     MFLCode,
-    DATIMAgeGroup,
-    Gender,
-    FacilityName,
-    County,
-    Subcounty,
-    CTPartner,
-    CTAgency,
-    AdverseEvent,
-    AdverseEventCause,
-    AdverseEventActionTaken,
-    AdverseEventRegimen,
-    Severity,
-	count(*) as AdverseEventsCount
-
-FROM AdverseEvents
-GROUP BY
-    MFLCode,
+	PatientKey,
     DATIMAgeGroup,
     Gender,
     FacilityName,
@@ -70,4 +53,5 @@ GROUP BY
     AdverseEventActionTaken,
     AdverseEventRegimen,
     Severity
+FROM AdverseEvents
 GO
