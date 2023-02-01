@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZ]') AND type in (N'U'))
+IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZ]') AND type in (N'U'))
 TRUNCATE TABLE [REPORTING].[dbo].[LineListOTZ]
 GO
 
@@ -11,7 +11,8 @@ SELECT DISTINCT
 	p.PartnerName as CTPartner,
 	a.AgencyName as CTAgency,
 	Gender,
-	age.DATIMAgeGroup as AgeGroup,otz_enrollment.DateKey as OTZEnrollmentDateKey,
+	age.DATIMAgeGroup as AgeGroup,
+	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
 	TransitionAttritionReason,
 	TransferInStatus,
