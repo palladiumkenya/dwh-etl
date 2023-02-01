@@ -1,5 +1,5 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NDWH.[dbo].load_aggregate_OptimizeStartRegimens') AND type in (N'U'))
-	TRUNCATE  TABLE NDWH.[dbo].load_aggregate_OptimizeStartRegimens;
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].AggregateOptimizeStartRegimens') AND type in (N'U'))
+	TRUNCATE  TABLE REPORTING.[dbo].AggregateOptimizeStartRegimens;
 
 	SELECT 
         SiteCode,
@@ -17,7 +17,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NDWH.[dbo].lo
         SUM(ISTxCurr)TXCurr,
         Firstregimen
         
-	INTO NDWH.[dbo].load_aggregate_OptimizeStartRegimens
+	INTO REPORTING.[dbo].AggregateOptimizeStartRegimens
 	FROM (
 		Select 
 		  SiteCode, 
