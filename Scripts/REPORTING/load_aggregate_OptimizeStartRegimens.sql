@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[load_aggregate_OptimizeStartRegimens]', N'U') IS NOT NULL	
-	DROP  TABLE [REPORTING].[dbo].[load_aggregate_OptimizeStartRegimens];
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT NULL	
+	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
 
 	SELECT 
         SiteCode,
@@ -17,7 +17,7 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[load_aggregate_OptimizeStartRegimens]', N'U') 
         SUM(ISTxCurr)TXCurr,
         Firstregimen
         
-	INTO [REPORTING].[dbo].[load_aggregate_OptimizeStartRegimens]
+	INTO REPORTING.[dbo].AggregateOptimizeStartRegimens
 	FROM (
 		Select 
 		  SiteCode, 
