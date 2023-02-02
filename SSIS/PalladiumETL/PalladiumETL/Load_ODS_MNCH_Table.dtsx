@@ -5,77 +5,58 @@
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
   DTS:CreatorName="WIN-LQ135V1RIG4\Administrator"
-  DTS:DTSID="{75617AC7-C38F-49DF-ADE7-7B578D13F4EE}"
+  DTS:DTSID="{D53B7251-EBE8-4E1E-B12F-8E8E34FE46FE}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="16.0.845.0"
   DTS:LocaleID="1033"
-  DTS:ObjectName="Package2"
+  DTS:ObjectName="Load_ODS_MNCH_Table"
   DTS:PackageType="5"
-  DTS:VersionBuild="14"
-  DTS:VersionGUID="{3D14DFDB-093E-424F-9A52-02D96981D722}">
+  DTS:VersionBuild="18"
+  DTS:VersionGUID="{85F8E66B-0A31-49C0-BE0B-42573B4E2526}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[ODS_SQL_FileConn.sql]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{6AA5B2EA-E9D8-4BAB-B82E-4B97D4D87EA3}"
+      DTS:DTSID="{6A9379F9-654B-493B-8537-DBEA7B63F4E7}"
       DTS:ObjectName="ODS_SQL_FileConn.sql">
       <DTS:PropertyExpression
         DTS:Name="ConnectionString">@[User::FilePath]+"\\"+ @[User::FileName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\HTS_DOCKET\" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[OLE_DB.HTSCentral_Src]"
+      DTS:refId="Package.ConnectionManagers[OLE_DB.MNCHCentral_Src]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{4F8BAB0A-6415-4C0E-A3A9-FDF402633EBD}"
-      DTS:ObjectName="OLE_DB.HTSCentral_Src">
+      DTS:DTSID="{BF8B24D5-C50B-4265-9F5E-0FD02D06156E}"
+      DTS:ObjectName="OLE_DB.MNCHCentral_Src">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=HTSCentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{4F8BAB0A-6415-4C0E-A3A9-FDF402633EBD}LocalHost.HTSCentral;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=MNCHCentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{BF8B24D5-C50B-4265-9F5E-0FD02D06156E}LocalHost.HTSCentral;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[OLE_DB.ODS_Dest]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{AB9440A8-9071-40F6-89EC-F551FC42CE6D}"
+      DTS:DTSID="{18A82727-91EF-4BBB-B13E-E1E2B851939D}"
       DTS:ObjectName="OLE_DB.ODS_Dest">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{AB9440A8-9071-40F6-89EC-F551FC42CE6D}LocalHost.DWAPICentral;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{18A82727-91EF-4BBB-B13E-E1E2B851939D}LocalHost.DWAPICentral;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{F6728EB1-3D80-470E-BD46-4512E36AF47B}"
-      DTS:IncludeInDebugDump="2345"
-      DTS:Namespace="User"
-      DTS:ObjectName="DuplicateFileName">
-      <DTS:VariableValue
-        DTS:DataType="8"
-        xml:space="preserve"></DTS:VariableValue>
-    </DTS:Variable>
-    <DTS:Variable
-      DTS:CreationName=""
-      DTS:DTSID="{6E360571-05C1-4DD9-9CC4-14F9C8544213}"
-      DTS:IncludeInDebugDump="2345"
-      DTS:Namespace="User"
-      DTS:ObjectName="DuplicateFilePath">
-      <DTS:VariableValue
-        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\Remove_Duplicates_On_HTSCentral</DTS:VariableValue>
-    </DTS:Variable>
-    <DTS:Variable
-      DTS:CreationName=""
-      DTS:DTSID="{47FED00E-3F2D-45A1-A8EA-5518348588B4}"
+      DTS:DTSID="{CC0F5DA3-EDCE-405C-AEFC-ED557FF577E1}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
       DTS:ObjectName="FileName">
@@ -85,31 +66,31 @@
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{162E5D30-81E8-4BC9-9BD5-8AD0DEEA8981}"
+      DTS:DTSID="{09B40F9C-D7A1-4CE7-A15D-F6690B3645BE}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
       DTS:ObjectName="FilePath">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\HTS_DOCKET</DTS:VariableValue>
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\Load HTS tables Container Loop"
+      DTS:refId="Package\Load MNCH tables Container Loop"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
-      DTS:DTSID="{C57E6D61-DEDA-4221-8D7F-18AC5AC70570}"
+      DTS:DTSID="{AA567727-8970-4D87-B78C-34628727D5B6}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Load HTS tables Container Loop">
+      DTS:ObjectName="Load MNCH tables Container Loop">
       <DTS:ForEachEnumerator
         DTS:CreationName="Microsoft.ForEachFileEnumerator"
-        DTS:DTSID="{4F14335A-D2A4-40D1-867F-1C9F80DC5D3D}"
-        DTS:ObjectName="{4F14335A-D2A4-40D1-867F-1C9F80DC5D3D}">
+        DTS:DTSID="{79D5E1D4-4473-43BA-8516-067D2E55E3FE}"
+        DTS:ObjectName="{79D5E1D4-4473-43BA-8516-067D2E55E3FE}">
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\HTS_DOCKET" />
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET" />
             <FEFEProperty
               FileSpec="*.SQL" />
             <FEFEProperty
@@ -122,10 +103,10 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
-          DTS:refId="Package\Load HTS tables Container Loop\Execute SQL Task"
+          DTS:refId="Package\Load MNCH tables Container Loop\Execute SQL Task"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
-          DTS:DTSID="{331CD1BD-71DD-4437-A384-05D1254F285D}"
+          DTS:DTSID="{1B2455CE-6921-4B4B-85D3-8B3C4CD522B2}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
@@ -133,7 +114,7 @@
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
-              SQLTask:Connection="{AB9440A8-9071-40F6-89EC-F551FC42CE6D}"
+              SQLTask:Connection="{18A82727-91EF-4BBB-B13E-E1E2B851939D}"
               SQLTask:SqlStmtSourceType="FileConnection"
               SQLTask:SqlStatementSource="ODS_SQL_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
@@ -142,8 +123,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{59113077-92E4-4F5B-BDFE-E2A27B594E1B}"
-          DTS:ObjectName="{59113077-92E4-4F5B-BDFE-E2A27B594E1B}"
+          DTS:DTSID="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
+          DTS:ObjectName="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -163,15 +144,15 @@
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
           Size="164,42.8"
-          Id="Package\Load HTS tables Container Loop\Execute SQL Task"
+          Id="Package\Load MNCH tables Container Loop\Execute SQL Task"
           TopLeft="55.4583293379595,27.4499982216954" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="268.8,120"
-          Size="268.8,163.2"
-          Id="Package\Load HTS tables Container Loop"
-          TopLeft="270.288444952873,34.5484840605109" />
+          PanelSize="268.8,120.8"
+          Size="268.8,163.6"
+          Id="Package\Load MNCH tables Container Loop"
+          TopLeft="513.749992344528,37.6999993258715" />
       </GraphLayout>
     </LayoutInfo>
   </Package>

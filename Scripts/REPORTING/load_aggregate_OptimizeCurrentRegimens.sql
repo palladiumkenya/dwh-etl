@@ -1,5 +1,6 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[NDWH.[dbo].load_aggregate_OptimizeCurrentRegimens]') AND type in (N'U'))
-	TRUNCATE TABLE NDWH.[dbo].load_aggregate_OptimizeCurrentRegimens;
+--IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].load_aggregate_OptimizeCurrentRegimens]') AND type in (N'U'))
+IF OBJECT_ID(N'[REPORTING].[dbo].[load_aggregate_OptimizeCurrentRegimens]', N'U') IS NOT NULL	
+	DROP table [REPORTING].[dbo].[load_aggregate_OptimizeCurrentRegimens];
 
 	SELECT 
      SiteCode,
@@ -20,7 +21,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[NDWH.[dbo].
      WeightBands,
      AgeBands
    
-	INTO NDWH.[dbo].load_aggregate_OptimizeCurrentRegimens
+	INTO [REPORTING].[dbo].[load_aggregate_OptimizeCurrentRegimens]
 	from (
 	Select 
        cast (ART.SiteCode as nvarchar) As SiteCode,
@@ -59,7 +60,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[NDWH.[dbo].
 		 WHEN cast (ART.age as float) between 5 and 9 THEN '5-9 Years'
 		 WHEN cast (ART.age as float) between 10 and 14 THEN '10-14 Years'
 		ELSE 'Adults' END AS AgeBands 
-	 from NDWH.dbo.Linelist_FACTART ART
+	 from REPORTING.dbo.Linelist_FACTART ART
 	INNER JOIN NDWH.dbo.DimAgeGroup b on ART.age=b.Age
     LEFT JOIN ODS.dbo.Intermediate_LastestWeightHeight weights on CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(weights.PatientPK as NVARCHAR(36))), 2) = ART.PatientPK and weights.Sitecode collate Latin1_General_CI_AS =ART.SiteCode collate Latin1_General_CI_AS
    -- LEFT JOIN NDWH.dbo.DimPatient p on ART.PatientPK = p.PatientPK and ART.SiteCode = P.SiteCode
