@@ -1,5 +1,5 @@
-IF EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].AggregateOptimizeStartRegimens') AND type in (N'U'))
-	TRUNCATE  TABLE REPORTING.[dbo].AggregateOptimizeStartRegimens;
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT NULL	
+	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
 
 	SELECT 
         SiteCode,
@@ -37,7 +37,7 @@ IF EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REP
 		  DATIMAgeGroup, 
 		  ISTxCurr 
 		from 
-		  NDWH.dbo.Linelist_FACTART a 
+		  REPORTING.dbo.Linelist_FACTART a 
 		  INNER JOIN NDWH.dbo.DimAgeGroup b  on a.age = b.Age 
 		where 
 		  ISTxCurr = 1 ) H 

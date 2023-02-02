@@ -1,5 +1,6 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].AggregateOptimizeCurrentRegimens]') AND type in (N'U'))
-	TRUNCATE TABLE REPORTING.[dbo].AggregateOptimizeCurrentRegimens;
+--IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].load_aggregate_OptimizeCurrentRegimens]') AND type in (N'U'))
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]', N'U') IS NOT NULL	
+	DROP table [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens];
 
 	SELECT 
 		SiteCode,
@@ -20,7 +21,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].
 		WeightBands,
 		AgeBands
 
-	INTO REPORTING.[dbo].AggregateOptimizeCurrentRegimens
+	INTO [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]
 	from (
 	Select 
 		cast (ART.SiteCode as nvarchar) As SiteCode,
