@@ -1,10 +1,10 @@
-IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZ]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].[LineListOTZ]
+IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]') AND type in (N'U'))
+	TRUNCATE TABLE [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
 GO
-
-INSERT INTO REPORTING.dbo.LineListOTZ
+--- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)
+INSERT INTO REPORTING.dbo.LineListOTZEligibilityAndEnrollments
 SELECT DISTINCT
-	MFLCode,
+				MFLCode,
 	f.FacilityName,
 	County,
 	SubCounty,
@@ -40,14 +40,25 @@ SELECT DISTINCT
 			CASE WHEN vl.Last12MonthVLResults  IN ('Undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') THEN 'VL' 
 			ELSE NULL END  
 		END AS Last12MVLResult,
-	vl.Last12MonthVL as Last12MonthVL
+	vl.Last12MonthVL as Last12MonthVL,
+	CASE
+	WHEN art.PatientKey is not null THEN 1
+	ELSE 0 END as Eligible,
+	CASE
+	WHEN otz.PatientKey is not null THEN 1
+	ELSE 0 END as Enrolled
 
-FROM NDWH.dbo.FactOTZ otz
-INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
-INNER join NDWH.dbo.DimFacility f on f.FacilityKey = otz.FacilityKey
-INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = otz.AgencyKey
-INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
-INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
-LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
-WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
+	
+	
+FROM NDWH.dbo.FACTART art
+
+INNER JOIN NDWH.dbo.DimAgeGroup age ON age.AgeGroupKey= art.AgeGroupKey
+INNER JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = art.FacilityKey
+INNER JOIN NDWH.dbo.DimAgency a ON a.AgencyKey = art.AgencyKey
+INNER JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = art.PatientKey
+INNER JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = art.PartnerKey
+LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = art.PatientKey AND vl.PatientKey IS NOT NULL 
+FULL OUTER JOIN NDWH.dbo.FactOTZ otz ON otz.PatientKey = art.PatientKey
+WHERE
+		age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
 GO
