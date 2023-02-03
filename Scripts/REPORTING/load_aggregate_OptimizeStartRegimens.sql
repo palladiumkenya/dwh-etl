@@ -1,5 +1,5 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].load_aggregate_OptimizeStartRegimens') AND type in (N'U'))
-	TRUNCATE  TABLE REPORTING.[dbo].load_aggregate_OptimizeStartRegimens;
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT NULL	
+	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
 
 	SELECT 
         SiteCode,
@@ -17,7 +17,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[db
         SUM(ISTxCurr)TXCurr,
         Firstregimen
         
-	INTO REPORTING.[dbo].load_aggregate_OptimizeStartRegimens
+	INTO REPORTING.[dbo].AggregateOptimizeStartRegimens
 	FROM (
 		Select 
 		  SiteCode, 
@@ -37,7 +37,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[db
 		  DATIMAgeGroup, 
 		  ISTxCurr 
 		from 
-		  NDWH.dbo.Linelist_FACTART a 
+		  REPORTING.dbo.Linelist_FACTART a 
 		  INNER JOIN NDWH.dbo.DimAgeGroup b  on a.age = b.Age 
 		where 
 		  ISTxCurr = 1 ) H 
