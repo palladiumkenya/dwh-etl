@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\PrEP\Checkpoint.xml"
+  DTS:CheckpointUsage="1"
   DTS:CreationDate="1/23/2023 11:45:05 AM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -11,8 +13,9 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Load_ODS_PrEP_Table"
   DTS:PackageType="5"
-  DTS:VersionBuild="16"
-  DTS:VersionGUID="{64B837EF-2351-458C-9C2D-E4B3A8280779}">
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="21"
+  DTS:VersionGUID="{48C5A1AA-7B26-4624-90DF-6B555578CD02}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -81,6 +84,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{459CD661-B7B8-4084-B3EF-F2C78570A787}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailParentOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load PrEP tables Container Loop">
       <DTS:ForEachEnumerator
@@ -108,6 +112,8 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{5BCD98E6-089B-4F25-AF45-483435923502}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
+          DTS:FailParentOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
           DTS:ThreadHint="0">
@@ -149,7 +155,7 @@
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="268.8,120.4"
+          PanelSize="268.8,120.8"
           Size="268.8,163.6"
           Id="Package\Load PrEP tables Container Loop"
           TopLeft="513.749992344528,37.6999993258715" />
