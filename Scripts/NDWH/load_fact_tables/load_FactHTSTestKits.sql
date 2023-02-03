@@ -50,24 +50,3 @@ BEGIN
 alter table NDWH.dbo.FactHTSTestKits add primary key(FactKey); 
 
 END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
