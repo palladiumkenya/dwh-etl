@@ -17,12 +17,12 @@ BEGIN
 		(CASE 
 					WHEN  Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and Exits.EffectiveDiscontinuationDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
 					WHEN  Exits.ExitReason<>'DIED' and Exits.EffectiveDiscontinuationDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1)  THEN SUBSTRING(Exits.ExitReason,1,1)--When a TO and LFTU has an discontinuationdate during the reporting Month 
-					WHEN  Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
+					WHEN Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and   Exits.EffectiveDiscontinuationDate >LastPatientEncounter.LastEncounterDate THEN SUBSTRING(Exits.ExitReason,1,1)--When Effective discontinuation date is aafter Last encounter date  then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
+                    WHEN  Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--When a TO and LFTU has an discontinuationdate > Last day of Previous month 
 					When Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and LastPatientEncounter.NextAppointmentDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'
                     When Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and Exits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'
 					When Exits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE())) and Exits.ExitReason='DIED' THEN 'V'
 					WHEN Exits.ExitDate IS NOT NULL THEN SUBSTRING(Exits.ExitReason,1,1)--When exit date is available then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
-					WHEN Exits.ExitDate IS NOT NULL and Exits.ExitReason<>'DIED' and   Exits.EffectiveDiscontinuationDate >LastPatientEncounter.LastEncounterDate THEN SUBSTRING(Exits.ExitReason,1,1)--When Effective discontinuation date is aafter Last encounter date  then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
 					WHEN ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'-- When StartARTDate is after Last Day of Previous EOM 
 					WHEN EOMONTH(DATEADD(mm,-1,GETDATE())) < ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn)-- When last day of previous month is less than TCA
 					OR DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days
