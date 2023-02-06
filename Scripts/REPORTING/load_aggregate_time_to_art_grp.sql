@@ -3,7 +3,21 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].
 TRUNCATE TABLE [dbo].AggregateTimeToARTGrp
 GO
 
-INSERT INTO [REPORTING].dbo.AggregateTimeToARTGrp
+INSERT INTO [REPORTING].[dbo].[AggregateTimeToARTGrp]
+           ([MFLCode]
+           ,[FacilityName]
+           ,[County]
+           ,[Subcounty]
+           ,[CTPartner]
+           ,[CTAgency]
+           ,[Gender]
+           ,[AgeGroup]
+           ,[StartARTYear]
+           ,[StartARTMonth]
+           ,[StartARTYearMonth]
+           ,[NumPatients]
+           ,[TotalBySite]
+           ,[proportions])
 select 
 MFLCode,
 f.FacilityName,

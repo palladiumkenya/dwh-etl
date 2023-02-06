@@ -3,7 +3,26 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToARTLast12M]
 GO
 
-INSERT INTO [REPORTING].dbo.AggregateTimeToARTLast12M
+INSERT INTO [REPORTING].[dbo].[AggregateTimeToARTLast12M]
+           ([MFLCode]
+           ,[FacilityName]
+           ,[SubCounty]
+           ,[County]
+           ,[CTPartner]
+           ,[CTAgency]
+           ,[Gender]
+           ,[AgeGroup]
+           ,[StartARTYear]
+           ,[StartARTYearMonth]
+           ,[MedianTimeToARTDiagnosis_year]
+           ,[MedianTimeToARTDiagnosis_yearPartner]
+           ,[MedianTimeToARTDiagnosis_yearCounty]
+           ,[MedianTimeToARTDiagnosis_yearSbCty]
+           ,[MedianTimeToARTDiagnosis_yearFacility]
+           ,[MedianTimeToARTDiagnosis_YearCountyPartner]
+           ,[MedianTimeToARTDiagnosis_yearCTAgency]
+           ,[MedianTimeToART_Gender]
+           ,[MedianTimeToART_DATIM_AgeGroup])
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
