@@ -40,12 +40,8 @@ Select distinct
     vl.EligibleVL as Eligible4VL,
     vl.Last12MonthVL,
     vl.Last12MVLSup,
-		Case WHEN ISNUMERIC(vl.Last12MonthVLResults) = 1 
-			THEN CASE WHEN CAST(Replace(vl.Last12MonthVLResults,',','')AS FLOAT) > 1000.00 THEN 1 ELSE 0 END
-		END as HighViremia,
-		Case WHEN ISNUMERIC(vl.Last12MonthVLResults) = 1 
-			THEN CASE WHEN CAST(Replace(vl.Last12MonthVLResults,',','')AS FLOAT) between 400.00 and 1000.00 THEN 1 ELSE 0 END
-		END as LowViremia,
+    vl.HighViremia,
+    vl.LowViremia,
     pat.ISTxCurr
     
 INTO [REPORTING].[dbo].[Linelist_FACTART]

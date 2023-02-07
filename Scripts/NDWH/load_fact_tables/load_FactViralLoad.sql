@@ -223,6 +223,12 @@ BEGIN
 			latest_VL_1.LatestVLDate1,
 			latest_VL_2.LatestVLDate2,
 			latest_VL_3.LatestVLDate3,
+			Case WHEN ISNUMERIC(last_12M_VL_indicators.Last12MonthVLResults) = 1 
+				THEN CASE WHEN CAST(Replace(last_12M_VL_indicators.Last12MonthVLResults,',','')AS FLOAT) > 1000.00 THEN 1 ELSE 0 END
+			END as HighViremia,
+			Case WHEN ISNUMERIC(last_12M_VL_indicators.Last12MonthVLResults) = 1 
+				THEN CASE WHEN CAST(Replace(last_12M_VL_indicators.Last12MonthVLResults,',','')AS FLOAT) between 400.00 and 1000.00 THEN 1 ELSE 0 END
+			END as LowViremia,
 			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
 		from ODS.dbo.CT_Patient as patient
 		left join eligible_for_VL on eligible_for_VL.PatientPK = patient.PatientPK
@@ -281,7 +287,9 @@ BEGIN
 		combined_viral_load_dataset.FirstVL,
 		combined_viral_load_dataset.LastVL,
 		combined_viral_load_dataset.TimetoFirstVL,
-		combined_viral_load_dataset.TimeToFirstVLGrp
+		combined_viral_load_dataset.TimeToFirstVLGrp,
+		combined_viral_load_dataset.HighViremia,
+		combined_viral_load_dataset.LowViremia
 	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_viral_load_dataset.PatientPK as nvarchar(36))), 2)
