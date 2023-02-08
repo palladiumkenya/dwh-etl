@@ -34,8 +34,12 @@ BEGIN
 					  0 AS KnockOutDrug
 					  ,P.ID as PatientUnique_ID
 					  ,PP.PatientId as UniquePatientPharmacyId
-					  ,PP.ID as PatientPharmacyUnique_ID
-					FROM [DWAPICentral].[dbo].[PatientExtract] P 
+					  ,PP.ID as PatientPharmacyUnique_ID,
+					  convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+
+											FROM [DWAPICentral].[dbo].[PatientExtract] P 
 						--INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
 						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -54,8 +58,8 @@ BEGIN
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID) 
-					VALUES(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID)
+					INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
+					VALUES(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,CKV,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 			
 				WHEN MATCHED THEN
 					UPDATE SET 

@@ -41,7 +41,12 @@ BEGIN
 						PS.ReEnrollmentDate ReEnrollmentDate
 						,P.ID as PatientUnique_ID
 						,PS.PatientId as UniquePatientStatusId
-						,PS.ID as PatientStatusUnique_ID
+						,PS.ID as PatientStatusUnique_ID,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+						
+	
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -56,8 +61,8 @@ BEGIN
 						--and a.PatientStatusUnique_ID = b.PatientStatusUnique_ID
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID )--/*,SpecificDeathReason,DeathDate,EffectiveDiscontinuationDate */) 
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID) --/*ReasonForDeath,SpecificDeathReason,DeathDate /*EffectiveDiscontinuationDate/*);
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
 			
 						WHEN MATCHED THEN
 							UPDATE SET 

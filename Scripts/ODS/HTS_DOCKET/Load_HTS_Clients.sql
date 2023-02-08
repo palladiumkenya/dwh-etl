@@ -1,3 +1,4 @@
+
 BEGIN
 
 			MERGE [ODS].[dbo].[HTS_clients] AS a
@@ -20,7 +21,9 @@ BEGIN
 					  ,NUPI
 					  ,HtsRecencyId
 		              ,Occupation 
-                     ,PriorityPopulationType 
+                     ,PriorityPopulationType ,
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash
 					FROM [HTSCentral].[dbo].[Clients](NoLock) a
 				INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
@@ -36,8 +39,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType ) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType )
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType ,PatientPKHash,HtsNumberHash ) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType  ,PatientPKHash,HtsNumberHash)
 				
 					WHEN MATCHED THEN
 						UPDATE SET       

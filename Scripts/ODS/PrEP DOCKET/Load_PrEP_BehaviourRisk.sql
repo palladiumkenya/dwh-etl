@@ -1,4 +1,6 @@
+
 BEGIN
+
 --truncate table [ODS].[dbo].[PrEP_BehaviourRisk]
 MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
 	USING(SELECT distinct
@@ -39,7 +41,9 @@ MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
       ,[NumberofchildrenWithPartner]
       ,a.[Date_Created]
       ,a.[Date_Last_Modified]
-	  ,a.SiteCode +'-'+ a.PatientPK AS CKV
+	  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
   FROM [PREPCentral].[dbo].[PrepBehaviourRisks](NoLock)a
   inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
 
@@ -67,14 +71,14 @@ AS b    			ON(
 		  ,VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV)
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash)
 		  
 
 		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
           VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV) 
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
 
 	  WHEN MATCHED THEN
 						UPDATE SET 

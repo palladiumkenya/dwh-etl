@@ -1,3 +1,4 @@
+
 BEGIN
 		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
@@ -24,7 +25,9 @@ BEGIN
 				  ,[Age]
 				  ,[DateElicited]
 				  ,Cl.[Dob]
-				  ,[LinkDateLinkedToCare]
+				  ,[LinkDateLinkedToCare],
+				convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash
 			  FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
@@ -51,8 +54,8 @@ BEGIN
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash)
 
 	WHEN MATCHED THEN
 		UPDATE SET 
