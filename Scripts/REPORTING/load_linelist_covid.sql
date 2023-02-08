@@ -2,14 +2,14 @@ IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo
 TRUNCATE TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
-INSERT INTO REPORTING.dbo.LineListCovid (MFLCode, FacilityName, County, SubCounty, CTPartner, CTAgency, Gender, AgeGroup,Covid19AssessmentDateKey, ReceivedCOVID19Vaccine, DateGivenFirstDoseKey,FirstDoseVaccineAdministered, DateGivenSecondDoseKey, SecondDoseVaccineAdministered, VaccinationStatus, VaccineVerification,BoosterGiven, BoosterDose, BoosterDoseDateKey, EverCOVID19Positive, COVID19TestDateKey, PatientStatus, AdmissionStatus, AdmissionUnit, MissedAppointmentDueToCOVID19, COVID19PositiveSinceLasVisit, COVID19TestDateSinceLastVisit, PatientStatusSinceLastVisit, AdmissionStatusSinceLastVisit, AdmissionStartDateKey, AdmissionEndDateKey, AdmissionUnitSinceLastVisit, SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome, CauseOfDeath) 
+INSERT INTO REPORTING.dbo.LineListCovid (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,Covid19AssessmentDateKey, ReceivedCOVID19Vaccine, DateGivenFirstDoseKey,FirstDoseVaccineAdministered, DateGivenSecondDoseKey, SecondDoseVaccineAdministered, VaccinationStatus, VaccineVerification,BoosterGiven, BoosterDose, BoosterDoseDateKey, EverCOVID19Positive, COVID19TestDateKey, PatientStatus, AdmissionStatus, AdmissionUnit, MissedAppointmentDueToCOVID19, COVID19PositiveSinceLasVisit, COVID19TestDateSinceLastVisit, PatientStatusSinceLastVisit, AdmissionStatusSinceLastVisit, AdmissionStartDateKey, AdmissionEndDateKey, AdmissionUnitSinceLastVisit, SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome, CauseOfDeath) 
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
 County,
 SubCounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 age.DATIMAgeGroup as AgeGroup,
 Covid19AssessmentDateKey,
