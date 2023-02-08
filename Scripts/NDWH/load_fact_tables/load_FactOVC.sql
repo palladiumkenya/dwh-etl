@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FactOVC]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactOVC];
+BEGIN	
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -53,3 +56,4 @@ left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_ovc.AgeLas
 left join NDWH.dbo.DimRelationshipWithPatient as relationship_client on relationship_client.RelationshipWithPatient = source_ovc.RelationshipToClient;
 
 alter table NDWH.dbo.FactOVC add primary key(FactKey);
+END

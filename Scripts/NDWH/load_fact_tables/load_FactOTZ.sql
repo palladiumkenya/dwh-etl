@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[NDWH].[dbo].[FactOTZ]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[FactOTZ];
+BEGIN
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -13,6 +16,7 @@ select
 	otz.OTZEnrollmentDate,
 	otz.LastVisitDate,
 	otz.TransferInStatus,
+	otz.TransitionAttritionReason,
 	otz.ModulesPreviouslyCovered,
 	otz.ModulesCompletedToday_OTZ_Orientation,
 	otz.ModulesCompletedToday_OTZ_Participation,
@@ -38,6 +42,7 @@ select
     age_group.AgeGroupKey,
     otz_enrollment.DateKey as OTZEnrollmentDateKey,
     last_visit.DateKey as LastVisitDateKey,
+	otz_and_last_encounter_combined.TransitionAttritionReason,
     otz_and_last_encounter_combined.TransferInStatus,
 	otz_and_last_encounter_combined.ModulesPreviouslyCovered,
 	otz_and_last_encounter_combined.ModulesCompletedToday_OTZ_Orientation,
@@ -62,3 +67,4 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = otz_and_last_encounter_combined.AgeLastVisit;
 
 alter table NDWH.dbo.FactOTZ add primary key(FactKey);
+END
