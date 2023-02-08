@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 	TRUNCATE TABLE [REPORTING].[dbo].[AggregateCohortRetention]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateCohortRetention
+INSERT INTO REPORTING.dbo.AggregateCohortRetention (MFLCode,FacilityName,County,SubCounty, CTPartner, CTAgency,Gender,AgeGroup, StartARTYearMonth,patients_startedART)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,

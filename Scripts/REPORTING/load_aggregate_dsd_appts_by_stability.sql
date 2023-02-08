@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDApptsByStability]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateDSDApptsByStability
+INSERT INTO REPORTING.dbo.AggregateDSDApptsByStability (MFLCode,FacilityName,County,SubCounty,CTPartner,CTAgency,Gender,AgeGroup, AppointmentsCategory,StabilityAssessment,Stability, patients_number)
 SELECT 
 MFLCode,
 FacilityName,
