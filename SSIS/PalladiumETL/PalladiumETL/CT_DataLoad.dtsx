@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="11"
-  DTS:VersionGUID="{E5203314-AA63-4155-B153-5FE983AB17E1}">
+  DTS:VersionBuild="12"
+  DTS:VersionGUID="{91D8A7C2-BA08-49DF-A88E-665BAA09CED3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -322,6 +322,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{07924AFE-CF78-4CFE-BA3F-28A4B35BA5AE}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="DQS Checks on ODS"
       DTS:ThreadHint="0">
