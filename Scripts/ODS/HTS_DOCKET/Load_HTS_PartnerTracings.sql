@@ -1,4 +1,5 @@
 BEGIN
+		--truncate table [ODS].[dbo].[HTS_PartnerTracings]
 		MERGE [ODS].[dbo].[HTS_PartnerTracings] AS a
 			USING(SELECT DISTINCT a.[FacilityName]
 			  ,a.[SiteCode]
@@ -16,7 +17,14 @@ BEGIN
 		  ) AS b 
 			ON(
 				a.PatientPK  = b.PatientPK 
-			and a.SiteCode = b.SiteCode						
+			and a.SiteCode = b.SiteCode		
+			
+			and a.TraceDate  = b.TraceDate 
+			and a.TraceOutcome COLLATE Latin1_General_CI_AS = b.TraceOutcome 
+			and a.BookingDate  = b.BookingDate 
+			and a.TraceType COLLATE Latin1_General_CI_AS = b.TraceType 
+			and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber 
+
 			)
 	WHEN NOT MATCHED THEN 
 		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate) 

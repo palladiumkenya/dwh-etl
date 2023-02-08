@@ -18,6 +18,9 @@ BEGIN
 					  ,[SubCounty]
 					  ,[Ward]
 					  ,NUPI
+					  ,HtsRecencyId
+		              ,Occupation 
+                     ,PriorityPopulationType 
 					FROM [HTSCentral].[dbo].[Clients](NoLock) a
 				INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
@@ -33,8 +36,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI)
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType ) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType )
 				
 					WHEN MATCHED THEN
 						UPDATE SET       

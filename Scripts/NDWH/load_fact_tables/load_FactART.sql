@@ -57,7 +57,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             age_group.AgeGroupKey,
             StartARTDate.Date As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
-            art_outcome.ARTOutcomeKey,
+            ARTOutcome.ARTOutcomeKey,
             lastRegimen As CurrentRegimen,
             LastRegimenLine As CurrentRegimenline,
             StartRegimen,
@@ -87,7 +87,7 @@ left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDa
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK = Patient.PatientPk  
   and IOutcomes.SiteCode = Patient.SiteCode
-left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcomeID=IOutcomes.ARTOutcome;
+left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END

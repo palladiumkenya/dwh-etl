@@ -1,8 +1,8 @@
-IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LineListCovid]') AND type in (N'U')) > 0
-TRUNCATE TABLE [dbo].[LineListCovid]
+IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[LineListCovid]') AND type in (N'U')) 
+TRUNCATE TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
-INSERT INTO REPORTING.dbo.LineListCovid
+INSERT INTO REPORTING.dbo.LineListCovid (MFLCode, FacilityName, County, SubCounty, CTPartner, CTAgency, Gender, AgeGroup,Covid19AssessmentDateKey, ReceivedCOVID19Vaccine, DateGivenFirstDoseKey,FirstDoseVaccineAdministered, DateGivenSecondDoseKey, SecondDoseVaccineAdministered, VaccinationStatus, VaccineVerification,BoosterGiven, BoosterDose, BoosterDoseDateKey, EverCOVID19Positive, COVID19TestDateKey, PatientStatus, AdmissionStatus, AdmissionUnit, MissedAppointmentDueToCOVID19, COVID19PositiveSinceLasVisit, COVID19TestDateSinceLastVisit, PatientStatusSinceLastVisit, AdmissionStatusSinceLastVisit, AdmissionStartDateKey, AdmissionEndDateKey, AdmissionUnitSinceLastVisit, SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome, CauseOfDeath) 
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
@@ -14,9 +14,9 @@ Gender,
 age.DATIMAgeGroup as AgeGroup,
 Covid19AssessmentDateKey,
 ReceivedCOVID19Vaccine,
-DateGivenFirstDoseKey,
+cast(cast(DateGivenFirstDoseKey as char) as date) as DateGivenFirstDoseKey,
 FirstDoseVaccineAdministered,
-DateGivenSecondDoseKey,
+cast(cast(DateGivenSecondDoseKey as char) as date) as DateGivenSecondDoseKey,
 SecondDoseVaccineAdministered,
 VaccinationStatus,
 VaccineVerification,

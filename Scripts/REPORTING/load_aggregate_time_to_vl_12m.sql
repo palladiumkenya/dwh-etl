@@ -1,4 +1,4 @@
-IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL12M]') AND type in (N'U')) > 0
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL12M]') AND type in (N'U')) 
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToVL12M]
 GO
 INSERT INTO [REPORTING].dbo.AggregateTimeToVL12M
@@ -24,5 +24,5 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
-WHERE MFLCode >1 and  DateDIFF(MONTH,StartARTDateKey,GETDATE())<=12 AND TimetoFirstVL IS NOT NULL
+WHERE DateDIFF(MONTH,StartARTDateKey,GETDATE())<=12 AND TimetoFirstVL IS NOT NULL
 ORDER BY county desc

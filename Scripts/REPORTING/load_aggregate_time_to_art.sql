@@ -1,9 +1,28 @@
-
-IF (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U')) > 0
+Go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToART]') AND type in (N'U'))
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToART]
 GO
 
-INSERT INTO [REPORTING].dbo.AggregateTimeToART
+INSERT INTO [REPORTING].[dbo].[AggregateTimeToART]
+           ([MFLCode]
+           ,[FacilityName]
+           ,[SubCounty]
+           ,[County]
+           ,[CTPartner]
+           ,[CTAgency]
+           ,[Gender]
+           ,[AgeGroup]
+           ,[StartARTYear]
+           ,[StartARTYearMonth]
+           ,[MedianTimeToARTDiagnosis_year]
+           ,[MedianTimeToARTDiagnosis_yearPartner]
+           ,[MedianTimeToARTDiagnosis_yearCounty]
+           ,[MedianTimeToARTDiagnosis_yearSbCty]
+           ,[MedianTimeToARTDiagnosis_yearFacility]
+           ,[MedianTimeToARTDiagnosis_YearCountyPartner]
+           ,[MedianTimeToARTDiagnosis_yearCTAgency]
+           ,[MedianTimeToART_Gender]
+           ,[MedianTimeToART_DATIM_AgeGroup])
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,

@@ -21,10 +21,10 @@ MERGE [ODS].[dbo].[CT_FacilityManifest] AS a
 		a.[UploadMode]	=b.[UploadMode],	
 		a.[Start]		=b.[Start],		
 		a.[End]			=b.[End],			
-		a.[Tag]			=b.[Tag]
-	WHEN NOT MATCHED BY SOURCE 
-	THEN
-	/* The Record is in the target table but doen't exit on the source table*/
-		Delete;
+		a.[Tag]			=b.[Tag];
+	--WHEN NOT MATCHED BY SOURCE 
+	--THEN
+	--/* The Record is in the target table but doen't exit on the source table*/
+	--	Delete;
 
 
