@@ -1,3 +1,4 @@
+
 BEGIN
 	
 		ALTER TABLE [HTSCentral].[dbo].[HtsClientTracing]	ALTER COLUMN [TracingDate] nvarchar(4000) COLLATE Latin1_General_CI_AS;
@@ -16,7 +17,9 @@ BEGIN
 				  ,a.[Project]     
 				  ,[TracingType]
 				  ,[TracingDate]
-				  ,[TracingOutcome]
+				  ,[TracingOutcome],
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
+				convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash
 			  FROM [HTSCentral].[dbo].[HtsClientTracing] (NoLock)a
 				INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
@@ -32,8 +35,8 @@ BEGIN
 			and a.FacilityName COLLATE Latin1_General_CI_AS = b.FacilityName
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash)
 
 	WHEN MATCHED THEN
 		UPDATE SET 
@@ -50,3 +53,4 @@ BEGIN
 				/* The Record is in the target table but doen't exit on the source table*/
 			Delete;
 END
+

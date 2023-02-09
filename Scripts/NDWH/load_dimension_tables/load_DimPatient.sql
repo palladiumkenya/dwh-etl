@@ -98,7 +98,6 @@ BEGIN
         combined_data.EnrollmentWHOKey,
         combined_data.DateBaselineWHOKey,
         combined_data.BaseLineWHOKey,
-        combined_data.DateBaselineWHOKey,
         combined_data.PrepEnrollmentDateKey,
         combined_data.IsTXCurr,
         combined_data.LoadDate
