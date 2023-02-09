@@ -63,16 +63,9 @@ BEGIN
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
-						--a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
-						--a.Drug						=b.Drug,
-						a.Duration					=b.Duration,
-						a.ExpectedReturn			=b.ExpectedReturn,
-						--a.TreatmentType				=b.TreatmentType,
 						a.PeriodTaken				=b.PeriodTaken,
 						a.ProphylaxisType			=b.ProphylaxisType,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
 						a.RegimenLine				=b.RegimenLine,
 						a.RegimenChangedSwitched	=b.RegimenChangedSwitched,
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,

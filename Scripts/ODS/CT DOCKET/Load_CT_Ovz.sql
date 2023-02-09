@@ -52,18 +52,14 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.FacilityName				=b.FacilityName,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
+						a.FacilityName				=b.FacilityName,						
 						a.OVCEnrollmentDate			=b.OVCEnrollmentDate,
 						a.RelationshipToClient		=b.RelationshipToClient,
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
 						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
 						a.OVCExitReason				=b.OVCExitReason,
-						a.ExitDate					=b.ExitDate,
-						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV;
+						a.ExitDate					=b.ExitDate;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN
@@ -77,7 +73,7 @@ BEGIN
 					--	FROM [ODS].[dbo].[CT_Ovc] 
 					--	)  
 			
-				DELETE FROM CTE WHERE dump_ >1;		
+				--DELETE FROM CTE WHERE dump_ >1;		
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]
 					SET LoadEndDateTime = GETDATE()

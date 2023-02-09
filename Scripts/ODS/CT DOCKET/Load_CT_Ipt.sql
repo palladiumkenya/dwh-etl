@@ -55,10 +55,8 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.PatientID				=b.PatientID,
-						a.FacilityName			=b.FacilityName,
-						a.Emr					=b.Emr,
-						a.Project				=b.Project,
+						
+						a.FacilityName			=b.FacilityName,						
 						a.OnTBDrugs				=b.OnTBDrugs,
 						a.OnIPT					=b.OnIPT,
 						a.EverOnIPT				=b.EverOnIPT,
@@ -77,9 +75,7 @@ BEGIN
 						a.TBScreening			=b.TBScreening,
 						a.IPTClientWorkUp		=b.IPTClientWorkUp,
 						a.StartIPT				=b.StartIPT,
-						a.IndicationForIPT		=b.IndicationForIPT,
-						a.DateImported			=b.DateImported,
-						a.CKV					=b.CKV;
+						a.IndicationForIPT		=b.IndicationForIPT;
 						
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

@@ -43,6 +43,8 @@ MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
 					--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						a.PatientPK  = b.PatientPK						
 					and a.SiteCode = b.SiteCode
+					and a.VisitID = b.VisitID
+					and a.[DispenseDate] = b.[DispenseDate]
 					) 
 
 	 WHEN NOT MATCHED THEN 
@@ -55,14 +57,11 @@ MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
 
 	  WHEN MATCHED THEN
 						UPDATE SET 														
-							a.StatusDate=b.StatusDate,
-							a.DateExtracted=b.DateExtracted,							
+							a.StatusDate=b.StatusDate,						
 							a.RegimenPrescribed=b.RegimenPrescribed,
-							a.Date_Created=b.Date_Created,
-							a.DispenseDate=b.DispenseDate,
 							a.Date_Last_Modified=b.Date_Last_Modified,
 							a.Duration=b.Duration,
-							a.EMR							=b.EMR;						
+							a.EMR	=b.EMR;						
 						
 
 	END

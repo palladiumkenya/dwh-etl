@@ -55,10 +55,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PatientID				=b.PatientID,
 							a.FacilityName			=b.FacilityName,
-							a.Emr					=b.Emr,
-							a.Project				=b.Project,
 							a.ChronicIllness		=b.ChronicIllness,
 							a.ChronicOnsetDate		=b.ChronicOnsetDate,
 							a.knownAllergies		=b.knownAllergies,
@@ -73,9 +70,7 @@ BEGIN
 							a.CVS					=b.CVS,
 							a.Abdomen				=b.Abdomen,
 							a.CNS					=b.CNS,
-							a.Genitourinary			=b.Genitourinary,
-							a.DateImported			=b.DateImported,
-							a.CKV					=b.CKV;
+							a.Genitourinary			=b.Genitourinary;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

@@ -57,11 +57,8 @@ BEGIN
 						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,SessionNumber,DateOfFirstSession,PillCountAdherence,MMAS4_1,MMAS4_2,MMAS4_3,MMAS4_4,MMSA8_1,MMSA8_2,MMSA8_3,MMSA8_4,MMSAScore,EACRecievedVL,EACVL,EACVLConcerns,EACVLThoughts,EACWayForward,EACCognitiveBarrier,EACBehaviouralBarrier_1,EACBehaviouralBarrier_2,EACBehaviouralBarrier_3,EACBehaviouralBarrier_4,EACBehaviouralBarrier_5,EACEmotionalBarriers_1,EACEmotionalBarriers_2,EACEconBarrier_1,EACEconBarrier_2,EACEconBarrier_3,EACEconBarrier_4,EACEconBarrier_5,EACEconBarrier_6,EACEconBarrier_7,EACEconBarrier_8,EACReviewImprovement,EACReviewMissedDoses,EACReviewStrategy,EACReferral,EACReferralApp,EACReferralExperience,EACHomevisit,EACAdherencePlan,EACFollowupDate,DateImported,CKV,PatientUnique_ID,EnhancedAdherenceCounsellingUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
-						UPDATE SET 
-						a.PatientID					=b.PatientID,						
+						UPDATE SET 						
 						a.FacilityName				=b.FacilityName,					
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
 						a.SessionNumber				=b.SessionNumber,
 						a.DateOfFirstSession		=b.DateOfFirstSession,
 						a.PillCountAdherence		=b.PillCountAdherence,
@@ -103,9 +100,7 @@ BEGIN
 						a.EACReferralExperience		=b.EACReferralExperience,
 						a.EACHomevisit				=b.EACHomevisit	,
 						a.EACAdherencePlan			=b.EACAdherencePlan,
-						a.EACFollowupDate			=b.EACFollowupDate,
-						a.DateImported				=b.DateImported	,
-						a.CKV						=b.CKV;
+						a.EACFollowupDate			=b.EACFollowupDate;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

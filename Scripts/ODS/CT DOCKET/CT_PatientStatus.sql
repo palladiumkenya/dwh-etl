@@ -66,13 +66,9 @@ BEGIN
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
-								a.PatientID						=b.PatientID,
 								a.FacilityName					=b.FacilityName,
 								a.ExitDescription				=b.ExitDescription,
 								a.ExitReason					=b.ExitReason,
-								a.PatientPK						=b.PatientPK,
-								a.Emr							=b.Emr,
-								a.Project						=b.Project,
 								a.TOVerified					=b.TOVerified	,
 								a.TOVerifiedDate				=b.TOVerifiedDate,
 								a.ReEnrollmentDate				=b.ReEnrollmentDate,

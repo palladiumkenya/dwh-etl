@@ -56,10 +56,8 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 		  AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,AdverseEventCause,AdverseEventRegimen,
 		  Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
 
-	WHEN MATCHED THEN UPDATE SET 															 				
-		a.StatusDate=b.StatusDate,				
+	WHEN MATCHED THEN UPDATE SET 															 								
 		a.AdverseEvent					=b.AdverseEvent,
-		a.AdverseEventStartDate			=b.AdverseEventStartDate,
 		a.AdverseEventEndDate			=b.AdverseEventEndDate,
 		a.Severity						=b.Severity,
 		a.AdverseEventCause				=b.AdverseEventCause,
@@ -67,7 +65,6 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 		a.AdverseEventActionTaken		=b.AdverseEventActionTaken,
 		a.AdverseEventClinicalOutcome	=b.AdverseEventClinicalOutcome,
 		a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
-		a.Date_Created                  =b.Date_Created,
 		a.Date_Last_Modified            =b.Date_Last_Modified;			
 						
 END

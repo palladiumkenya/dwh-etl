@@ -54,10 +54,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
 						a.PHQ9_1					=b.PHQ9_1,
 						a.PHQ9_2					=b.PHQ9_2,
 						a.PHQ9_3					=b.PHQ9_3,
@@ -68,9 +65,7 @@ BEGIN
 						a.PHQ9_8					=b.PHQ9_8,
 						a.PHQ9_9					=b.PHQ9_9,
 						a.PHQ_9_rating				=b.PHQ_9_rating,
-						a.DepressionAssesmentScore	=b.DepressionAssesmentScore,
-						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV;
+						a.DepressionAssesmentScore	=b.DepressionAssesmentScore;
 					
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

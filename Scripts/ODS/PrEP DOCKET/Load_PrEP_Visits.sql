@@ -87,6 +87,8 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 			--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 				a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode
+			and a.visitID = b.visitID
+			and a.VisitDate = b. visitDate
 			) 
 
 	 WHEN NOT MATCHED THEN 
@@ -150,9 +152,7 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 				a.VaccinationForHepCStarted=b.VaccinationForHepCStarted,
 				a.TreatedForHepC=b.TreatedForHepC,
 				a.NextAppointment=b.NextAppointment,
-				a.ClinicalNotes=b.ClinicalNotes,    
-				a.Date_Created=b.Date_Created,							
-				a.Date_Last_Modified=b.Date_Last_Modified;					
+				a.ClinicalNotes=b.ClinicalNotes;					
 																
 END
 

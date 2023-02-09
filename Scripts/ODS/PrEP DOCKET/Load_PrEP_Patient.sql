@@ -69,8 +69,6 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 					a.Status=b.Status,
 					a.StatusDate=b.StatusDate,													
 					a.PrepEnrollmentDate=b.PrepEnrollmentDate,
-					a.Sex=b.Sex,
-					a.DateofBirth=b.DateofBirth,
 					a.CountyofBirth=b.CountyofBirth,
 					a.County=b.County,
 					a.SubCounty=b.SubCounty,
@@ -90,11 +88,7 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 					a.DatefirstinitiatedinPrepCare=b.DatefirstinitiatedinPrepCare,
 					a.DateStartedPrEPattransferringfacility=b.DateStartedPrEPattransferringfacility,
 					a.ClientPreviouslyonPrep=b.ClientPreviouslyonPrep,
-					a.PrevPrepReg=b.PrevPrepReg,
-					a.DateLastUsedPrev=b.DateLastUsedPrev,
-					a.Date_Created=b.Date_Created,
-					a.Date_Last_Modified=b.Date_Last_Modified,
-					a.EMR=b.EMR;										
+					a.PrevPrepReg=b.PrevPrepReg;										
 
 	END
 

@@ -60,19 +60,9 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PatientID						=b.PatientID,
-							a.AdverseEvent					=b.AdverseEvent,
-							a.AdverseEventStartDate			=b.AdverseEventStartDate,
-							a.AdverseEventEndDate			=b.AdverseEventEndDate,
-							a.Severity						=b.Severity,
 							a.EMR							=b.EMR,
 							a.Project						=b.Project,
-							a.AdverseEventCause				=b.AdverseEventCause,
-							a.AdverseEventRegimen			=b.AdverseEventRegimen,
-							a.AdverseEventActionTaken		=b.AdverseEventActionTaken,
-							a.AdverseEventClinicalOutcome	=b.AdverseEventClinicalOutcome,
-							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
-							a.CKV							=b.CKV		
+							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant;	
 					
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN
