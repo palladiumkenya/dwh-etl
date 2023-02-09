@@ -6,8 +6,8 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT
         FacilityName,
         County, 
         Subcounty, 
-        CTPartner,
-        CTAgency,
+        PartnerName,
+        AgencyName,
         Agegroup,
         [DATIMAgeGroup],
         Gender,
@@ -24,8 +24,8 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT
 		  FacilityName, 
 		  County, 
 		  Subcounty, 
-		  PartnerName As CTPartner, 
-	      AgencyName As CTAgency,
+		  PartnerName, 
+	      AgencyName,
 		  DateName(m, StartARTDate) AS StartARTMonth, 
 		  Year(StartARTDate) AS StartARTYr, 
 		  CASE WHEN StartRegimen like '3TC+DTG+TDF' THEN 'TLD' 
@@ -41,5 +41,5 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT
 		  INNER JOIN NDWH.dbo.DimAgeGroup b  on a.age = b.Age 
 		where 
 		  ISTxCurr = 1 ) H 
-	Group By SiteCode, FacilityName,County, Subcounty, CTPartner,CTAgency,StartRegimen,Agegroup,[DATIMAgeGroup],Gender,StartARTMonth,StartARTYr,Firstregimen
+	Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,StartRegimen,Agegroup,[DATIMAgeGroup],Gender,StartARTMonth,StartARTYr,Firstregimen
 	;

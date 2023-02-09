@@ -8,8 +8,8 @@ INSERT INTO [REPORTING].[dbo].[AggregateTimeToARTGrp]
            ,[FacilityName]
            ,[County]
            ,[Subcounty]
-           ,[CTPartner]
-           ,[CTAgency]
+           ,[PartnerName]
+           ,[AgencyName]
            ,[Gender]
            ,[AgeGroup]
            ,[StartARTYear]
@@ -23,8 +23,8 @@ MFLCode,
 f.FacilityName,
 County,
 Subcounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 g.DATIMAgeGroup as AgeGroup,
 Year(StartARTDateKey) StartARTYear,
