@@ -3,7 +3,8 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 TRUNCATE TABLE [REPORTING].[dbo].[LineListVLNonSuppressed]
 GO
 
-INSERT INTO [REPORTING].[dbo].[LineListVLNonSuppressed]
+INSERT INTO [REPORTING].[dbo].[LineListVLNonSuppressed] (MFLCode,FacilityName,SubCounty,County,CTPartner,CTAgency,Gender, AgeGroup,AgeLastVisit, StartARTDate,Last12MonthVLResults,LastVisitDate,NextAppointmentDate, ARTOutcome
+)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,

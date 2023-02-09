@@ -1,6 +1,6 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT NULL	
 	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
-
+-- TODO:: Add Last12MVLResult
 	SELECT 
         SiteCode,
         FacilityName,
