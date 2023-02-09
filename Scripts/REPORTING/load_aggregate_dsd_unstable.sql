@@ -8,8 +8,8 @@ MFLCode,
 FacilityName,
 County,
 SubCounty,
-CTPartner,
-CTAgency,
+PartnerName,
+AgencyName,
 Gender,
 AgeGroup, 
 Sum ([OnART<12Months]) as onARTlessthan12mnths,
@@ -26,8 +26,8 @@ FROM (
     f.FacilityName,
     County,
     SubCounty,
-    p.PartnerName as CTPartner,
-    a.AgencyName as CTAgency,
+    p.PartnerName,
+    a.AgencyName,
     Gender,
     age.DATIMAgeGroup as AgeGroup, 
     CASE WHEN DATEDIFF(MONTH,art.StartARTDateKey,GETDATE())>=12 THEN 0
@@ -51,5 +51,5 @@ FROM (
     LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = lob.PatientKey and vl.PatientKey IS NOT NULL
     WHERE pat.isTXCurr = 1
 ) A
-GROUP BY MFLCode, FacilityName, County, SubCounty, CTPartner, CTAgency, Gender, AgeGroup
+GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup
 GO
