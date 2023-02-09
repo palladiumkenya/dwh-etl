@@ -2,7 +2,7 @@
 IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateVLUptakeOutcome]') AND type in (N'U'))
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateVLUptakeOutcome]
 GO
--- TODO::Fix StartARTYear & Last12MVLResult
+
 INSERT INTO [REPORTING].dbo.AggregateVLUptakeOutcome (MFLCode, FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, StartARTYear, AgeGroup, TotalLast12MVL, Last12MVLResult, TXCurr, EligibleVL12Mnths, VLDone, VirallySuppressed, NewLast12MVLResult)
 SELECT
 	MFLCode,
