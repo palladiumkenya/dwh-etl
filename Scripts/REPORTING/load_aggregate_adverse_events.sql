@@ -38,7 +38,7 @@ with AdverseEvents as (
             pat.IsTXCurr = 1
 )
 
-INSERT INTO [REPORTING].[dbo].AggregateAdverseEvents
+INSERT INTO [REPORTING].[dbo].AggregateAdverseEvents (MFLCode,DATIMAgeGroup,Gender,FacilityName,County,Subcounty,PartnerName,AgencyName,AdverseEvent,AdverseEventCause,AdverseEventActionTaken,AdverseEventRegimen,Severity,AdverseEventsCount, AdverseClientsCount)
 SELECT
     MFLCode,
     DATIMAgeGroup,

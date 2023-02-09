@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDStable]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateDSDStable
+INSERT INTO REPORTING.dbo.AggregateDSDStable (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup,DifferentiatedCare,  MMDModels, TXCurr)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
