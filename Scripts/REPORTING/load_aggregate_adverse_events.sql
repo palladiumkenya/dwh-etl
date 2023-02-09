@@ -11,7 +11,7 @@ IF EXISTS (
 GO
 
 with AdverseEvents as (
- SELECT
+    SELECT
             MFLCode,
             pat.PatientKey,
             g.DATIMAgeGroup,
@@ -53,7 +53,8 @@ SELECT
     AdverseEventActionTaken,
     AdverseEventRegimen,
     Severity,
-	count(*) as AdverseEventsCount
+	count(*) as AdverseEventsCount,
+	count(DISTINCT PatientKey) as AdverseClientsCount
 
 FROM AdverseEvents
 GROUP BY
