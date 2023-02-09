@@ -8,8 +8,8 @@ MFLCode,
 FacilityName,
 County,
 SubCounty,
-CTPartner,
-CTAgency,
+PartnerName,
+AgencyName,
 Gender,
 AgeGroup, 
 AppointmentsCategory,
@@ -22,8 +22,8 @@ FROM (
 	f.FacilityName,
 	County,
 	SubCounty,
-	p.PartnerName as CTPartner,
-	a.AgencyName as CTAgency,
+	p.PartnerName,
+	a.AgencyName,
 	Gender,
 	age.DATIMAgeGroup as AgeGroup, 
 	Case when ABS(DATEDIFF(DAY,LastVisitDate,NextAppointmentDate)) <=89 THEN '<3 Months'
@@ -45,5 +45,5 @@ FROM (
 	INNER JOIN NDWH.dbo.FactART art on art.PatientKey = lob.PatientKey
 	WHERE pat.isTXCurr = 1
 ) A
-GROUP BY MFLCode, FacilityName, County, SubCounty, CTPartner, CTAgency, Gender, AgeGroup, StabilityAssessment, AppointmentsCategory, Stability
+GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, StabilityAssessment, AppointmentsCategory, Stability
 GO
