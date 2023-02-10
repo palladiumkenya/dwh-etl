@@ -32,7 +32,7 @@ BEGIN
 							[VisitDate], 
 							PA.[EMR], PA.[Project], [AdverseEventCause], [AdverseEventRegimen],
 							[AdverseEventActionTaken],[AdverseEventClinicalOutcome], [AdverseEventIsPregnant], 
-							LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV,
+							LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS	 CKV,
 							GETDATE() AS dateimported
 							,P.ID as PatientUnique_ID
 							,PA.PatientId as UniquePatienAdverseEventsID
