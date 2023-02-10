@@ -18,7 +18,8 @@ BEGIN
 		  ,[TestKitExpiry2]
 		  ,[TestResult2],
 			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2) CKVHash
 	  FROM [HTSCentral].[dbo].[HtsTestKits](NoLock) a
 	  INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 	  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) AS b 
