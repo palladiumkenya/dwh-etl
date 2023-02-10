@@ -89,7 +89,9 @@ CombinedVisits As (
           CASE 
             WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <= 365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
         END AS NextAppointmentDate,
-        cast (getdate() as DATE) as LoadDate
+        cast (getdate() as DATE) as LoadDate,
+			 convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash
        INTO ODS.dbo.Intermediate_LastPatientEncounter
     from CombinedVisits
    where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))

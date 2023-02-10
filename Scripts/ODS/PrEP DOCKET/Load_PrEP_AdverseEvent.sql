@@ -32,7 +32,8 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 				  ,a.[Date_Last_Modified]
 				  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
 				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,   
-				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
 			FROM [PREPCentral].[dbo].[PrepAdverseEvents](NoLock) a
 			inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
 		on a.SiteCode = b.SiteCode 
@@ -49,12 +50,12 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 		  INSERT( Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,
 		  FacilityId,FacilityName,PrepNumber,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,
 		  AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,AdverseEventCause,
-		  AdverseEventRegimen,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
+		  AdverseEventRegimen,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash) 
 
 		  VALUES(Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,FacilityId,
 		  FacilityName,PrepNumber,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,
 		  AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,AdverseEventCause,AdverseEventRegimen,
-		  Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
+		  Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash) 
 
 	WHEN MATCHED THEN UPDATE SET 															 								
 		a.AdverseEvent					=b.AdverseEvent,

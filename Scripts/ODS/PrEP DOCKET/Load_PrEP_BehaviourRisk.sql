@@ -4,8 +4,8 @@ BEGIN
 --truncate table [ODS].[dbo].[PrEP_BehaviourRisk]
 MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
 	USING(SELECT distinct
-
-      a.[RefId]
+	   A.ID
+      ,a.[RefId]
       ,a.[Created]
       ,a.[PatientPk]
       ,a.[SiteCode]
@@ -43,7 +43,8 @@ MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
       ,a.[Date_Last_Modified]
 	  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
 	convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-	convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
   FROM [PREPCentral].[dbo].[PrepBehaviourRisks](NoLock)a
   inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
 
@@ -73,14 +74,14 @@ AS b    			ON(
 		  ,VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash)
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash)
 		  
 
 		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
           VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash) 
 
 	  WHEN MATCHED THEN
 						UPDATE SET 
