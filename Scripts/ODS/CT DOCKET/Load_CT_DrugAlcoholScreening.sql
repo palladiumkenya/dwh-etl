@@ -51,14 +51,10 @@ BEGIN
 					WHEN MATCHED THEN
 						UPDATE SET 
 						--a.PatientID			=b.PatientID,
-						a.FacilityName		=b.FacilityName,
-						a.Emr				=b.Emr,
-						a.Project			=b.Project,
+						a.FacilityName		=b.FacilityName,					
 						a.DrinkingAlcohol	=b.DrinkingAlcohol,
 						a.Smoking			=b.Smoking,
-						a.DrugUse			=b.DrugUse,
-						a.DateImported		=b.DateImported,
-						a.CKV				=b.CKV;
+						a.DrugUse			=b.DrugUse;
 					
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

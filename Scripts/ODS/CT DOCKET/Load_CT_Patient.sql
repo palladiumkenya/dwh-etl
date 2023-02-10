@@ -38,9 +38,7 @@ BEGIN
 						VALUES(PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,CKV,PatientPKHash,PatientIDHash,CKVHash)
 				
 						WHEN MATCHED THEN
-							UPDATE SET 
-							a.Gender					=b.Gender,
-							a.DOB						=b.DOB,						
+							UPDATE SET 				
 							a.RegistrationAtCCC			=b.RegistrationAtCCC,
 							a.RegistrationAtPMTCT		=b.RegistrationAtPMTCT,
 							a.RegistrationAtTBClinic	=b.RegistrationAtTBClinic,
@@ -54,7 +52,6 @@ BEGIN
 							a.DateConfirmedHIVPositive	=b.DateConfirmedHIVPositive	,
 							a.PreviousARTExposure		=b.PreviousARTExposure,
 							a.PreviousARTStartDate		=b.PreviousARTStartDate,
-							a.Emr						=b.Emr,
 							a.Orphan					=b.Orphan,
 							a.Inschool					=b.Inschool	,
 							a.PatientType				=b.PatientType,
@@ -67,7 +64,7 @@ BEGIN
 							a.PatientResidentWard		=b.PatientResidentWard	,
 							a.PatientResidentVillage	=b.PatientResidentVillage,
 							a.TransferInDate			=b.TransferInDate,
-							a.Occupation				=b.Occupation
+							a.Occupation				=b.Occupation;
 							
 						--WHEN NOT MATCHED BY SOURCE 
 						--THEN

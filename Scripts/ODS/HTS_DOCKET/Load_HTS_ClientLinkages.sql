@@ -19,7 +19,8 @@ BEGIN
 							  ,[ReportedCCCNumber]
 							  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]	,
 							   convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-					       convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash
+					       convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
+						   convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2) as CKVHash
 						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
 						INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted

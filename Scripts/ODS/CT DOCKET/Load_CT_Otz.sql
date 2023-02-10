@@ -51,9 +51,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
-						
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
+												
 						a.OTZEnrollmentDate			=b.OTZEnrollmentDate,
 						a.TransferInStatus			=b.TransferInStatus,
 						a.ModulesPreviouslyCovered	=b.ModulesPreviouslyCovered,
@@ -61,9 +59,7 @@ BEGIN
 						a.SupportGroupInvolvement	=b.SupportGroupInvolvement,
 						a.Remarks					=b.Remarks,
 						a.TransitionAttritionReason	=b.TransitionAttritionReason,
-						a.OutcomeDate				=b.OutcomeDate,
-						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV;
+						a.OutcomeDate				=b.OutcomeDate;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

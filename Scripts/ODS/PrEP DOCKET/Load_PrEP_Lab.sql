@@ -1,6 +1,9 @@
 
 BEGIN
 --truncate table [ODS].[dbo].[PrEP_Lab]
+ --ALTER TABLE [PREPCentral].[dbo].[PrepLabs]  ALTER COLUMN PrepNumber nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS;
+ -- ALTER TABLE [PREPCentral].[dbo].[PrepPatients]  ALTER COLUMN PrepNumber nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS;
+
 MERGE [ODS].[dbo].[PrEP_Lab] AS a
 	USING(SELECT	
 	           a.ID

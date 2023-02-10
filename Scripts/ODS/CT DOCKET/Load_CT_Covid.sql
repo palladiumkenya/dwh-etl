@@ -70,11 +70,8 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
-						a.Emr								=b.Emr,
-						a.Project							=b.Project,
-						a.FacilityName						=b.FacilityName,
-						a.VisitID							=b.VisitID,
-						a.ReceivedCOVID19Vaccine			=b.ReceivedCOVID19Vaccine,
+					
+						a.FacilityName						=b.FacilityName,					
 						a.DateGivenFirstDose				=b.DateGivenFirstDose,
 						a.FirstDoseVaccineAdministered		=b.FirstDoseVaccineAdministered,
 						a.DateGivenSecondDose				=b.DateGivenSecondDose,
@@ -101,8 +98,6 @@ BEGIN
 						a.PatientVentilated					=b.PatientVentilated,
 						a.TracingFinalOutcome				=b.TracingFinalOutcome,
 						a.CauseOfDeath						=b.CauseOfDeath,
-						a.CKV								=b.CKV,
-						a.DateImported						=b.DateImported,
 						a.BoosterDoseVerified				=b.BoosterDoseVerified,
 						a.[Sequence]						=b.[Sequence],
 						a.COVID19TestResult					=b.COVID19TestResult;

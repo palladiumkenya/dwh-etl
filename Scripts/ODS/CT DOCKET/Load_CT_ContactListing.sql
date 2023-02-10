@@ -56,12 +56,8 @@ BEGIN
 						VALUES(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,CKV,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
-						UPDATE SET 
-						a.PatientID						=b.PatientID,						
+						UPDATE SET 					
 						a.FacilityName					=b.FacilityName,
-						a.Emr							=b.Emr,
-						a.Project						=b.Project,
-						a.PartnerPersonID				=b.PartnerPersonID,
 						a.ContactAge					=b.ContactAge,
 						a.ContactSex					=b.ContactSex,
 						a.ContactMaritalStatus			=b.ContactMaritalStatus,
@@ -71,11 +67,7 @@ BEGIN
 						a.IPVScreeningOutcome			=b.IPVScreeningOutcome,
 						a.CurrentlyLivingWithIndexClient=b.CurrentlyLivingWithIndexClient,
 						a.KnowledgeOfHivStatus			=b.KnowledgeOfHivStatus,
-						a.PnsApproach					=b.PnsApproach,
-						a.DateImported					=b.DateImported	,
-						a.CKV							=b.CKV,
-						a.ContactPatientPK				=b.ContactPatientPK	,
-						a.DateCreated					=b.DateCreated;
+						a.PnsApproach					=b.PnsApproach;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

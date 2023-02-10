@@ -62,6 +62,8 @@ AS b    			ON(
 						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK						
 						and a.SiteCode = b.SiteCode
+						and a.visitID  = b.visitID
+						and a.VisitDate = b.Visitdate
 						) 
 
 
@@ -92,31 +94,14 @@ AS b    			ON(
 							a.ReferralToOtherPrevServices=b.ReferralToOtherPrevServices,
 							a.FirstEstablishPartnerStatus=b.FirstEstablishPartnerStatus,
 							a.PartnerEnrolledtoCCC=b.PartnerEnrolledtoCCC,
-							a.HIVPartnerCCCnumber=b.HIVPartnerCCCnumber,
 							a.HIVPartnerARTStartDate=b.HIVPartnerARTStartDate,
 							a.MonthsknownHIVSerodiscordant=b.MonthsknownHIVSerodiscordant,
 							a.SexWithoutCondom=b.SexWithoutCondom,
 							a.NumberofchildrenWithPartner=b.NumberofchildrenWithPartner,
-							a.RefId = b.RefId,
-							a.Created = b.Created,				 
-							a.SiteCode=b.SiteCode,						
-							a.Project=b.Project,
-							a.Processed=b.Processed,
-							a.QueueId=b.QueueId,
 							a.Status=b.Status,
-							a.StatusDate=b.StatusDate,
-							a.DateExtracted=b.DateExtracted,
-							a.FacilityId=b.FacilityId,
-							a.FacilityName=b.FacilityName,
-							a.PrepNumber=b.PrepNumber,
-							a.HtsNumber=b.HtsNumber,
-							a.VisitDate=b.VisitDate,
 							a.SexPartnerHIVStatus=b.SexPartnerHIVStatus,
-						    a.VisitID = b.VisitID,
-							a.IsHIVPositivePartnerCurrentonART=b.IsHIVPositivePartnerCurrentonART,
-							a.Date_Created=b.Date_Created,							
-							a.Date_Last_Modified=b.Date_Last_Modified,							
-							a.EMR							=b.EMR;						
+							a.IsHIVPositivePartnerCurrentonART=b.IsHIVPositivePartnerCurrentonART,						
+							a.Date_Last_Modified=b.Date_Last_Modified;						
 						
 							
 				

@@ -56,12 +56,9 @@ MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
 
 	  WHEN MATCHED THEN
 				UPDATE SET 														
-					a.Status=b.Status,
-					a.StatusDate=b.StatusDate,						
+					a.Status=b.Status,					
 					a.ExitDate=b.ExitDate,
 					a.ExitReason=b.ExitReason,
-					a.Date_Created=b.Date_Created,
-					a.DateOfLastPrepDose=b.DateOfLastPrepDose,
 					a.Date_Last_Modified=b.Date_Last_Modified,
 					a.EMR=b.EMR;				
 																			

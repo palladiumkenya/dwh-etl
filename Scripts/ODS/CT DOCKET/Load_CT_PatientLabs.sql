@@ -57,20 +57,12 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PatientID			=b.PatientID	,
 							a.FacilityName		=b.FacilityName	,
-							a.ReportedbyDate	=b.ReportedbyDate,
 							--a.TestName			=b.TestName		,
 							a.EnrollmentTest	=b.EnrollmentTest,
-							 
-							a.Emr				=b.Emr			,
-							a.Project			=b.Project		,
-							a.DateImported		=b.DateImported	,
 							a.Reason			=b.Reason		,
 							a.DateSampleTaken	=b.DateSampleTaken	,
-							a.SampleType		=b.SampleType		,
-							a.Created			=b.Created			,
-							a.CKV				=b.CKV	;
+							a.SampleType		=b.SampleType;
 							
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN
