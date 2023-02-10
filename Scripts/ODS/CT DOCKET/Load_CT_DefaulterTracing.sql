@@ -31,7 +31,11 @@ BEGIN
 					 ,getdate() as [DateImported] 
 					 ,P.ID as PatientUnique_ID
 					 ,C.PatientID as UniquePatientDTracingID
-					 ,C.ID as DefaulterTracingUnique_ID
+					 ,C.ID as DefaulterTracingUnique_ID,
+					 convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -47,13 +51,11 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
-						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID)
+						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
+						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,CKV,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
-						UPDATE SET 						
-						a.Emr			=b.Emr,
-						a.Project		=b.Project,
+						UPDATE SET 												
 						a.FacilityName	=b.FacilityName,
 						a.EncounterId	=b.EncounterId,
 						a.TracingType	=b.TracingType,
@@ -62,10 +64,7 @@ BEGIN
 						a.IsFinalTrace	=b.IsFinalTrace,
 						a.TrueStatus	=b.TrueStatus,
 						a.CauseOfDeath	=b.CauseOfDeath,
-						a.Comments		=b.Comments,
-						a.BookingDate	=b.BookingDate,
-						a.CKV			=b.CKV,
-						a.DateImported	=b.DateImported;
+						a.Comments		=b.Comments;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

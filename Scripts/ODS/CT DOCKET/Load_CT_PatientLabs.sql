@@ -29,7 +29,10 @@ BEGIN
 						PL.SampleType,
 						p.ID as PatientUnique_ID,
 						PL.PatientID as UniquePatientLabID,
-						PL.ID as PatientLabsUnique_ID
+						PL.ID as PatientLabsUnique_ID,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+					convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
@@ -49,25 +52,17 @@ BEGIN
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created) 
-						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created)
+						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created,PatientPKHash,PatientIDHash,CKVHash) 
+						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PatientID			=b.PatientID	,
 							a.FacilityName		=b.FacilityName	,
-							a.ReportedbyDate	=b.ReportedbyDate,
 							--a.TestName			=b.TestName		,
 							a.EnrollmentTest	=b.EnrollmentTest,
-							 
-							a.Emr				=b.Emr			,
-							a.Project			=b.Project		,
-							a.DateImported		=b.DateImported	,
 							a.Reason			=b.Reason		,
 							a.DateSampleTaken	=b.DateSampleTaken	,
-							a.SampleType		=b.SampleType		,
-							a.Created			=b.Created			,
-							a.CKV				=b.CKV	;
+							a.SampleType		=b.SampleType;
 							
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

@@ -1,11 +1,15 @@
+ 
 IF OBJECT_ID(N'[NDWH].[dbo].[FactLatestObs]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FactLatestObs];
+
+ALTER TABLE ODS.dbo.All_EMRSites  ALTER COLUMN SDP_Agency nvarchar(4000) COLLATE Latin1_General_CI_AS;
+
 BEGIN	
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	    SDP_Agency as Agency --collate Latin1_General_CI_AS as Agency
 	from ODS.dbo.All_EMRSites 
 ),
 latest_weight_height as (
