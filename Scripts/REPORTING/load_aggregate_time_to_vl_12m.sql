@@ -7,8 +7,8 @@ MFLCode,
 f.FacilityName,
 SubCounty,
 County,
- p.PartnerName as CTPartner,
- a.AgencyName as CTAgency,
+ p.PartnerName,
+ a.AgencyName,
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
         OVER (PARTITION BY p.PartnerName) AS MedianTimeToFirstVL_Partner,
 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)

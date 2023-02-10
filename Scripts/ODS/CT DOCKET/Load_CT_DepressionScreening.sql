@@ -29,7 +29,11 @@ BEGIN
 						LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 						,P.ID as PatientUnique_ID
 						,DS.PatientId as PatientDepressionScreeningID
-						,DS.ID as DepressionScreeningUnique_ID
+						,DS.ID as DepressionScreeningUnique_ID,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) DS ON DS.[PatientId] = P.ID AND DS.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -45,15 +49,12 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID)
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9,PHQ_9_rating,DepressionAssesmentScore,DateImported,CKV,PatientUnique_ID,DepressionScreeningUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
 						a.PHQ9_1					=b.PHQ9_1,
 						a.PHQ9_2					=b.PHQ9_2,
 						a.PHQ9_3					=b.PHQ9_3,
@@ -64,9 +65,7 @@ BEGIN
 						a.PHQ9_8					=b.PHQ9_8,
 						a.PHQ9_9					=b.PHQ9_9,
 						a.PHQ_9_rating				=b.PHQ_9_rating,
-						a.DepressionAssesmentScore	=b.DepressionAssesmentScore,
-						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV;
+						a.DepressionAssesmentScore	=b.DepressionAssesmentScore;
 					
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN

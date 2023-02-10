@@ -1,3 +1,4 @@
+
 BEGIN
 --ALTER DATABASE SCOPED CONFIGURATION 
 --  SET VERBOSE_TRUNCATION_WARNINGS = ON;
@@ -68,7 +69,9 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 				  ,[ClinicalNotes]
 				  ,a.[Date_Created]
 				  ,a.[Date_Last_Modified]
-				  ,a.SiteCode +'-'+ a.PatientPK AS CKV
+				  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
 		FROM [PREPCentral].[dbo].[PrepVisits](NoLock) a
 			INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated 
 						from [PREPCentral].[dbo].[PrepVisits]
@@ -84,6 +87,8 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 			--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 				a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode
+			and a.visitID = b.visitID
+			and a.VisitDate = b. visitDate
 			) 
 
 	 WHEN NOT MATCHED THEN 
@@ -92,14 +97,14 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 		  PregnantAtThisVisit,EDD,PlanningToGetPregnant,PregnancyPlanned,PregnancyEnded,PregnancyEndDate,PregnancyOutcome,BirthDefects,Breastfeeding,FamilyPlanningStatus,
 		  FPMethods,AdherenceDone,AdherenceOutcome,AdherenceReasons,SymptomsAcuteHIV,ContraindicationsPrep,PrepTreatmentPlan,PrepPrescribed,RegimenPrescribed,MonthsPrescribed,
 		  CondomsIssued,Tobegivennextappointment,Reasonfornotgivingnextappointment,HepatitisBPositiveResult,HepatitisCPositiveResult,VaccinationForHepBStarted,TreatedForHepB,
-		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV)
+		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash)
 		  
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
           VisitDate,VisitID,BloodPressure,Temperature,Weight,Height,BMI,STIScreening,STISymptoms,STITreated,Circumcised,VMMCReferral,LMP,MenopausalStatus,
 		  PregnantAtThisVisit,EDD,PlanningToGetPregnant,PregnancyPlanned,PregnancyEnded,PregnancyEndDate,PregnancyOutcome,BirthDefects,Breastfeeding,FamilyPlanningStatus,
 		  FPMethods,AdherenceDone,AdherenceOutcome,AdherenceReasons,SymptomsAcuteHIV,ContraindicationsPrep,PrepTreatmentPlan,PrepPrescribed,RegimenPrescribed,MonthsPrescribed,
 		  CondomsIssued,Tobegivennextappointment,Reasonfornotgivingnextappointment,HepatitisBPositiveResult,HepatitisCPositiveResult,VaccinationForHepBStarted,TreatedForHepB,
-		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV)
+		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash)
 		  
 	 WHEN MATCHED THEN
 		UPDATE SET													
@@ -147,9 +152,7 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 				a.VaccinationForHepCStarted=b.VaccinationForHepCStarted,
 				a.TreatedForHepC=b.TreatedForHepC,
 				a.NextAppointment=b.NextAppointment,
-				a.ClinicalNotes=b.ClinicalNotes,    
-				a.Date_Created=b.Date_Created,							
-				a.Date_Last_Modified=b.Date_Last_Modified;					
+				a.ClinicalNotes=b.ClinicalNotes;					
 																
 END
 

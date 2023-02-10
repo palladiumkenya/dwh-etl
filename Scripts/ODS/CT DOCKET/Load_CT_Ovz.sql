@@ -27,7 +27,11 @@ BEGIN
 						LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
 						,P.ID as PatientUnique_ID
 						,OE.PatientID as UniquePatientOVCID
-						,OE.ID as OvcUnique_ID
+						,OE.ID as OvcUnique_ID,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -43,23 +47,19 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID)
+						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
+						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.FacilityName				=b.FacilityName,
-						a.Emr						=b.Emr,
-						a.Project					=b.Project,
+						a.FacilityName				=b.FacilityName,						
 						a.OVCEnrollmentDate			=b.OVCEnrollmentDate,
 						a.RelationshipToClient		=b.RelationshipToClient,
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
 						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
 						a.OVCExitReason				=b.OVCExitReason,
-						a.ExitDate					=b.ExitDate,
-						a.DateImported				=b.DateImported,
-						a.CKV						=b.CKV;
+						a.ExitDate					=b.ExitDate;
 
 					--WHEN NOT MATCHED BY SOURCE 
 					--	THEN
@@ -73,7 +73,7 @@ BEGIN
 					--	FROM [ODS].[dbo].[CT_Ovc] 
 					--	)  
 			
-				DELETE FROM CTE WHERE dump_ >1;		
+				--DELETE FROM CTE WHERE dump_ >1;		
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]
 					SET LoadEndDateTime = GETDATE()

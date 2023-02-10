@@ -1,3 +1,4 @@
+
 BEGIN
 --truncate table [ODS].[dbo].[PrEP_Patient]
 MERGE [ODS].[dbo].[PrEP_Patient] AS a
@@ -43,7 +44,9 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 				  ,[DateLastUsedPrev]
 				  ,[Date_Created]
 				  ,[Date_Last_Modified]
-				  ,c.SiteCode +'-'+ c.PatientPK AS CKV
+				  ,c.SiteCode +'-'+ c.PatientPK AS CKV,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(c.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(c.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
  	 FROM [PREPCentral].[dbo].[PrepPatients](NoLock) c
 	 INNER JOIN 
 		(SELECT patientPK,sitecode,max(created)as Maxcreated from [PREPCentral].[dbo].[PrepPatients](NoLock) group by patientPK,sitecode)tn
@@ -66,8 +69,6 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 					a.Status=b.Status,
 					a.StatusDate=b.StatusDate,													
 					a.PrepEnrollmentDate=b.PrepEnrollmentDate,
-					a.Sex=b.Sex,
-					a.DateofBirth=b.DateofBirth,
 					a.CountyofBirth=b.CountyofBirth,
 					a.County=b.County,
 					a.SubCounty=b.SubCounty,
@@ -87,11 +88,7 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 					a.DatefirstinitiatedinPrepCare=b.DatefirstinitiatedinPrepCare,
 					a.DateStartedPrEPattransferringfacility=b.DateStartedPrEPattransferringfacility,
 					a.ClientPreviouslyonPrep=b.ClientPreviouslyonPrep,
-					a.PrevPrepReg=b.PrevPrepReg,
-					a.DateLastUsedPrev=b.DateLastUsedPrev,
-					a.Date_Created=b.Date_Created,
-					a.Date_Last_Modified=b.Date_Last_Modified,
-					a.EMR=b.EMR;										
+					a.PrevPrepReg=b.PrevPrepReg;										
 
 	END
 

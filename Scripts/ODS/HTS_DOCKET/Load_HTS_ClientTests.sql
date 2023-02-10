@@ -1,3 +1,4 @@
+
 BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
        ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN TestType nvarchar(4000) COLLATE Latin1_General_CI_AS;
@@ -19,8 +20,9 @@ BEGIN
 
 
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a
-			USING(SELECT distinct 
-						  a.[FacilityName]
+			USING(SELECT distinct
+			              a.ID
+						  ,a.[FacilityName]
 
 						  ,a.[SiteCode]
 						  ,a.[PatientPk]
@@ -44,33 +46,35 @@ BEGIN
 						  ,a.[TestType]
 						  ,[Consent]
 						  ,Setting
-						  ,Approach
+						  ,Approach                                                           
 						  ,HtsRiskCategory
-						  ,HtsRiskScore
+						  ,HtsRiskScore,
+							   convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash
 					  FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a
 				inner JOIN  [HTSCentral].[dbo].Clients(NoLock) b								
 				ON a.[SiteCode] = b.[SiteCode] and a.PatientPK=b.PatientPK 
 				where a.FinalTestResult is not null
 					   ) AS b 
 				ON(
-					a.PatientPK  = b.PatientPK 
+				a.ID = b.ID
+				and a.PatientPK  = b.PatientPK 
 				and a.SiteCode = b.SiteCode	
-				and a.TestStrategy = b.TestStrategy 
-				and a.[EncounterId] = b.[EncounterId]
-				and a.[EntryPoint] = b.[EntryPoint]
-				and a.[EverTestedForHiv] = b.[EverTestedForHiv]
-				and a.[TestResult1] = b.[TestResult1]
-				and a.[TestResult2] = b.[TestResult2]
-				and a.[FinalTestResult] = b.[FinalTestResult]								
-				and a.FacilityName = b.FacilityName
-				and a.TestDate =b.TestDate			
-				and a.CoupleDiscordant = b.CoupleDiscordant 
-				and a.Consent COLLATE Latin1_General_CI_AS = b.Consent
-				and a.ClientTestedAs = b.ClientTestedAs
-				and a.TbScreening = b.TbScreening
-				and a.PatientGivenResult =b.PatientGivenResult
-				and a. ClientSelfTested = b.ClientSelfTested
-				and a.MonthsSinceLastTest = b.MonthsSinceLastTest
+				--and a.TestStrategy = b.TestStrategy 
+				--and a.[EncounterId] = b.[EncounterId]
+				--and a.[EntryPoint] = b.[EntryPoint]
+				--and a.[EverTestedForHiv] = b.[EverTestedForHiv]
+				--and a.[TestResult1] = b.[TestResult1]
+				--and a.[TestResult2] = b.[TestResult2]
+				--and a.[FinalTestResult] = b.[FinalTestResult]								
+				--and a.FacilityName = b.FacilityName
+				--and a.TestDate =b.TestDate			
+				--and a.CoupleDiscordant = b.CoupleDiscordant 
+				--and a.Consent COLLATE Latin1_General_CI_AS = b.Consent
+				--and a.ClientTestedAs = b.ClientTestedAs
+				--and a.TbScreening = b.TbScreening
+				--and a.PatientGivenResult =b.PatientGivenResult
+				--and a. ClientSelfTested = b.ClientSelfTested
+				--and a.MonthsSinceLastTest = b.MonthsSinceLastTest
 				)
 		
 	   WHEN MATCHED THEN
@@ -96,8 +100,8 @@ BEGIN
 					a.[Consent]				=b.[Consent]
 
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
-			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
+			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,PatientPKHash) 
+			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,PatientPKHash);
 		
 
 
