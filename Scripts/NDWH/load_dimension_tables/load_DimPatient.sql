@@ -72,7 +72,11 @@ BEGIN
         combined_data.NUPI,
         combined_data.DOB,
         combined_data.MaritalStatus,
-        combined_data.Gender,
+        CASE 
+            WHEN combined_data.Gender = 'M' THEN 'Male'
+            WHEN combined_data.Gender = 'F' THEN 'Female'
+            ELSE combined_data.Gender 
+        END AS Gender,
         combined_data.PatientType,
         combined_data.PatientSource,
         combined_data.EnrollmentWHOKey,
