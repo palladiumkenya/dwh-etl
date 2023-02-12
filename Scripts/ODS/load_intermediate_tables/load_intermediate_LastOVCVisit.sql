@@ -8,6 +8,8 @@ BEGIN
 			PatientID ,
 			SiteCode,
 			PatientPK, 
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
 			EMR, 
 			VisitID, 
 			OVCEnrollmentDate,

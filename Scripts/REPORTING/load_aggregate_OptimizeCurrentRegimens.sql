@@ -60,9 +60,9 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]', N'U') IS N
 			WHEN cast (ART.age as float) between 5 and 9 THEN '5-9 Years'
 			WHEN cast (ART.age as float) between 10 and 14 THEN '10-14 Years'
 			ELSE 'Adults' END AS AgeBands 
-	from NDWH.dbo.Linelist_FACTART ART
+	from REPORTING.dbo.Linelist_FACTART ART
 	INNER JOIN NDWH.dbo.DimAgeGroup b on ART.age=b.Age
-    LEFT JOIN ODS.dbo.Intermediate_LastestWeightHeight weights on CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(weights.PatientPK as NVARCHAR(36))), 2) = ART.PatientPK and weights.Sitecode collate Latin1_General_CI_AS =ART.SiteCode collate Latin1_General_CI_AS
+    LEFT JOIN ODS.dbo.Intermediate_LastestWeightHeight weights on CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(weights.PatientPK as NVARCHAR(36))), 2) = ART.PatientPK and weights.Sitecode  =ART.SiteCode
 	-- LEFT JOIN NDWH.dbo.DimPatient p on ART.PatientPK = p.PatientPK and ART.SiteCode = P.SiteCode
 
 	where IsTXCurr = 1

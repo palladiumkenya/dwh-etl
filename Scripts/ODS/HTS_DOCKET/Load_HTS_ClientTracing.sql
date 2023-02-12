@@ -36,8 +36,8 @@ BEGIN
 			and a.FacilityName COLLATE Latin1_General_CI_AS = b.FacilityName
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash,CKVHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,PatientPKHash,HtsNumberHash,CKVHash)
 
 	WHEN MATCHED THEN
 		UPDATE SET 

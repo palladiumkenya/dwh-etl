@@ -41,8 +41,8 @@ BEGIN
 	and a.Project COLLATE Latin1_General_CI_AS = b.Project 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash)
 	WHEN MATCHED THEN
 		UPDATE SET 
 			a.[HtsNumber]			=b.[HtsNumber],

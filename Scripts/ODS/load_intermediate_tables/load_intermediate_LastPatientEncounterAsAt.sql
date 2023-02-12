@@ -16,8 +16,9 @@ BEGIN
 		CASE 
 			WHEN LastVisit.[AppointmentDateAsAt]>LastDispense.ExpectedReturn
 			THEN LastVisit.[AppointmentDateAsAt] ELSE coalesce(LastDispense.ExpectedReturn,LastVisit.AppointmentDateAsAt)  END AS AppointmentDateAsAt,
-			cast(getdate() as date) as LoadDate
-	
+			cast(getdate() as date) as LoadDate, 
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(coalesce(LastVisit.PatientPK,LastDispense.PatientPK)  as nvarchar(36))), 2) PatientPKHash,
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(coalesce (LastVisit.PatientID,LastDispense.PatientID)  as nvarchar(36))), 2)PatientIDHash
 	 FROM ODS.dbo.Intermediate_LastVisitAsAt  LastVisit
 	 FULL JOIN ODS.dbo.Intermediate_PharmacyDispenseAsAtDate  LastDispense
 	 ON  LastVisit.PatientID=LastDispense.PatientID AND LastVisit.SiteCode=LastDispense.SiteCode AND LastVisit.PatientPK =LastDispense.PatientPK

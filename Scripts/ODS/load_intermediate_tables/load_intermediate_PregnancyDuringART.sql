@@ -5,6 +5,8 @@ BEGIN
 	SELECT  
 		PatientID ,
 		PatientPK ,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
 		SiteCode,
 		MAX(PregnantDuringART)AS PregnantDuringART,
 		 X.VisitDate,
