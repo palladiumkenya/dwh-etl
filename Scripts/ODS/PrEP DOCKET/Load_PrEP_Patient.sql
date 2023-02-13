@@ -2,8 +2,8 @@
 BEGIN
 --truncate table [ODS].[dbo].[PrEP_Patient]
 MERGE [ODS].[dbo].[PrEP_Patient] AS a
-	USING(SELECT  
-				  [RefId]
+	USING(SELECT  ID
+				  ,[RefId]
 				  ,[Created]
 				  ,c.[PatientPk]
 				  ,c.[SiteCode]
@@ -46,7 +46,8 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 				  ,[Date_Last_Modified]
 				  ,c.SiteCode +'-'+ c.PatientPK AS CKV,
 				  convert(nvarchar(64), hashbytes('SHA2_256', cast(c.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-				  convert(nvarchar(64), hashbytes('SHA2_256', cast(c.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(c.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(c.SiteCode))+'-'+LTRIM(RTRIM(c.PatientPk))   as nvarchar(36))), 2)CKVHash
  	 FROM [PREPCentral].[dbo].[PrepPatients](NoLock) c
 	 INNER JOIN 
 		(SELECT patientPK,sitecode,max(created)as Maxcreated from [PREPCentral].[dbo].[PrepPatients](NoLock) group by patientPK,sitecode)tn
@@ -59,10 +60,10 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 		and a.SiteCode = b.SiteCode
 		) 
 	 WHEN NOT MATCHED THEN 
-		  INSERT(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
-			  ,Date_Last_Modified,CKV) 
-		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
-				,Date_Last_Modified,CKV) 
+		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
+			  ,Date_Last_Modified,CKV,CKVHash) 
+		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
+				,Date_Last_Modified,CKV,CKVHash) 
 
 	  WHEN MATCHED THEN
 				UPDATE SET 													
