@@ -47,11 +47,7 @@ from (
 			WHEN currentRegimenLine like 'Third%' THEN 'Third Regimen Line'
 			ELSE 'Undocumented Regimen Line' 
 		END AS RegimenLine,
-		Case
-			when floor(age) <15 then 'Child'
-			when floor(age) >=15 then 'Adult'
-			ELSE 'Aii' 
-		End as Agegroup,
+		Agegrouping as Agegroup,
 		b.DATIMAgeGroup,
 		age,
 		ISTxCurr,
