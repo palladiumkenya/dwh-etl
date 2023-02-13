@@ -39,13 +39,7 @@ FROM
 		END AS StartRegimen,
 		StartRegimen AS Firstregimen,
 		Gender,
-		CASE
-			
-			WHEN floor( age.Age ) < 15 THEN
-			'Child' 
-			WHEN floor( age.Age ) >= 15 THEN
-			'Adult' ELSE 'Aii' 
-		END AS Agegroup,
+		Agegrouping as Agegroup,
 		DATIMAgeGroup,
 		CASE
 			WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN

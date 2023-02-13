@@ -39,7 +39,7 @@ with MFL_partner_agency_combination as (
         lastRegimenline,
         StartRegimenline,
         outcome.ARTOutcome
-       
+
 from 
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
@@ -65,6 +65,12 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             AgeAtEnrol,
             AgeAtARTStart,
             AgeLastVisit,
+            CASE
+              WHEN floor( AgeLastVisit ) < 15 THEN
+              'Child' 
+              WHEN floor( AgeLastVisit ) >= 15 THEN
+              'Adult' ELSE 'Aii' 
+            END AS Agegrouping,
             TimetoARTDiagnosis,
             TimetoARTEnrollment,
             PregnantARTStart,
@@ -75,7 +81,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             PreviousARTStartDate,
             PreviousARTRegimen,
             cast(getdate() as date) as LoadDate
- INTO NDWH.dbo.FACTART
+INTO NDWH.dbo.FACTART
 from  Patient
 left join NDWH.dbo.DimPatient as Pat on pat.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(Patient.PatientPk  as nvarchar(36))), 2)and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
