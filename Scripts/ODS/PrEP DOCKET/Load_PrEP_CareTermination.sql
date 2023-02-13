@@ -25,7 +25,8 @@ MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
 				  ,a.[Date_Last_Modified]
 				  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
 				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
 			  FROM [PREPCentral].[dbo].[PrepCareTerminations](NoLock)a
 			  inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) c
 				on a.SiteCode = c.SiteCode 
@@ -48,11 +49,11 @@ MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
 
 	 WHEN NOT MATCHED THEN 
 		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
-		  ,ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash)
+		  ,ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash)
 		  
 
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
-          ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash) 
+          ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash) 
 
 	  WHEN MATCHED THEN
 				UPDATE SET 														

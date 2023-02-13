@@ -31,8 +31,8 @@ BEGIN
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate,PatientPKHash,HtsNumberHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate,PatientPKHash,HtsNumberHash)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate,PatientPKHash,HtsNumberHash,CKVHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate,PatientPKHash,HtsNumberHash,CKVHash)
 
 	WHEN MATCHED THEN
 		UPDATE SET 

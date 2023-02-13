@@ -32,7 +32,8 @@ MERGE [ODS].[dbo].[PrEP_Lab] AS a
 			  ,a.[Date_Last_Modified]
 			  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
 			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
 		FROM [PREPCentral].[dbo].[PrepLabs](NoLock) a
 		INNER JOIN  [PREPCentral].[dbo].[PrepPatients](NoLock) b	
 		ON a.sitecode = b.sitecode
@@ -48,9 +49,9 @@ MERGE [ODS].[dbo].[PrEP_Lab] AS a
 			) 
 	 WHEN NOT MATCHED THEN 
 		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
-				,VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified,CKV ,PatientPKHash,PrepNumberHash) 
+				,VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified,CKV ,PatientPKHash,PrepNumberHash,CKVHash) 
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
-				  VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified,CKV ,PatientPKHash,PrepNumberHash) 
+				  VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified,CKV ,PatientPKHash,PrepNumberHash,CKVHash) 
 	  WHEN MATCHED THEN
 				UPDATE SET 							
 					a.Created = b.Created,				 						

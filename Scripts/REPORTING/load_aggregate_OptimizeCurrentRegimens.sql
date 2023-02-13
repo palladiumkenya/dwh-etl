@@ -69,8 +69,8 @@ from (
 			WHEN cast (age as float) between 5 and 9 THEN '5-9 Years'
 			WHEN cast (age as float) between 10 and 14 THEN '10-14 Years'
 			ELSE 'Adults' 
-		END AS AgeBands ,
-
+		END AS AgeBands,
+    
 		CASE
 			WHEN CurrentRegimen in ('3TC+ABC+ATV/r','(3TC300mg)+(ABC600mg)+(ATV300mg)+(RTV100mg)') THEN 'ABC+3TC+ATV/r'
 			WHEN CurrentRegimen in ('NVP','TDF','AZT+DTG','Other','DTG+FTC+TDF','FTC+RPV','AZTliquidBID+NVPliquidODfor6weeksthenNVPliquidODuntil6weeksaftercompletecessationofBreastfeeding','NULL','EFV/3TC/TDF/ATV/r','LOP+RTV','LPV/r','RHE','AZT+EFV+TDF','SRfbHZE','ETR+FTC+TDF','DRV+RTV','VIRAMUNE','ATV+RTV','DTG','EFV','RfbHZ', '3TC+ABC+ATV+RTV+TDF','3TC+ATV+EFV+RTV+TDF','3TC+ABC+DTG+TDF','3TC+D4T+TDF','3TC+DRV/r+RAL+TDF','3TC+EFV+LPV/r+TDF','3TC+ATV/rTV+DTG+TDF','3TC+DTG+FTC+TDF','3TC+AZT+EFV+NVP+TDF','3TC+DTG+EFV+TDF','3TC+EFV+NVP+TDF','3TC+AZT+DTG+NVP+TDF','3TC+DRV+RTV+TDF','3TC+AZT+DTG+TDF','3TC+DRV/r+DTG+EFV+TDF','3TC+ATV+DTG+RTV+TDF',

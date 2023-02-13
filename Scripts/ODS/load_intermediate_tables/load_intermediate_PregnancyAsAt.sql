@@ -17,6 +17,8 @@ BEGIN
 	Select 
 			PregnancyAsATInitiation.PatientID ,
 			PregnancyAsATInitiation.PatientPK ,
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(PregnancyAsATInitiation.PatientPK  as nvarchar(36))), 2) PatientPKHash,
+		    convert(nvarchar(64), hashbytes('SHA2_256', cast(PregnancyAsATInitiation.PatientID  as nvarchar(36))), 2)PatientIDHash,
 			PregnancyAsATInitiation.SiteCode,
 			PregnancyAsATInitiation.PregnantARTStart,
 			PregnancyAsATInitiation.PregnantAtEnrol,

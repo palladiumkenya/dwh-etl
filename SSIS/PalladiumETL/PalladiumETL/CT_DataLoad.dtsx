@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="13"
-  DTS:VersionGUID="{A7F45ED1-173D-4902-8617-8DEA368E538B}">
+  DTS:VersionBuild="14"
+  DTS:VersionGUID="{67996B8A-3F5C-4EE1-8BB8-5C3B3E4F8C24}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -238,7 +238,7 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{14A0EFEF-9C7C-4183-88B8-D98747BE03BA}LocalHost.DWAPICentral;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=DWAPICentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{14A0EFEF-9C7C-4183-88B8-D98747BE03BA}LocalHost.DWAPICentral;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>

@@ -12,8 +12,10 @@ BEGIN
 						  ,[Date_Created]
 						  ,[Date_Last_Modified],
 					  convert(nvarchar(64), hashbytes('SHA2_256', cast(p.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-					  convert(nvarchar(64), hashbytes('SHA2_256', cast(PKV  as nvarchar(36))), 2)PKVHash,
-					   convert(nvarchar(64), hashbytes('SHA2_256', cast(MothersPkv  as nvarchar(36))), 2)MothersPkvHash
+					  --convert(nvarchar(64), hashbytes('SHA2_256', cast(PKV  as nvarchar(36))), 2)PKVHash,
+					   convert(nvarchar(64), hashbytes('SHA2_256', cast(MothersPkv  as nvarchar(36))), 2)MothersPkvHash,  
+					   convert(nvarchar(64), hashbytes('SHA2_256', cast(MothersCCCNo  as nvarchar(36))), 2)MothersCCCNoHash,
+					   convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(P.SiteCode))+'-'+LTRIM(RTRIM(p.PatientPk))   as nvarchar(36))), 2)CKVHash
 
 					  FROM [MNCHCentral].[dbo].[CwcEnrolments]P
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities]F on F.Id=P.FacilityId ) AS b 
@@ -24,8 +26,8 @@ BEGIN
 						and a.ID COLLATE SQL_Latin1_General_CP1_CI_AS = b.ID
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(id,PatientIDCWC,HEIID,PatientPk,SiteCode,EMR,FacilityName,Project,DateExtracted,PKV,MothersPkv,RegistrationAtCWC,RegistrationAtHEI,VisitID,Gestation,BirthWeight,BirthLength,BirthOrder,BirthType,PlaceOfDelivery,ModeOfDelivery,SpecialNeeds,SpecialCare,HEI,MotherAlive,MothersCCCNo,TransferIn,TransferInDate,TransferredFrom,HEIDate,NVP,BreastFeeding,ReferredFrom,ARTMother,ARTRegimenMother,ARTStartDateMother,Date_Created,Date_Last_Modified,PatientPKHash,PKVHash,MothersPkvHash) 
-						VALUES(id,PatientIDCWC,HEIID,PatientPk,SiteCode,EMR,FacilityName,Project,DateExtracted,PKV,MothersPkv,RegistrationAtCWC,RegistrationAtHEI,VisitID,Gestation,BirthWeight,BirthLength,BirthOrder,BirthType,PlaceOfDelivery,ModeOfDelivery,SpecialNeeds,SpecialCare,HEI,MotherAlive,MothersCCCNo,TransferIn,TransferInDate,TransferredFrom,HEIDate,NVP,BreastFeeding,ReferredFrom,ARTMother,ARTRegimenMother,ARTStartDateMother,Date_Created,Date_Last_Modified,PatientPKHash,PKVHash,MothersPkvHash)
+						INSERT(id,PatientIDCWC,HEIID,PatientPk,SiteCode,EMR,FacilityName,Project,DateExtracted,PKV,MothersPkv,RegistrationAtCWC,RegistrationAtHEI,VisitID,Gestation,BirthWeight,BirthLength,BirthOrder,BirthType,PlaceOfDelivery,ModeOfDelivery,SpecialNeeds,SpecialCare,HEI,MotherAlive,MothersCCCNo,TransferIn,TransferInDate,TransferredFrom,HEIDate,NVP,BreastFeeding,ReferredFrom,ARTMother,ARTRegimenMother,ARTStartDateMother,Date_Created,Date_Last_Modified,PatientPKHash,MothersPkvHash,CKVHash,MothersCCCNoHash) 
+						VALUES(id,PatientIDCWC,HEIID,PatientPk,SiteCode,EMR,FacilityName,Project,DateExtracted,PKV,MothersPkv,RegistrationAtCWC,RegistrationAtHEI,VisitID,Gestation,BirthWeight,BirthLength,BirthOrder,BirthType,PlaceOfDelivery,ModeOfDelivery,SpecialNeeds,SpecialCare,HEI,MotherAlive,MothersCCCNo,TransferIn,TransferInDate,TransferredFrom,HEIDate,NVP,BreastFeeding,ReferredFrom,ARTMother,ARTRegimenMother,ARTStartDateMother,Date_Created,Date_Last_Modified,PatientPKHash,MothersPkvHash,CKVHash,MothersCCCNoHash)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

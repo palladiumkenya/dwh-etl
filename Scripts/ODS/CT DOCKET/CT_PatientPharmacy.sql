@@ -29,7 +29,7 @@ BEGIN
 					  ,PP.RegimenChangeSwitchReason RegimenChangeSwitchReason
 					  ,PP.StopRegimenReason StopRegimenReason
 					  ,PP.StopRegimenDate StopRegimenDate
-					  ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber])) +'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV, 
+					  ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV, 
 					  0 AS IsRegimenFlag, 
 					  0 AS KnockOutDrug
 					  ,P.ID as PatientUnique_ID
@@ -37,7 +37,7 @@ BEGIN
 					  ,PP.ID as PatientPharmacyUnique_ID,
 					  convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
 						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(P.[PatientCccNumber])) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
 
 											FROM [DWAPICentral].[dbo].[PatientExtract] P 
 						--INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
