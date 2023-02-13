@@ -3,7 +3,7 @@ IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo
 TRUNCATE TABLE REPORTING.[dbo].[AggregateOTZOutcome]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateOTZOutcome
+INSERT INTO REPORTING.dbo.AggregateOTZOutcome (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentYearMonth, Outcome, patients_totalOutcome)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
