@@ -22,7 +22,7 @@ SELECT
 	LastRegimenClean,
 	WeightBands,
 	AgeBands
-
+INTO [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]
 from (
 	Select 
 		cast (MFLCode as nvarchar) As SiteCode,
