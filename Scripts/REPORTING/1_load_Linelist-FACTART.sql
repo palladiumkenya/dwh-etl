@@ -11,7 +11,7 @@ Select distinct
     pat.MaritalStatus,
     pat.Nupi,
     pat.PatientSource,
-    pat.PatientType,
+    pat.ClientType,
     pat.SiteCode,
     fac.FacilityName,
     fac.County,
@@ -40,6 +40,8 @@ Select distinct
     vl.EligibleVL as Eligible4VL,
     vl.Last12MonthVL,
     vl.Last12MVLSup,
+    vl.LastVL,
+    cast(vl.LastVlDateKey as date) LastVLDate,
     vl.HighViremia,
     vl.LowViremia,
     pat.ISTxCurr
