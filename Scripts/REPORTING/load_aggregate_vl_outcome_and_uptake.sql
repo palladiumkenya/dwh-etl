@@ -50,7 +50,7 @@ FROM
 	INNER JOIN NDWH.dbo.DimAgency a ON a.AgencyKey = it.AgencyKey
 	INNER JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = it.PatientKey
 	INNER JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = it.PartnerKey
-	INNER JOIN NDWH.dbo.FactART art ON art.PatientKey = it.PatientKey 
+	LEFT JOIN NDWH.dbo.FactART art ON art.PatientKey = it.PatientKey 
 WHERE
 	IsTXCurr = 1 
 GROUP BY
