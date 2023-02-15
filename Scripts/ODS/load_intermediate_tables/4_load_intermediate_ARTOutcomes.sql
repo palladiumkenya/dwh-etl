@@ -6,6 +6,8 @@ BEGIN
 	DISTINCT 
 		Patients.PatientID, 
 		Patients.PatientPK,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(Patients.PatientPK  as nvarchar(36))), 2) PatientPKHash,
+	convert(nvarchar(64), hashbytes('SHA2_256', cast(Patients.PatientID  as nvarchar(36))), 2)PatientIDHash,
 		ART.startARTDate,
 		YEAR(ART.startARTDate) AS Cohort,
 		Exits.ExitReason,

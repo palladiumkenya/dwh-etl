@@ -3,14 +3,14 @@ IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo
 TRUNCATE TABLE REPORTING.[dbo].[AggregateOTZOutcome]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateOTZOutcome
+INSERT INTO REPORTING.dbo.AggregateOTZOutcome (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentYearMonth, Outcome, patients_totalOutcome)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
 County,
 SubCounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 age.DATIMAgeGroup as AgeGroup,
 CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23) as OTZEnrollmentYearMonth,

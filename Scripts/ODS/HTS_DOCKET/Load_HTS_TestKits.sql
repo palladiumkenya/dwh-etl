@@ -1,3 +1,5 @@
+
+
 BEGIN
 	MERGE [ODS].[dbo].[HTS_TestKits] AS a
 	USING(SELECT DISTINCT a.[FacilityName]
@@ -14,7 +16,10 @@ BEGIN
 		  ,a.[TestKitName2]
 		  ,a.[TestKitLotNumber2]
 		  ,[TestKitExpiry2]
-		  ,[TestResult2]
+		  ,[TestResult2],
+			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2) CKVHash
 	  FROM [HTSCentral].[dbo].[HtsTestKits](NoLock) a
 	  INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 	  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) AS b 
@@ -36,8 +41,8 @@ BEGIN
 	and a.Project COLLATE Latin1_General_CI_AS = b.Project 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash)
 	WHEN MATCHED THEN
 		UPDATE SET 
 			a.[HtsNumber]			=b.[HtsNumber],

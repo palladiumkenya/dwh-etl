@@ -1,3 +1,4 @@
+
 BEGIN
 --truncate table [ODS].[dbo].[PrEP_Pharmacy]
 MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
@@ -24,7 +25,10 @@ MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
 				  ,[Duration]
 				  ,a.[Date_Created]
 				  ,a.[Date_Last_Modified]
-				  ,a.SiteCode +'-'+ a.PatientPK AS CKV
+				  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
+				  convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
 
 			  FROM [PREPCentral].[dbo].[PrepPharmacys](NoLock) a
 				INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepPharmacys]
@@ -40,26 +44,25 @@ MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
 					--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						a.PatientPK  = b.PatientPK						
 					and a.SiteCode = b.SiteCode
+					and a.VisitID = b.VisitID
+					and a.[DispenseDate] = b.[DispenseDate]
 					) 
 
 	 WHEN NOT MATCHED THEN 
-		  INSERT(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
-		  ,VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,CKV)
+		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
+		  ,VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash)
 		  
 
-		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
-          VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,CKV) 
+		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
+          VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash) 
 
 	  WHEN MATCHED THEN
 						UPDATE SET 														
-							a.StatusDate=b.StatusDate,
-							a.DateExtracted=b.DateExtracted,							
+							a.StatusDate=b.StatusDate,						
 							a.RegimenPrescribed=b.RegimenPrescribed,
-							a.Date_Created=b.Date_Created,
-							a.DispenseDate=b.DispenseDate,
 							a.Date_Last_Modified=b.Date_Last_Modified,
 							a.Duration=b.Duration,
-							a.EMR							=b.EMR;						
+							a.EMR	=b.EMR;						
 						
 
 	END

@@ -14,8 +14,8 @@
   DTS:ObjectName="Load_ODS_PrEP_Table"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="21"
-  DTS:VersionGUID="{48C5A1AA-7B26-4624-90DF-6B555578CD02}">
+  DTS:VersionBuild="32"
+  DTS:VersionGUID="{7598581A-6A08-4184-802D-81C1A1ED5C1B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -84,7 +84,6 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{459CD661-B7B8-4084-B3EF-F2C78570A787}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
-      DTS:FailParentOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load PrEP tables Container Loop">
       <DTS:ForEachEnumerator
@@ -113,7 +112,6 @@
           DTS:DTSID="{5BCD98E6-089B-4F25-AF45-483435923502}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:FailPackageOnFailure="True"
-          DTS:FailParentOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
           DTS:ThreadHint="0">
@@ -129,8 +127,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{DE610241-4DEF-403B-AC00-645F1AFBDE09}"
-          DTS:ObjectName="{DE610241-4DEF-403B-AC00-645F1AFBDE09}"
+          DTS:DTSID="{D9430483-3847-41DE-ACBD-963733452046}"
+          DTS:ObjectName="{D9430483-3847-41DE-ACBD-963733452046}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -156,7 +154,7 @@
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="268.8,120.8"
-          Size="268.8,163.6"
+          Size="268.8,164"
           Id="Package\Load PrEP tables Container Loop"
           TopLeft="513.749992344528,37.6999993258715" />
       </GraphLayout>
