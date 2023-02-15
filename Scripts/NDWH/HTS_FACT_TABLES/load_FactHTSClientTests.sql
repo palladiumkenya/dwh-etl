@@ -46,6 +46,7 @@ select
     case when hts_encounter.FinalTestResult is not null then 1 else 0 end as Tested,
     case when hts_encounter.FinalTestResult = 'Positive' then 1 else 0 end as Positive,
     case when (hts_encounter.FinalTestResult = 'Positive' and client_linkage_data.ReportedCCCNumber is not null) then 1 else 0 end as Linked,
+    case when client_linkage_data.ReportedCCCNumber is not null then 1 else 0 end ReportedCCCNumber,
     case 
         when (hts_encounter.MonthsSinceLastTest < 3 and hts_encounter.MonthsSinceLastTest is not null) then '<3 Months' 
         when (hts_encounter.MonthsSinceLastTest >= 3 and hts_encounter.MonthsSinceLastTest < 6) then '3-6 Months' 
