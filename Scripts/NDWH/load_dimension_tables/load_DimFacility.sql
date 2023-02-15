@@ -11,7 +11,8 @@ BEGIN
 			EMR,
 			Project,
 			Longitude,
-			Latitude		
+			Latitude,
+			Implementation
 		from ODS.dbo.All_EMRSites
 	),
 	site_abstraction as (
@@ -33,6 +34,9 @@ BEGIN
 		source_facility.*,
 		cast(format(site_abstraction.DateSiteAbstraction,'yyyyMMdd') as int) as DateSiteAbstractionKey,
 		cast(format(latest_upload.LatestDateUploaded, 'yyyyMMdd') as int) as LatestDateUploadedKey,
+		case when [Implementation] like '%CT%' then 1 else 0 end as isCT,
+		case when [Implementation] like '%CT%' then 1 else 0 end as isPKV,
+		case when [Implementation] like '%HTS%' then 1 else 0 end as isHTS,
 		cast(getdate() as date) as LoadDate
 	INTO [NDWH].[dbo].[DimFacility]
 	from source_facility
