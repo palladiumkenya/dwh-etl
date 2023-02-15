@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'REPORTING.DBO.expected_uploads ', N'U') IS NOT NULL 
-	DROP TABLE REPORTING.DBO.expected_uploads ;
+IF OBJECT_ID(N'REPORTING.DBO.AggregateExpectedUploads', N'U') IS NOT NULL 
+	DROP TABLE REPORTING.DBO.AggregateExpectedUploads ;
 
 BEGIN
 	with uploads as (
@@ -45,5 +45,5 @@ BEGIN
 			(isPkv = 1)
 		GROUP BY p.county, p.subCounty, SDP_Agency, SDP
 	) 
-	select * into REPORTING.DBO.expected_uploads  from uploads
+	select * into REPORTING.DBO.AggregateExpectedUploads  from uploads
 END

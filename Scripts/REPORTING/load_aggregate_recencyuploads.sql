@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'REPORTING.DBO.recency_uploads ', N'U') IS NOT NULL 
-	DROP TABLE REPORTING.DBO.recency_uploads ;
+IF OBJECT_ID(N'REPORTING.DBO.AggregateRecencyUploads', N'U') IS NOT NULL 
+	DROP TABLE REPORTING.DBO.AggregateRecencyUploads ;
 
 BEGIN
 	with uploads as (
@@ -38,11 +38,11 @@ BEGIN
 			FROM
 				NDWH.dbo.fact_manifest fm
 				JOIN NDWH.dbo.DimFacility f ON fm.facilityId = f.MFLCode
-							JOIN ODS.dbo.All_EMRSites a on a.MFL_Code = fm.facilityId
+				JOIN ODS.dbo.All_EMRSites a on a.MFL_Code = fm.facilityId
 			) g
 		WHERE
 			g.docket IS NOT NULL
 		GROUP BY g.docket, g.year, g.month, g.county, g.subcounty, g.agency, g.partner
 	) 
-	select * into REPORTING.DBO.recency_uploads  from uploads
+	select * into REPORTING.DBO.AggregateRecencyUploads  from uploads
 END
