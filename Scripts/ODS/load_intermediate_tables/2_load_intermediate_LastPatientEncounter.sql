@@ -9,7 +9,8 @@ BEGIN
          SiteCode,
          PatientPK ,
          DispenseDate As LastEncounterDate,
-         ExpectedReturn As NextAppointmentDate
+        Case When DATEDIFF(dd,GETDATE(),ExpectedReturn) >= 365 or ExpectedReturn ='1900-01-01' or  ExpectedReturn is null  THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End as NextAppointmentDate
+
      FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
      where DispenseDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 ),
@@ -46,6 +47,7 @@ Patients As (
     sitecode
     from ODS.dbo.CT_ARTPatients
 ),
+--Compare Pharmacy and ART last visits and expected return dates  and Pick the higher of the 2 
 OrderedVisits As (
         SELECT
         Patients.PatientID,
@@ -58,6 +60,7 @@ OrderedVisits As (
     left join Pharmacy on Patients.PatientId=Pharmacy.PatientId and Patients.PatientPk=Pharmacy.PatientPk and Patients.Sitecode=Pharmacy.Sitecode and Num=1
     left join ART_expected_dates_logic on Patients.PatientId=ART_expected_dates_logic.PatientId and Patients.PatientPk=ART_expected_dates_logic.PatientPk and Patients.Sitecode=ART_expected_dates_logic.Sitecode
 ),
+--compare the results of the Pharmacy and ART above with when date add has been applied for the patients mising  TCAs and pick the greater
 PharmacyART_Combined As (
         SELECT
         OrderedVisits.PatientID,
@@ -94,5 +97,5 @@ CombinedVisits As (
 	convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash
        INTO ODS.dbo.Intermediate_LastPatientEncounter
     from CombinedVisits
-   where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
+   where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE())) 
    END
