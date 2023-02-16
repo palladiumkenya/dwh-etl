@@ -1,5 +1,6 @@
-IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PrEPLastVisit]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[Intermediate_PrEPLastVisit];
+IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PrepLastVisit]', N'U') IS NOT NULL 
+DROP TABLE [ODS].[dbo].[Intermediate_PrepLastVisit];
+
 BEGIN
 
     with source_data as (
@@ -61,7 +62,7 @@ BEGIN
     select 
         source_data.*,
         cast(getdate() as date) as LoadDate
-    into  [ODS].[dbo].[Intermediate_PrEPLastVisit]
+    into  [ODS].[dbo].[Intermediate_PrepLastVisit]
     from  source_data
     where num = 1;
 

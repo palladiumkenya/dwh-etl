@@ -34,43 +34,10 @@ BEGIN
         from exits_ordering
         where num = 1
     ),
-    prep_assessments as (
-        select
-            row_number () over (partition by PrepNumber, PatientPk,SiteCode order by VisitDate desc) as num,
-            PatientPk,
-            SiteCode,
-            VisitID,
-            SexPartnerHIVStatus,
-            IsHIVPositivePartnerCurrentonART,
-            IsPartnerHighrisk,
-            PartnerARTRisk,
-            ClientAssessments,
-            ClientWillingToTakePrep,
-            PrEPDeclineReason,
-            RiskReductionEducationOffered,
-            ReferralToOtherPrevServices,
-            FirstEstablishPartnerStatus,
-            PartnerEnrolledtoCCC,
-            HIVPartnerCCCnumber,
-            HIVPartnerARTStartDate,
-            MonthsknownHIVSerodiscordant,
-            SexWithoutCondom,
-            NumberofchildrenWithPartner,
-            ClientRisk,
-            CASE 
-                WHEN ClientRisk='Risk' THEN 1 ELSE 0 
-            END AS EligiblePrep,
-            VisitDate,
-            CASE 
-                WHEN VisitDate is not null THEN 1 ELSE 0 
-            END AS ScreenedPrep
-        from ODS.dbo.PrEP_BehaviourRisk
-    ),
     latest_prep_assessments as (
         select 
             *
-        from prep_assessments
-        where num = 1
+        from ODS.dbo.Intermediate_LastestPrepAssessments
     )
     select 
         FactKey = IDENTITY(INT, 1, 1),
@@ -140,7 +107,7 @@ BEGIN
         dispense_month_3.DateKey as DateDispenseMonth3
     into NDWH.dbo.FactPrep
     from prep_patients
-    left join ODS.dbo.Intermediate_PrEPLastVisit as  latest_prep_visits on convert(nvarchar(64), hashbytes('SHA2_256', cast(latest_prep_visits.PatientPK as nvarchar(36))), 2) =  prep_patients.PatientPK
+    left join ODS.dbo.Intermediate_PrepLastVisit as  latest_prep_visits on convert(nvarchar(64), hashbytes('SHA2_256', cast(latest_prep_visits.PatientPK as nvarchar(36))), 2) =  prep_patients.PatientPK
         and latest_prep_visits.SiteCode = prep_patients.SiteCode
     left join latest_exits on convert(nvarchar(64), hashbytes('SHA2_256', cast(latest_exits.PatientPK as nvarchar(36))), 2) = prep_patients.PatientPK
         and latest_exits.SiteCode = prep_patients.SiteCode
