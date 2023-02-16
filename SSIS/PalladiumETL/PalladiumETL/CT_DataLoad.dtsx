@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="14"
-  DTS:VersionGUID="{67996B8A-3F5C-4EE1-8BB8-5C3B3E4F8C24}">
+  DTS:VersionBuild="15"
+  DTS:VersionGUID="{21A9DD6A-CB3E-4ED9-8822-AE6EEAC58F16}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -26,7 +26,7 @@
       DTS:ObjectName="CT_AdverseEvents.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_AdverseEvents.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_AdverseEvents.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -36,7 +36,7 @@
       DTS:ObjectName="CT_PatientPharmacy.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientPharmacy.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientPharmacy.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -46,7 +46,7 @@
       DTS:ObjectName="CT_PatientStatus.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientStatus.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientStatus.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -56,7 +56,7 @@
       DTS:ObjectName="CT_PatientVisits.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientVisits.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientVisits.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -76,7 +76,7 @@
       DTS:ObjectName="Load_all_EMRSites.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_all_EMRSites.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_all_EMRSites.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -86,7 +86,7 @@
       DTS:ObjectName="Load_CT_AllergiesChronicIllness.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_AllergiesChronicIllness.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_AllergiesChronicIllness.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -96,7 +96,7 @@
       DTS:ObjectName="Load_CT_ARTPatient.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_ARTPatient.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_ARTPatient.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -106,7 +106,7 @@
       DTS:ObjectName="Load_CT_ContactListing.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_ContactListing.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_ContactListing.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -116,7 +116,7 @@
       DTS:ObjectName="Load_CT_Covid.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT\Load_CT_Covid.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Covid.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -126,7 +126,7 @@
       DTS:ObjectName="Load_CT_DefaulterTracing.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_DefaulterTracing.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_DefaulterTracing.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -136,7 +136,7 @@
       DTS:ObjectName="Load_CT_DepressionScreening.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_DepressionScreening.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_DepressionScreening.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -146,7 +146,7 @@
       DTS:ObjectName="Load_CT_EnhancedAdherenceCounselling.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_EnhancedAdherenceCounselling.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_EnhancedAdherenceCounselling.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -156,7 +156,7 @@
       DTS:ObjectName="Load_CT_FacilityManifest.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_FacilityManifest.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_FacilityManifest.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -166,7 +166,7 @@
       DTS:ObjectName="Load_CT_GbvScreening.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_GbvScreening.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_GbvScreening.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -176,7 +176,7 @@
       DTS:ObjectName="Load_CT_Ipt.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Ipt.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Ipt.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -186,7 +186,7 @@
       DTS:ObjectName="Load_CT_Otz.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Otz.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Otz.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -196,7 +196,7 @@
       DTS:ObjectName="Load_CT_Ovz.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Ovz.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Ovz.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -206,7 +206,7 @@
       DTS:ObjectName="Load_CT_Patient.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT\Load_CT_Patient.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Patient.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -216,7 +216,7 @@
       DTS:ObjectName="Load_CT_PatientBaselines.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_PatientBaselines.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_PatientBaselines.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -226,7 +226,7 @@
       DTS:ObjectName="Load_CT_PatientLabs.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_PatientLabs.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_PatientLabs.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager

@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">DENNIS</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUBkSZr+6RUu5kdxdzs/rLQAAAAACAAAAAAAQZgAAAAEAACAAAAAtRJedmFFXJiVACrC6Mmy3/aTV79Lsw+Ct99MZIMm56AAAAAAOgAAAAAIAACAAAADgxJ5GUuKtQ9BZIau0kiCn/P1MJLLMTwzQ0Zw8hmTQBJAAAAAq4999ZmEexpQXZdzA9LyJpSFblMZgVWkYZ+99851IriABaqBKExuMAzhGT4eIguGLyu22kId0oUVR7mhziSCsu0sj+lc7BVN+DVLuu1JZGExdxifRZdeRoE4kLUA15nr9r3kCqUaZE4VAVxmaTTkNXhhF5vC7H28qbKmZZZ+7TEQKcEiUpd2nj8/loDA32ndAAAAA/vKe0kmBsPjYblLH8Mt0c0oK3CFvf6hpp4rRXBzYzQkCzGBXwQRDG+TWPFLlyQ8jPKoKnzGNMQ9umfyGwGth3Q==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUBkSZr+6RUu5kdxdzs/rLQAAAAACAAAAAAAQZgAAAAEAACAAAABXBbu91q+Bf7xrgYxrIjiys8R9jWr09Va2ddUfzoXebgAAAAAOgAAAAAIAACAAAAByF89Og8aL54ISsbQZ/kOocpE812z6dPc7KidTqskr4pAAAABYF+dQuAxolzwhJg161xgTGxSs/SERPh+hA+bb/Tm3JfZh+fEZOhDNxEtI1pV4yVZ08ES8y7TumdWQ6iKEyGlvkzmo2kHFiAaRqYxqLRrw2h2Hbfj9RzNDFxhq5bOi3YyEKioJB8QPHkGYQ/VY03Oom7L2yqY3hFKIMx/mnIjLeN16j8qT9S3knzjeycqJz9tAAAAAeoe/5wiYywXPqJI3yf7FfyjrDO3XzuAoluJ9Yth4ZstLpOD5X6k4aWmBMiLwfEEHHh8LoKZAjvUgae7/L6IBpg==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -2884,10 +2884,10 @@
                 <SSIS:Property SSIS:Name="Name">Package2</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">14</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">15</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{67996B8A-3F5C-4EE1-8BB8-5C3B3E4F8C24}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{21A9DD6A-CB3E-4ED9-8822-AE6EEAC58F16}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -2920,7 +2920,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_AdverseEvents.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_AdverseEvents.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -2950,7 +2950,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientPharmacy.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientPharmacy.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -2980,7 +2980,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientStatus.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientStatus.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3010,7 +3010,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\CT_PatientVisits.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\CT_PatientVisits.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3070,7 +3070,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_all_EMRSites.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_all_EMRSites.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3100,7 +3100,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_AllergiesChronicIllness.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_AllergiesChronicIllness.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3130,7 +3130,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_ARTPatient.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_ARTPatient.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3160,7 +3160,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_ContactListing.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_ContactListing.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3190,7 +3190,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT\Load_CT_Covid.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Covid.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3220,7 +3220,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_DefaulterTracing.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_DefaulterTracing.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3250,7 +3250,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_DepressionScreening.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_DepressionScreening.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3280,7 +3280,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_EnhancedAdherenceCounselling.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_EnhancedAdherenceCounselling.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3310,7 +3310,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_FacilityManifest.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_FacilityManifest.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3340,7 +3340,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_GbvScreening.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_GbvScreening.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3370,7 +3370,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Ipt.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Ipt.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3400,7 +3400,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Otz.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Otz.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3430,7 +3430,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_Ovz.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Ovz.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3460,7 +3460,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT\Load_CT_Patient.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_Patient.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3490,7 +3490,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_PatientBaselines.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_PatientBaselines.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -3520,7 +3520,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT DOCKET\Load_CT_PatientLabs.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Load_CT_PatientLabs.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
