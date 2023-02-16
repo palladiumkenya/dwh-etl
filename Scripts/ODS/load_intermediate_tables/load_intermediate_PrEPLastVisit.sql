@@ -1,68 +1,69 @@
-IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PrEPLastVisit]', N'U') IS NOT NULL 
-	DROP TABLE [ODS].[dbo].[Intermediate_PrEPLastVisit];
+IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PrepLastVisit]', N'U') IS NOT NULL 
+DROP TABLE [ODS].[dbo].[Intermediate_PrepLastVisit];
+
 BEGIN
 
-with source_data as (
+    with source_data as (
+        select 
+            distinct row_number() over (partition by PrepNumber, SiteCode, PatientPK order by VisitDate desc) as num,
+            PatientPk,
+            SiteCode,
+            EncounterId,
+            VisitID,
+            VisitDate,
+            month(VisitDate) As VisitMonth,
+            year (VisitDate) As VisitYear,
+            BloodPressure,
+            Temperature,
+            Weight,
+            Height,
+            BMI,
+            STIScreening,
+            STISymptoms,
+            STITreated,
+            Circumcised,
+            VMMCReferral,
+            LMP,
+            MenopausalStatus,
+            PregnantAtThisVisit,
+            EDD,
+            PlanningToGetPregnant,
+            PregnancyPlanned,
+            PregnancyEnded,
+            PregnancyEndDate,
+            PregnancyOutcome,
+            BirthDefects,
+            Breastfeeding,
+            FamilyPlanningStatus,
+            FPMethods,
+            AdherenceDone,
+            AdherenceOutcome,
+            AdherenceReasons,
+            SymptomsAcuteHIV,
+            ContraindicationsPrep,
+            PrepTreatmentPlan,
+            PrepPrescribed,
+            RegimenPrescribed,
+            MonthsPrescribed,
+            CondomsIssued,
+            Tobegivennextappointment,
+            Reasonfornotgivingnextappointment,
+            HepatitisBPositiveResult,
+            HepatitisCPositiveResult,
+            VaccinationForHepBStarted,
+            TreatedForHepB,
+            VaccinationForHepCStarted,
+            TreatedForHepC,
+            NextAppointment,
+            ClinicalNotes
+        from PrEP_Visits
+        where VisitDate is not null
+    )
     select 
-        distinct row_number() over (partition by PrepNumber, SiteCode, PatientPK order by VisitDate desc) as num,
-        PatientPk,
-        SiteCode,
-        EncounterId,
-        VisitID,
-        VisitDate,
-        month(VisitDate) As VisitMonth,
-        year (VisitDate) As VisitYear,
-        BloodPressure,
-        Temperature,
-        Weight,
-        Height,
-        BMI,
-        STIScreening,
-        STISymptoms,
-        STITreated,
-        Circumcised,
-        VMMCReferral,
-        LMP,
-        MenopausalStatus,
-        PregnantAtThisVisit,
-        EDD,
-        PlanningToGetPregnant,
-        PregnancyPlanned,
-        PregnancyEnded,
-        PregnancyEndDate,
-        PregnancyOutcome,
-        BirthDefects,
-        Breastfeeding,
-        FamilyPlanningStatus,
-        FPMethods,
-        AdherenceDone,
-        AdherenceOutcome,
-        AdherenceReasons,
-        SymptomsAcuteHIV,
-        ContraindicationsPrep,
-        PrepTreatmentPlan,
-        PrepPrescribed,
-        RegimenPrescribed,
-        MonthsPrescribed,
-        CondomsIssued,
-        Tobegivennextappointment,
-        Reasonfornotgivingnextappointment,
-        HepatitisBPositiveResult,
-        HepatitisCPositiveResult,
-        VaccinationForHepBStarted,
-        TreatedForHepB,
-        VaccinationForHepCStarted,
-        TreatedForHepC,
-        NextAppointment,
-        ClinicalNotes
-    from PrEP_Visits
-    where VisitDate is not null
-)
-select 
-    source_data.*,
-    cast(getdate() as date) as LoadDate
-into  [ODS].[dbo].[Intermediate_PrEPLastVisit]
-from  source_data
-where num = 1;
+        source_data.*,
+        cast(getdate() as date) as LoadDate
+    into  [ODS].[dbo].[Intermediate_PrepLastVisit]
+    from  source_data
+    where num = 1;
 
 END
