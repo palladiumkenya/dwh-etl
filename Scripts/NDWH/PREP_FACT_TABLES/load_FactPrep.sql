@@ -104,7 +104,8 @@ BEGIN
         refills.RefilMonth3,
         refills.TestResultsMonth3,
         refill_month_3.DateKey as DateTestMonth3Key,
-        dispense_month_3.DateKey as DateDispenseMonth3
+        dispense_month_3.DateKey as DateDispenseMonth3,
+        cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrep
     from prep_patients
     left join ODS.dbo.Intermediate_PrepLastVisit as  latest_prep_visits on convert(nvarchar(64), hashbytes('SHA2_256', cast(latest_prep_visits.PatientPK as nvarchar(36))), 2) =  prep_patients.PatientPK
