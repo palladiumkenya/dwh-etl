@@ -106,9 +106,9 @@ BEGIN
     )
 	select
     	PatientKey = IDENTITY(INT, 1, 1),
-        combined_data_ct_hts_prep.PatientIDHash as PatientID,
-		combined_data_ct_hts_prep.PatientPKHash as PatientPK,
-        combined_data_ct_hts_prep.HtsNumberHash as HtsNumber,
+        combined_data_ct_hts_prep.PatientIDHash,
+		combined_data_ct_hts_prep.PatientPKHash,
+        combined_data_ct_hts_prep.HtsNumberHash,
         combined_data_ct_hts_prep.PrepNumber,
         combined_data_ct_hts_prep.SiteCode,
         combined_data_ct_hts_prep.NUPI,
