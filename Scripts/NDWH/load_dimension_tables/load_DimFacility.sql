@@ -8,7 +8,7 @@ BEGIN
 			Facility_Name as [FacilityName],
 			SubCounty,
 			County,
-			EMR,
+			EMR,		
 			Project,
 			Longitude,
 			Latitude,
