@@ -69,7 +69,7 @@ BEGIN
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactHTSPartnerNotificationServices
     from source_data
-    left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_data.PatientPK as nvarchar(36))), 2)
+    left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_data.PatientPK as nvarchar(36))), 2)
         and patient.SiteCode = source_data.SiteCode
     left join NDWH.dbo.DimFacility as facility on facility.MFLCode = source_data.SiteCode
     left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = source_data.SiteCode
