@@ -16,7 +16,7 @@ SELECT
 	county, 
 	agency, 
 	partner,
-	DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -2, @PERIOD)) + 1, 0) AS startPeriod,
+	DATEADD(MONTH, -1, DATEADD( DAY , 1, EOMONTH(DATEADD(MONTH, -2, @PERIOD)))) AS startPeriod,
 	EOMONTH(@PERIOD) AS endPeriod
 FROM (
 	SELECT fm.facilityId,
@@ -24,10 +24,9 @@ FROM (
 		f.county,
 		f.AgencyName agency,
 		f.PartnerName partner
-	FROM fact_manifest fm 
-		JOIN DWH.dbo.all_EMRSites f ON fm.facilityId = f.MFLCode
-	WHERE fm.docketid = @docketName AND fm.timeId BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -2, @PERIOD)) + 1, 0) AND
-	EOMONTH(@PERIOD)
+	FROM NDWH.dbo.fact_manifest fm 
+		JOIN REPORTING.dbo.all_EMRSites f ON fm.facilityId = f.MFLCode
+	WHERE fm.docketid = @docketName AND fm.timeId BETWEEN DATEADD (MONTH, -1, DATEADD ( DAY, 1,EOMONTH ( DATEADD(MONTH, -2, @PERIOD))) ) AND EOMONTH( @PERIOD ) 
 ) X
 GROUP BY facilityId, docket, county, agency, partner
 HAVING COUNT(facilityId) >= 3;
