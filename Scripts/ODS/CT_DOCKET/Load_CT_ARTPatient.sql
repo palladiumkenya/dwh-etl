@@ -5,7 +5,7 @@ BEGIN
 								AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,
 								PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
 								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,
-								Project,[DOB],CKV,PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf) 
+								Project,[DOB],CKV,PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,PatientPKHash,PatientIDHash,CKVHash) 
 			SELECT  DISTINCT
 				P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName, PA.[AgeEnrollment]
 				,PA.[AgeARTStart],PA.[AgeLastVisit],PA.[RegistrationDate],PA.[PatientSource],PA.[Gender],PA.[StartARTDate],PA.[PreviousARTStartDate]
@@ -32,6 +32,11 @@ BEGIN
 				FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 				INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
 				INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
+				INNER JOIN (SELECT a.PatientPID,c.code,Max(b.created)MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract]  a  with (NoLock)
+									INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] b with(NoLock) ON b.[PatientId]= a.ID AND b.Voided=0
+									INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0 
+									GROUP BY  a.PatientPID,c.code)tn
+							on P.PatientPID = tn.PatientPID and F.code = tn.code and PA.Created = tn.MaxCreated
 				--INNER JOIN (SELECT PatientId,MAX(created)Maxcreated from [DWAPICentral].[dbo].[PatientArtExtract](NoLock)
 				--			group by PatientId) tn
 				--on PA.PatientId = tn.PatientId and PA.Created = tn.Maxcreated

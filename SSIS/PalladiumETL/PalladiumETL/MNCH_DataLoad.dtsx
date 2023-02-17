@@ -1,429 +1,135 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\MNCH\Checkpoint.xml"
-  DTS:CheckpointUsage="1"
-  DTS:CreationDate="2/8/2023 11:13:43 AM"
+  DTS:CreationDate="1/23/2023 11:45:05 AM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
   DTS:CreatorName="WIN-LQ135V1RIG4\Administrator"
-  DTS:DTSID="{6D4C94A1-6109-4051-BA92-B6F08DBEAF6E}"
+  DTS:DTSID="{FD4F0673-5018-4ECE-BE3C-4A3C40AE6307}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="16.0.845.0"
   DTS:LocaleID="1033"
-  DTS:ObjectName="Package2"
+  DTS:ObjectName="MNCH_DataLoad"
   DTS:PackageType="5"
-  DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="7"
-  DTS:VersionGUID="{F5A898FD-8350-4128-A356-3108E274B56A}">
+  DTS:VersionBuild="19"
+  DTS:VersionGUID="{50E1D123-4418-4A9C-8F81-3ED070BE51AE}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_AncVisits.sql]"
+      DTS:refId="Package.ConnectionManagers[ODS_SQL_FileConn.sql]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{9CC9051F-37DB-4DA7-8227-62A3F0AD0BA6}"
-      DTS:ObjectName="Load_MNCH_AncVisits.sql">
+      DTS:DTSID="{6A9379F9-654B-493B-8537-DBEA7B63F4E7}"
+      DTS:ObjectName="ODS_SQL_FileConn.sql">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::FilePath]+"\\"+ @[User::FileName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_AncVisits.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_Arts.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{4F8DA6E3-4BBC-469E-A7CC-7CF07843C48B}"
-      DTS:ObjectName="Load_MNCH_Arts.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_Arts.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_CwcEnrolments.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{7C62377F-3C60-4E6D-95C5-BD0F1418D3A2}"
-      DTS:ObjectName="Load_MNCH_CwcEnrolments.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_CwcEnrolments.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_CwcVisits.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{DD4D2166-C9E5-434D-8AAE-14711EC142C0}"
-      DTS:ObjectName="Load_MNCH_CwcVisits.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_CwcVisits.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_Enrolments.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{AECCB9A1-C7FF-476C-BB41-AE2020462A91}"
-      DTS:ObjectName="Load_MNCH_Enrolments.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_Enrolments.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_Heis.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{6F8808C5-4F25-475D-837A-531EC8FEA7AA}"
-      DTS:ObjectName="Load_MNCH_Heis.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_Heis.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_Labs.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{45D5C63A-A37A-46C5-BEDD-5DF264E83531}"
-      DTS:ObjectName="Load_MNCH_Labs.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_Labs.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_MatVisits.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{4E80B5CF-449D-46A5-98BB-510829C1C55C}"
-      DTS:ObjectName="Load_MNCH_MatVisits.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_MatVisits.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_MotherBabyPairs.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{B2603F6C-75C6-4C40-AD41-2DBB748F13AF}"
-      DTS:ObjectName="Load_MNCH_MotherBabyPairs.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_MotherBabyPairs.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_Patient.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{5AC7C72E-C768-437E-8443-E68DF5905053}"
-      DTS:ObjectName="Load_MNCH_Patient.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_Patient.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Load_MNCH_PncVisits.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{672654B5-E335-4AC2-817F-B8D7BB601E34}"
-      DTS:ObjectName="Load_MNCH_PncVisits.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET\Load_MNCH_PncVisits.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[LocalHost.MNCHCentral]"
+      DTS:refId="Package.ConnectionManagers[OLE_DB.MNCHCentral_Src]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-      DTS:ObjectName="LocalHost.MNCHCentral">
+      DTS:DTSID="{BF8B24D5-C50B-4265-9F5E-0FD02D06156E}"
+      DTS:ObjectName="OLE_DB.MNCHCentral_Src">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=MNCHCentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{4284C940-2810-482C-A1C1-EE485A9E6D30}LocalHost.MNCHCentral;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=MNCHCentral;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{BF8B24D5-C50B-4265-9F5E-0FD02D06156E}LocalHost.HTSCentral;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLE_DB.ODS_Dest]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{18A82727-91EF-4BBB-B13E-E1E2B851939D}"
+      DTS:ObjectName="OLE_DB.ODS_Dest">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{18A82727-91EF-4BBB-B13E-E1E2B851939D}LocalHost.DWAPICentral;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
-  <DTS:Variables />
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{CC0F5DA3-EDCE-405C-AEFC-ED557FF577E1}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{09B40F9C-D7A1-4CE7-A15D-F6690B3645BE}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\Load_MNCH_AncVisits"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{54ECCBFF-7520-4E1C-9A20-9EF24D6E50F0}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:refId="Package\Load MNCH tables Container Loop"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{AA567727-8970-4D87-B78C-34628727D5B6}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_AncVisits"
-      DTS:ThreadHint="0">
+      DTS:ObjectName="Load MNCH tables Container Loop">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{79D5E1D4-4473-43BA-8516-067D2E55E3FE}"
+        DTS:ObjectName="{79D5E1D4-4473-43BA-8516-067D2E55E3FE}">
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\MNCH DOCKET" />
+            <FEFEProperty
+              FileSpec="*.SQL" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
       <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_AncVisits.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_Arts"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{ed42fd7d-279f-428c-a988-dc44ab4647f0}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_Arts"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_Arts.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_CwcEnrolments"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{a674ce17-ac28-4ff6-b6aa-5638044e63e2}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_CwcEnrolments"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_CwcEnrolments.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_CwcVisits"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{8e806f9b-80b3-4b99-b7b5-67a28ab96463}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_CwcVisits"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_CwcVisits.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_Enrolments"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{2118bf79-f2b2-490a-b26a-758cd3dc263b}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_Enrolments"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_Enrolments.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_Heis"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{893F145B-CCEE-445A-B5B6-81AF9D21ABA1}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_Heis"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_Heis.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_Labs"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{4C62983D-E78B-438C-B951-A9793E867652}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_Labs"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_Labs.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_MatVisits"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{37F094D4-E0B4-4FDE-BB24-09DA9F8C085D}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_MatVisits"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_MatVisits.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_MotherBabyPairs"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{29F96D77-EC1F-4BCC-B78B-F6A3DA91FDE7}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_MotherBabyPairs"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_MotherBabyPairs.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_Patient"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{DE207856-7636-4E14-9395-6487942C78F7}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_Patient"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_Patient.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Load_MNCH_PncVisits"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:DTSID="{D7487A40-9AA9-4738-B35F-7186B8382577}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:FailPackageOnFailure="True"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Load_MNCH_PncVisits"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{4284C940-2810-482C-A1C1-EE485A9E6D30}"
-          SQLTask:SqlStmtSourceType="FileConnection"
-          SQLTask:SqlStatementSource="Load_MNCH_PncVisits.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load MNCH tables Container Loop\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{1B2455CE-6921-4B4B-85D3-8B3C4CD522B2}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{18A82727-91EF-4BBB-B13E-E1E2B851939D}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="ODS_SQL_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
+          DTS:ObjectName="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FileName" />
+      </DTS:ForEachVariableMappings>
     </DTS:Executable>
   </DTS:Executables>
-  <DTS:PrecedenceConstraints>
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint]"
-      DTS:CreationName=""
-      DTS:DTSID="{36DAB537-40DF-4BCD-87DA-BC30E672F85A}"
-      DTS:From="Package\Load_MNCH_Patient"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint"
-      DTS:To="Package\Load_MNCH_AncVisits" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
-      DTS:CreationName=""
-      DTS:DTSID="{964CF9DE-9832-44D5-AB3B-578627503482}"
-      DTS:From="Package\Load_MNCH_AncVisits"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 1"
-      DTS:To="Package\Load_MNCH_Arts" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
-      DTS:CreationName=""
-      DTS:DTSID="{EAF70C57-FD7B-4593-B112-D198C2702AA5}"
-      DTS:From="Package\Load_MNCH_Arts"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 2"
-      DTS:To="Package\Load_MNCH_CwcEnrolments" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
-      DTS:CreationName=""
-      DTS:DTSID="{1647C640-F26D-4D54-8643-7B8DB0988A70}"
-      DTS:From="Package\Load_MNCH_CwcEnrolments"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 3"
-      DTS:To="Package\Load_MNCH_CwcVisits" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
-      DTS:CreationName=""
-      DTS:DTSID="{A4E1F364-5FCD-468A-A71E-847C2CA44BED}"
-      DTS:From="Package\Load_MNCH_CwcVisits"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 4"
-      DTS:To="Package\Load_MNCH_Enrolments" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
-      DTS:CreationName=""
-      DTS:DTSID="{F0D2C444-37CC-4A94-8F4D-AA589E9621C3}"
-      DTS:From="Package\Load_MNCH_Enrolments"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 5"
-      DTS:To="Package\Load_MNCH_Heis" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
-      DTS:CreationName=""
-      DTS:DTSID="{4C50EDDF-FDCD-47F7-8437-C24E7E49A9DF}"
-      DTS:From="Package\Load_MNCH_Heis"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 6"
-      DTS:To="Package\Load_MNCH_Labs" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 7]"
-      DTS:CreationName=""
-      DTS:DTSID="{A74DC655-0FE2-4802-95FE-A100402972DE}"
-      DTS:From="Package\Load_MNCH_Labs"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 7"
-      DTS:To="Package\Load_MNCH_MatVisits" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 8]"
-      DTS:CreationName=""
-      DTS:DTSID="{74340AED-D3FD-4441-A37D-6D4436956A5A}"
-      DTS:From="Package\Load_MNCH_MatVisits"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 8"
-      DTS:To="Package\Load_MNCH_MotherBabyPairs" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 9]"
-      DTS:CreationName=""
-      DTS:DTSID="{C2542D7D-3E4B-4A7A-8A83-F8E13AE94A94}"
-      DTS:From="Package\Load_MNCH_MotherBabyPairs"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 9"
-      DTS:To="Package\Load_MNCH_PncVisits" />
-  </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
 <!--If you manually edit this section and make a mistake, you can delete it. -->
@@ -435,271 +141,18 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="174.4,41.6"
-          Id="Package\Load_MNCH_Patient"
-          TopLeft="33.4615396889004,32.696970878116" />
-        <NodeLayout
-          Size="160,41.6"
-          Id="Package\Load_MNCH_Arts"
-          TopLeft="465.769247853545,31.0484786296786" />
-        <NodeLayout
-          Size="213.6,41.6"
-          Id="Package\Load_MNCH_CwcEnrolments"
-          TopLeft="662.646176361897,30.2605998133385" />
-        <NodeLayout
-          Size="185.6,41.6"
-          Id="Package\Load_MNCH_CwcVisits"
-          TopLeft="969.953879941568,34.4848398325964" />
-        <NodeLayout
-          Size="194.4,41.6"
-          Id="Package\Load_MNCH_Enrolments"
-          TopLeft="971.723110188819,125.915141382909" />
-        <NodeLayout
-          Size="161.6,41.6"
-          Id="Package\Load_MNCH_Heis"
-          TopLeft="701.153871872017,126.848489430763" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="625.769247853545,51.4545392215085">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="36.8769285083524,0"
-              Start="0,0"
-              End="29.3769285083524,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="29.3769285083524,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="876.246176361897,53.1727198229674">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="93.7077035796709,0"
-              Start="0,0"
-              End="86.2077035796709,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="86.2077035796709,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="1065.83849506519,76.0848398325964">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,49.8303015503126"
-              Start="0,0"
-              End="0,42.3303015503126">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,42.3303015503126" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="971.723110188819,147.181815406836">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-108.969238316802,0"
-              Start="0,0"
-              End="-101.469238316802,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-101.469238316802,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="163.2,41.6"
-          Id="Package\Load_MNCH_Labs"
-          TopLeft="471.153863435667,130.787883512464" />
-        <NodeLayout
-          Size="183.2,41.6"
-          Id="Package\Load_MNCH_MatVisits"
-          TopLeft="250.769239967392,128.030307655273" />
-        <NodeLayout
-          Size="220,41.6"
-          Id="Package\Load_MNCH_MotherBabyPairs"
-          TopLeft="1.56319401867222E-13,133.939398777824" />
-        <NodeLayout
-          Size="183.2,41.6"
-          Id="Package\Load_MNCH_PncVisits"
-          TopLeft="16.9230775438117,237.151523718383" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 6]"
-          TopLeft="701.153871872017,149.618186471614">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-66.80000843635,0"
-              Start="0,0"
-              End="-59.30000843635,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-59.30000843635,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 7]"
-          TopLeft="471.153863435667,150.209095583869">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-37.184623468275,0"
-              Start="0,0"
-              End="-29.684623468275,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-29.684623468275,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 8]"
-          TopLeft="250.769239967392,151.784853216549">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-30.7692399673916,0"
-              Start="0,0"
-              End="-23.2692399673916,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-23.2692399673916,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 9]"
-          TopLeft="109.261538771906,175.539398777824">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,61.6121249405589"
-              Start="0,0"
-              End="0,54.1121249405589">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,54.1121249405589" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="183.2,41.6"
-          Id="Package\Load_MNCH_AncVisits"
-          TopLeft="243.461547391655,33.1090920617758" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="207.8615396889,53.7030314699459">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="35.6000077027544,0"
-              Start="0,0"
-              End="28.1000077027544,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="28.1000077027544,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="426.661547391655,52.8787853457272">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="39.10770046189,0"
-              Start="0,0"
-              End="31.60770046189,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="31.60770046189,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
+          Size="164,42.8"
+          Id="Package\Load MNCH tables Container Loop\Execute SQL Task"
+          TopLeft="55.4583293379595,27.4499982216954" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="268.8,120.8"
+          Size="268.8,163.6"
+          Id="Package\Load MNCH tables Container Loop"
+          TopLeft="513.749992344528,37.6999993258715" />
       </GraphLayout>
     </LayoutInfo>
   </Package>
