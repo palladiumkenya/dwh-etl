@@ -9,9 +9,9 @@ BEGIN
 			SubCounty,
 			County,
 			EMR,
-			Project,
-			Longitude,
-			Latitude		
+			Project
+			--,Longitude,
+			--Latitude		
 		from ODS.dbo.All_EMRSites
 	),
 	site_abstraction as (
