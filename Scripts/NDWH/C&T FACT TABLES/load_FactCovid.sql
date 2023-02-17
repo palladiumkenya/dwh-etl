@@ -2,9 +2,9 @@ IF OBJECT_ID(N'[NDWH].[Dbo].[FactCovid]', N'U') IS NOT NULL
 	DROP TABLE [NDWH].[Dbo].[FactCovid];
 BEGIN
 With Covid As  (
-SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientID,Covid.PatientPK,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
+SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientID,Covid.PatientPKHash,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
         cast (Covid.PatientID as nvarchar) As PatientID ,
-        cast (Covid.PatientPK as nvarchar) As PatientPK,
+        cast (Covid.PatientPKHash as nvarchar) As PatientPKHash,
         cast (Covid.SiteCode as nvarchar) As SiteCode,
         Covid.FacilityName,
         VisitID, 
@@ -42,7 +42,7 @@ left join ODS.dbo.CT_Patient as patient on patient.PatientPK = Covid.PatientPK a
 left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPK = Covid.PatientPK and last_encounter.SiteCode = Covid.SiteCode
 group by 
         Covid.PatientID,
-        Covid.PatientPK,
+        Covid.PatientPKHash,
         PatientStatus,
         PatientStatusSinceLastVisit,
         Covid.SiteCode,
@@ -124,7 +124,7 @@ group by
         cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FactCovid
  from Covid
- left join NDWH.dbo.DimPatient as patient on patient.PatientPK =  convert(nvarchar(64), hashbytes('SHA2_256', cast(Covid.PatientPK  as nvarchar(36))), 2) and patient.SiteCode = Covid.SiteCode
+ left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash =  Covid.PatientPKHash  and patient.SiteCode = Covid.SiteCode
  left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Covid.SiteCode
  left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Covid.SiteCode
  left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP

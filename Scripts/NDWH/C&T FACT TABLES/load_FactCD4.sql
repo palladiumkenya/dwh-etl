@@ -10,8 +10,8 @@ with MFL_partner_agency_combination as (
 ),
 source_CD4 as (
 	select
-		distinct baselines.PatientID,
-		baselines.PatientPK,
+		distinct baselines.PatientIDHash,
+		baselines.PatientPKHash,
 		baselines.SiteCode,
 		CD4atEnrollment,
 		CD4atEnrollment_Date as CD4atEnrollmentDate,
@@ -41,7 +41,7 @@ select
 	source_CD4.LastCD4Date
 into NDWH.dbo.FactCD4
 from source_CD4 as source_CD4
-left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_CD4.PatientPK as nvarchar(36))), 2)
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = source_CD4.PatientPKHash
     and patient.SiteCode = source_CD4.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = source_CD4.SiteCode
 left join NDWH.dbo.DimDate as cd4_enrollment on cd4_enrollment.Date = source_CD4.CD4atEnrollmentDate

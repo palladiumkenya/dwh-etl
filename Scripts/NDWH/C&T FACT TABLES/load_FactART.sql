@@ -11,8 +11,8 @@ with MFL_partner_agency_combination as (
 
    Patient As ( Select    
      
-      Patient.PatientID,
-      Patient.PatientPK,
+      Patient.PatientIDHash,
+      Patient.PatientPKHash,
       cast (Patient.SiteCode as nvarchar) As SiteCode,
       DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
       DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
@@ -83,7 +83,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART
 from  Patient
-left join NDWH.dbo.DimPatient as Pat on pat.PatientPK=convert(nvarchar(64), hashbytes('SHA2_256', cast(Patient.PatientPk  as nvarchar(36))), 2)and Pat.SiteCode=Patient.SiteCode
+left join NDWH.dbo.DimPatient as Pat on pat.PatientPKHash=Patient.PatientPkHash and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code collate Latin1_General_CI_AS = Patient.SiteCode collate Latin1_General_CI_AS
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
@@ -91,7 +91,7 @@ left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVi
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date= Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPK = Patient.PatientPk and IOutcomes.SiteCode = Patient.SiteCode
+left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash collate Latin1_General_CI_AS and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)

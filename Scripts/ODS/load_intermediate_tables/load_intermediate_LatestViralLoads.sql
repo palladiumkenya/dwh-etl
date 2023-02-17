@@ -7,8 +7,6 @@ BEGIN
 			PatientID,
 			SiteCode,
 			PatientPK,
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
 			VisitID,
 			[OrderedbyDate],
 			[ReportedbyDate],
@@ -23,7 +21,8 @@ BEGIN
 				and TestResult is not null
 	)
 	select 
- 		source_LatestViralLoads.*,
+ 		source_LatestViralLoads.*,					convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
 		cast(getdate() as date) as LoadDate
 	into [ODS].[dbo].[Intermediate_LatestViralLoads]
 	from source_LatestViralLoads

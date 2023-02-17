@@ -15,7 +15,7 @@ with MFL_partner_agency_combination as (
 latest_weight_height as (
 select 
 	PatientID,
-	PatientPK,
+	PatientPKHash,
 	SiteCode,
 	Weight as LatestWeight,
 	Height as LatestHeight
@@ -104,7 +104,7 @@ latest_fp_method as (
 ),
 combined_table as (
 	select 
-		patient.PatientPK,
+		patient.PatientPKHash,
 		patient.SiteCode,
 		patient.PatientID,
 		latest_weight_height.LatestHeight,
@@ -116,7 +116,7 @@ combined_table as (
 		lastest_stability_assessment.StabilityAssessment,
 		latest_pregnancy.Pregnant
 	from ODS.dbo.CT_Patient as patient
-	left join latest_weight_height on latest_weight_height.PatientPK = patient.PatientPK
+	left join latest_weight_height on latest_weight_height.PatientPKHash = patient.PatientPKHash
 		and latest_weight_height.SiteCode = patient.SiteCode
 	left join age_of_last_visit on age_of_last_visit.PatientPK = patient.PatientPK
 		and age_of_last_visit.SiteCode = patient.SiteCode
@@ -152,7 +152,7 @@ select
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from combined_table 
-left join NDWH.dbo.DimPatient as patient on patient.PatientPK = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_table.PatientPK as nvarchar(36))), 2)
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = combined_table.PatientPKHash 
     and patient.SiteCode = combined_table.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = combined_table.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = combined_table.SiteCode

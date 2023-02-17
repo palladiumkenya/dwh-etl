@@ -4,14 +4,14 @@ BEGIN
 	With Exits As (
 	select 
 		PatientID,
-		PatientPK,
+		PatientPKHash,
 		SiteCode
 	from ODS.dbo.CT_PatientStatus
 	where ExitReason is not null
 	),
 	Died As (select 
 		PatientID,
-		PatientPK,
+		PatientPKHash,
 		SiteCode,
 		ExitDate as dtDead
 	from ODS.dbo.CT_PatientStatus
@@ -20,7 +20,7 @@ BEGIN
 
 	Stopped As (select 
 		PatientID,
-		PatientPK,
+		PatientPKHash,
 		SiteCode,
 		ExitDate as dtARTStop
 	from ODS.dbo.CT_PatientStatus
@@ -28,7 +28,7 @@ BEGIN
 	),
 	LTFU AS ( Select
 		PatientID,
-		PatientPK,
+		PatientPKHash,
 		SiteCode,
 		ExitDate as dtLTFU
 	from ODS.dbo.CT_PatientStatus
@@ -63,15 +63,15 @@ BEGIN
 		cast (getdate() as date) as LoadDate
 		INTO [NDWH].[DBO].[FACTPatientExits]
 		from Exits
-		Left join NDWH.dbo.DimPatient as Patient on Patient.PatientPK= Exits.PatientPK and Patient.SiteCode=Exits.SiteCode
+		Left join NDWH.dbo.DimPatient as Patient on Patient.PatientPKHash= Exits.PatientPKHash and Patient.SiteCode=Exits.SiteCode
 		Left join NDWH.dbo.DimFacility as facility on facility.MFLCode=Exits.SiteCode
 		left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=Exits.SiteCode
 		Left join NDWH.dbo.DimPartner as partner on partner.PartnerName=MFL_partner_agency_combination.SDP
 		Left join NDWH.dbo.DimAgency as agency on agency.AgencyName=MFL_partner_agency_combination.agency
-		left join Died on Died.PatientPK=Exits.PatientPK and Died.SiteCode=Exits.SiteCode
-		left join [Stopped] on [Stopped].PatientPK=Exits.PatientPK and [Stopped].SiteCode=Exits.SiteCode
-		left join TransferOut on TransferOut.PatientPK=Exits.PatientPK and TransferOut.SiteCode=Exits.SiteCode
-		left join LTFU on LTFU.PatientPK=Exits.PatientPK and LTFU.SiteCode=Exits.SiteCode
+		left join Died on Died.PatientPKHash=Exits.PatientPKHash and Died.SiteCode=Exits.SiteCode
+		left join [Stopped] on [Stopped].PatientPKHash=Exits.PatientPKHash and [Stopped].SiteCode=Exits.SiteCode
+		left join TransferOut on TransferOut.PatientPK=Exits.PatientPKHash and TransferOut.SiteCode=Exits.SiteCode
+		left join LTFU on LTFU.PatientPKHash=Exits.PatientPKHash and LTFU.SiteCode=Exits.SiteCode
 		left join NDWH.dbo.DimDate as dtARTStop on dtARTStop.Date=Stopped.dtARTStop
 		left join NDWH.dbo.DimDate as dtLTFU on dtLTFU.Date= LTFU.dtLTFU
 		left join NDWH.dbo.DimDate as dtTO on dtTO.Date= TransferOut.dtTO

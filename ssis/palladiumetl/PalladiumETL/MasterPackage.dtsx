@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="53"
-  DTS:VersionGUID="{268B8432-834E-4502-A50C-2C1C092D53D3}">
+  DTS:VersionBuild="55"
+  DTS:VersionGUID="{CADFCC55-BAD9-4A63-B995-F26277DF14D6}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -61,6 +61,7 @@
       DTS:refId="Package\Execute Load_Dim_Tables Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{FD7F0D10-DFDF-4DBF-A712-69D79F817036}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -116,6 +117,7 @@
       DTS:refId="Package\Execute ODS Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{108DCBBB-2095-472B-B22E-99E00BF8A8BB}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
