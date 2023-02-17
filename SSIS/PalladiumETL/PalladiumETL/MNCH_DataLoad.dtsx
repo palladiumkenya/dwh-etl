@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="MNCH_DataLoad"
   DTS:PackageType="5"
-  DTS:VersionBuild="19"
-  DTS:VersionGUID="{50E1D123-4418-4A9C-8F81-3ED070BE51AE}">
+  DTS:VersionBuild="20"
+  DTS:VersionGUID="{B72F930E-7970-4E10-AB94-FA3E1099DF79}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -123,8 +123,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
-          DTS:ObjectName="{C6472310-C1BB-4866-9835-F21585EEEA3D}"
+          DTS:DTSID="{BE9137A1-68E3-4047-A33C-8754F9F5C0B9}"
+          DTS:ObjectName="{BE9137A1-68E3-4047-A33C-8754F9F5C0B9}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
