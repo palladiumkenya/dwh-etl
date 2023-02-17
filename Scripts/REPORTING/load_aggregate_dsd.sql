@@ -2,14 +2,14 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSD]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateDSD
+INSERT INTO REPORTING.dbo.AggregateDSD (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup, StabilityAssessment, patients_onMMD, patients_nonMMD, Stability, TXCurr)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
 County,
 SubCounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 age.DATIMAgeGroup as AgeGroup, 
 StabilityAssessment,

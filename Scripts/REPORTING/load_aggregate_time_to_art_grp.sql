@@ -15,6 +15,7 @@ INSERT INTO [REPORTING].[dbo].[AggregateTimeToARTGrp]
            ,[StartARTYear]
            ,[StartARTMonth]
            ,[StartARTYearMonth]
+           ,TimeToARTDiagnosis_Grp
            ,[NumPatients]
            ,[TotalBySite]
            ,[proportions])
@@ -23,14 +24,18 @@ MFLCode,
 f.FacilityName,
 County,
 Subcounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 g.DATIMAgeGroup as AgeGroup,
 Year(StartARTDateKey) StartARTYear,
 DateName(Month,StartARTDateKey) StartARTMonth,
 convert(varchar(7),StartARTDateKey,126) as StartARTYearMonth,
---TimeToARTDiagnosis_Grp, TODO: This column has to be included in the FactART script
+CASE WHEN [TimetoARTDiagnosis]=0 THEN 'Same Day'
+    WHEN [TimetoARTDiagnosis] between 1 and 7 THEN '1 to 7 Days'
+    WHEN [TimetoARTDiagnosis] between 8 and 14 THEN '8 to 14 Days'
+    WHEN [TimetoARTDiagnosis]>14 and TimetoARTDiagnosis is not NULL THEN '> 14 Days'
+    ELSE NULL END AS TimeToARTDiagnosis_Grp,
 Count(*) as NumPatients,
 SUM(Count(*)) OVER (PARTITION BY MFLCode,Year(StartARTDateKey),DateName(Month,StartARTDateKey)) AS TotalBySite,
 cast((cast(Count(*) as decimal (9,2))/
@@ -43,6 +48,5 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 where MFLCode>1
-Group BY MFLCode,f.FacilityName,County,Subcounty,p.PartnerName,a.AgencyName,Gender,g.DATIMAgeGroup,Year(StartARTDateKey),DateName(Month,StartARTDateKey),
-convert(varchar(7),StartARTDateKey,126)
+Group BY MFLCode,f.FacilityName,County,Subcounty,p.PartnerName,a.AgencyName,Gender,g.DATIMAgeGroup,Year(StartARTDateKey),DateName(Month,StartARTDateKey), convert(varchar(7),StartARTDateKey,126), TimetoARTDiagnosis
 order by MFLCode,Year(StartARTDateKey)

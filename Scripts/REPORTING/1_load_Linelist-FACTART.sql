@@ -11,7 +11,7 @@ Select distinct
     pat.MaritalStatus,
     pat.Nupi,
     pat.PatientSource,
-    pat.PatientType,
+    pat.ClientType,
     pat.SiteCode,
     fac.FacilityName,
     fac.County,
@@ -40,9 +40,12 @@ Select distinct
     vl.EligibleVL as Eligible4VL,
     vl.Last12MonthVL,
     vl.Last12MVLSup,
+    vl.LastVL,
+    cast(vl.LastVlDateKey as date) LastVLDate,
     vl.HighViremia,
     vl.LowViremia,
-    pat.ISTxCurr
+    pat.ISTxCurr,
+	dif.DifferentiatedCare
     
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
@@ -53,6 +56,8 @@ left join NDWH.dbo.DimFacility fac on fac.FacilityKey=ART.FacilityKey
 left join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=ART.AgeGroupKey
 left join NDWH.dbo.DimDate startdate on startdate.[Date]=ART.StartARTDateKey
 left join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey=ART.ARTOutcomeKey
-LEFT JOIN NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey;
+LEFT JOIN NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey
+LEFT JOIN NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
+LEFT JOIN NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey;
 
 END

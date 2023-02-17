@@ -15,7 +15,9 @@ source_CD4 as (
 		baselines.SiteCode,
 		CD4atEnrollment,
 		CD4atEnrollment_Date as CD4atEnrollmentDate,
-		LastCD4AfterARTStart AS LastCD4,
+		bCD4 as BaselineCD4,
+		bCD4Date as BaselineCD4Date,
+		lastCD4 AS LastCD4,
 		LastCD4AfterARTStart_Date as LastCD4Date,
 		datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
 	from ODS.dbo.CT_PatientBaselines as baselines
@@ -33,6 +35,8 @@ select
     age_group.AgeGroupKey,
 	source_CD4.CD4atEnrollment,
 	source_CD4.CD4atEnrollmentDate,
+	source_CD4.BaselineCD4,
+	source_CD4.BaselineCD4Date,
 	source_CD4.LastCD4,
 	source_CD4.LastCD4Date
 into NDWH.dbo.FactCD4

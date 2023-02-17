@@ -221,8 +221,11 @@ BEGIN
 			time_to_first_vl.TimetoFirstVL,
 			time_to_first_vl_group.TimeToFirstVLGrp,
 			latest_VL_1.LatestVLDate1,
+			latest_VL_1.LatestVL1,
 			latest_VL_2.LatestVLDate2,
+			latest_VL_2.LatestVL2,
 			latest_VL_3.LatestVLDate3,
+			latest_VL_3.LatestVL3,
 			Case WHEN ISNUMERIC(last_12M_VL_indicators.Last12MonthVLResults) = 1 
 				THEN CASE WHEN CAST(Replace(last_12M_VL_indicators.Last12MonthVLResults,',','')AS FLOAT) > 1000.00 THEN 1 ELSE 0 END
 			END as HighViremia,
@@ -271,6 +274,9 @@ BEGIN
 		lastest_VL_date1.DateKey as LatestVLDate1Key,
 		lastest_VL_date2.DateKey as LatestVLDate2Key,
 		lastest_VL_date3.DateKey as LatestVLDate3Key,
+		combined_viral_load_dataset.LatestVL1,
+		combined_viral_load_dataset.LatestVL2,
+		combined_viral_load_dataset.LatestVL3,
 		combined_viral_load_dataset.EligibleVL,
 		combined_viral_load_dataset.Last12MonthVLResults,
 		combined_viral_load_dataset.Last12MonthVL,

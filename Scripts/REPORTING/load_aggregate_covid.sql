@@ -3,14 +3,14 @@ IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REP
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateCovid]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateCovid
+INSERT INTO REPORTING.dbo.AggregateCovid (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup,VaccinationStatus,PatientStatus,AdmissionStatus,AdmissionUnit,EverCOVID19Positive,MissedAppointmentDueToCOVID19,adults_count)
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
 County,
 SubCounty,
-p.PartnerName as CTPartner,
-a.AgencyName as CTAgency,
+p.PartnerName,
+a.AgencyName,
 Gender,
 age.DATIMAgeGroup as AgeGroup,
 cov.VaccinationStatus,
