@@ -1,8 +1,25 @@
-IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListViralLoad]') AND type in (N'U'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListViralLoad]') AND type in (N'U'))
+
 TRUNCATE TABLE [REPORTING].[dbo].[LineListViralLoad]
 GO
 
-INSERT INTO REPORTING.dbo.LineListViralLoad (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, PatientPK, PatientID, LatestVL1, LatestVLDate1Key, LatestVL2, LatestVLDate2Key, LatestVL3, LatestVLDate3Key) 
+INSERT INTO REPORTING.dbo.LineListViralLoad (
+MFLCode, 
+FacilityName, 
+County, 
+SubCounty, 
+PartnerName, 
+AgencyName, 
+Gender, 
+AgeGroup, 
+PatientPK, 
+PatientID, 
+LatestVL1, 
+LatestVLDate1Key, 
+LatestVL2,
+LatestVLDate2Key, 
+LatestVL3, 
+LatestVLDate3Key) 
 SELECT DISTINCT
 	MFLCode,
 	f.FacilityName,
@@ -12,12 +29,12 @@ SELECT DISTINCT
 	a.AgencyName,
 	Gender,
 	age.DATIMAgeGroup as AgeGroup,
-	pat.PatientPK,
-	pat.PatientID,
+	pat.PatientPKHash,
+	pat.PatientIDHash,
 	LatestVL1,
 	vl.LatestVLDate1Key,
 	LatestVL2,
-	vl.LatestVLDate2Key
+	vl.LatestVLDate2Key,
 	LatestVL3,
 	vl.LatestVLDate3Key
 

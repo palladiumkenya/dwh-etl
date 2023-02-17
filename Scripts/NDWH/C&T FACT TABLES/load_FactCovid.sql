@@ -2,10 +2,10 @@ IF OBJECT_ID(N'[NDWH].[Dbo].[FactCovid]', N'U') IS NOT NULL
 	DROP TABLE [NDWH].[Dbo].[FactCovid];
 BEGIN
 With Covid As  (
-SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientID,Covid.PatientPKHash,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
-        cast (Covid.PatientID as nvarchar) As PatientID ,
-        cast (Covid.PatientPKHash as nvarchar) As PatientPKHash,
-        cast (Covid.SiteCode as nvarchar) As SiteCode,
+SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
+        Covid.PatientIDHash  ,
+        Covid.PatientPKHash ,
+        Covid.SiteCode ,
         Covid.FacilityName,
         VisitID, 
         Max (Covid19AssessmentDate)Covid19AssessmentDate ,
@@ -38,10 +38,10 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientID,Covid.PatientPKHash,Covid.S
         CauseOfDeath,
         datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
 from ODS.dbo.CT_Covid as Covid
-left join ODS.dbo.CT_Patient as patient on patient.PatientPK = Covid.PatientPK and patient.SiteCode = Covid.SiteCode
-left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPK = Covid.PatientPK and last_encounter.SiteCode = Covid.SiteCode
+left join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = Covid.PatientPKHash and patient.SiteCode = Covid.SiteCode
+left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = Covid.PatientPKHash and last_encounter.SiteCode = Covid.SiteCode
 group by 
-        Covid.PatientID,
+        Covid.PatientIDHash,
         Covid.PatientPKHash,
         PatientStatus,
         PatientStatusSinceLastVisit,

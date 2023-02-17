@@ -27,9 +27,9 @@ BEGIN
             cast(getdate() as date) as LoadDate
         from 
         ODS.dbo.CT_Patient as patients
-        left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPK = baselines.PatientPK
+        left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPKHash = baselines.PatientPKHash collate Latin1_General_CI_AS
             and patients.SiteCode = baselines.SiteCode
-        left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPK = patients.PatientPK
+        left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPKHash = patients.PatientPKHash collate Latin1_General_CI_AS
             and outcomes.SiteCode = patients.SiteCode
 	),
     hts_patient_source as (
@@ -60,7 +60,7 @@ BEGIN
     combined_data_ct_hts as (
         select
             coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
-            coalesce(ct_patient_source.PatientPK, hts_patient_source.PatientPK) as PatientPK,
+            --coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
             coalesce(ct_patient_source.SiteCode, hts_patient_source.SiteCode) as SiteCode,
             coalesce(ct_patient_source.NUPI, hts_patient_source.NUPI) as NUPI,
             coalesce(ct_patient_source.DOB, hts_patient_source.DOB) as DOB,
@@ -77,7 +77,7 @@ BEGIN
             hts_patient_source.HTSNumberHash,
 			cast(getdate() as date) as LoadDate
         from ct_patient_source 
-        full join hts_patient_source on  hts_patient_source.PatientPK = ct_patient_source.PatientPK
+        full join hts_patient_source on  hts_patient_source.PatientPKHash = ct_patient_source.PatientPKHash
             and ct_patient_source.SiteCode = hts_patient_source.SiteCode
     ),
     combined_data_ct_hts_prep as (
@@ -101,7 +101,7 @@ BEGIN
             cast(format(prep_patient_source.PrepEnrollmentDate,'yyyyMMdd') as int) as PrepEnrollmentDateKey,
 			cast(getdate() as date) as LoadDate
         from combined_data_ct_hts 
-        full join prep_patient_source on combined_data_ct_hts.PatientPK = prep_patient_source.PatientPk
+        full join prep_patient_source on combined_data_ct_hts.PatientPKHash = prep_patient_source.PatientPKHash
             and prep_patient_source.SiteCode = combined_data_ct_hts.SiteCode            
     )
 	select

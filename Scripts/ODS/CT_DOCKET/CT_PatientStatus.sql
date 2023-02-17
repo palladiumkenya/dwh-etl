@@ -19,6 +19,7 @@ BEGIN
 							F.Code AS SiteCode
 							,PS.[ExitDescription] ExitDescription
 							,PS.[ExitDate] ExitDate
+							,P.Lastvisit
 							,PS.[ExitReason] ExitReason
 							,P.[Emr] Emr
 							,CASE P.[Project] 
@@ -50,6 +51,13 @@ BEGIN
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+						inner join (
+									select P.PatientPID,F.code,exitdate,max(Ps.Created)MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
+									INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
+									INNER JOIN [DWAPICentral].[dbo].[Facility] F (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+									group by P.PatientPID,F.code,exitdate
+								)tn
+			on P.PatientPID = tn.PatientPID and f.code = tn.Code and PS.ExitDate = tn.ExitDate and PS.Created = tn.MaxCreated
 						---INNER JOIN FacilityManifest_MaxDateRecieved(NoLock) a ON F.Code = a.SiteCode and a.[End] is not null and a.[Session] is not null
 						WHERE p.gender!='Unknown') AS b 
 						ON(
@@ -57,12 +65,14 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.exitdate = b.exitdate
-						and a.PatientUnique_ID = b.UniquePatientStatusId 
+						and a.ExitReason = b.ExitReason COLLATE SQL_Latin1_General_CP1_CI_AS
+						and a.Lastvisit = b.Lastvisit
+						--and a.PatientUnique_ID = b.UniquePatientStatusId 
 						--and a.PatientStatusUnique_ID = b.PatientStatusUnique_ID
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
+							INSERT(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,CKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
+							VALUES(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,PKV,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,PatientPKHash,PatientIDHash,CKVHash,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
 			
 						WHEN MATCHED THEN
 							UPDATE SET 

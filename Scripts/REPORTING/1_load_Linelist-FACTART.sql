@@ -4,8 +4,8 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL
 BEGIN
 
 Select distinct 
-    pat.PatientID,
-    pat.PatientPK,
+    pat.PatientIDHash,
+    pat.PatientPKHash,
     pat.Gender,
     pat.DOB,
     pat.MaritalStatus,
