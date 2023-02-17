@@ -11,32 +11,30 @@ BEGIN
 			   END AS [Project] 
 			  ,PB.[Voided],PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
 			  ,PB.[lastWABDate],PB.[Created]
-			  ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV,
-			  convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+			 -- ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV,
+			 -- convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
+				--convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
+				--convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' + LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
 
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 		INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID
 		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-		INNER JOIN (
-						select p.[PatientPID],F.code, max(PB.created)Maxcreated FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID
-						INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
-						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-						group by p.[PatientPID],F.code
-					)tn
-		on P.[PatientPID] = tn.[PatientPID] and F.code = tn.Code and PB.created = tn.Maxcreated
+		--INNER JOIN (	select p.[PatientPID],F.code, max(PB.created)Maxcreated FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+		--				INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
+		--				INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+		--				group by p.[PatientPID],F.code
+		--			)tn
+		--on P.[PatientPID] = tn.[PatientPID] and F.code = tn.Code and PB.created = tn.Maxcreated
 		WHERE p.gender!='Unknown') b
 		ON a.patientID COLLATE SQL_Latin1_General_CP1_CI_AS= b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and 
-		a.sitecode = b.sitecode and
-		a.PatientBaselinesUniqueID = b.ID
+		a.sitecode = b.sitecode 
+		--and a.PatientBaselinesUniqueID = b.ID
 
 
 		WHEN NOT MATCHED THEN 
-		INSERT(PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created],PatientPKHash,PatientIDHash,CKVHash)
-		VALUES(PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created],PatientPKHash,PatientIDHash,CKVHash)
+		INSERT(PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created] /*,PatientPKHash,PatientIDHash,CKVHash */)
+		VALUES(PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created] /*,PatientPKHash,PatientIDHash,CKVHash */)
 
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -67,4 +65,16 @@ BEGIN
 	--	THEN
 	--	/* The Record is in the target table but doen't exit on the source table*/
 	--		Delete;
+
+		with cte AS (
+	Select
+	PatientId,
+	sitecode,
+
+	 ROW_NUMBER() OVER (PARTITION BY PatientId,sitecode ORDER BY
+	PatientId,sitecode) Row_Num
+	FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
+	)
+delete  from cte 
+	Where Row_Num >1
 END
