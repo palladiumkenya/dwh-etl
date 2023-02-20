@@ -13,6 +13,7 @@ with MFL_partner_agency_combination as (
 source_data as (
     select 
         distinct adverse_events.Patientpk,
+        adverse_events.PatientPKHash,
         adverse_events.SiteCode,
         AdverseEvent,
         AdverseEventStartDate,
@@ -53,7 +54,7 @@ select
 into [NDWH].[dbo].[FactAdverseEvents]
 from source_data
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode  = source_data.SiteCode
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_data.PatientPK as nvarchar(36))), 2)
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = source_data.PatientPKHash
      and patient.SiteCode = source_data.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = source_data.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
