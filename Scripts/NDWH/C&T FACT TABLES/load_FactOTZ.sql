@@ -5,7 +5,7 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	    SDP_Agency as Agency
 	from ODS.dbo.All_EMRSites 
 ),
 otz_and_last_encounter_combined as (
@@ -28,9 +28,9 @@ select
 	otz.ModulesCompletedToday_OTZ_Beyond,
     datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
 from ODS.dbo.Intermediate_LastOTZVisit as otz
-left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = otz.PatientPKHash collate Latin1_General_CI_AS
+left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = otz.PatientPKHash 
 		and last_encounter.SiteCode = otz.SiteCode
-left join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = otz.PatientPKHash collate Latin1_General_CI_AS
+left join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = otz.PatientPKHash 
 	and patient.SiteCode = otz.SiteCode
 )
 select 
@@ -56,7 +56,7 @@ select
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactOTZ
 from otz_and_last_encounter_combined
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash collate Latin1_General_CI_AS= otz_and_last_encounter_combined.PatientPKHash collate Latin1_General_CI_AS
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = otz_and_last_encounter_combined.PatientPKHash 
     and patient.SiteCode = otz_and_last_encounter_combined.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = otz_and_last_encounter_combined.SiteCode
 left join NDWH.dbo.DimDate as otz_enrollment on otz_enrollment.Date = otz_and_last_encounter_combined.OTZEnrollmentDate
