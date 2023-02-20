@@ -29,17 +29,7 @@ BEGIN
 		
 		WHEN MATCHED THEN
 			UPDATE SET 
-					a.[FacilityName]					=b.[FacilityName],         
-					a.[HtsNumber]						=b.[HtsNumber],
-					a.[Emr]								=b.[Emr],
-					a.[Project]							=b.[Project],
-					a.[Processed]						=b.[Processed],
-					a.[QueueId]							=b.[QueueId],
-					a.[Status]							=b.[Status]	,
-					a.[StatusDate]						=b.[StatusDate],
-					a.[EncounterId]						=b.[EncounterId],
-					a.[VisitID]							=b.[VisitID],
-					a.[VisitDate]						=b.[VisitDate],
+					
 					a.[PopulationType]					=b.[PopulationType]	,
 					a.[KeyPopulation]					=b.[KeyPopulation],
 					a.[PriorityPopulation]				=b.[PriorityPopulation]	,

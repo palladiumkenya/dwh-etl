@@ -48,14 +48,9 @@ BEGIN
 
 	WHEN MATCHED THEN
 		UPDATE SET 
-				a.[FacilityName]					=b.[FacilityName],											
-				a.[HtsNumber]						=b.[HtsNumber],
-				a.[Emr]								=b.[Emr],	
-				a.[Project]							=b.[Project],	
-				a.[PartnerPatientPk]				=b.[PartnerPatientPk]	,
+			
 				a.[KnowledgeOfHivStatus]			=b.[KnowledgeOfHivStatus],
-				a.[PartnerPersonID]					=b.[PartnerPersonID],	
-				a.[CccNumber]						=b.[CccNumber],
+				
 				a.[IpvScreeningOutcome]				=b.[IpvScreeningOutcome],	
 				a.[ScreenedForIpv]					=b.[ScreenedForIpv]	,
 				a.[PnsConsent]						=b.[PnsConsent],
@@ -69,11 +64,7 @@ BEGIN
 				a.[Age]								=b.[Age],	
 				a.[DateElicited]					=b.[DateElicited],
 				a.[Dob]								=b.[Dob],	
-				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare]
-		
-		WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare];
+	
 END
 	

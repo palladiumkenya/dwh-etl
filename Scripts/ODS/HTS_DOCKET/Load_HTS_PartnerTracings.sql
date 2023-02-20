@@ -31,16 +31,9 @@ BEGIN
 	WHEN MATCHED THEN
 		UPDATE SET 
 			a.[FacilityName]=b.[FacilityName],
-			a.[HtsNumber]	=b.[HtsNumber],
-			a.[Emr]			=b.[Emr],
-			a.[Project]		=b.[Project],
+			
 			a.[TraceType]	=b.[TraceType],
 			a.[TraceDate]	=b.[TraceDate],
 			a.[TraceOutcome]=b.[TraceOutcome],
-			a.[BookingDate]	=b.[BookingDate]
-	
-	WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+			a.[BookingDate]	=b.[BookingDate];
 END
