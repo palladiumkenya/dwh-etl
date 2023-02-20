@@ -16,12 +16,12 @@ BEGIN
 		INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID
 		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-		--INNER JOIN (	select p.[PatientPID],F.code, max(PB.created)Maxcreated FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-		--				INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
-		--				INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-		--				group by p.[PatientPID],F.code
-		--			)tn
-		--on P.[PatientPID] = tn.[PatientPID] and F.code = tn.Code and PB.created = tn.Maxcreated
+		INNER JOIN (	select p.[PatientPID],F.code, max(PB.created)Maxcreated FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+						INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+						group by p.[PatientPID],F.code
+					)tn
+		on P.[PatientPID] = tn.[PatientPID] and F.code = tn.Code --and PB.created = tn.Maxcreated
 		WHERE p.gender!='Unknown') b
 		ON a.patientID = b.PatientID and 
 		a.sitecode = b.sitecode 
