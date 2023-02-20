@@ -5,9 +5,9 @@ BEGIN
 
 with MFL_partner_agency_combination as (
 	select 
-		distinct MFL_Code collate Latin1_General_CI_AS as MFL_Code,
-		SDP collate Latin1_General_CI_AS as SDP,
-	    SDP_Agency collate Latin1_General_CI_AS as Agency
+		distinct MFL_Code,
+		SDP ,
+	    SDP_Agency  as Agency
 	from ODS.dbo.All_EMRSites 
 ),
 source_data as (
