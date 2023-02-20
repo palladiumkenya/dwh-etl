@@ -46,7 +46,7 @@ BEGIN
 	Select 
 		MFL_code,
 		SDP,
-		[SDP_Agency] collate Latin1_General_CI_AS as agency
+		[SDP_Agency]  as agency
 		from [ODS].dbo.All_EMRSites
 		)
 
