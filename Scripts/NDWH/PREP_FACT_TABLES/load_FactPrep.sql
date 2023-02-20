@@ -7,7 +7,7 @@ BEGIN
         select 
             distinct MFL_Code,
             SDP,
-        SDP_Agency collate Latin1_General_CI_AS as Agency
+        SDP_Agency  as Agency
         from ODS.dbo.All_EMRSites 
     ),
     prep_patients as
@@ -119,7 +119,7 @@ BEGIN
     left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = prep_patients.PatientPK
         and patient.SiteCode = prep_patients.SiteCode
     left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = prep_patients.SiteCode
-    left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
+    left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP 
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimFacility as facility on facility.MFLCode = prep_patients.SiteCode
     left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, coalesce(latest_prep_visits.VisitDate, getdate()))
