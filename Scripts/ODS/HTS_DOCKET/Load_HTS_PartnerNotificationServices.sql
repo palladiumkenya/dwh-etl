@@ -1,4 +1,3 @@
-
 BEGIN
 		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
@@ -25,10 +24,8 @@ BEGIN
 				  ,[Age]
 				  ,[DateElicited]
 				  ,Cl.[Dob]
-				  ,[LinkDateLinkedToCare],
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2)  as CKVHash
+				  ,[LinkDateLinkedToCare]
+			
 			  FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
@@ -40,23 +37,14 @@ BEGIN
 				and a.PartnerPersonID  = b.PartnerPersonID 
 				and a.PartnerPatientPk  = b.PartnerPatientPk 
 
-				and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber 
-				and a.KnowledgeOfHivStatus COLLATE Latin1_General_CI_AS = b.KnowledgeOfHivStatus  
-				and a.PnsApproach COLLATE Latin1_General_CI_AS = b.PnsApproach 
-				and a.MaritalStatus COLLATE Latin1_General_CI_AS = b.MaritalStatus 
-				and a.RelationsipToIndexClient COLLATE Latin1_General_CI_AS = b.RelationsipToIndexClient 
-				and a.CurrentlyLivingWithIndexClient COLLATE Latin1_General_CI_AS = b.CurrentlyLivingWithIndexClient
-				and a.Age  = b.Age 
-				and a.CccNumber COLLATE Latin1_General_CI_AS = b.CccNumber 
-				and a.Gender COLLATE Latin1_General_CI_AS = b.Gender 
-				and a.FacilityLinkedTo COLLATE Latin1_General_CI_AS = b.FacilityLinkedTo 
+				
 				and a.DateElicited  = b.DateElicited
 				and a.Dob  = b.Dob
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash,CKVHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash,CKVHash)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare)
 
 	WHEN MATCHED THEN
 		UPDATE SET 
@@ -89,4 +77,3 @@ BEGIN
 			Delete;
 END
 	
-

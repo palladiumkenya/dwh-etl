@@ -16,7 +16,7 @@ MFL_partner_agency_combination as (
     SELECT distinct 
     MFL_Code,
     SDP,
-    [SDP_Agency] collate Latin1_General_CI_AS as Agency
+    [SDP_Agency] as Agency
     from ODS.dbo.[All_EMRSites]
 
 )
@@ -35,7 +35,7 @@ from Uploads
 
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode=Uploads.Sitecode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=Uploads.SiteCode
-left join NDWH.dbo.DimPartner as partner on partner.PartnerName=MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
-left join NDWH.dbo.DimAgency as agency on Agency.AgencyName=MFL_partner_agency_combination.Agency collate Latin1_General_CI_AS
+left join NDWH.dbo.DimPartner as partner on partner.PartnerName=MFL_partner_agency_combination.SDP 
+left join NDWH.dbo.DimAgency as agency on Agency.AgencyName=MFL_partner_agency_combination.Agency 
 left join NDWH.dbo.DimDate as UploadDates on UploadDates.[Date]=Uploads.Dateuploaded
 END

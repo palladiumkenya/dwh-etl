@@ -1,4 +1,3 @@
-
 BEGIN
 
 		--Truncate table [ODS].[dbo].[HTS_ClientTracing]

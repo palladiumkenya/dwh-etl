@@ -1,4 +1,3 @@
-
 BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a

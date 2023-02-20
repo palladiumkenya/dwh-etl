@@ -5,7 +5,7 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-	  SDP_Agency collate Latin1_General_CI_AS as Agency
+	  SDP_Agency as Agency
 	from ODS.dbo.All_EMRSites 
 ),
 
@@ -44,7 +44,7 @@ from
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
 left join ODS.dbo.PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
-left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK collate Latin1_General_CI_AS=Patient.PatientPK collate Latin1_General_CI_AS and las.SiteCode collate Latin1_General_CI_AS=Patient.SiteCode collate Latin1_General_CI_AS
+left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
    )
 
@@ -85,13 +85,13 @@ INTO NDWH.dbo.FACTART
 from  Patient
 left join NDWH.dbo.DimPatient as Pat on pat.PatientPKHash=Patient.PatientPkHash and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
-left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code collate Latin1_General_CI_AS = Patient.SiteCode collate Latin1_General_CI_AS
-left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
+left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code  = Patient.SiteCode 
+left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP 
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVisit
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date= Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash collate Latin1_General_CI_AS and IOutcomes.SiteCode = Patient.SiteCode
+left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)

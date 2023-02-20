@@ -1,4 +1,3 @@
-
 BEGIN
 --truncate table [ODS].[dbo].[HTS_ClientLinkages]
 		MERGE [ODS].[dbo].[HTS_ClientLinkages] AS a
@@ -17,6 +16,8 @@ BEGIN
 							  ,[HandedOverTo]
 							  ,[HandedOverToCadre]
 							  ,[ReportedCCCNumber]
+							  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]
+							
 						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
 						INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted

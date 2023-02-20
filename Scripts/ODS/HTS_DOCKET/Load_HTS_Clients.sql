@@ -1,4 +1,3 @@
-
 BEGIN
 
 			MERGE [ODS].[dbo].[HTS_clients] AS a
