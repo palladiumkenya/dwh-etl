@@ -1,4 +1,3 @@
-
 BEGIN
 
 			MERGE [ODS].[dbo].[HTS_clients] AS a
@@ -21,10 +20,8 @@ BEGIN
 					  ,NUPI
 					  ,HtsRecencyId
 		              ,Occupation 
-                     ,PriorityPopulationType ,
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2)  CKVHash 
+                     ,PriorityPopulationType
+					
 					FROM [HTSCentral].[dbo].[Clients](NoLock) a
 				INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
@@ -40,8 +37,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType ,PatientPKHash,HtsNumberHash,CKVHash ) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType  ,PatientPKHash,HtsNumberHash,CKVHash)
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType)
 				
 					WHEN MATCHED THEN
 						UPDATE SET       
