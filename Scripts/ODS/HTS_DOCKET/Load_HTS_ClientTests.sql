@@ -1,23 +1,6 @@
-
 BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
-       ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN TestType nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [EntryPoint] nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [EverTestedForHiv] nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [TestResult1] nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [TestResult2] nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [FinalTestResult] nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN FacilityName nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [ODS].[dbo].[HTS_ClientTests]	ALTER COLUMN CoupleDiscordant nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   --ALTER TABLE [ODS].[dbo].[HTS_ClientTests]   ALTER COLUMN Consent nvarchar(4000)  COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN ClientTestedAs nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN TbScreening nvarchar(4000) COLLATE Latin1_General_CI_AS; 
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN PatientGivenResult nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	   ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN TestDate nvarchar(4000) COLLATE Latin1_General_CI_AS;
-	  ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN [ClientSelfTested] nvarchar(4000) COLLATE Latin1_General_CI_AS; 
-	 ALTER TABLE [HTSCentral].[dbo].HtsClientTests ALTER COLUMN MonthsSinceLastTest nvarchar(4000) COLLATE Latin1_General_CI_AS; 
-
-
+       
 
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a
 			USING(SELECT distinct
@@ -48,8 +31,8 @@ BEGIN
 						  ,Setting
 						  ,Approach                                                           
 						  ,HtsRiskCategory
-						  ,HtsRiskScore,
-							   convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash
+						  ,HtsRiskScore
+
 					  FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a
 				inner JOIN  [HTSCentral].[dbo].Clients(NoLock) b								
 				ON a.[SiteCode] = b.[SiteCode] and a.PatientPK=b.PatientPK 
@@ -100,8 +83,8 @@ BEGIN
 					a.[Consent]				=b.[Consent]
 
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,PatientPKHash) 
-			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,PatientPKHash);
+			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
+			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
 		
 
 
