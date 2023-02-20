@@ -21,76 +21,48 @@ BEGIN
 						   END AS [Project] ,
 						   Getdate() as DateImported,
 						   null as Reason,
-						   null as Created,
-						   LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
-						  
-					-------------------- Added by Dennis as missing columns
+						   null as Created
 						,PL.DateSampleTaken,
 						PL.SampleType,
 						p.ID as PatientUnique_ID,
 						PL.PatientID as UniquePatientLabID,
-						PL.ID as PatientLabsUnique_ID,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-					convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+						PL.ID as PatientLabsUnique_ID
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
 					WHERE p.gender!='Unknown') AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitID		=b.VisitID
 						and a.OrderedbyDate	=b.OrderedbyDate
-						and  a.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestResult COLLATE SQL_Latin1_General_CP1_CI_AS						
-						and  a.TestName COLLATE SQL_Latin1_General_CP1_CI_AS =  b.TestName COLLATE SQL_Latin1_General_CP1_CI_AS
+						and  a.TestResult =  b.TestResult					
+						and  a.TestName =  b.TestName 
 						and a.PatientUnique_ID		=b.UniquePatientLabID
-						--and a.PatientLabsUnique_ID = b.PatientLabsUnique_ID
 						)
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created,PatientPKHash,PatientIDHash,CKVHash) 
-						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,CKV,Reason,DateSampleTaken,SampleType,Created,PatientPKHash,PatientIDHash,CKVHash)
+						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,Reason,DateSampleTaken,SampleType,Created) 
+						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,Reason,DateSampleTaken,SampleType,Created)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.FacilityName		=b.FacilityName	,
-							--a.TestName			=b.TestName		,
 							a.EnrollmentTest	=b.EnrollmentTest,
 							a.Reason			=b.Reason		,
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType;
 							
-					--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-					--		Delete;
-
-				--	WITH CTE AS   
-				--	(  
-				--		SELECT [PatientPK],[SiteCode],VisitID,OrderedbyDate,ROW_NUMBER() 
-				--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,OrderedbyDate
-				--		ORDER BY [PatientPK],[SiteCode],VisitID,OrderedbyDate) AS dump_ 
-				--		FROM [ODS].[dbo].[CT_PatientLabs] 
-				--		)  
-			
-				--DELETE FROM CTE WHERE dump_ >1;
-
 					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;
 
 				INSERT INTO [ODS].[dbo].[CT_PatientLabsCount_Log]([SiteCode],[CreatedDate],[PatientLabsCount])
-				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientLabsCount 
+				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientLabsCount 
 				FROM [ODS].[dbo].[CT_PatientLabs] 
 				--WHERE @MaxCreatedDate  > @MaxCreatedDate
 				GROUP BY SiteCode;
-
-				--DROP INDEX CT_PatientLabs ON [ODS].[dbo].[CT_PatientLabs];
-				---Remove any duplicate from [ODS].[dbo].[CT_PatientLabs]
-				
 
 	END

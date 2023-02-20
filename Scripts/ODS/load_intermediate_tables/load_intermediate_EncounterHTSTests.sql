@@ -10,7 +10,7 @@ BEGIN
             EncounterId,
             SiteCode,
             PatientPK,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+			null PatientPKHash,
             EMR, 
             Project,
             DateExtracted,

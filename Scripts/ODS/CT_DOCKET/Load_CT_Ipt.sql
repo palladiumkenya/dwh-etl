@@ -9,7 +9,6 @@ BEGIN
 		INSERT INTO  [ODS].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@VisitDate,GETDATE())
 
-			--CREATE INDEX CT_Patient ON [ODS].[dbo].[CT_Ipt] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_Ipt]
 			MERGE [ODS].[dbo].[CT_Ipt] AS a
 				USING(SELECT
@@ -27,15 +26,10 @@ BEGIN
 						IE.[TBClinicalDiagnosis] AS TBClinicalDiagnosis,IE.[ContactsInvited] AS ContactsInvited,
 						IE.[EvaluatedForIPT] AS EvaluatedForIPT,IE.[StartAntiTBs] AS StartAntiTBs,IE.[TBRxStartDate] AS TBRxStartDate,
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
-						IE.[IndicationForIPT] AS IndicationForIPT,GETDATE() AS DateImported,
-						LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
+						IE.[IndicationForIPT] AS IndicationForIPT,GETDATE() AS DateImported
 					   ,P.ID as PatientUnique_ID
 					   ,IE.PatientID as UniquePatientIptID
-					   ,IE.ID as IptVisitUnique_ID,
-					   convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
-
+					   ,IE.ID as IptVisitUnique_ID
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -76,34 +70,17 @@ BEGIN
 						a.IPTClientWorkUp		=b.IPTClientWorkUp,
 						a.StartIPT				=b.StartIPT,
 						a.IndicationForIPT		=b.IndicationForIPT;
-						
-					--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-					--		Delete;
 
-					--WITH CTE AS   
-					--	(  
-					--		SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
-					--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID
-					--		ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate) AS dump_ 
-					--		FROM [ODS].[dbo].[CT_Ipt] 
-					--		)  
-			
-					--DELETE FROM CTE WHERE dump_ >1;
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 
 					INSERT INTO [ODS].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
-					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS IptCount 
+					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS IptCount 
 					FROM [ODS].[dbo].[CT_Ipt] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
-			
-					--DROP INDEX CT_Patient ON [ODS].[dbo].[CT_Ipt];
-					---Remove any duplicate from [ODS].[dbo].[CT_Ipt]
-					
 
-	END
+					
+END

@@ -34,7 +34,7 @@ BEGIN
         from ODS.dbo.PrEP_BehaviourRisk
     )
     select 
-        source_data.*,
+        source_data.*,null PatientPKHash,null HIVPartnerCCCnumberHash,
         cast(getdate() as date) as LoadDate
     into ODS.dbo.Intermediate_LastestPrepAssessments
     from  source_data

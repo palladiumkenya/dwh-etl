@@ -17,10 +17,6 @@ BEGIN
 							  ,[HandedOverTo]
 							  ,[HandedOverToCadre]
 							  ,[ReportedCCCNumber]
-							  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]	,
-							   convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-					       convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
-						   convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2) as CKVHash
 						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
 						INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
@@ -52,15 +48,12 @@ BEGIN
 				and a.DateExtracted = b.DateExtracted
 				)
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EnrolledFacilityName,ReferralDate,DateEnrolled,DatePrefferedToBeEnrolled,FacilityReferredTo,HandedOverTo,HandedOverToCadre,ReportedCCCNumber,ReportedStartARTDate, PatientPKHash,HtsNumberHash,CKVHash) 
-			VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EnrolledFacilityName,ReferralDate,DateEnrolled,DatePrefferedToBeEnrolled,FacilityReferredTo,HandedOverTo,HandedOverToCadre,ReportedCCCNumber,ReportedStartARTDate ,PatientPKHash,HtsNumberHash,CKVHash)
+			INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EnrolledFacilityName,ReferralDate,DateEnrolled,DatePrefferedToBeEnrolled,FacilityReferredTo,HandedOverTo,HandedOverToCadre,ReportedCCCNumber) 
+			VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EnrolledFacilityName,ReferralDate,DateEnrolled,DatePrefferedToBeEnrolled,FacilityReferredTo,HandedOverTo,HandedOverToCadre,ReportedCCCNumber)
 		
 		WHEN MATCHED THEN
 		UPDATE SET 
 				a.[FacilityName]				=b.[FacilityName],
-				a.[HtsNumber]					=b.[HtsNumber],
-				a.[Emr]							=b.[Emr],
-				a.[Project]						=b.[Project],
 				a.[EnrolledFacilityName]		=b.[EnrolledFacilityName],
 				a.[ReferralDate]				=b.[ReferralDate],
 				a.[DateEnrolled]				=b.[DateEnrolled],
@@ -68,11 +61,7 @@ BEGIN
 				a.[FacilityReferredTo]			=b.[FacilityReferredTo]	,
 				a.[HandedOverTo]				=b.[HandedOverTo],
 				a.[HandedOverToCadre]			=b.[HandedOverToCadre],
-				a.[ReportedCCCNumber]			=b.[ReportedCCCNumber],
-				a.[ReportedStartARTDate]		=b.[ReportedStartARTDate]
+				a.[ReportedCCCNumber]			=b.[ReportedCCCNumber];
 
-		WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+		
 END
