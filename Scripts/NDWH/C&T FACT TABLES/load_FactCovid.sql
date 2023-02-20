@@ -82,7 +82,7 @@ group by
 	select 
             distinct MFL_Code,
             SDP,
-            SDP_Agency collate Latin1_General_CI_AS as Agency
+            SDP_Agency  as Agency
 	from ODS.dbo.All_EMRSites 
  )
  Select 
