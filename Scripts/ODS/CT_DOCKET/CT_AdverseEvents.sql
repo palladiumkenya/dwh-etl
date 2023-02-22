@@ -31,32 +31,42 @@ BEGIN
 							END AS [Severity] , 
 							[VisitDate], 
 							PA.[EMR], PA.[Project], [AdverseEventCause], [AdverseEventRegimen],
-							[AdverseEventActionTaken],[AdverseEventClinicalOutcome], [AdverseEventIsPregnant], 
-							--LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS	 CKV,
-							GETDATE() AS dateimported
-							,P.ID as PatientUnique_ID
-							,PA.PatientId as UniquePatienAdverseEventsID
-							,PA.ID as AdverseEventsUnique_ID
+							[AdverseEventActionTaken],[AdverseEventClinicalOutcome], [AdverseEventIsPregnant]
+							,PA.ID
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 ) AS b 
 						ON(
-						 a.PatientPK  = b.PatientPK 
-						and a.SiteCode = b.SiteCode
+						 a.SiteCode = b.SiteCode
+						and  a.PatientPK  = b.PatientPK 
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID = b.UniquePatienAdverseEventsID
+						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,PatientUnique_ID,AdverseEventsUnique_ID) 
-						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,dateimported,AdverseEventIsPregnant,PatientUnique_ID,AdverseEventsUnique_ID)
+						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant) 
+						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.EMR							=b.EMR,
 							a.Project						=b.Project,
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant;	
+
+					
+					with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						VisitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
+						PatientPK,Sitecode,VisitDate) Row_Num
+						FROM  [ODS].[dbo].[CT_AdverseEvents](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
 				  SET LoadEndDateTime = GETDATE()

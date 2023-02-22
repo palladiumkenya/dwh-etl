@@ -15,8 +15,8 @@ BEGIN
 			TestResult,
 			[Emr],
 			[Project],
-			null PatientPKHash,
-			null PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			Reason
 		from ODS.dbo.CT_PatientLabs
 		where TestName = 'Viral Load'

@@ -12,24 +12,21 @@ BEGIN
 			  ,PB.[Voided],PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
 			  ,PB.[lastWABDate],PB.[Created]
 
+
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 		INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID
 		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-		INNER JOIN (	select p.[PatientPID],F.code, max(PB.created)Maxcreated FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-						INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
-						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-						group by p.[PatientPID],F.code
-					)tn
-		on P.[PatientPID] = tn.[PatientPID] and F.code = tn.Code --and PB.created = tn.Maxcreated
 		WHERE p.gender!='Unknown') b
-		ON a.patientID = b.PatientID and 
-		a.sitecode = b.sitecode 
+
+		ON a.patientID = b.PatientID  
+		and a.sitecode = b.sitecode 
+		and a.ID =b. ID
 
 
 		WHEN NOT MATCHED THEN 
-		INSERT(PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created] )
-		VALUES(PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Created])
+		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate])
+		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate])
 
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -57,15 +54,15 @@ BEGIN
 						a.lastWABDate	= b.lastWABDate;
 
 
-			--		with cte AS (
-			--	Select
-			--	PatientId,
-			--	sitecode,
+					with cte AS (
+				Select
+				PatientId,
+				sitecode,
 
-			--	 ROW_NUMBER() OVER (PARTITION BY PatientId,sitecode ORDER BY
-			--	PatientId,sitecode) Row_Num
-			--	FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
-			--	)
-			--delete  from cte 
-			--	Where Row_Num >1
+				 ROW_NUMBER() OVER (PARTITION BY PatientId,sitecode ORDER BY
+				PatientId,sitecode) Row_Num
+				FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
+				)
+			delete  from cte 
+				Where Row_Num >1;
 END

@@ -29,31 +29,24 @@ BEGIN
 					  ,PP.RegimenChangeSwitchReason RegimenChangeSwitchReason
 					  ,PP.StopRegimenReason StopRegimenReason
 					  ,PP.StopRegimenDate StopRegimenDate,					  
-					  0 AS IsRegimenFlag
-					  ,P.ID as PatientUnique_ID
-					  ,PP.PatientId as UniquePatientPharmacyId
-					  ,PP.ID as PatientPharmacyUnique_ID
+					  PP.ID
 
 						FROM [DWAPICentral].[dbo].[PatientExtract] P 
-						--INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA ON PA.[PatientId]= P.ID
 						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
 					WHERE p.gender!='Unknown' ) AS b 
 						ON(
-						a.PatientID  = b.PatientID  and
-						 a.PatientPK  = b.PatientPK 
-						and a.SiteCode = b.SiteCode
+						 a.SiteCode = b.SiteCode
+						and  a.PatientPK  = b.PatientPK 
 						and a.visitID = b.visitID
 						and a.DispenseDate = b.DispenseDate
-						and a.PatientUnique_ID =b.UniquePatientPharmacyId
-						and a.drug  = b.drug 
-						and a.TreatmentType = b.TreatmentType
+						and a.ID =b.ID						
 
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID) 
-					VALUES(PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate,PatientUnique_ID,PatientPharmacyUnique_ID)
+					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate) 
+					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate)
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
@@ -64,6 +57,20 @@ BEGIN
 						a.RegimenChangedSwitched	=b.RegimenChangedSwitched,
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
 						a.StopRegimenReason			=b.StopRegimenReason;
+
+						with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						visitID,
+						DispenseDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,DispenseDate ORDER BY
+						PatientPK,Sitecode,visitID,DispenseDate) Row_Num
+						FROM [ODS].[dbo].[CT_PatientPharmacy](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 			
 				UPDATE [ODS].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()

@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\HTS\Checkpoint.xml"
+  DTS:CheckpointUsage="1"
   DTS:CreationDate="1/23/2023 11:45:05 AM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -11,8 +13,9 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="HTS_DataLoad"
   DTS:PackageType="5"
-  DTS:VersionBuild="15"
-  DTS:VersionGUID="{31285DC4-4C3C-43CB-9FA9-35AA305C0BB7}">
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="17"
+  DTS:VersionGUID="{9B44ACDB-7A83-43D7-ADE6-4709AC7BA0A2}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -81,6 +84,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{C57E6D61-DEDA-4221-8D7F-18AC5AC70570}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load HTS tables Container Loop">
       <DTS:ForEachEnumerator
@@ -108,6 +112,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{331CD1BD-71DD-4437-A384-05D1254F285D}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
           DTS:ThreadHint="0">

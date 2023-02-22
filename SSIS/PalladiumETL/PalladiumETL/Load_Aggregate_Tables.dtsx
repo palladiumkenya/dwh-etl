@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\Aggregate\Checkpoint.xml"
   DTS:CreationDate="1/21/2023 2:06:02 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -11,8 +12,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="8"
-  DTS:VersionGUID="{E6EA07C6-8038-4FED-BB9C-7684D0BBDC51}">
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{8A7011A8-3F6B-43FB-B70A-7E795A851BFC}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -69,6 +70,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{12586C81-397B-4C7A-96A7-D334080FB620}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load Reports tables Container Loop">
       <DTS:ForEachEnumerator
@@ -96,6 +98,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{CB5E85EC-44E7-4E7F-81D1-3A041ACFE649}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load Aggregate tables Task"
           DTS:ThreadHint="0">
@@ -131,14 +134,14 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="210.666666666667,42.6666666666667"
+          Size="210.8,42.8"
           Id="Package\Load Reports tables Container Loop\Load Aggregate tables Task"
           TopLeft="53.9346238536993,27.0181850627764" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="312,132"
-          Size="312,174.666666666667"
+          Size="312,174.8"
           Id="Package\Load Reports tables Container Loop"
           TopLeft="175.000006418962,19.0469704201265" />
       </GraphLayout>

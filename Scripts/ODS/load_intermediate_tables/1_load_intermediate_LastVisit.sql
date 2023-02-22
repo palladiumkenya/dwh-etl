@@ -14,8 +14,8 @@ BEGIN
 	FROM ODS.dbo.CT_PatientVisits
 	 )
 	 Select LatestVisit.* ,
-	 	 null PatientPKHash,
-		null PatientIDHash
+	 	 cast( '' as nvarchar(100))PatientPKHash,
+		 cast( '' as nvarchar(100)) PatientIDHash
 		INTO [ODS].[dbo].[Intermediate_LastVisitDate]
 	 from LatestVisit
 	 where NUM=1

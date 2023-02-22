@@ -37,28 +37,25 @@ BEGIN
 							,[PatientVentilated]
 							,[TracingFinalOutcome]
 							,[CauseOfDeath]
-						,getdate() as [DateImported]
 						,BoosterDoseVerified
 						,[Sequence]
 						,COVID19TestResult
-						,P.ID as PatientUnique_ID
-						,C.PatientId as UniquePatientCovidId
-						,C.ID as CovidUnique_ID
+						,P.ID
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID AND C.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
 					WHERE P.gender != 'Unknown') AS b 
 						ON(
-						 a.PatientPK  = b.PatientPK 
-						and a.SiteCode = b.SiteCode
+						 a.SiteCode = b.SiteCode
+						and  a.PatientPK  = b.PatientPK 
 						and a.visitID = b.visitID
 						AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
-						and a.PatientUnique_ID =b.UniquePatientCovidId
+						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID) 
-						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,DateImported,BoosterDoseVerified,Sequence,COVID19TestResult,PatientUnique_ID,CovidUnique_ID)
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,Sequence,COVID19TestResult) 
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,Sequence,COVID19TestResult)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -95,6 +92,20 @@ BEGIN
 						a.COVID19TestResult					=b.COVID19TestResult;
 						
 
+					
+						with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						visitID,
+						Covid19AssessmentDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,Covid19AssessmentDate ORDER BY
+						PatientPK,Sitecode,visitID,Covid19AssessmentDate) Row_Num
+						FROM [ODS].[dbo].[CT_Covid](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_Covid_Log]
 					SET LoadEndDateTime = GETDATE()

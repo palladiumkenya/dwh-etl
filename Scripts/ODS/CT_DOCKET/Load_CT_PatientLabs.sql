@@ -18,16 +18,10 @@ BEGIN
 								WHEN 'I-TECH' THEN 'Kenya HMIS II' 
 								WHEN 'HMIS' THEN 'Kenya HMIS II'
 						   ELSE P.[Project] 
-						   END AS [Project] ,
-						   Getdate() as DateImported,
-						   null as Reason,
-						   null as Created
+						   END AS [Project] 
 						,PL.DateSampleTaken,
 						PL.SampleType,
-						p.ID as PatientUnique_ID,
-						PL.PatientID as UniquePatientLabID,
-						PL.ID as PatientLabsUnique_ID
-
+						p.ID 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -39,21 +33,34 @@ BEGIN
 						and a.OrderedbyDate	=b.OrderedbyDate
 						and  a.TestResult =  b.TestResult					
 						and  a.TestName =  b.TestName 
-						and a.PatientUnique_ID		=b.UniquePatientLabID
+						and a.ID		=b.ID
 						)
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,Reason,DateSampleTaken,SampleType,Created) 
-						VALUES(PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateImported,Reason,DateSampleTaken,SampleType,Created)
+						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType) 
+						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.FacilityName		=b.FacilityName	,
-							a.EnrollmentTest	=b.EnrollmentTest,
-							a.Reason			=b.Reason		,
+							a.EnrollmentTest	=b.EnrollmentTest,		
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType;
+
+					with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						OrderedbyDate,TestResult,TestName,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,OrderedbyDate,TestResult,TestName ORDER BY
+						PatientPK,Sitecode,visitID,OrderedbyDate) Row_Num
+						FROM [ODS].[dbo].[CT_PatientLabs](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 							
 					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()

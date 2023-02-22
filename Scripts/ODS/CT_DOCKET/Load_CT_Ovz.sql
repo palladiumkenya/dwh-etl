@@ -21,12 +21,8 @@ BEGIN
 							ELSE P.[Project]
 						END AS Project,
 						OE.[OVCEnrollmentDate],OE.[RelationshipToClient],OE.[EnrolledinCPIMS],OE.[CPIMSUniqueIdentifier],
-						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate],
-						GETDATE() AS DateImported
-						,P.ID as PatientUnique_ID
-						,OE.PatientID as UniquePatientOVCID
-						,OE.ID as OvcUnique_ID
-
+						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate]
+						,P.ID 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -36,12 +32,12 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID = b.UniquePatientOVCID
+						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,PatientUnique_ID,OvcUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,PatientUnique_ID,OvcUnique_ID)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -51,6 +47,20 @@ BEGIN
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
 						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
 						a.OVCExitReason				=b.OVCExitReason;
+
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_Ovc](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]
 					SET LoadEndDateTime = GETDATE()

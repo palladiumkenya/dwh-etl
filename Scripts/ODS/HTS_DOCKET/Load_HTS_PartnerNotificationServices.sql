@@ -1,7 +1,7 @@
 BEGIN
 		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
-			USING(SELECT DISTINCT a.[FacilityName]
+			USING(SELECT DISTINCT a.ID,a.[FacilityName]
 				  ,a.[SiteCode]
 				  ,a.[PatientPk]
 				  ,a.[HtsNumber]
@@ -40,11 +40,12 @@ BEGIN
 				
 				and a.DateElicited  = b.DateElicited
 				and a.Dob  = b.Dob
+				and a.ID = b.ID
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare)
 
 	WHEN MATCHED THEN
 		UPDATE SET 

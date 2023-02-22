@@ -12,8 +12,8 @@ BEGIN
 			[ReportedbyDate],
 			[TestName],
 			TestResult,
-			null PatientPKHash,
-			null PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			[Emr],
 			[Project],
 			Reason

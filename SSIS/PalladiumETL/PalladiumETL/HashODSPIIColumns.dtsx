@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\PIIs\Checkpoint.xml"
+  DTS:CheckpointUsage="1"
   DTS:CreationDate="2/20/2023 10:00:22 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -11,8 +13,9 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{DED604B8-F2D9-4D60-986E-437717F9500B}">
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{A3FBAB38-792F-4F61-94A2-58B86EE7D127}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -197,6 +200,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{57CB5C5D-6552-4D9F-9FFE-BF94776B41DF}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_CT_IntermidiatePatientIDHash"
       DTS:ThreadHint="0">
@@ -214,6 +218,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{0BDCF1A5-7204-4BD8-885A-E76EC418A9F4}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_CT_IntermidiatePatientPKHash"
       DTS:ThreadHint="0">
@@ -231,6 +236,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{3A593FA5-832D-40F8-AF3B-DACC49B30035}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_CT_PatientIDHash"
       DTS:ThreadHint="0">
@@ -248,6 +254,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{FB7D52A6-E324-44B0-A97C-6342082A52C7}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_CT_PatientNupiHash"
       DTS:ThreadHint="0">
@@ -265,6 +272,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{EA9BAB5F-C817-4A4F-801B-DF9E9090D748}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_CT_PatientPKHash"
       DTS:ThreadHint="0">
@@ -282,6 +290,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{C56CD9C4-6AC0-408C-9B35-0A1B2A4F9EE3}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_EndDateTime"
       DTS:ThreadHint="0">
@@ -298,6 +307,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{F0A139A6-3BD7-45D7-BC62-29029A4C28B8}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_HtsNumberHash"
       DTS:ThreadHint="0">
@@ -315,6 +325,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{76C38609-6555-4A71-AD92-01D270CFF9AE}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_htsPatientNupiHash"
       DTS:ThreadHint="0">
@@ -332,6 +343,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{B09D1211-2688-4019-A380-1B52E94CB8C1}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_htsPatientPKHash"
       DTS:ThreadHint="0">
@@ -349,6 +361,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{9DDE2301-7C4F-431E-AB8D-863CB328F19A}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_mnchPatientNupiHash"
       DTS:ThreadHint="0">
@@ -366,6 +379,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{98EA09B3-669F-42F7-8536-0EA5DD8C0113}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_mnchPatientPKHash"
       DTS:ThreadHint="0">
@@ -383,6 +397,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{DA3A2627-9FFA-491E-B93F-717BBEB03726}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_PrEPINtermidiatePatientIDHash"
       DTS:ThreadHint="0">
@@ -400,6 +415,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{76DB58A9-D9FF-4374-826F-F95D19C20525}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_PrEPIntermidiatePatientPKHash"
       DTS:ThreadHint="0">
@@ -417,6 +433,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{70C0620D-9355-432B-AC91-19D91D39F5B2}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_PrepNumberHash"
       DTS:ThreadHint="0">
@@ -434,6 +451,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{CBBC938E-F110-4A28-A5C4-99977AF58A89}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_PrEPPatientPKHash"
       DTS:ThreadHint="0">
@@ -451,6 +469,7 @@
       DTS:Description="Execute SQL Task"
       DTS:DTSID="{3B4C17F8-C95D-49D6-8E78-90A72B37D233}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Update_StartDateTime"
       DTS:ThreadHint="0">
@@ -597,9 +616,13 @@
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="185.6,41.6"
-          Id="Package\Update_StartDateTime"
-          TopLeft="116.015386802064,32.696970878116" />
+          Size="261.6,41.6"
+          Id="Package\Update_CT_IntermidiatePatientIDHash"
+          TopLeft="1063.03080569894,30.3333344290956" />
+        <NodeLayout
+          Size="262.4,41.6"
+          Id="Package\Update_CT_IntermidiatePatientPKHash"
+          TopLeft="1072.26157526829,129.606065287954" />
         <NodeLayout
           Size="204,41.6"
           Id="Package\Update_CT_PatientIDHash"
@@ -609,29 +632,53 @@
           Id="Package\Update_CT_PatientNupiHash"
           TopLeft="566.784634105412,32.696970878116" />
         <NodeLayout
-          Size="200.8,41.6"
-          Id="Package\Update_htsPatientPKHash"
-          TopLeft="258.415391570436,133.545459369654" />
+          Size="204.8,41.6"
+          Id="Package\Update_CT_PatientPKHash"
+          TopLeft="814.646179663078,33.8787891026262" />
         <NodeLayout
-          Size="262.4,41.6"
-          Id="Package\Update_CT_IntermidiatePatientPKHash"
-          TopLeft="1072.26157526829,129.606065287954" />
+          Size="180.8,41.6"
+          Id="Package\Update_EndDateTime"
+          TopLeft="625.707714216809,299.581825738308" />
         <NodeLayout
-          Size="261.6,41.6"
-          Id="Package\Update_CT_IntermidiatePatientIDHash"
-          TopLeft="1063.03080569894,30.3333344290956" />
+          Size="194.4,41.6"
+          Id="Package\Update_HtsNumberHash"
+          TopLeft="820.800026042645,130.393944104294" />
         <NodeLayout
           Size="209.6,41.6"
           Id="Package\Update_htsPatientNupiHash"
           TopLeft="554.646170126334,133.545459369654" />
         <NodeLayout
-          Size="204.8,41.6"
-          Id="Package\Update_CT_PatientPKHash"
-          TopLeft="814.646179663078,33.8787891026262" />
+          Size="200.8,41.6"
+          Id="Package\Update_htsPatientPKHash"
+          TopLeft="258.415391570436,133.545459369654" />
         <NodeLayout
-          Size="194.4,41.6"
-          Id="Package\Update_HtsNumberHash"
-          TopLeft="820.800026042645,130.393944104294" />
+          Size="221.6,41.6"
+          Id="Package\Update_mnchPatientNupiHash"
+          TopLeft="0.0461519698418726,133.151519961484" />
+        <NodeLayout
+          Size="212,41.6"
+          Id="Package\Update_mnchPatientPKHash"
+          TopLeft="76.0615373047143,228.266674493539" />
+        <NodeLayout
+          Size="265.6,41.6"
+          Id="Package\Update_PrEPINtermidiatePatientIDHash"
+          TopLeft="913.215417613082,298.963645371655" />
+        <NodeLayout
+          Size="265.6,41.6"
+          Id="Package\Update_PrEPIntermidiatePatientPKHash"
+          TopLeft="889.753878290979,208.745460308879" />
+        <NodeLayout
+          Size="200,41.6"
+          Id="Package\Update_PrepNumberHash"
+          TopLeft="612.215403124568,214.084855799417" />
+        <NodeLayout
+          Size="208,41.6"
+          Id="Package\Update_PrEPPatientPKHash"
+          TopLeft="343.753854815918,216.054552840267" />
+        <NodeLayout
+          Size="185.6,41.6"
+          Id="Package\Update_StartDateTime"
+          TopLeft="116.015386802064,32.696970878116" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="301.615386802064,54.0878799903711">
@@ -680,6 +727,140 @@
                     Point3="222.876931075937,18.5" />
                   <mssgle:LineSegment
                     End="222.876931075937,6.31818177548979" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 10]"
+          TopLeft="288.061537304714,249.066674493539">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="55.6923175112033,-12.2121216532722"
+              Start="0,0"
+              End="48.1923175112033,-12.2121216532722">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="23.8461587556017,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="23.8461587556017,0"
+                    Point2="27.8461587556017,0"
+                    Point3="27.8461587556017,-4" />
+                  <mssgle:LineSegment
+                    End="27.8461587556017,-8.21212165327219" />
+                  <mssgle:CubicBezierSegment
+                    Point1="27.8461587556017,-8.21212165327219"
+                    Point2="27.8461587556017,-12.2121216532722"
+                    Point3="31.8461587556017,-12.2121216532722" />
+                  <mssgle:LineSegment
+                    End="48.1923175112033,-12.2121216532722" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 11]"
+          TopLeft="551.753854815918,235.869704319842">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="60.4615483086502,0"
+              Start="0,0"
+              End="52.9615483086502,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="52.9615483086502,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 12]"
+          TopLeft="812.215403124568,232.215158054148">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="77.5384751664113,0"
+              Start="0,0"
+              End="70.0384751664113,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="70.0384751664113,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 13]"
+          TopLeft="1022.55387829098,250.345460308879">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="23.4615393221025,48.6181850627763"
+              Start="0,0"
+              End="23.4615393221025,41.1181850627763">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.3090925313882" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.3090925313882"
+                    Point2="0,24.3090925313882"
+                    Point3="4,24.3090925313882" />
+                  <mssgle:LineSegment
+                    End="19.4615393221025,24.3090925313882" />
+                  <mssgle:CubicBezierSegment
+                    Point1="19.4615393221025,24.3090925313882"
+                    Point2="23.4615393221025,24.3090925313882"
+                    Point3="23.4615393221025,28.3090925313882" />
+                  <mssgle:LineSegment
+                    End="23.4615393221025,41.1181850627763" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 14]"
+          TopLeft="913.215417613082,320.072735554982">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-106.707703396273,0"
+              Start="0,0"
+              End="-99.2077033962728,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-99.2077033962728,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -832,22 +1013,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="221.6,41.6"
-          Id="Package\Update_mnchPatientNupiHash"
-          TopLeft="0.0461519698418726,133.151519961484" />
-        <NodeLayout
-          Size="212,41.6"
-          Id="Package\Update_mnchPatientPKHash"
-          TopLeft="76.0615373047143,228.266674493539" />
-        <NodeLayout
-          Size="208,41.6"
-          Id="Package\Update_PrEPPatientPKHash"
-          TopLeft="343.753854815918,216.054552840267" />
-        <NodeLayout
-          Size="200,41.6"
-          Id="Package\Update_PrepNumberHash"
-          TopLeft="612.215403124568,214.084855799417" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 8]"
           TopLeft="258.415391570436,154.148489665569">
@@ -896,152 +1061,6 @@
                     Point3="71.2153853348724,30.7575772660276" />
                   <mssgle:LineSegment
                     End="71.2153853348724,46.0151545320551" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 10]"
-          TopLeft="288.061537304714,249.066674493539">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="55.6923175112033,-12.2121216532722"
-              Start="0,0"
-              End="48.1923175112033,-12.2121216532722">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="23.8461587556017,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="23.8461587556017,0"
-                    Point2="27.8461587556017,0"
-                    Point3="27.8461587556017,-4" />
-                  <mssgle:LineSegment
-                    End="27.8461587556017,-8.21212165327219" />
-                  <mssgle:CubicBezierSegment
-                    Point1="27.8461587556017,-8.21212165327219"
-                    Point2="27.8461587556017,-12.2121216532722"
-                    Point3="31.8461587556017,-12.2121216532722" />
-                  <mssgle:LineSegment
-                    End="48.1923175112033,-12.2121216532722" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 11]"
-          TopLeft="551.753854815918,235.869704319842">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="60.4615483086502,0"
-              Start="0,0"
-              End="52.9615483086502,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="52.9615483086502,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="265.6,41.6"
-          Id="Package\Update_PrEPIntermidiatePatientPKHash"
-          TopLeft="889.753878290979,208.745460308879" />
-        <NodeLayout
-          Size="265.6,41.6"
-          Id="Package\Update_PrEPINtermidiatePatientIDHash"
-          TopLeft="913.215417613082,298.963645371655" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 12]"
-          TopLeft="812.215403124568,232.215158054148">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="77.5384751664113,0"
-              Start="0,0"
-              End="70.0384751664113,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="70.0384751664113,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 13]"
-          TopLeft="1022.55387829098,250.345460308879">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="23.4615393221025,48.6181850627763"
-              Start="0,0"
-              End="23.4615393221025,41.1181850627763">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,20.3090925313882" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,20.3090925313882"
-                    Point2="0,24.3090925313882"
-                    Point3="4,24.3090925313882" />
-                  <mssgle:LineSegment
-                    End="19.4615393221025,24.3090925313882" />
-                  <mssgle:CubicBezierSegment
-                    Point1="19.4615393221025,24.3090925313882"
-                    Point2="23.4615393221025,24.3090925313882"
-                    Point3="23.4615393221025,28.3090925313882" />
-                  <mssgle:LineSegment
-                    End="23.4615393221025,41.1181850627763" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="180.8,41.6"
-          Id="Package\Update_EndDateTime"
-          TopLeft="625.707714216809,299.581825738308" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 14]"
-          TopLeft="913.215417613082,320.072735554982">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-106.707703396273,0"
-              Start="0,0"
-              End="-99.2077033962728,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-99.2077033962728,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

@@ -24,28 +24,31 @@ BEGIN
 						CL.[ScreenedForIpv] AS ScreenedForIpv,CL.[IpvScreening] AS IpvScreening,
 						CL.[IPVScreeningOutcome] AS IPVScreeningOutcome,
 						CL.[CurrentlyLivingWithIndexClient] AS CurrentlyLivingWithIndexClient,
-						CL.[KnowledgeOfHivStatus] AS KnowledgeOfHivStatus,CL.[PnsApproach] AS PnsApproach,
-						GETDATE() AS DateImported,
+						CL.[KnowledgeOfHivStatus] AS KnowledgeOfHivStatus,CL.[PnsApproach] AS PnsApproach,					
 					  ContactPatientPK,
 					  CL.Created as DateCreated
-					  ,P.ID as  PatientUnique_ID
-					  ,CL.PatientId as UniquePatientContactListingId
-					  ,CL.ID as  ContactListingUnique_ID
+					  ,CL.ID
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+					INNER JOIN (SELECT p.[PatientPID],F.code,CL.Contactage,max(cl.created)Maxcreated 
+								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
+								INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+								GROUP BY p.[PatientPID],F.code,CL.Contactage)tn
+								on p.[PatientPID] = tn.[PatientPID] and F.code = tn.code and cl.created = tn.Maxcreated and cl.Contactage = tn.Contactage
 					WHERE P.gender != 'Unknown') AS b 
 						ON(
-						 a.PatientPK  = b.PatientPK 
-						and a.SiteCode = b.SiteCode
-						and a.PatientUnique_ID =b.UniquePatientContactListingId
+						 a.SiteCode = b.SiteCode
+						and a.PatientPK  = b.PatientPK 
 						and a.Contactage = b.Contactage 
 						and a.RelationshipWithPatient =b.RelationshipWithPatient 
+						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,DateImported,ContactPatientPK,DateCreated,PatientUnique_ID,ContactListingUnique_ID)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 					
@@ -60,6 +63,21 @@ BEGIN
 						a.CurrentlyLivingWithIndexClient=b.CurrentlyLivingWithIndexClient,
 						a.KnowledgeOfHivStatus			=b.KnowledgeOfHivStatus,
 						a.PnsApproach					=b.PnsApproach;
+
+						
+						with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						Contactage,
+						RelationshipWithPatient,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,Contactage,RelationshipWithPatient ORDER BY
+						PatientPK,Sitecode,Contactage,RelationshipWithPatient) Row_Num
+						FROM [ODS].[dbo].[CT_ContactListing](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_ContactListing_Log]
 					SET LoadEndDateTime = GETDATE()

@@ -91,8 +91,8 @@ BEGIN
 	Select 
 			ARTOutcomes.PatientID, 
 			ARTOutcomes.PatientPK,
-			null PatientPKHash,
-			null PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			ARTOutcomes.startARTDate,
 			YEAR(ARTOutcomes.startARTDate) AS Cohort,
 			ARTOutcomes.ExitReason,

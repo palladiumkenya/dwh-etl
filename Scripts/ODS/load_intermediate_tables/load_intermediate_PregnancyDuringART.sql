@@ -30,8 +30,8 @@ BEGIN
 	Select 
 			PregnancyDuringART.PatientID ,
 			PregnancyDuringART.PatientPK ,
-			null PatientPKHash,
-			null PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			PregnancyDuringART.SiteCode,
 			PregnancyDuringART.PregnantDuringART,
 			PregnancyDuringART.LoadDate

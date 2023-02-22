@@ -1,7 +1,7 @@
 BEGIN
 		--truncate table [ODS].[dbo].[HTS_PartnerTracings]
 		MERGE [ODS].[dbo].[HTS_PartnerTracings] AS a
-			USING(SELECT DISTINCT a.[FacilityName]
+			USING(SELECT DISTINCT a.ID, a.[FacilityName]
 			  ,a.[SiteCode]
 			  ,a.[PatientPk]
 			  ,a.[HtsNumber]
@@ -21,12 +21,12 @@ BEGIN
 			and a.SiteCode = b.SiteCode
 			and a.TraceDate  = b.TraceDate 			
 			and a.BookingDate  = b.BookingDate 
-			
+			and a.ID = b.ID
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TraceType,TraceDate,TraceOutcome,BookingDate)
 
 	WHEN MATCHED THEN
 		UPDATE SET 

@@ -10,7 +10,7 @@ BEGIN
             EncounterId,
             SiteCode,
             PatientPK,
-			null PatientPKHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
             EMR, 
             Project,
             DateExtracted,

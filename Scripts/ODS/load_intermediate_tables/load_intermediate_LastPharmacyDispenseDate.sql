@@ -7,8 +7,8 @@ BEGIN
 		PatientID ,
 		SiteCode,
 		PatientPK,
-		null PatientPKHash,
-		null PatientIDHash,
+		cast( '' as nvarchar(100)) PatientPKHash,
+		cast( '' as nvarchar(100)) PatientIDHash,
 		DispenseDate as LastDispenseDate,
 	CASE WHEN ExpectedReturn IS NULL THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End AS ExpectedReturn,
 	cast(getdate() as date) as LoadDate

@@ -14,8 +14,8 @@
   DTS:ObjectName="PrEP_DataLoad"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="33"
-  DTS:VersionGUID="{62AA418E-1F9F-4338-9C8C-16F49EBE5A8A}">
+  DTS:VersionBuild="34"
+  DTS:VersionGUID="{C0CA0860-CE35-48D1-B5A9-46EFE1640E68}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -84,6 +84,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{459CD661-B7B8-4084-B3EF-F2C78570A787}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load PrEP tables Container Loop">
       <DTS:ForEachEnumerator

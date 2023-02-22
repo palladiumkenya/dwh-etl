@@ -18,8 +18,8 @@ BEGIN
 	Select 
 			PregnancyAsATInitiation.PatientID ,
 			PregnancyAsATInitiation.PatientPK ,
-			null PatientPKHash,
-			null PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			PregnancyAsATInitiation.SiteCode,
 			PregnancyAsATInitiation.PregnantARTStart,
 			PregnancyAsATInitiation.PregnantAtEnrol,

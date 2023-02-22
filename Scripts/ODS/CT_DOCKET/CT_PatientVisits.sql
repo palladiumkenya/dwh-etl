@@ -106,6 +106,23 @@ BEGIN
 						a.Abdomen					=b.Abdomen,
 						a.CNS						=b.CNS,
 						a.Genitourinary				=b.Genitourinary;
+
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_PatientVisits](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
+
+
+		
  
 			UPDATE [ODS].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()

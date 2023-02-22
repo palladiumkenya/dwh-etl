@@ -21,11 +21,8 @@ BEGIN
 						END AS Project,
 						OE.[OTZEnrollmentDate],OE.[TransferInStatus],OE.[ModulesPreviouslyCovered],OE.[ModulesCompletedToday],OE.[SupportGroupInvolvement],OE.[Remarks],
 						OE.[TransitionAttritionReason],
-						OE.[OutcomeDate],
-						GETDATE() AS DateImported
-						,P.ID as PatientUnique_ID
-						,OE.PatientID as UniquePatientOtzID
-						,OE.ID as OtzUnique_ID
+						OE.[OutcomeDate]
+						,P.ID
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
@@ -36,12 +33,12 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID =b.UniquePatientOtzID
+						and a.ID =b.ID
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,DateImported,PatientUnique_ID,OtzUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,DateImported,PatientUnique_ID,OtzUnique_ID)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -52,6 +49,20 @@ BEGIN
 						a.SupportGroupInvolvement	=b.SupportGroupInvolvement,
 						a.Remarks					=b.Remarks,
 						a.TransitionAttritionReason	=b.TransitionAttritionReason;
+
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_Otz](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_Otz_Log]
 					SET LoadEndDateTime = GETDATE()

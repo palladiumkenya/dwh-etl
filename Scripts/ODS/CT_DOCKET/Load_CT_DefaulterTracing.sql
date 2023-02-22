@@ -26,10 +26,7 @@ BEGIN
 						  ,[CauseOfDeath]
 						  ,[Comments]
 						  ,Cast([BookingDate] As Date)[BookingDate]
-					 ,getdate() as [DateImported] 
-					 ,P.ID as PatientUnique_ID
-					 ,C.PatientID as UniquePatientDTracingID
-					 ,C.ID as DefaulterTracingUnique_ID
+					 ,P.ID 
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -39,12 +36,12 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
-						and a.PatientUnique_ID =b.UniquePatientDTracingID
+						and a.ID =b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID) 
-						VALUES(PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,DateImported,PatientUnique_ID,DefaulterTracingUnique_ID)
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate) 
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 												
@@ -56,6 +53,20 @@ BEGIN
 						a.TrueStatus	=b.TrueStatus,
 						a.CauseOfDeath	=b.CauseOfDeath,
 						a.Comments		=b.Comments;
+
+						with cte AS (
+							Select
+							PatientPK,
+							Sitecode,
+							visitID,
+							visitDate,
+
+								ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+							PatientPK,Sitecode,visitID,visitDate) Row_Num
+							FROM [ODS].[dbo].[CT_DefaulterTracing](NoLock))
+							
+							delete from cte 
+								Where Row_Num >1 ;
 
 				
 				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]---

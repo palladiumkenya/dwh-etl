@@ -19,11 +19,9 @@ BEGIN
 								WHEN 'HMIS' THEN 'Kenya HMIS II'
 								ELSE P.[Project]
 							END AS Project,
-							DAS.[DrinkingAlcohol] AS DrinkingAlcohol,DAS.[Smoking] AS Smoking,DAS.[DrugUse] AS DrugUse,
-							GETDATE() AS DateImported
-							,DAS.ID as DrugAlcoholScreeningUnique_ID
-							,P.ID as PatientUnique_ID
-							,DAS.PatientId as uniquePatientDAndAScreeningID
+							DAS.[DrinkingAlcohol] AS DrinkingAlcohol,DAS.[Smoking] AS Smoking,DAS.[DrugUse] AS DrugUse
+
+							,DAS.ID 
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[DrugAlcoholScreeningExtract](NoLock) DAS ON DAS.[PatientId] = P.ID AND DAS.Voided = 0
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -33,19 +31,33 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID =b.uniquePatientDAndAScreeningID
+						and a.ID =b.ID
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,PatientUnique_ID,DrugAlcoholScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,DateImported,PatientUnique_ID,DrugAlcoholScreeningUnique_ID)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.FacilityName		=b.FacilityName,					
 						a.DrinkingAlcohol	=b.DrinkingAlcohol,
 						a.Smoking			=b.Smoking,
-						a.DrugUse			=b.DrugUse;				
+						a.DrugUse			=b.DrugUse;		
+						
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_DrugAlcoholScreening](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 					
 					UPDATE [ODS].[dbo].[CT_DrugAlcoholScreening_Log]
 						SET LoadEndDateTime = GETDATE()

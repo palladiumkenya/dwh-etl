@@ -24,11 +24,7 @@ BEGIN
 						ACI.[ChronicIllness] AS ChronicIllness,ACI.[ChronicOnsetDate] AS ChronicOnsetDate,ACI.[knownAllergies] AS knownAllergies,
 						ACI.[AllergyCausativeAgent] AS AllergyCausativeAgent,ACI.[AllergicReaction] AS AllergicReaction,ACI.[AllergySeverity] AS AllergySeverity,
 						ACI.[AllergyOnsetDate] AS AllergyOnsetDate,ACI.[Skin] AS Skin,ACI.[Eyes] AS Eyes,ACI.[ENT] AS ENT,ACI.[Chest] AS Chest,ACI.[CVS] AS CVS,
-						ACI.[Abdomen] AS Abdomen,ACI.[CNS] AS CNS,ACI.[Genitourinary] AS Genitourinary,GETDATE() AS DateImported,
-						p.ID as PatientUnique_ID
-						,ACI.PatientId as UniquePatientAllergiesChronicIllnessId
-						,ACI.ID as AllergiesChronicIllnessUnique_ID
-
+						ACI.[Abdomen] AS Abdomen,ACI.[CNS] AS CNS,ACI.[Genitourinary] AS Genitourinary
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID AND ACI.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -39,12 +35,12 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID
-						and a.PatientUnique_ID = b.UniquePatientAllergiesChronicIllnessId
+						and a.ID =b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientUnique_ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported) 
-						VALUES(PatientUnique_ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported)
+						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary) 
+						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -64,6 +60,21 @@ BEGIN
 							a.Abdomen				=b.Abdomen,
 							a.CNS					=b.CNS,
 							a.Genitourinary			=b.Genitourinary;
+
+						
+						with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						visitID,
+						VisitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						FROM [ODS].[dbo].[CT_AllergiesChronicIllness](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 					
 					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]

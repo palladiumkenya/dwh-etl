@@ -102,8 +102,8 @@ SELECT ROW_NUMBER () OVER (PARTITION BY  Refil.PrepNumber,Refil.PatientPk,Refil.
        PrepPatients.PrepNumber
 
        ,PrepPatients.PatientPk
-	  ,Null  PatientPkHash
-	  ,Null PrepNumberHash
+	  ,cast( '' as nvarchar(100))  PatientPkHash
+	  ,cast( '' as nvarchar(100)) PrepNumberHash
       ,PrepPatients.SiteCode
 
 	  ,PrepRefil1stMonth.RefilMonth As  RefilMonth1

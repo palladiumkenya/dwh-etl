@@ -26,10 +26,8 @@ BEGIN
 						IE.[TBClinicalDiagnosis] AS TBClinicalDiagnosis,IE.[ContactsInvited] AS ContactsInvited,
 						IE.[EvaluatedForIPT] AS EvaluatedForIPT,IE.[StartAntiTBs] AS StartAntiTBs,IE.[TBRxStartDate] AS TBRxStartDate,
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
-						IE.[IndicationForIPT] AS IndicationForIPT,GETDATE() AS DateImported
-					   ,P.ID as PatientUnique_ID
-					   ,IE.PatientID as UniquePatientIptID
-					   ,IE.ID as IptVisitUnique_ID
+						IE.[IndicationForIPT] AS IndicationForIPT
+					   ,P.ID 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -40,12 +38,11 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID =b.UniquePatientIptID
-						and a.IptVisitUnique_ID = b.IptVisitUnique_ID)
+						and a.ID =b.ID)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,DateImported,CKV,PatientUnique_ID,IptVisitUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -71,6 +68,19 @@ BEGIN
 						a.StartIPT				=b.StartIPT,
 						a.IndicationForIPT		=b.IndicationForIPT;
 
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						VisitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						FROM [ODS].[dbo].[CT_Ipt](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()

@@ -1,6 +1,6 @@
 BEGIN
 	MERGE [ODS].[dbo].[HTS_TestKits] AS a
-	USING(SELECT DISTINCT a.[FacilityName]
+	USING(SELECT DISTINCT a.ID,a.[FacilityName]
 		  ,a.[SiteCode]
 		  ,a.[PatientPk]
 		  ,a.[HtsNumber]
@@ -24,11 +24,12 @@ BEGIN
 	and a.SiteCode = b.SiteCode	
 	
 	and a.EncounterId  = b.EncounterId 
+	and a.ID = b.ID
 	 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
 	WHEN MATCHED THEN
 		UPDATE SET 
 			

@@ -19,11 +19,8 @@ BEGIN
 								WHEN 'HMIS' THEN 'Kenya HMIS II'
 								ELSE P.[Project]
 							END AS Project,
-							GSE.[IPV] AS IPV,GSE.[PhysicalIPV],GSE.[EmotionalIPV],GSE.[SexualIPV],GSE.[IPVRelationship],
-							GETDATE() AS DateImported
-							,P.ID as PatientUnique_ID
-							,GSE.PatientID as UniquePatientGbvScreeningID
-							,GSE.ID GbvScreeningUnique_ID
+							GSE.[IPV] AS IPV,GSE.[PhysicalIPV],GSE.[EmotionalIPV],GSE.[SexualIPV],GSE.[IPVRelationship]						
+							,GSE.ID 
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID AND GSE.Voided = 0
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -33,13 +30,11 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID			=b.VisitID
 						and a.VisitDate			=b.VisitDate
-						and a.PatientUnique_ID =b.UniquePatientGbvScreeningID
-						and a.GbvScreeningUnique_ID = b.GbvScreeningUnique_ID
-						and a.GbvScreeningUnique_ID = b.GbvScreeningUnique_ID)
+						AND  a.ID = b.ID)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,PatientUnique_ID,GbvScreeningUnique_ID) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,DateImported,PatientUnique_ID,GbvScreeningUnique_ID)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -49,6 +44,20 @@ BEGIN
 						a.EmotionalIPV		=b.EmotionalIPV,
 						a.SexualIPV			=b.SexualIPV,
 						a.IPVRelationship	=b.IPVRelationship;
+
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_GbvScreening](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 					
 					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]
 						SET LoadEndDateTime = GETDATE()
