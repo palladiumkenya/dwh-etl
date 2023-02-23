@@ -1,4 +1,24 @@
 BEGIN
+
+	with cte AS ( Select            
+					P.PatientPID,            
+					PB.PatientId,            
+					F.code,
+					PB.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code 
+					ORDER BY PB.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+			INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0        
+			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0        )      
+		
+			delete pb from      [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code      
+			where  Row_Num  > 1;
+
+		
 		MERGE INTO [ODS].[DBO].CT_PatientBaselines AS a
 		USING(SELECT  P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,PB.ID
 			  ,PB.[eCD4],PB.[eCD4Date],PB.[eWHO],PB.[eWHODate],PB.[bCD4],PB.[bCD4Date]
@@ -10,7 +30,7 @@ BEGIN
 			   ELSE P.[Project] 
 			   END AS [Project] 
 			  ,PB.[Voided],PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
-			  ,PB.[lastWABDate],PB.[Created]
+			  ,PB.[lastWABDate]
 
 
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
@@ -19,7 +39,7 @@ BEGIN
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
 		WHERE p.gender!='Unknown') b
 
-		ON a.patientID = b.PatientID  
+		ON a.patientPK = b.PatientPK  
 		and a.sitecode = b.sitecode 
 		and a.ID =b. ID
 
@@ -54,15 +74,15 @@ BEGIN
 						a.lastWABDate	= b.lastWABDate;
 
 
-					with cte AS (
-				Select
-				PatientId,
-				sitecode,
+			--		with cte AS (
+			--	Select
+			--	PatientPK,
+			--	sitecode,id,
 
-				 ROW_NUMBER() OVER (PARTITION BY PatientId,sitecode ORDER BY
-				PatientId,sitecode) Row_Num
-				FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
-				)
-			delete  from cte 
-				Where Row_Num >1;
+			--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,id ORDER BY
+			--	PatientPK,sitecode) Row_Num
+			--	FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
+			--	)
+			--delete  from cte 
+			--	Where Row_Num >1;
 END
