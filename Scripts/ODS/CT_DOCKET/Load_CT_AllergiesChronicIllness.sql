@@ -1,5 +1,29 @@
 
 BEGIN
+
+	;with cte AS ( Select            
+			P.PatientPID,            
+			ACI.PatientId,            
+			F.code,
+			ACI.VisitID,
+			ACI.VisitDate,
+			ACI.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,ACI.VisitID,ACI.VisitDate
+			ORDER BY ACI.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+			INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID AND ACI.Voided = 0
+			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+
+			WHERE P.gender != 'Unknown')      
+		
+			delete ACI from  [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] (NoLock) ACI
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON ACI.[PatientId]= P.ID AND ACI.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on ACI.PatientId = cte.PatientId  
+				and cte.Created = ACI.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = ACI.VisitID
+				and cte.VisitDate = ACI.VisitDate
+			where  Row_Num  > 1;
  
 	 DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
@@ -35,7 +59,7 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID
-						and a.ID =b.ID
+						---and a.ID =b.ID
 						)
 
 					WHEN NOT MATCHED THEN 

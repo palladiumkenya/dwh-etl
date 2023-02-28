@@ -1,4 +1,32 @@
 BEGIN
+		;with cte AS ( Select            
+					f.code,
+					pl.PatientId,
+						P.[PatientPID],
+						visitID,pl.created,
+						OrderedbyDate,TestResult,TestName,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,visitID,OrderedbyDate,TestResult,TestName
+					ORDER BY pl.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+			INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
+			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+			WHERE p.gender!='Unknown' ) 
+			
+			--select * from  cte  where Row_Num >1
+		
+			delete pb from  [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on cte.PatientId = pb.PatientId   
+				and cte.Code =  f.Code    
+				and cte.VisitId =pb.VisitId
+				and cte.OrderedByDate = pb.OrderedByDate
+				and cte.TestResult = pb.TestResult
+				and cte.TestName = pb.TestName
+				and cte.created = pb.created
+			where  Row_Num  > 1;
+
+			
+
 		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
 				   @OrderedbyDate					DATETIME
 				
@@ -33,7 +61,7 @@ BEGIN
 						and a.OrderedbyDate	=b.OrderedbyDate
 						and  a.TestResult =  b.TestResult					
 						and  a.TestName =  b.TestName 
-						and a.ID		=b.ID
+						--and a.ID		=b.ID
 						)
 
 												
@@ -48,20 +76,6 @@ BEGIN
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType;
 
-					with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						OrderedbyDate,TestResult,TestName,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,OrderedbyDate,TestResult,TestName ORDER BY
-						PatientPK,Sitecode,visitID,OrderedbyDate) Row_Num
-						FROM [ODS].[dbo].[CT_PatientLabs](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
-							
 					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;

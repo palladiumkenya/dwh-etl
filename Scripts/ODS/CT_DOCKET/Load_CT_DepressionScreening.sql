@@ -1,4 +1,32 @@
 BEGIN
+
+;with cte AS ( Select            
+					P.PatientPID,            
+					DS.PatientId,            
+					F.code,
+					DS.VisitID,
+					ds.VisitDate,
+					DS.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,DS.VisitID,ds.VisitDate
+					ORDER BY DS.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+					INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) DS ON DS.[PatientId] = P.ID AND DS.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+					WHERE P.gender != 'Unknown'    )      
+		
+			delete pb from      [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = pb.VisitID
+				and cte.VisitDate = pb.VisitDate
+			where  Row_Num  > 1;
+
+
+
+
+
 		DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
@@ -53,19 +81,6 @@ BEGIN
 						a.PHQ_9_rating				=b.PHQ_9_rating,
 						a.DepressionAssesmentScore	=b.DepressionAssesmentScore;
 						
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						visitDate,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						PatientPK,Sitecode,visitID,visitDate) Row_Num
-						FROM [ODS].[dbo].[CT_DepressionScreening](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
 
 	
 					UPDATE [ODS].[dbo].[CT_DepressionScreening_Log]

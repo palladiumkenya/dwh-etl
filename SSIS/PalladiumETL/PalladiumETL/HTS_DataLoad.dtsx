@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="4"
-  DTS:VersionGUID="{C8C99BD8-84BB-42BA-921A-2B55B4427F91}">
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{0C2CC328-DA8A-436D-A971-B140FD4BB03D}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -141,6 +141,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{0F357EE2-593F-4EE0-BFBE-B23F17FCC326}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_ClientLinkages"
           DTS:ThreadHint="3">
@@ -158,6 +159,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{1E4CFBD2-5FE2-4F75-BBB8-0B414C016388}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_Clients"
           DTS:ThreadHint="4">
@@ -175,6 +177,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{BF128977-98B0-4555-87A9-ED18E702130B}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_TestKits"
           DTS:ThreadHint="5">
@@ -205,6 +208,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{1019A089-F919-42AE-BB3C-C22CAE7A6A3C}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_PartnerNotificationServices"
           DTS:ThreadHint="6">
@@ -222,6 +226,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{5A6BBF84-F4F5-4AD3-B12F-A8B3BC9E0EF2}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_PartnerTracings"
           DTS:ThreadHint="7">
@@ -252,9 +257,10 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{EFC36D75-C7C9-4464-9B36-C9EB22A905C0}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_ClientTests"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -269,6 +275,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{2A882EDA-0C47-4B50-9720-5699DB65D35D}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_ClientTracing"
           DTS:ThreadHint="1">
@@ -286,9 +293,10 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{C206FFD8-AFDA-4B96-A0E1-2E5BE9FA57BA}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_HTS_EligibilityExtract"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData

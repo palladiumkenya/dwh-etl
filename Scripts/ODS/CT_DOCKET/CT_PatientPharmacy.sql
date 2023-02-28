@@ -1,4 +1,28 @@
 BEGIN
+
+					;with cte AS ( Select            
+					P.PatientPID,            
+					PP.PatientId,            
+					F.code,
+					PP.VisitID,
+					PP.DispenseDate,
+					PP.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,PP.VisitID,PP.DispenseDate
+					ORDER BY PP.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract] P 
+						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
+					WHERE p.gender!='Unknown'  )      
+		
+			delete pb from  [DWAPICentral].[dbo].[PatientPharmacyExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = pb.VisitID
+				and cte.DispenseDate = pb.DispenseDate
+			where  Row_Num  > 1;
+
 			DECLARE @MaxDispenseDate_Hist			DATETIME,
 				  @DispenseDate					DATETIME,
 				  @MaxCreatedDate				DATETIME
@@ -58,19 +82,19 @@ BEGIN
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
 						a.StopRegimenReason			=b.StopRegimenReason;
 
-						with cte AS (
-						Select
-						Sitecode,
-						PatientPK,
-						visitID,
-						DispenseDate,
+						--with cte AS (
+						--Select
+						--Sitecode,
+						--PatientPK,
+						--visitID,
+						--DispenseDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,DispenseDate ORDER BY
-						PatientPK,Sitecode,visitID,DispenseDate) Row_Num
-						FROM [ODS].[dbo].[CT_PatientPharmacy](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+						-- ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,DispenseDate ORDER BY
+						--PatientPK,Sitecode,visitID,DispenseDate) Row_Num
+						--FROM [ODS].[dbo].[CT_PatientPharmacy](NoLock)
+						--)
+						--delete from cte 
+						--Where Row_Num >1 ;
 			
 				UPDATE [ODS].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()

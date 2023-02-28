@@ -1,5 +1,26 @@
 BEGIN
 
+				;with cte AS ( Select            
+					P.PatientPID,            
+					PA.PatientId,            
+					F.code,
+					PA.VisitDate,
+					PA.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,PA.VisitDate
+					ORDER BY PA.created desc) Row_Num
+				FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 )      
+		
+			delete pb from     [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code     
+				and cte.VisitDate = pb.VisitDate
+			where  Row_Num  > 1;
+
+
 		DECLARE	@MaxAdverseEventStartDate	DATETIME,
 				@AdverseEventStartDate		DATETIME,
 				@MaxCreatedDate				DATETIME
@@ -55,18 +76,18 @@ BEGIN
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant;	
 
 					
-					with cte AS (
-						Select
-						Sitecode,
-						PatientPK,
-						VisitDate,
+					--with cte AS (
+					--	Select
+					--	Sitecode,
+					--	PatientPK,
+					--	VisitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
-						PatientPK,Sitecode,VisitDate) Row_Num
-						FROM  [ODS].[dbo].[CT_AdverseEvents](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+					--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
+					--	PatientPK,Sitecode,VisitDate) Row_Num
+					--	FROM  [ODS].[dbo].[CT_AdverseEvents](NoLock)
+					--	)
+					--	delete from cte 
+					--	Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
 				  SET LoadEndDateTime = GETDATE()

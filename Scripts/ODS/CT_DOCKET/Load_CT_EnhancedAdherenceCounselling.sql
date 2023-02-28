@@ -1,4 +1,27 @@
 BEGIN
+				;with cte AS ( Select            
+					P.PatientPID,            
+					EAC.PatientId,            
+					F.code,
+					EAC.VisitID,
+					EAC.VisitDate,
+					EAC.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,EAC.VisitID,EAC.VisitDate
+					ORDER BY EAC.created desc) Row_Num
+					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+					INNER JOIN [DWAPICentral].[dbo].[EnhancedAdherenceCounsellingExtract](NoLock) EAC ON EAC.[PatientId] = P.ID AND EAC.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+					WHERE P.gender != 'Unknown')      
+		
+				delete EAC from  [DWAPICentral].[dbo].[EnhancedAdherenceCounsellingExtract](NoLock) EAC
+				inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON EAC.[PatientId]= P.ID AND EAC.Voided = 0       
+				inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+				inner join cte on EAC.PatientId = cte.PatientId  
+					and cte.Created = EAC.created 
+					and cte.Code =  f.Code     
+					and cte.VisitID = EAC.VisitID
+					and cte.VisitDate = EAC.VisitDate
+				where  Row_Num  > 1;
+
 		  DECLARE	@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
@@ -39,7 +62,7 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.ID =b.ID
+						--and a.ID =b.ID
 						)
 					
 					WHEN NOT MATCHED THEN 
@@ -91,19 +114,19 @@ BEGIN
 						a.EACAdherencePlan			=b.EACAdherencePlan,
 						a.EACFollowupDate			=b.EACFollowupDate;
 
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						visitDate,
+					--	with cte AS (
+					--	Select
+					--	PatientPK,
+					--	Sitecode,
+					--	visitID,
+					--	visitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						PatientPK,Sitecode,visitID,visitDate) Row_Num
-						FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
+					--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+					--	PatientPK,Sitecode,visitID,visitDate) Row_Num
+					--	FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling](NoLock)
+					--	)
+					--delete from cte 
+					--	Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_EnhancedAdherenceCounselling_Log]
 						SET LoadEndDateTime = GETDATE()

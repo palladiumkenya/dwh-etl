@@ -1,4 +1,29 @@
 BEGIN
+
+
+		;with cte AS ( Select            
+			P.PatientPID,            
+			PV.PatientId,            
+			F.code,
+			PV.VisitID,
+			PV.VisitDate,
+			PV.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,PV.VisitID,PV.VisitDate
+			ORDER BY PV.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
+			INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
+			INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+			WHERE p.gender!='Unknown')      
+		
+			delete pv from  [DWAPICentral].[dbo].[PatientVisitExtract] (NoLock) PV
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PV.[PatientId]= P.ID AND PV.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on PV.PatientId = cte.PatientId  
+				and cte.Created = PV.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = PV.VisitID
+				and cte.VisitDate = PV.VisitDate
+			where  Row_Num  > 1;
+
 	 
 	 DECLARE	@MaxVisitDate_Hist		DATETIME,
 				@VisitDate				DATETIME,
@@ -48,12 +73,11 @@ BEGIN
 							 a.PatientPK  = b.PatientPK 
 							AND a.SiteCode = b.SiteCode
 							AND a.visitID = b.[VisitId]
-							and a.visitDate = b.visitDate
-							and a.PatientUnique_ID = b.UniquePatientVisitId						
+							and a.visitDate = b.visitDate					
 							)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID) 
-							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID)
+							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes) 
+							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes)
 			
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -107,19 +131,19 @@ BEGIN
 						a.CNS						=b.CNS,
 						a.Genitourinary				=b.Genitourinary;
 
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						visitDate,
+					--	with cte AS (
+					--	Select
+					--	PatientPK,
+					--	Sitecode,
+					--	visitID,
+					--	visitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						PatientPK,Sitecode,visitID,visitDate) Row_Num
-						FROM [ODS].[dbo].[CT_PatientVisits](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
+					--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+					--	PatientPK,Sitecode,visitID,visitDate) Row_Num
+					--	FROM [ODS].[dbo].[CT_PatientVisits](NoLock)
+					--	)
+					--delete from cte 
+					--	Where Row_Num >1 ;
 
 
 		

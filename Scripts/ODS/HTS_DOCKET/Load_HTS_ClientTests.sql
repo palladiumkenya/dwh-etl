@@ -37,7 +37,8 @@ BEGIN
 				where a.FinalTestResult is not null
 					   ) AS b 
 				ON(
-				a.ID = b.ID
+				--a.ID = b.ID
+				a.sitecode = b.sitecode
 				and a.PatientPK  = b.PatientPK 
 
 				)

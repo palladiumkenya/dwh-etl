@@ -127,4 +127,35 @@ CREATE INDEX Intermediate_PharmacyDispenseAsAtDate_index
 ON Intermediate_PharmacyDispenseAsAtDate (Patientpk, SiteCode);
 go
 
+--------------------------------------------------------------------hts
 
+CREATE INDEX HTS_ClientLinkages
+ON HTS_ClientLinkages (SiteCode,Patientpk,HtsNumber);
+go
+
+CREATE INDEX HTS_clients
+ON HTS_clients (SiteCode,Patientpk);
+go
+
+CREATE INDEX HTS_ClientTests
+ON HTS_clients (SiteCode,Patientpk);
+go
+
+CREATE INDEX HTS_ClientTracing
+ON HTS_ClientTracing (SiteCode,Patientpk);
+go
+
+CREATE INDEX HTS_EligibilityExtract
+ON HTS_EligibilityExtract (SiteCode,Patientpk);
+go
+
+CREATE INDEX HTS_PartnerNotificationServices
+ON HTS_PartnerNotificationServices (SiteCode,Patientpk);
+go
+CREATE INDEX HTS_PartnerTracings
+ON HTS_PartnerNotificationServices (SiteCode,Patientpk);
+go
+
+CREATE INDEX HTS_TestKits
+ON HTS_TestKits (SiteCode,Patientpk);
+go

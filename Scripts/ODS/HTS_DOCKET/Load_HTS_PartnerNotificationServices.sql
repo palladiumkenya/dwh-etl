@@ -1,4 +1,25 @@
 BEGIN
+		
+			;with cte AS ( Select            
+					a.PatientPk,
+					a.sitecode,
+					a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited,  ROW_NUMBER() OVER (PARTITION BY a.PatientPk,a.sitecode,a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited
+					ORDER BY a.DateElicited desc) Row_Num
+			FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
+			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
+			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) 
+			
+		
+			delete pb from  [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) pb		 
+			inner join cte on cte.PatientPk = pb.PatientPk   
+				and cte.SiteCode =  pb.SiteCode    
+				and cte.PartnerPersonID =pb.PartnerPersonID
+				and cte.PartnerPatientPk = pb.PartnerPatientPk
+				and cte.DateElicited = pb.DateElicited
+
+			where  Row_Num  > 1;
+
+
 		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
 			USING(SELECT DISTINCT a.ID,a.[FacilityName]
@@ -32,15 +53,12 @@ BEGIN
 			  ) AS b 
 			ON(
 				a.PatientPK  = b.PatientPK 
-				and a.SiteCode = b.SiteCode	
-				
+				and a.SiteCode = b.SiteCode					
 				and a.PartnerPersonID  = b.PartnerPersonID 
-				and a.PartnerPatientPk  = b.PartnerPatientPk 
-
-				
+				and a.PartnerPatientPk  = b.PartnerPatientPk 				
 				and a.DateElicited  = b.DateElicited
 				and a.Dob  = b.Dob
-				and a.ID = b.ID
+				--and a.ID = b.ID
 
 			)
 	WHEN NOT MATCHED THEN 

@@ -15,8 +15,8 @@ BEGIN
 			[TestName],
 			TestResult,
 			[Emr],
-			[Project],
-			Reason
+			[Project]
+
 		from ODS.dbo.CT_PatientLabs
 		where TestName = 'Viral Load'
 				and TestName <>'CholesterolLDL (mmol/L)' and TestName <> 'Hepatitis C viral load' 

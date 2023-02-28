@@ -1,4 +1,32 @@
 BEGIN
+
+
+				;with cte AS ( Select            
+					P.PatientPID,            
+					IE.PatientId,            
+					F.code,
+					IE.VisitID,
+					IE.VisitDate,
+					IE.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,IE.VisitID,IE.VisitDate
+					ORDER BY IE.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+					WHERE P.gender != 'Unknown')      
+		
+			delete pb from      [DWAPICentral].[dbo].[IptExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = pb.VisitID
+				and cte.VisitDate = pb.VisitDate
+			where  Row_Num  > 1;
+
+
+
+
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
 				
@@ -68,19 +96,19 @@ BEGIN
 						a.StartIPT				=b.StartIPT,
 						a.IndicationForIPT		=b.IndicationForIPT;
 
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						VisitDate,
+						--with cte AS (
+						--Select
+						--PatientPK,
+						--Sitecode,
+						--visitID,
+						--VisitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
-						PatientPK,Sitecode,visitID,VisitDate) Row_Num
-						FROM [ODS].[dbo].[CT_Ipt](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+						-- ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						--PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						--FROM [ODS].[dbo].[CT_Ipt](NoLock)
+						--)
+						--delete from cte 
+						--Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()

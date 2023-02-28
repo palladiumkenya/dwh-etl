@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="8"
-  DTS:VersionGUID="{C5D53C6B-80DA-45EC-B4D5-817011A56511}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{2E8F0286-03D8-42C8-B0B4-14B41A37FBB4}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -261,6 +261,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{C15588E6-66DD-440A-BE1B-B0A8A633FB6C}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="CT_PatientPharmacy"
           DTS:ThreadHint="18">
@@ -278,6 +279,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{D47AC815-5E65-4A1F-B4A5-5C77EA0EEABB}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_AllergiesChronicIllness"
           DTS:ThreadHint="19">
@@ -295,6 +297,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{C115809C-CCE6-459D-A13F-6E92B856136F}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_ContactListing"
           DTS:ThreadHint="20">
@@ -312,6 +315,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{CB1C4C23-6129-49E9-B4C7-D04A74FA92F9}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DefaulterTracing"
           DTS:ThreadHint="15">
@@ -329,6 +333,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{B574D7FB-56FC-40F7-8009-DD821212F466}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DepressionScreening"
           DTS:ThreadHint="16">
@@ -346,6 +351,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{802E4417-80B5-4D48-9CBD-98BA274200F5}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_FacilityManifest"
           DTS:ThreadHint="17">
@@ -376,6 +382,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{EE3A441D-1B49-4A66-8AB3-9F78C42779D4}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_all_EMRSites"
           DTS:ThreadHint="5">
@@ -393,6 +400,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{F2EF3B93-740A-42BB-AA24-FA1A323B5608}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_AdverseEvents"
           DTS:ThreadHint="3">
@@ -410,6 +418,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{79A879B7-60DC-405C-828E-761E3DFF6C31}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_ARTPatient"
           DTS:ThreadHint="0">
@@ -427,6 +436,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{4F123BDE-9E34-4011-9D05-F93EA1478217}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Covid"
           DTS:ThreadHint="1">
@@ -444,6 +454,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{78107451-B5E9-4B2D-8FB5-605174F7E233}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DrugAlcoholScreening"
           DTS:ThreadHint="2">
@@ -461,6 +472,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{C6214CAB-A2BD-40E8-BA26-730AC03458E9}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Patient"
           DTS:ThreadHint="6">
@@ -478,6 +490,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{8FD8C78B-4C1E-495C-ADBE-61724E85DE2C}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientLabs"
           DTS:ThreadHint="7">
@@ -495,6 +508,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{3B2E93D7-BAD8-4F72-B47A-5ED605227F3A}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientStatus"
           DTS:ThreadHint="4">
@@ -525,6 +539,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{798BCA24-DB86-4696-BC19-FBF7EA35AD9D}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_EnhancedAdherenceCounselling"
           DTS:ThreadHint="11">
@@ -542,6 +557,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{006B9C97-8D37-4F35-A164-A6216068D5B3}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_GbvScreening"
           DTS:ThreadHint="12">
@@ -559,6 +575,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{9320DA13-8C5E-4E2E-B7B1-C662F490A192}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Ipt"
           DTS:ThreadHint="13">
@@ -576,6 +593,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{1AE19B4F-D811-4BEE-B529-29C726BFB5BB}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Otz"
           DTS:ThreadHint="14">
@@ -593,6 +611,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{2F885F26-EA41-498D-AB1C-ECD9FD364CCD}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Ovz"
           DTS:ThreadHint="10">
@@ -608,9 +627,9 @@
           DTS:refId="Package\CHUNK_THREE\Load_CT_PatientBaselines"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
-          DTS:Disabled="True"
           DTS:DTSID="{21B116C2-5D15-4E6C-93A6-4092825E47BD}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientBaselines"
           DTS:ThreadHint="8">
@@ -628,6 +647,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{E5DC5102-61FB-41DA-915D-644A1179D433}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientVisits"
           DTS:ThreadHint="9">
