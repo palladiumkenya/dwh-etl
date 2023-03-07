@@ -27,9 +27,9 @@ BEGIN
             cast(getdate() as date) as LoadDate
         from 
         ODS.dbo.CT_Patient as patients
-        left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPKHash = baselines.PatientPKHash collate Latin1_General_CI_AS
+        left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPKHash = baselines.PatientPKHash 
             and patients.SiteCode = baselines.SiteCode
-        left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPKHash = patients.PatientPKHash collate Latin1_General_CI_AS
+        left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPKHash = patients.PatientPKHash 
             and outcomes.SiteCode = patients.SiteCode
 	),
     hts_patient_source as (

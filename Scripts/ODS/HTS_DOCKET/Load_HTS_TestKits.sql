@@ -1,6 +1,6 @@
 BEGIN
 	MERGE [ODS].[dbo].[HTS_TestKits] AS a
-	USING(SELECT DISTINCT a.ID,a.[FacilityName]
+	USING(SELECT DISTINCT a.[FacilityName]
 		  ,a.[SiteCode]
 		  ,a.[PatientPk]
 		  ,a.[HtsNumber]
@@ -33,12 +33,15 @@ BEGIN
 	and a.SiteCode = b.SiteCode	
 	
 	and a.EncounterId  = b.EncounterId 
-	and a.ID = b.ID
+	and a.[EncounterId] = b.[EncounterId]
+	and a.[TestKitName1] =b.[TestKitName1]
+	and a.[TestResult2] =b.[TestResult2]
+	and a.[TestKitLotNumber1] = b.[TestKitLotNumber1]
 	 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
-		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
 	WHEN MATCHED THEN
 		UPDATE SET 
 			
@@ -50,4 +53,16 @@ BEGIN
 			a.[TestKitLotNumber2]	=b.[TestKitLotNumber2],
 			a.[TestKitExpiry2]		=b.[TestKitExpiry2],
 			a.[TestResult2]			=b.[TestResult2];
+
+	with cte AS ( Select           
+		a.[PatientPk],           
+		a.[SiteCode],            
+		a.EncounterId,
+		[TestKitName1],
+		[TestResult2],
+		[TestKitLotNumber1],ROW_NUMBER() OVER (PARTITION BY a.[PatientPk],a.[SiteCode],a.EncounterId,[TestKitName1],[TestResult2],[TestKitLotNumber1]
+		ORDER BY a.[PatientPk],a.[SiteCode] desc) Row_Num
+        FROM [ODS].[dbo].[HTS_TestKits]a)
+
+delete from cte where Row_Num>1 
 END

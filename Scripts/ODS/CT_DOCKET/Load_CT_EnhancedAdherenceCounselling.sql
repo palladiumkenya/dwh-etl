@@ -114,19 +114,19 @@ BEGIN
 						a.EACAdherencePlan			=b.EACAdherencePlan,
 						a.EACFollowupDate			=b.EACFollowupDate;
 
-					--	with cte AS (
-					--	Select
-					--	PatientPK,
-					--	Sitecode,
-					--	visitID,
-					--	visitDate,
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
 
-					--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-					--	PatientPK,Sitecode,visitID,visitDate) Row_Num
-					--	FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling](NoLock)
-					--	)
-					--delete from cte 
-					--	Where Row_Num >1 ;
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						visitDate desc) Row_Num
+						FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_EnhancedAdherenceCounselling_Log]
 						SET LoadEndDateTime = GETDATE()

@@ -25,8 +25,6 @@ BEGIN
 
 
 
-
-
 		DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
@@ -81,7 +79,19 @@ BEGIN
 						a.PHQ_9_rating				=b.PHQ_9_rating,
 						a.DepressionAssesmentScore	=b.DepressionAssesmentScore;
 						
+					with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						visitID,
+						VisitDate,
 
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						VisitDate desc) Row_Num
+						FROM [ODS].[dbo].[CT_DepressionScreening](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 	
 					UPDATE [ODS].[dbo].[CT_DepressionScreening_Log]
 						SET LoadEndDateTime = GETDATE()

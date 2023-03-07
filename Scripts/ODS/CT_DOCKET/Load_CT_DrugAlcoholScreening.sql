@@ -53,7 +53,7 @@ BEGIN
 						visitDate,
 
 						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						visitDate desc) Row_Num
 						FROM [ODS].[dbo].[CT_DrugAlcoholScreening](NoLock)
 						)
 					delete from cte 

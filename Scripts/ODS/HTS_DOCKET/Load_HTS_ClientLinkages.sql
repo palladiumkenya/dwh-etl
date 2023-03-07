@@ -18,9 +18,9 @@ BEGIN
 							  ,[ReportedCCCNumber]
 							  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]
 							
-						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
+						FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a--
 						INNER JOIN (
-								SELECT SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
+								SELECT distinct SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
 								FROM  [HTSCentral].[dbo].[ClientLinkages](NoLock)
 								GROUP BY SiteCode,PatientPK
 							) tm 
@@ -54,15 +54,21 @@ BEGIN
 		
 		WHEN MATCHED THEN
 		UPDATE SET 
-				a.[FacilityName]				=b.[FacilityName],
 				a.[EnrolledFacilityName]		=b.[EnrolledFacilityName],
 				a.[ReferralDate]				=b.[ReferralDate],
 				a.[DateEnrolled]				=b.[DateEnrolled],
 				a.[DatePrefferedToBeEnrolled]	=b.[DatePrefferedToBeEnrolled],
 				a.[FacilityReferredTo]			=b.[FacilityReferredTo]	,
 				a.[HandedOverTo]				=b.[HandedOverTo],
-				a.[HandedOverToCadre]			=b.[HandedOverToCadre],
-				a.[ReportedCCCNumber]			=b.[ReportedCCCNumber];
+				a.[HandedOverToCadre]			=b.[HandedOverToCadre];
 
+			with cte AS ( Select           
+		a.[PatientPk],           
+		a.[SiteCode],            
+		a.DateExtracted, ROW_NUMBER() OVER (PARTITION BY a.[PatientPk],a.[SiteCode]
+		ORDER BY a.DateExtracted desc) Row_Num
+       from [ODS].[dbo].[HTS_ClientLinkages] a)
+
+	delete from cte where Row_Num>1
 		
 END

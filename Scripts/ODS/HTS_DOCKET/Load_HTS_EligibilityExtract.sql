@@ -20,13 +20,22 @@ BEGIN
 									and a.encounterID = tn.encounterID
 									and a.visitID = tn.visitID
 									
+						Inner join ( select ct1.sitecode,ct1.patientPK,ct1.encounterID,ct1.visitID,max(ct1.DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsEligibilityExtract] ct1
+									group by ct1.sitecode,ct1.patientPK,ct1.encounterID,ct1.visitID)tn1
+									on a.sitecode = tn1.sitecode and a.patientPK = tn1.patientPK
+									and a.DateExtracted = tn1.MaxDateExtracted
+									and a.encounterID = tn1.encounterID
+									and a.visitID = tn1.visitID
+
 						INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-						on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode					
+						on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode				
 					
 				) AS b 
 				ON(
 					a.PatientPK  = b.PatientPK 
 					and a.SiteCode = b.SiteCode	
+					and a.encounterID = b.encounterID
+					and a.visitID = b.visitID
 					--and a.ID = b.ID
 					
 
@@ -97,9 +106,13 @@ BEGIN
 					a.[ReceivedServices]				=b.[ReceivedServices],
 					a.[TypeGBV]							=b.[TypeGBV];
 
+			with cte AS ( Select           
+		a.[PatientPk],           
+		a.[SiteCode],            
+		a.encounterID,
+		visitID,ROW_NUMBER() OVER (PARTITION BY a.[PatientPk],a.[SiteCode],encounterID,visitID
+		ORDER BY a.encounterID ) Row_Num
+       from [ODS].[dbo].[HTS_EligibilityExtract] a)
 
-		--WHEN NOT MATCHED BY SOURCE 
-		--	THEN
-		--		/* The Record is in the target table but doen't exit on the source table*/
-		--	Delete;
+	delete from cte where Row_Num>1
 END

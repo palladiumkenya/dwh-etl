@@ -11,8 +11,7 @@ MERGE [ODS].[dbo].[CT_FacilityManifest] AS a
 	
 	WHEN MATCHED THEN
     UPDATE SET 		
-		a.[Voided]		=b.[Voided]	,	
-		a.[Processed]	=b.[Processed],	
+			
 		a.[PatientCount]=b.[PatientCount],
 		a.[DateRecieved]=b.[DateRecieved],
 		a.[Name]		=b.[Name]	,	

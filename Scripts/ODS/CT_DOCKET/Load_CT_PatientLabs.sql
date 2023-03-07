@@ -76,6 +76,21 @@ BEGIN
 							a.DateSampleTaken	=b.DateSampleTaken	,
 							a.SampleType		=b.SampleType;
 
+					with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						OrderedbyDate,
+						TestResult,
+						TestName,
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,OrderedbyDate,TestResult,TestName ORDER BY
+						OrderedbyDate) Row_Num
+						FROM [ODS].[dbo].[CT_PatientLabs](NoLock)
+						)
+					DELETE from cte 
+						Where Row_Num >1 ;
+
 					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;

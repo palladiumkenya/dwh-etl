@@ -75,20 +75,20 @@ BEGIN
 							a.Project						=b.Project,
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant;	
 
-					
-					--with cte AS (
-					--	Select
-					--	Sitecode,
-					--	PatientPK,
-					--	VisitDate,
+					-----Remove duplicates from CT_AdverseEvents
+					with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						VisitDate,
 
-					--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
-					--	PatientPK,Sitecode,VisitDate) Row_Num
-					--	FROM  [ODS].[dbo].[CT_AdverseEvents](NoLock)
-					--	)
-					--	delete from cte 
-					--	Where Row_Num >1 ;
-
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
+						PatientPK,Sitecode,VisitDate) Row_Num
+						FROM  [ODS].[dbo].[CT_AdverseEvents](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
+			--------------------------------------------------------End
 				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;

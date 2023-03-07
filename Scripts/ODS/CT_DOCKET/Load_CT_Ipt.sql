@@ -74,8 +74,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						
-						a.FacilityName			=b.FacilityName,						
+												
 						a.OnTBDrugs				=b.OnTBDrugs,
 						a.OnIPT					=b.OnIPT,
 						a.EverOnIPT				=b.EverOnIPT,
@@ -96,19 +95,19 @@ BEGIN
 						a.StartIPT				=b.StartIPT,
 						a.IndicationForIPT		=b.IndicationForIPT;
 
-						--with cte AS (
-						--Select
-						--PatientPK,
-						--Sitecode,
-						--visitID,
-						--VisitDate,
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						VisitDate,
 
-						-- ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
-						--PatientPK,Sitecode,visitID,VisitDate) Row_Num
-						--FROM [ODS].[dbo].[CT_Ipt](NoLock)
-						--)
-						--delete from cte 
-						--Where Row_Num >1 ;
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						FROM [ODS].[dbo].[CT_Ipt](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()

@@ -2,8 +2,8 @@ BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a
 			USING(SELECT distinct
-			              a.ID
-						  ,a.[FacilityName]
+			             -- a.ID
+						  a.[FacilityName]
 
 						  ,a.[SiteCode]
 						  ,a.[PatientPk]
@@ -15,8 +15,8 @@ BEGIN
 						  ,[EverTestedForHiv]
 						  ,[MonthsSinceLastTest]
 						  ,a.[ClientTestedAs]
-						  ,[EntryPoint]
-						  ,[TestStrategy]
+						  ,a.[EntryPoint]
+						  ,a.[TestStrategy]
 						  ,a.[TestResult1]
 						  ,a.[TestResult2]
 						  ,a.[FinalTestResult]
@@ -32,15 +32,18 @@ BEGIN
 						  ,HtsRiskScore
 							  
 					  FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a
-					  Inner join ( select ct.sitecode,ct.patientPK,ct.TestResult1,ct.TestResult2,ct.FinalTestResult,ct.TestDate,ct.TestType,ct.ID,max(DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsClientTests] ct
-									group by ct.sitecode,ct.patientPK,ct.TestResult1,ct.TestResult2,ct.FinalTestResult,ct.TestDate,ct.TestType,ct.ID)tn
-									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK and a.ID = tn.ID
+					  Inner join ( select ct.sitecode,ct.patientPK,ct.TestResult1,ct.TestResult2,ct.FinalTestResult,ct.TestDate,ct.TestType,ct.EncounterId,ct.TestStrategy,ct.EntryPoint,max(DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsClientTests] ct
+									group by ct.sitecode,ct.patientPK,ct.TestResult1,ct.TestResult2,ct.FinalTestResult,ct.TestDate,ct.TestType,ct.EncounterId,ct.TestStrategy,ct.EntryPoint)tn
+									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK 
 									and a.DateExtracted = tn.MaxDateExtracted
 									and a.TestResult1 = tn.TestResult1
 									and a.TestResult2 = tn.TestResult2
 									and a.FinalTestResult = tn.FinalTestResult
 									and a.TestDate = tn.TestDate
 									and a.TestType = tn.TestType
+									and a.EntryPoint = tn.EntryPoint
+									and a.TestStrategy = tn.TestStrategy
+									and a.EncounterId = tn.EncounterId
 				inner JOIN  [HTSCentral].[dbo].Clients(NoLock) b								
 				ON a.[SiteCode] = b.[SiteCode] and a.PatientPK=b.PatientPK 			
 				
@@ -50,6 +53,14 @@ BEGIN
 				--a.ID = b.ID
 				a.sitecode = b.sitecode
 				and a.PatientPK  = b.PatientPK 
+				and a.TestResult1 = b.TestResult1
+				and a.TestResult2 = b.TestResult2
+				and a.FinalTestResult = b.FinalTestResult
+				and a.TestDate = b.TestDate
+				and a.TestType = b.TestType
+				and a.EntryPoint = b.EntryPoint
+				and a.TestStrategy = b.TestStrategy
+				and a.EncounterId = b.EncounterId
 
 				)
 		
@@ -71,4 +82,24 @@ BEGIN
 			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
 
 		
+--			with cte AS (
+--	Select
+--	a.PatientPK,
+--	a.SiteCode,
+--	a.TestResult1,
+--	a.TestResult2,
+--	a.FinalTestResult,
+--	a.TestDate,
+--	a.TestType,
+--	a.EntryPoint,
+--	a.TestStrategy,
+--	a.EncounterId,
+--	 ROW_NUMBER() OVER (PARTITION BY a.PatientPK,a.SiteCode,a.TestResult1,a.TestResult2,a.FinalTestResult,a.TestDate,a.TestType,a.EntryPoint,a.TestStrategy,a.EncounterId ORDER BY
+--	a.TestDate desc) Row_Num
+--	 FROM [ODS].[dbo].[HTS_ClientTests] a
+				
+--				where a.FinalTestResult is not null
+--	)
+--delete  from cte 
+--	Where Row_Num >1
 END

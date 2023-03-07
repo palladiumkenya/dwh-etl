@@ -38,9 +38,7 @@ BEGIN
 						PS.TOVerified TOVerified,
 						PS.TOVerifiedDate TOVerifiedDate,
 						PS.ReEnrollmentDate ReEnrollmentDate
-						,P.ID as PatientUnique_ID
-						,PS.PatientId as UniquePatientStatusId
-						,PS.ID as PatientStatusUnique_ID
+
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -62,8 +60,8 @@ BEGIN
 
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
-							VALUES(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,PatientUnique_ID,PatientStatusUnique_ID,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
+							INSERT(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
+							VALUES(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
@@ -74,7 +72,21 @@ BEGIN
 								a.SpecificDeathReason			=b.SpecificDeathReason,
 								a.DeathDate						=b.DeathDate;
 						
-	
+							with cte AS (
+									Select
+									PatientPK,
+									SiteCode,
+									ExitDate,
+									ExitReason,
+									Lastvisit,
+
+									 ROW_NUMBER() OVER (PARTITION BY PatientPK,ExitDate,SiteCode,ExitReason,Lastvisit ORDER BY
+									ExitDate desc) Row_Num
+									FROM [ODS].[dbo].[CT_PatientStatus]PS WITH (NoLock)
+									)
+								delete  from cte 
+									Where Row_Num >1
+
 						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
 							SET LoadEndDateTime = GETDATE()
 						WHERE MaxExitDate = @ExitDate;
@@ -88,3 +100,4 @@ BEGIN
 						GROUP BY SiteCode;
 
 	END
+

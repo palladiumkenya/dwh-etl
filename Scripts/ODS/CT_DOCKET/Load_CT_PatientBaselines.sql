@@ -41,7 +41,7 @@ BEGIN
 
 		ON a.patientPK = b.PatientPK  
 		and a.sitecode = b.sitecode 
-		and a.ID =b. ID
+		--and a.ID =b. ID
 
 
 		WHEN NOT MATCHED THEN 
@@ -74,15 +74,15 @@ BEGIN
 						a.lastWABDate	= b.lastWABDate;
 
 
-			--		with cte AS (
-			--	Select
-			--	PatientPK,
-			--	sitecode,id,
+					with cte AS (
+				Select
+				PatientPK,
+				sitecode,id,
 
-			--	 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,id ORDER BY
-			--	PatientPK,sitecode) Row_Num
-			--	FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
-			--	)
-			--delete  from cte 
-			--	Where Row_Num >1;
+				 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,id ORDER BY
+				PatientPK,sitecode) Row_Num
+				FROM [ODS].[DBO].CT_PatientBaselines(NoLock)
+				)
+			delete  from cte 
+				Where Row_Num >1;
 END
