@@ -27,6 +27,7 @@ BEGIN
             ClientSelfTested,
             CoupleDiscordant,
             TestType,
+            Setting,
             Consent  
         from ODS.dbo.HTS_ClientTests
         where FinalTestResult is not null and TestDate is not null and EncounterId is not null
