@@ -4,7 +4,7 @@ BEGIN
 --truncate table [ODS].[dbo].[MNCH_AncVisits]
 	MERGE [ODS].[dbo].[MNCH_AncVisits] AS a
 		USING(
-				SELECT  Distinct [PatientMnchID],[ANCClinicNumber],[PatientPk],F.[SiteCode],[FacilityName],P.[EMR],[Project],cast([DateExtracted] as date)[DateExtracted]
+				SELECT  Distinct P.[PatientMnchID],[ANCClinicNumber], P.[PatientPk],F.[SiteCode], P.[FacilityName],P.[EMR], P.[Project],cast( P.[DateExtracted] as date)[DateExtracted]
 					  ,[VisitID],cast([VisitDate] as date)[VisitDate],[ANCVisitNo],[GestationWeeks],[Height],[Weight],[Temp],[PulseRate],[RespiratoryRate]
 					  ,[OxygenSaturation],[MUAC],[BP],[BreastExam],[AntenatalExercises],[FGM],[FGMComplications],[Haemoglobin],[DiabetesTest],[TBScreening]
 					  ,[CACxScreen],[CACxScreenMethod],[WHOStaging],[VLSampleTaken],[VLDate],[VLResult],[SyphilisTreatment],[HIVStatusBeforeANC]
@@ -13,9 +13,16 @@ BEGIN
 					  ,[NVPBabyDispense],[ChronicIllness],[CounselledOn],[PartnerHIVTestingANC],[PartnerHIVStatusANC],[PostParturmFP],[Deworming]
 					  ,[MalariaProphylaxis],[TetanusDose],[IronSupplementsGiven],[ReceivedMosquitoNet],[PreventiveServices],[UrinalysisVariables]
 					  ,[ReferredFrom],[ReferredTo],[ReferralReasons],cast([NextAppointmentANC] as date)[NextAppointmentANC]
-					  ,[ClinicalNotes] ,[Date_Created],[Date_Last_Modified]
+					  ,[ClinicalNotes] , P.[Date_Created], P.[Date_Last_Modified]
 				  FROM [MNCHCentral].[dbo].[AncVisits] (NoLock) P
-				  INNER JOIN [MNCHCentral].[dbo].[Facilities](NoLock) F ON P.[FacilityId] = F.Id  ) AS b 
+					inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted 
+									FROM [MNCHCentral].[dbo].[AncVisits] (NoLock)tn
+									group by tn.PatientPK,tn.SiteCode
+								)tm
+					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
+					INNER JOIN  [MNCHCentral].[dbo].[MnchPatients](NOLOCK)  Mnchp
+					on P.PatientPK = Mnchp.patientPK and P.SiteCode = Mnchp.Sitecode
+					INNER JOIN [MNCHCentral].[dbo].[Facilities](NoLock) F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode

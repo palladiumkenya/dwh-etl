@@ -37,7 +37,9 @@ with clinical_visits_as_of_date as (
     /* get visits as of date */
     select 
         PatientPK,
+		PatientPKHash,
         PatientID,
+		PatientIDHash,
         SiteCode,
         VisitDate,
         NextAppointmentDate,
@@ -52,6 +54,8 @@ pharmacy_visits_as_of_date as (
      /* get pharmacy dispensations as of date */
     select 
         PatientPK,
+		PatientPKHash,
+		PatientIDHash,
         PatientID,
         SiteCode,
         DispenseDate,
@@ -65,6 +69,8 @@ patient_art_and_enrollment_info as (
     select
         distinct CT_ARTPatients.PatientID,
         CT_ARTPatients.PatientPK,
+		CT_ARTPatients.PatientPKHash,
+		CT_ARTPatients.PatientIDHash,
         CT_ARTPatients.SiteCode,
         CT_ARTPatients.StartARTDate,
         CT_ARTPatients.StartRegimen,
@@ -112,6 +118,8 @@ effective_discontinuation_ordering as (
     select 
         PatientID,
         PatientPK,
+		PatientPKHash,
+		PatientIDHash,
         SiteCode,
         EffectiveDiscontinuationDate,
         ExitDate,
@@ -132,6 +140,8 @@ exits_as_of_date as (
     select 
         PatientID,
         PatientPK,
+		PatientPKHash,
+		PatientIDHash,
         SiteCode,
         ExitDate,
         ExitReason
@@ -143,6 +153,8 @@ exits_as_of_date_ordering as (
     select 
         PatientID,
         PatientPK,
+		PatientPKHash,
+		PatientIDHash,
         SiteCode,
         ExitDate,
         ExitReason,
@@ -162,6 +174,8 @@ visits_and_dispense_encounters_combined_tbl as (
     select  distinct coalesce (last_visit.PatientID, last_dispense.PatientID) as PatientID,
             coalesce(last_visit.SiteCode, last_dispense.SiteCode) as SiteCode,
             coalesce(last_visit.PatientPK, last_dispense.PatientPK) as PatientPK ,
+			coalesce(last_visit.PatientPKHash, last_dispense.PatientPKHash) as PatientPKHash ,
+			coalesce (last_visit.PatientIDHash, last_dispense.PatientIDHash) as PatientIDHash,
             coalesce(last_visit.Emr, last_dispense.Emr) as Emr,
             case
                 when last_visit.VisitDate >= last_dispense.DispenseDate then last_visit.VisitDate 
@@ -185,8 +199,10 @@ last_encounter as (
     /* preparing the latest encounter records as of date */
     select
         visits_and_dispense_encounters_combined_tbl.PatientID,
+		visits_and_dispense_encounters_combined_tbl.PatientIDHash,
         visits_and_dispense_encounters_combined_tbl.SiteCode,
         visits_and_dispense_encounters_combined_tbl.PatientPK,
+		visits_and_dispense_encounters_combined_tbl.PatientPKHash,
         visits_and_dispense_encounters_combined_tbl.Emr,
         visits_and_dispense_encounters_combined_tbl.LastEncounterDate,
         case 
@@ -222,19 +238,21 @@ ARTOutcomesCompuation as (
         @as_of_date as AsOfDate
     from last_encounter
     left join latest_effective_discontinuation on latest_effective_discontinuation.PatientID = last_encounter.PatientID
-        and latest_effective_discontinuation.PatientPK = last_encounter.PatientPK
+        and latest_effective_discontinuation.PatientPKHash = last_encounter.PatientPKHash
         and latest_effective_discontinuation.SiteCode = last_encounter.SiteCode
     left join last_exit_as_of_date on last_exit_as_of_date.PatientID = last_encounter.PatientID
-        and last_exit_as_of_date.PatientPK = last_encounter.PatientPK
+        and last_exit_as_of_date.PatientPKHash = last_encounter.PatientPKHash
         and last_exit_as_of_date.SiteCode = last_encounter.SiteCode
     left join patient_art_and_enrollment_info on patient_art_and_enrollment_info.PatientID = last_encounter.PatientID
-        and patient_art_and_enrollment_info.PatientPK = last_encounter.PatientPK
+        and patient_art_and_enrollment_info.PatientPKHash = last_encounter.PatientPKHash
         and patient_art_and_enrollment_info.SiteCode = last_encounter.SiteCode
 )
 insert into dbo.HistoricalARTOutcomesBaseTable
 select 
 	ARTOutcomesCompuation.PatientID as PatientID,
+	ARTOutcomesCompuation.PatientIDHash as PatientIDHash,
     ARTOutcomesCompuation.PatientPK,
+	 ARTOutcomesCompuation.PatientPKHash,
     ARTOutcomesCompuation.SiteCode as MFLCode,
     ARTOutcomesCompuation.ARTOutcome,
 	ARTOutcomesCompuation.AsOfDate

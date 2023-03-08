@@ -2,9 +2,9 @@
 BEGIN
 
 MERGE [ODS].[dbo].[PrEP_Lab] AS a
-	USING(SELECT	
-	           a.ID
-			   ,a.[RefId]
+	USING(SELECT	DISTINCT
+	        
+			   a.[RefId]
 			  ,a.[Created]
 			  ,a.[PatientPk]
 			  ,a.[SiteCode]
@@ -28,6 +28,9 @@ MERGE [ODS].[dbo].[PrEP_Lab] AS a
 			  ,a.[Date_Created]
 			  ,a.[Date_Last_Modified]
 		FROM [PREPCentral].[dbo].[PrepLabs](NoLock) a
+			inner join (select tn.PatientPK,tn.SiteCode,tn.PrepNumber,max(tn.Created)MaxCreated FROM [PREPCentral].[dbo].[PrepLabs](NoLock)tn
+						GROUP BY tn.PatientPK,tn.SiteCode,tn.PrepNumber)tm
+			on a.PatientPk = tm.PatientPk and a.SiteCode =tm.SiteCode and a.Created = tm.MaxCreated
 		INNER JOIN  [PREPCentral].[dbo].[PrepPatients](NoLock) b	
 		ON a.sitecode = b.sitecode
 		and a.patientPK = b.patientPK
@@ -37,12 +40,12 @@ MERGE [ODS].[dbo].[PrEP_Lab] AS a
 			a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode
 			and a.PrepNumber = b.PrepNumber
-			and a.ID = b.ID
+			--and a.ID = b.ID
 			) 
 	 WHEN NOT MATCHED THEN 
-		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
+		  INSERT(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
 				,VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified) 
-		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
+		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
 				  VisitID,TestName,TestResult,SampleDate,TestResultDate,Reason,Date_Created,Date_Last_Modified) 
 	  WHEN MATCHED THEN
 				UPDATE SET 							
