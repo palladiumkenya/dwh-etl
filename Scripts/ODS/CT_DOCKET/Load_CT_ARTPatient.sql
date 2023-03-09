@@ -5,7 +5,7 @@ BEGIN
 								AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,
 								PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
 								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,
-								Project,[DOB],CKV,PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,PatientPKHash,PatientIDHash,CKVHash) 
+								Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf) 
 			SELECT  DISTINCT
 				P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName, PA.[AgeEnrollment]
 				,PA.[AgeARTStart],PA.[AgeLastVisit],PA.[RegistrationDate],PA.[PatientSource],PA.[Gender],PA.[StartARTDate],PA.[PreviousARTStartDate]
@@ -17,18 +17,11 @@ BEGIN
 						ELSE P.[Project] 
 						END AS [Project]
 						,PA.[DOB]
-						,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
-						--,PA.[Processed]
 
-						--,PA.[Created]
 				,PA.[PreviousARTUse]
 				,PA.[PreviousARTPurpose]
 				,PA.[DateLastUsed]
-				,GETDATE () AS DateAsOf,
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
-
+				,GETDATE () AS DateAsOf
 				FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 				INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
 				INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
@@ -37,20 +30,24 @@ BEGIN
 									INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0 
 									GROUP BY  a.PatientPID,c.code)tn
 							on P.PatientPID = tn.PatientPID and F.code = tn.code and PA.Created = tn.MaxCreated
-				--INNER JOIN (SELECT PatientId,MAX(created)Maxcreated from [DWAPICentral].[dbo].[PatientArtExtract](NoLock)
-				--			group by PatientId) tn
-				--on PA.PatientId = tn.PatientId and PA.Created = tn.Maxcreated
 				WHERE p.gender!='Unknown';
+
+					with cte AS (
+				Select
+				PatientPK,
+				sitecode,
+				lastvisit,
+				 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,lastvisit ORDER BY
+				lastvisit desc) Row_Num
+				FROM [ODS].[dbo].[CT_ARTPatients](NoLock)
+				)
+			delete from cte 
+				Where Row_Num >1;
+			--TRUNCATE TABLE [ODS].[dbo].[CT_ARTPatientsCount_Log]
+			INSERT INTO  [ODS].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
+				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount 
+				FROM [ODS].[dbo].[CT_ARTPatients]
+				group by SiteCode
 				
-				---Remove any duplicate from [ODS].[dbo].[CT_ARTPatients]
-				--WITH CTE AS   
-				--	(  
-				--		SELECT [PatientPK],[SiteCode],ROW_NUMBER() 
-				--		OVER (PARTITION BY [PatientPK],[SiteCode] 
-				--		ORDER BY [PatientPK],[SiteCode]) AS dump_ 
-				--		FROM [ODS].[dbo].[CT_ARTPatients] 
-				--		)  
-			
-				--DELETE FROM CTE WHERE dump_ >1;
 
 	END

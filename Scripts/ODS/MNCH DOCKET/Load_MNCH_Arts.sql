@@ -3,25 +3,25 @@ BEGIN
     --truncate table [ODS].[dbo].[MNCH_Arts]
 	MERGE [ODS].[dbo].[MNCH_Arts] AS a
 			USING(
-					SELECT  P.[Id],P.[RefId],P.[Created],[PatientPk],P.[SiteCode],P.[Emr],[Project],[Processed],[QueueId],[Status],[StatusDate],[DateExtracted]
-						  ,[Pkv],[PatientMnchID],[PatientHeiID],[FacilityName],[RegistrationAtCCC],[StartARTDate],[StartRegimen]
-						  ,[StartRegimenLine],[StatusAtCCC],[LastARTDate],[LastRegimen],[LastRegimenLine],[Date_Created],[Date_Last_Modified]
-					      ,[PatientPk]+'-'+P.[SiteCode] AS CKV,
-					  convert(nvarchar(64), hashbytes('SHA2_256', cast(p.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-					  convert(nvarchar(64), hashbytes('SHA2_256', cast([PatientMnchID]  as nvarchar(36))), 2)PatientMnchIDHash,
-					  convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR([PatientPk]))) + '-' + LTRIM(RTRIM(P.[SiteCode]))  as nvarchar(36))), 2) CKVHash
-
-					  FROM [MNCHCentral].[dbo].[MnchArts] P(NoLock) 
-					    INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
+					SELECT  distinct  P.[PatientPk],P.[SiteCode],P.[Emr], P.[Project], P.[Processed], P.[QueueId], P.[Status], P.[StatusDate], P.[DateExtracted]
+						  , P.[Pkv], P.[PatientMnchID], P.[PatientHeiID], P.[FacilityName],[RegistrationAtCCC],[StartARTDate],[StartRegimen]
+						  ,[StartRegimenLine],[StatusAtCCC],[LastARTDate],[LastRegimen],[LastRegimenLine], P.[Date_Created], P.[Date_Last_Modified]
+					     
+					   FROM [MNCHCentral].[dbo].[MnchArts] P(NoLock) 
+				inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[MnchArts] (NoLock)tn
+				group by tn.PatientPK,tn.SiteCode)tm
+					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
+			  INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
+			on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+			INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						and a.ID COLLATE SQL_Latin1_General_CP1_CI_AS = b.ID
+						
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,CKV,PatientMnchID,PatientHeiID,FacilityName,RegistrationAtCCC,StartARTDate,StartRegimen,StartRegimenLine,StatusAtCCC,LastARTDate,LastRegimen,LastRegimenLine,Date_Created,Date_Last_Modified,PatientPKHash,CKVHash,PatientMnchIDHash) 
-						VALUES(Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,CKV,PatientMnchID,PatientHeiID,FacilityName,RegistrationAtCCC,StartARTDate,StartRegimen,StartRegimenLine,StatusAtCCC,LastARTDate,LastRegimen,LastRegimenLine,Date_Created,Date_Last_Modified,PatientPKHash,CKVHash,PatientMnchIDHash)
+						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,PatientMnchID,PatientHeiID,FacilityName,RegistrationAtCCC,StartARTDate,StartRegimen,StartRegimenLine,StatusAtCCC,LastARTDate,LastRegimen,LastRegimenLine,Date_Created,Date_Last_Modified) 
+						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,PatientMnchID,PatientHeiID,FacilityName,RegistrationAtCCC,StartARTDate,StartRegimen,StartRegimenLine,StatusAtCCC,LastARTDate,LastRegimen,LastRegimenLine,Date_Created,Date_Last_Modified)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

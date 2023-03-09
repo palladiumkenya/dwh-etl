@@ -7,16 +7,16 @@ BEGIN
 			PatientID,
 			SiteCode,
 			PatientPK,
-					 convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-	convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			VisitID,
 			[OrderedbyDate],
 			[ReportedbyDate],
 			[TestName],
 			TestResult,
 			[Emr],
-			[Project],
-			Reason
+			[Project]
+
 		from ODS.dbo.CT_PatientLabs
 		where TestName = 'Viral Load'
 				and TestName <>'CholesterolLDL (mmol/L)' and TestName <> 'Hepatitis C viral load' 

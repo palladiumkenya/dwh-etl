@@ -10,7 +10,7 @@ BEGIN
             EncounterId,
             SiteCode,
             PatientPK,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
             EMR, 
             Project,
             DateExtracted,
@@ -27,6 +27,7 @@ BEGIN
             ClientSelfTested,
             CoupleDiscordant,
             TestType,
+            Setting,
             Consent  
         from ODS.dbo.HTS_ClientTests
         where FinalTestResult is not null and TestDate is not null and EncounterId is not null

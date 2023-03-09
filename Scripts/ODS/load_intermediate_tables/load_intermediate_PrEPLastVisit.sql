@@ -56,11 +56,11 @@ BEGIN
             TreatedForHepC,
             NextAppointment,
             ClinicalNotes
-        from PrEP_Visits
+        from ODS.DBO.PrEP_Visits
         where VisitDate is not null
     )
     select 
-        source_data.*,
+        source_data.*,cast( '' as nvarchar(100)) PatientPKHash,
         cast(getdate() as date) as LoadDate
     into  [ODS].[dbo].[Intermediate_PrepLastVisit]
     from  source_data

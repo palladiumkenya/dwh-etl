@@ -30,8 +30,10 @@ BEGIN
 	select 
 
 		SiteCode,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
+		PatientPK,
+		PatientID,
+		cast( '' as nvarchar(100)) PatientPKHash,
+		cast( '' as nvarchar(100)) PatientIDHash,
 		EMR,
 		VisitDate as LastVisitDate,
 		OTZEnrollmentDate,

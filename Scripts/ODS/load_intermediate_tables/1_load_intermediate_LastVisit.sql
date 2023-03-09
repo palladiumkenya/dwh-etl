@@ -7,11 +7,12 @@ BEGIN
 		PatientID,
 		SiteCode,
 		PatientPK,
+		cast( '' as nvarchar(100))PatientPKHash,
+	    cast( '' as nvarchar(100))PatientIDHash,
 		VisitDate as LastVisitDate,
 	CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End AS NextAppointment,
-	cast(getdate() as date) as LoadDate,
-	 convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-	convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash
+	cast(getdate() as date) as LoadDate
+
 	FROM ODS.dbo.CT_PatientVisits
 	 )
 	 Select LatestVisit.* 

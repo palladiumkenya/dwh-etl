@@ -1,8 +1,28 @@
-
 BEGIN
+		
+			;with cte AS ( Select            
+					a.PatientPk,
+					a.sitecode,
+					a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited,  ROW_NUMBER() OVER (PARTITION BY a.PatientPk,a.sitecode,a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited
+					ORDER BY a.DateElicited desc) Row_Num
+			FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
+			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
+			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) 
+			
+		
+			delete pb from  [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) pb		 
+			inner join cte on cte.PatientPk = pb.PatientPk   
+				and cte.SiteCode =  pb.SiteCode    
+				and cte.PartnerPersonID =pb.PartnerPersonID
+				and cte.PartnerPatientPk = pb.PartnerPatientPk
+				and cte.DateElicited = pb.DateElicited
+
+			where  Row_Num  > 1;
+
+
 		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
-			USING(SELECT DISTINCT a.[FacilityName]
+			USING(SELECT DISTINCT a.ID,a.[FacilityName]
 				  ,a.[SiteCode]
 				  ,a.[PatientPk]
 				  ,a.[HtsNumber]
@@ -25,49 +45,31 @@ BEGIN
 				  ,[Age]
 				  ,[DateElicited]
 				  ,Cl.[Dob]
-				  ,[LinkDateLinkedToCare],
-				convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2)  as CKVHash
+				  ,[LinkDateLinkedToCare]
+			
 			  FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
 			  ) AS b 
 			ON(
 				a.PatientPK  = b.PatientPK 
-				and a.SiteCode = b.SiteCode	
-				
+				and a.SiteCode = b.SiteCode					
 				and a.PartnerPersonID  = b.PartnerPersonID 
-				and a.PartnerPatientPk  = b.PartnerPatientPk 
-
-				and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber 
-				and a.KnowledgeOfHivStatus COLLATE Latin1_General_CI_AS = b.KnowledgeOfHivStatus  
-				and a.PnsApproach COLLATE Latin1_General_CI_AS = b.PnsApproach 
-				and a.MaritalStatus COLLATE Latin1_General_CI_AS = b.MaritalStatus 
-				and a.RelationsipToIndexClient COLLATE Latin1_General_CI_AS = b.RelationsipToIndexClient 
-				and a.CurrentlyLivingWithIndexClient COLLATE Latin1_General_CI_AS = b.CurrentlyLivingWithIndexClient
-				and a.Age  = b.Age 
-				and a.CccNumber COLLATE Latin1_General_CI_AS = b.CccNumber 
-				and a.Gender COLLATE Latin1_General_CI_AS = b.Gender 
-				and a.FacilityLinkedTo COLLATE Latin1_General_CI_AS = b.FacilityLinkedTo 
+				and a.PartnerPatientPk  = b.PartnerPatientPk 				
 				and a.DateElicited  = b.DateElicited
 				and a.Dob  = b.Dob
+				--and a.ID = b.ID
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash,CKVHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,PatientPKHash,HtsNumberHash,CKVHash)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare)
 
 	WHEN MATCHED THEN
 		UPDATE SET 
-				a.[FacilityName]					=b.[FacilityName],											
-				a.[HtsNumber]						=b.[HtsNumber],
-				a.[Emr]								=b.[Emr],	
-				a.[Project]							=b.[Project],	
-				a.[PartnerPatientPk]				=b.[PartnerPatientPk]	,
+			
 				a.[KnowledgeOfHivStatus]			=b.[KnowledgeOfHivStatus],
-				a.[PartnerPersonID]					=b.[PartnerPersonID],	
-				a.[CccNumber]						=b.[CccNumber],
+				
 				a.[IpvScreeningOutcome]				=b.[IpvScreeningOutcome],	
 				a.[ScreenedForIpv]					=b.[ScreenedForIpv]	,
 				a.[PnsConsent]						=b.[PnsConsent],
@@ -81,12 +83,7 @@ BEGIN
 				a.[Age]								=b.[Age],	
 				a.[DateElicited]					=b.[DateElicited],
 				a.[Dob]								=b.[Dob],	
-				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare]
-		
-		WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare];
+	
 END
 	
-

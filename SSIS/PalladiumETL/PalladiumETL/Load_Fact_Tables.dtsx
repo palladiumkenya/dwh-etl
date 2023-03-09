@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\NDWH\Checkpoint"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\NDWH\Checkpoint.xml"
   DTS:CheckpointUsage="1"
   DTS:CreationDate="11/24/2022 11:51:39 AM"
   DTS:CreationName="Microsoft.Package"
@@ -14,11 +14,23 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="40"
-  DTS:VersionGUID="{1C9CA3CF-50DC-4B1C-B5F8-C76F074F8EEF}">
+  DTS:VersionBuild="42"
+  DTS:VersionGUID="{65FD004E-B622-457A-AC83-3EDC8762BDBC}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[load_fact_manifest.sql]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{0A74CF4E-6B8C-4827-9B42-FD3C2D9DD7DD}"
+      DTS:ObjectName="load_fact_manifest.sql">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::RatesFilePath]+"\\"+ @[User::RatesFileName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\REPORTING RATES\" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[NDWH_HTS_SQL_Fact_FileConn.sql]"
       DTS:CreationName="FILE"
@@ -95,6 +107,25 @@
       <DTS:VariableValue
         DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\HTS_FACT_TABLES</DTS:VariableValue>
     </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{2969101D-300D-492A-ABF3-13014AFB77FA}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="RatesFileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7133652D-C147-4EEB-9AC6-66B9EC6C9C7B}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="RatesFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\REPORTING RATES</DTS:VariableValue>
+    </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
@@ -103,6 +134,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{287285A5-8DD1-45E1-8522-7DDABC195622}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load CT  Fact tables Container">
       <DTS:ForEachEnumerator
@@ -158,6 +190,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{8A086D49-B62A-4FA9-AB63-F35EF0B2665A}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Load HTS Fact tables Container">
       <DTS:ForEachEnumerator
@@ -207,6 +240,60 @@
           DTS:VariableName="User::HTSFileName" />
       </DTS:ForEachVariableMappings>
     </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loop through Reporting Rates Fact tables Folder"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{DE1964A1-6D74-4284-A2F2-D546D86D7F0A}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loop through Reporting Rates Fact tables Folder">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{DBB4CF06-E741-46A4-9EBB-31889544FAD0}"
+        DTS:ObjectName="{DBB4CF06-E741-46A4-9EBB-31889544FAD0}">
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\REPORTING RATES" />
+            <FEFEProperty
+              FileSpec="*.sql" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Loop through Reporting Rates Fact tables Folder\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{E65335EC-E3A0-4869-80D7-820D138B6710}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7E04522E-043D-49D2-81B3-D5ED35D29297}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="load_fact_manifest.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{81D1EE65-D488-4AB0-B613-B645112A40C8}"
+          DTS:ObjectName="{81D1EE65-D488-4AB0-B613-B645112A40C8}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::RatesFileName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
     <DTS:PrecedenceConstraint
@@ -217,6 +304,14 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
       DTS:To="Package\Load HTS Fact tables Container" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{AA070C71-CB83-40DE-A295-869182767F7B}"
+      DTS:From="Package\Load HTS Fact tables Container"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Loop through Reporting Rates Fact tables Folder" />
   </DTS:PrecedenceConstraints>
   <DTS:EventHandlers>
     <DTS:EventHandler
@@ -995,14 +1090,34 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
   </resheader>
 </root>]]></ProjectItem>
               <ProjectItem
-                Name="Properties\Settings.settings"
-                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
-</SettingsFile>]]></ProjectItem>
+                Name="Properties\Settings.Designer.cs"
+                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_22c62e28aa6044a996db065d072cbb57.Properties.Settings.get_Default():ST_22c62e28aa6044a996db065d072cbb57.Properties.Sett" +
+    "ings")]
+
+namespace ST_22c62e28aa6044a996db065d072cbb57.Properties {
+    
+    
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
+        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+        private static Settings defaultInstance = new Settings();
+        
+        public static Settings Default {
+            get {
+                return defaultInstance;
+            }
+        }
+    }
+}]]></ProjectItem>
               <ProjectItem
                 Name="ScriptMain.cs"
                 Encoding="UTF8"><![CDATA[#region Help:  Introduction to the script task
@@ -1192,35 +1307,6 @@ namespace ST_22c62e28aa6044a996db065d072cbb57
   </msb:ItemGroup>
 </c:Project>]]></ProjectItem>
               <ProjectItem
-                Name="Properties\Settings.Designer.cs"
-                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
-// <auto-generated>
-//     This code was generated by a tool.
-//
-//     Changes to this file may cause incorrect behavior and will be lost if
-//     the code is regenerated.
-// </auto-generated>
-//------------------------------------------------------------------------------
-
-[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_22c62e28aa6044a996db065d072cbb57.Properties.Settings.get_Default():ST_22c62e28aa6044a996db065d072cbb57.Properties.Sett" +
-    "ings")]
-
-namespace ST_22c62e28aa6044a996db065d072cbb57.Properties {
-    
-    
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
-        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        private static Settings defaultInstance = new Settings();
-        
-        public static Settings Default {
-            get {
-                return defaultInstance;
-            }
-        }
-    }
-}]]></ProjectItem>
-              <ProjectItem
                 Name="Properties\AssemblyInfo.cs"
                 Encoding="UTF8"><![CDATA[using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -1250,6 +1336,15 @@ using System.Runtime.CompilerServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Settings.settings"
+                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.Designer.cs"
                 Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
@@ -1491,7 +1586,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="347.6,131.2"
-          Size="347.6,174"
+          Size="347.6,174.4"
           Id="Package\Load HTS Fact tables Container"
           TopLeft="428.846169576138,9.06060638791161" />
         <EdgeLayout
@@ -1508,6 +1603,51 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
                   Capacity="5">
                   <mssgle:LineSegment
                     End="117.482720705262,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="163.2,41.6"
+          Id="Package\Loop through Reporting Rates Fact tables Folder\Execute SQL Task"
+          TopLeft="65.9538616016777,38.1939473915804" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="320.4,134.8"
+          Size="320.4,178"
+          Id="Package\Loop through Reporting Rates Fact tables Folder"
+          TopLeft="355.384628420046,223.363644432431" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="602.646169576138,183.460606387912">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-87.0615411560918,39.9030380445192"
+              Start="0,0"
+              End="-87.0615411560918,32.4030380445192">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,15.9515190222596" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,15.9515190222596"
+                    Point2="0,19.9515190222596"
+                    Point3="-4,19.9515190222596" />
+                  <mssgle:LineSegment
+                    End="-83.0615411560918,19.9515190222596" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-83.0615411560918,19.9515190222596"
+                    Point2="-87.0615411560918,19.9515190222596"
+                    Point3="-87.0615411560918,23.9515190222596" />
+                  <mssgle:LineSegment
+                    End="-87.0615411560918,32.4030380445192" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

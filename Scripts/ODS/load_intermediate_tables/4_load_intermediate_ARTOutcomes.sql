@@ -68,7 +68,7 @@ BEGIN
     
 	FROM ODS.dbo.CT_Patient Patients
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
-	LEFT JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK COLLATE Latin1_General_CI_AS =LastPatientEncounter.PatientPK   AND Patients.SiteCode COLLATE Latin1_General_CI_AS  =LastPatientEncounter.SiteCode COLLATE Latin1_General_CI_AS
+	LEFT JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
 	LEFT JOIN  LatestExits   ON  Patients.PatientPK=Latestexits.PatientPK  and Patients.Sitecode=Latestexits.Sitecode
 
 	  WHERE  ART.startARTDate IS NOT NULL 
@@ -91,8 +91,8 @@ BEGIN
 	Select 
 			ARTOutcomes.PatientID, 
 			ARTOutcomes.PatientPK,
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(ARTOutcomes.PatientPK  as nvarchar(36))), 2) PatientPKHash,
-	convert(nvarchar(64), hashbytes('SHA2_256', cast(ARTOutcomes.PatientID  as nvarchar(36))), 2)PatientIDHash,
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			ARTOutcomes.startARTDate,
 			YEAR(ARTOutcomes.startARTDate) AS Cohort,
 			ARTOutcomes.ExitReason,

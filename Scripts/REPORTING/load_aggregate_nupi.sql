@@ -1,3 +1,4 @@
+/*
 Go
 IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateNupi]') AND type in (N'U'))
 TRUNCATE TABLE [REPORTING].[dbo].[AggregateNupi]
@@ -26,3 +27,4 @@ INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
 
 WHERE pat.Nupi is not NULL AND pat.IsTXCurr = 1
 GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup
+*/

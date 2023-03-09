@@ -1,5 +1,29 @@
 
 BEGIN
+
+	;with cte AS ( Select            
+			P.PatientPID,            
+			ACI.PatientId,            
+			F.code,
+			ACI.VisitID,
+			ACI.VisitDate,
+			ACI.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,ACI.VisitID,ACI.VisitDate
+			ORDER BY ACI.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+			INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID AND ACI.Voided = 0
+			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+
+			WHERE P.gender != 'Unknown')      
+		
+			delete ACI from  [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] (NoLock) ACI
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON ACI.[PatientId]= P.ID AND ACI.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on ACI.PatientId = cte.PatientId  
+				and cte.Created = ACI.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = ACI.VisitID
+				and cte.VisitDate = ACI.VisitDate
+			where  Row_Num  > 1;
  
 	 DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
@@ -10,7 +34,6 @@ BEGIN
 			INSERT INTO  [ODS].[dbo].[CT_AllergiesChronicIllness_Log](MaxVisitDate,LoadStartDateTime)
 			VALUES(@VisitDate,GETDATE())
 
-			--CREATE INDEX CT_AllergiesChronicIllness ON [ODS].[dbo].[CT_AllergiesChronicIllness] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_AllergiesChronicIllness]
 			MERGE [ODS].[dbo].[CT_AllergiesChronicIllness] AS a
 				USING(SELECT
@@ -25,33 +48,23 @@ BEGIN
 						ACI.[ChronicIllness] AS ChronicIllness,ACI.[ChronicOnsetDate] AS ChronicOnsetDate,ACI.[knownAllergies] AS knownAllergies,
 						ACI.[AllergyCausativeAgent] AS AllergyCausativeAgent,ACI.[AllergicReaction] AS AllergicReaction,ACI.[AllergySeverity] AS AllergySeverity,
 						ACI.[AllergyOnsetDate] AS AllergyOnsetDate,ACI.[Skin] AS Skin,ACI.[Eyes] AS Eyes,ACI.[ENT] AS ENT,ACI.[Chest] AS Chest,ACI.[CVS] AS CVS,
-						ACI.[Abdomen] AS Abdomen,ACI.[CNS] AS CNS,ACI.[Genitourinary] AS Genitourinary,GETDATE() AS DateImported,
-						LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV,
-						p.ID as PatientUnique_ID
-						,ACI.PatientId as UniquePatientAllergiesChronicIllnessId
-						,ACI.ID as AllergiesChronicIllnessUnique_ID,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
-
+						ACI.[Abdomen] AS Abdomen,ACI.[CNS] AS CNS,ACI.[Genitourinary] AS Genitourinary
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID AND ACI.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 
 					WHERE P.gender != 'Unknown') AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID
-						and a.PatientUnique_ID = b.UniquePatientAllergiesChronicIllnessId
-						--and a.AllergiesChronicIllnessUnique_ID = b.AllergiesChronicIllnessUnique_ID
+						---and a.ID =b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientUnique_ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV,PatientPKHash,PatientIDHash,CKVHash) 
-						VALUES(PatientUnique_ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,DateImported,CKV,PatientPKHash,PatientIDHash,CKVHash)
+						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary) 
+						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -72,32 +85,30 @@ BEGIN
 							a.CNS					=b.CNS,
 							a.Genitourinary			=b.Genitourinary;
 
-					--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-					--		Delete;
-					--					WITH CTE AS   
-					--	(  
-					--		SELECT [PatientPK],[SiteCode],VisitDate,VisitID,ROW_NUMBER() 
-					--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitDate,VisitID
-					--		ORDER BY [PatientPK],[SiteCode],VisitDate,VisitID) AS dump_ 
-					--		FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
-					--		)  
-			
-					--DELETE FROM CTE WHERE dump_ >1;
+						
+						with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						visitID,
+						VisitDate,
 
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
+						PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						FROM [ODS].[dbo].[CT_AllergiesChronicIllness](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
+
+					
 					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 					
 					INSERT INTO [ODS].[dbo].[CT_AllergiesChronicIllnessCount_Log]([SiteCode],[CreatedDate],[AllergiesChronicIllnessCount])
-					SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS PatientPharmacyCount 
+					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount 
 					FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
-
-					--DROP INDEX CT_AllergiesChronicIllness ON [ODS].[dbo].[CT_AllergiesChronicIllness];
-					---Remove any duplicate from [ODS].[dbo].[CT_AllergiesChronicIllness]
-
 
 	END

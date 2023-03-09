@@ -5,8 +5,8 @@ BEGIN
 --truncate table [ODS].[dbo].[PrEP_Visits]
 MERGE [ODS].[dbo].[PrEP_Visits] AS a
 	USING(SELECT distinct
-				   a.[Id]
-				  ,a.[RefId]
+				  -- a.[Id]
+				  a.[RefId]
 				  ,a.[Created]
 				  ,a.[PatientPk]
 				  ,a.[SiteCode]
@@ -69,10 +69,6 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 				  ,[ClinicalNotes]
 				  ,a.[Date_Created]
 				  ,a.[Date_Last_Modified]
-				  ,a.SiteCode +'-'+ a.PatientPK AS CKV,
-				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash, 
-				  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PrepNumber]  as nvarchar(36))), 2) PrepNumberHash,
-				   convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.SiteCode))+'-'+LTRIM(RTRIM(a.PatientPk))   as nvarchar(36))), 2)CKVHash
 		FROM [PREPCentral].[dbo].[PrepVisits](NoLock) a
 			INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated 
 						from [PREPCentral].[dbo].[PrepVisits]
@@ -85,7 +81,7 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 			ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
 		)AS b      
             ON(
-			--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
+
 				a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode
 			and a.visitID = b.visitID
@@ -93,19 +89,19 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 			) 
 
 	 WHEN NOT MATCHED THEN 
-		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
+		  INSERT(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
 		  ,VisitDate,VisitID,BloodPressure,Temperature,Weight,Height,BMI,STIScreening,STISymptoms,STITreated,Circumcised,VMMCReferral,LMP,MenopausalStatus,
 		  PregnantAtThisVisit,EDD,PlanningToGetPregnant,PregnancyPlanned,PregnancyEnded,PregnancyEndDate,PregnancyOutcome,BirthDefects,Breastfeeding,FamilyPlanningStatus,
 		  FPMethods,AdherenceDone,AdherenceOutcome,AdherenceReasons,SymptomsAcuteHIV,ContraindicationsPrep,PrepTreatmentPlan,PrepPrescribed,RegimenPrescribed,MonthsPrescribed,
 		  CondomsIssued,Tobegivennextappointment,Reasonfornotgivingnextappointment,HepatitisBPositiveResult,HepatitisCPositiveResult,VaccinationForHepBStarted,TreatedForHepB,
-		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash)
+		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified)
 		  
-		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
+		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
           VisitDate,VisitID,BloodPressure,Temperature,Weight,Height,BMI,STIScreening,STISymptoms,STITreated,Circumcised,VMMCReferral,LMP,MenopausalStatus,
 		  PregnantAtThisVisit,EDD,PlanningToGetPregnant,PregnancyPlanned,PregnancyEnded,PregnancyEndDate,PregnancyOutcome,BirthDefects,Breastfeeding,FamilyPlanningStatus,
 		  FPMethods,AdherenceDone,AdherenceOutcome,AdherenceReasons,SymptomsAcuteHIV,ContraindicationsPrep,PrepTreatmentPlan,PrepPrescribed,RegimenPrescribed,MonthsPrescribed,
 		  CondomsIssued,Tobegivennextappointment,Reasonfornotgivingnextappointment,HepatitisBPositiveResult,HepatitisCPositiveResult,VaccinationForHepBStarted,TreatedForHepB,
-		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified,CKV,PatientPKHash,PrepNumberHash,CKVHash)
+		  VaccinationForHepCStarted,TreatedForHepC,NextAppointment,ClinicalNotes,Date_Created,Date_Last_Modified)
 		  
 	 WHEN MATCHED THEN
 		UPDATE SET													

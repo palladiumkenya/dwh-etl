@@ -1,4 +1,29 @@
 BEGIN
+
+
+		;with cte AS ( Select            
+			P.PatientPID,            
+			PV.PatientId,            
+			F.code,
+			PV.VisitID,
+			PV.VisitDate,
+			PV.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,PV.VisitID,PV.VisitDate
+			ORDER BY PV.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
+			INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
+			INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+			WHERE p.gender!='Unknown')      
+		
+			delete pv from  [DWAPICentral].[dbo].[PatientVisitExtract] (NoLock) PV
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PV.[PatientId]= P.ID AND PV.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on PV.PatientId = cte.PatientId  
+				and cte.Created = PV.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = PV.VisitID
+				and cte.VisitDate = PV.VisitDate
+			where  Row_Num  > 1;
+
 	 
 	 DECLARE	@MaxVisitDate_Hist		DATETIME,
 				@VisitDate				DATETIME,
@@ -30,39 +55,29 @@ BEGIN
 								ELSE P.[Project] 
 							END AS [Project] 
 						  ,PV.[Voided] Voided,pv.[StabilityAssessment] StabilityAssessment,pv.[DifferentiatedCare] DifferentiatedCare,pv.[PopulationType] PopulationType,pv.[KeyPopulationType] KeyPopulationType,PV.[Processed] Processed
-						  ,PV.[Created] Created
-						  ,LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(STR(P.[PatientPID]))) AS PKV, 
-						  0 AS knockout,[GeneralExamination],[SystemExamination],[Skin],[Eyes],[ENT],[Chest],[CVS],[Abdomen],[CNS],[Genitourinary]
+						  ,PV.[Created] Created						  
+						 ,[GeneralExamination],[SystemExamination],[Skin],[Eyes],[ENT],[Chest],[CVS],[Abdomen],[CNS],[Genitourinary]
 							-----Missing columns Added later by Dennis
 						  ,PV.VisitBy VisitBy,PV.Temp Temp,PV.PulseRate PulseRate,PV.RespiratoryRate RespiratoryRate,PV.OxygenSaturation OxygenSaturation,PV.Muac Muac,PV.NutritionalStatus NutritionalStatus,PV.EverHadMenses EverHadMenses,PV.Menopausal Menopausal
 						  ,PV.Breastfeeding Breastfeeding,PV.NoFPReason NoFPReason,PV.ProphylaxisUsed ProphylaxisUsed,PV.CTXAdherence CTXAdherence,PV.CurrentRegimen CurrentRegimen,PV.HCWConcern HCWConcern,PV.TCAReason TCAReason,PV.ClinicalNotes ClinicalNotes
 						  ,P.ID as PatientUnique_ID
 						  ,PV.PatientId as UniquePatientVisitId
-						  ,PV.ID as PatientVisitUnique_ID,
-						  convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-							convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-							convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
+						  ,PV.ID as PatientVisitUnique_ID
 
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
 						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
-						---INNER JOIN [DWAPICentral].[dbo].[FacilityManifest_MaxDateRecieved](NoLock) a ON F.Code = a.SiteCode
-						----LEFT JOIN All_Staging_2016_2.dbo.stg_Patients TPat ON TPat.PKV=LTRIM(RTRIM(STR(F.Code)))+'-'+LTRIM(RTRIM(P.[PatientCccNumber]))+'-'+LTRIM(RTRIM(STR(P.[PatientPID])))
-						--ORDER BY F.Id, PV.[PatientId],PV.[VisitDate],PV.[VisitId]
 						WHERE p.gender!='Unknown') AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS AND
 							 a.PatientPK  = b.PatientPK 
 							AND a.SiteCode = b.SiteCode
 							AND a.visitID = b.[VisitId]
-							and a.visitDate = b.visitDate
-							and a.PatientUnique_ID = b.UniquePatientVisitId						
-							--and a.PatientVisitUnique_ID = b.PatientVisitUnique_ID
+							and a.visitDate = b.visitDate					
 							)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,CKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
-							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,PKV,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,PatientUnique_ID,PatientVisitUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
+							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes) 
+							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes)
 			
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -116,37 +131,32 @@ BEGIN
 						a.CNS						=b.CNS,
 						a.Genitourinary				=b.Genitourinary;
 
-					--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-					--		Delete;
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
 
-			--				WITH CTE AS   
-			--	(  
-			--		SELECT [PatientPK],[SiteCode],VisitID,visitDate,ROW_NUMBER() 
-			--		OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,visitDate
-			--		ORDER BY [PatientPK],[SiteCode],VisitID,visitDate) AS dump_ 
-			--		FROM [ODS].[dbo].[CT_PatientVisits] 
-			--		)  
-			
-			--DELETE FROM CTE WHERE dump_ >1;
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						visitDate desc) Row_Num
+						FROM [ODS].[dbo].[CT_PatientVisits](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 
 
-			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
-			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
+		
+ 
 			UPDATE [ODS].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxVisitDate = @VisitDate;
 
 				  --truncate table [CT_VisitCount_Log]
 			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
-			SELECT SiteCode,GETDATE(),COUNT(CKV) AS VisitCount 
+			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS VisitCount 
 			FROM [ODS].[dbo].[CT_PatientVisits] 
 			---WHERE @MaxCreatedDate  > @MaxCreatedDate
 			GROUP BY SiteCode;
-
-
-			--DROP INDEX CT_PatientVisits ON [ODS].[dbo].[CT_PatientVisits];
-			---Remove any duplicate from [ODS].[dbo].[CT_PatientVisits] 
 			
-	END
+END

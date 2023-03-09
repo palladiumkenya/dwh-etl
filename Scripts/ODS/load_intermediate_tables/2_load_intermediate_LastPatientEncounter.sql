@@ -88,13 +88,15 @@ CombinedVisits As (
         PatientID,
         SiteCode,
         PatientPK ,
+	 cast( '' as nvarchar(100))PatientPKHash,
+	 cast( '' as nvarchar(100))PatientIDHash,
         LastEncounterDate,
           CASE 
             WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <= 365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
         END AS NextAppointmentDate,
-        cast (getdate() as DATE) as LoadDate,
-			 convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-	convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash
+        cast (getdate() as DATE) as LoadDate
+	--		cast( '' as nvarchar(100)) PatientPKHash,
+	--cast( '' as nvarchar(100)) PatientIDHash
        INTO ODS.dbo.Intermediate_LastPatientEncounter
     from CombinedVisits
    where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE())) 

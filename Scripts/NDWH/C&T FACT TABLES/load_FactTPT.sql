@@ -5,7 +5,7 @@ with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
 		SDP,
-	    SDP_Agency collate Latin1_General_CI_AS as Agency
+	    SDP_Agency  as Agency
 	from ODS.dbo.All_EMRSites
 ),
 distinct_patients as (
@@ -55,6 +55,7 @@ latest_visit as (
 combined_ipt_data as (
     select
        distinct_patients.PatientPK,
+       patient.PatientPKHash,
        distinct_patients.SiteCode,
        date_started_TB_treatment.StartTBTreatmentDate,
        patient_TB_Diagnosis.TBDiagnosisDate,
@@ -89,7 +90,7 @@ select
     combined_ipt_data.hasTB
 into NDWH.dbo.FactTPT
 from combined_ipt_data
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(combined_ipt_data.PatientPK as nvarchar(36))), 2)
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = combined_ipt_data.PatientPKHash
     and patient.SiteCode = combined_ipt_data.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = combined_ipt_data.SiteCode
 left join NDWH.dbo.DimDate as tb_start_treatment on tb_start_treatment.Date = combined_ipt_data.StartTBTreatmentDate

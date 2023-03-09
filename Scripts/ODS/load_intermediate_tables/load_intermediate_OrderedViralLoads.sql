@@ -15,6 +15,8 @@ BEGIN
 			TestResult,
 			[Emr],
 			[Project],
+			cast( '' as nvarchar(100)) PatientPKHash,
+			cast( '' as nvarchar(100)) PatientIDHash,
 			Reason
 		from ODS.dbo.CT_PatientLabs
 		where TestName = 'Viral Load'
@@ -22,8 +24,7 @@ BEGIN
 				and TestResult is not null
 	)
 	select 
- 		source_OrderedViralLoads.*,					convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2) PatientPKHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)PatientIDHash,
+ 		source_OrderedViralLoads.*,	
 		cast(getdate() as date) as LoadDate
 	into [ODS].[dbo].[Intermediate_OrderedViralLoads]
 	from source_OrderedViralLoads

@@ -3,12 +3,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PrepRefills]', N'U') IS NOT NULL
 	DROP TABLE [ODS].[dbo].[Intermediate_PrepRefills];
 
 BEGIN
-
-
-
-
 With PrepPatients AS (
-
 SELECT distinct 
 
        Patients.PrepNumber
@@ -24,8 +19,6 @@ SELECT distinct
    where Patients.PrepNumber is not null
 
 ),
-
-
 
 
 PrepRefil1stMonth As (
@@ -109,7 +102,8 @@ SELECT ROW_NUMBER () OVER (PARTITION BY  Refil.PrepNumber,Refil.PatientPk,Refil.
        PrepPatients.PrepNumber
 
        ,PrepPatients.PatientPk
-
+	  ,cast( '' as nvarchar(100))  PatientPkHash
+	  ,cast( '' as nvarchar(100)) PrepNumberHash
       ,PrepPatients.SiteCode
 
 	  ,PrepRefil1stMonth.RefilMonth As  RefilMonth1

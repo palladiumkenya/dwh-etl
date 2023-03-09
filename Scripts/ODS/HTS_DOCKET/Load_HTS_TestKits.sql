@@ -1,5 +1,3 @@
-
-
 BEGIN
 	MERGE [ODS].[dbo].[HTS_TestKits] AS a
 	USING(SELECT DISTINCT a.[FacilityName]
@@ -16,11 +14,18 @@ BEGIN
 		  ,a.[TestKitName2]
 		  ,a.[TestKitLotNumber2]
 		  ,[TestKitExpiry2]
-		  ,[TestResult2],
-			convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2) PatientPKHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(a.HtsNumber  as nvarchar(36))), 2)HtsNumberHash,
-		convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(a.PatientPk)) +'-'+LTRIM(RTRIM(a.HtsNumber)) as nvarchar(100))), 2) CKVHash
+		  ,a.[TestResult2]
+			
 	  FROM [HTSCentral].[dbo].[HtsTestKits](NoLock) a
+	  Inner join ( select ct.sitecode,ct.patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1],max(DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsTestKits] ct
+									group by ct.sitecode,ct.patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1])tn
+									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK 
+									and a.DateExtracted = tn.MaxDateExtracted
+									and a.[EncounterId] = tn.[EncounterId]
+									and a.[TestKitName1] =tn.[TestKitName1]
+									and a.[TestResult2] =tn.[TestResult2]
+									and a.[TestKitLotNumber1] = tn.[TestKitLotNumber1]
+									
 	  INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 	  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) AS b 
 	ON(
@@ -28,27 +33,18 @@ BEGIN
 	and a.SiteCode = b.SiteCode	
 	
 	and a.EncounterId  = b.EncounterId 
-	and a.HtsNumber COLLATE Latin1_General_CI_AS = b.HtsNumber 
-	and a.TestKitExpiry1 COLLATE Latin1_General_CI_AS = b.TestKitExpiry1 
-	and a.TestKitExpiry2 COLLATE Latin1_General_CI_AS = b.TestKitExpiry2 
-	and a.FacilityName COLLATE Latin1_General_CI_AS = b.FacilityName 
-	and a.TestKitName1 COLLATE Latin1_General_CI_AS = b.TestKitName1 
-	and a.TestKitName2 COLLATE Latin1_General_CI_AS = b.TestKitName2 
-	and a.TestKitLotNumber1 COLLATE Latin1_General_CI_AS = b.TestKitLotNumber1 
-	and a.TestKitLotNumber2 COLLATE Latin1_General_CI_AS = b.TestKitLotNumber2 
-	and a.TestResult1 COLLATE Latin1_General_CI_AS = b.TestResult1 
-	and a.TestResult2 COLLATE Latin1_General_CI_AS = b.TestResult2 
-	and a.Project COLLATE Latin1_General_CI_AS = b.Project 
+	and a.[EncounterId] = b.[EncounterId]
+	and a.[TestKitName1] =b.[TestKitName1]
+	and a.[TestResult2] =b.[TestResult2]
+	and a.[TestKitLotNumber1] = b.[TestKitLotNumber1]
+	 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2 ,PatientPKHash,HtsNumberHash,CKVHash)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
 	WHEN MATCHED THEN
 		UPDATE SET 
-			a.[HtsNumber]			=b.[HtsNumber],
-			a.[Emr]					=b.[Emr],
-			a.[Project]				=b.[Project],
-			a.[EncounterId]			=b.[EncounterId],
+			
 			a.[TestKitName1]		=b.[TestKitName1],
 			a.[TestKitLotNumber1]	=b.[TestKitLotNumber1],
 			a.[TestKitExpiry1]		=b.[TestKitExpiry1],
@@ -56,10 +52,17 @@ BEGIN
 			a.[TestKitName2]		=b.[TestKitName2],
 			a.[TestKitLotNumber2]	=b.[TestKitLotNumber2],
 			a.[TestKitExpiry2]		=b.[TestKitExpiry2],
-			a.[TestResult2]			=b.[TestResult2]
+			a.[TestResult2]			=b.[TestResult2];
 
-	WHEN NOT MATCHED BY SOURCE 
-			THEN
-				/* The Record is in the target table but doen't exit on the source table*/
-			Delete;
+	with cte AS ( Select           
+		a.[PatientPk],           
+		a.[SiteCode],            
+		a.EncounterId,
+		[TestKitName1],
+		[TestResult2],
+		[TestKitLotNumber1],ROW_NUMBER() OVER (PARTITION BY a.[PatientPk],a.[SiteCode],a.EncounterId,[TestKitName1],[TestResult2],[TestKitLotNumber1]
+		ORDER BY a.[PatientPk],a.[SiteCode] desc) Row_Num
+        FROM [ODS].[dbo].[HTS_TestKits]a)
+
+delete from cte where Row_Num>1 
 END

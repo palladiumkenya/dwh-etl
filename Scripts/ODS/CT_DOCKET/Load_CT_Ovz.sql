@@ -1,4 +1,29 @@
 BEGIN
+
+		;with cte AS ( Select            
+					P.PatientPID,            
+					OE.PatientId,            
+					F.code,
+					OE.VisitID,
+					OE.VisitDate,
+					OE.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,OE.VisitID,OE.VisitDate
+					ORDER BY OE.created desc) Row_Num
+			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+					WHERE P.gender != 'Unknown' )      
+		
+			delete pb from      [DWAPICentral].[dbo].[OvcExtract](NoLock) pb
+			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
+			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
+			inner join cte on pb.PatientId = cte.PatientId  
+				and cte.Created = pb.created 
+				and cte.Code =  f.Code     
+				and cte.VisitID = pb.VisitID
+				and cte.VisitDate = pb.VisitDate
+			where  Row_Num  > 1;
+
+
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
 				
@@ -9,7 +34,6 @@ BEGIN
 					INSERT INTO  [ODS].[dbo].[CT_Ovc_Log](MaxVisitDate,LoadStartDateTime)
 					VALUES(@MaxVisitDate_Hist,GETDATE())
 
-			--CREATE INDEX CT_Ovz ON [ODS].[dbo].[CT_Ovc] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_Ovc]
 			MERGE [ODS].[dbo].[CT_Ovc] AS a
 				USING(SELECT
@@ -22,73 +46,55 @@ BEGIN
 							ELSE P.[Project]
 						END AS Project,
 						OE.[OVCEnrollmentDate],OE.[RelationshipToClient],OE.[EnrolledinCPIMS],OE.[CPIMSUniqueIdentifier],
-						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate],
-						GETDATE() AS DateImported,
-						LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID]))) AS CKV
-						,P.ID as PatientUnique_ID
-						,OE.PatientID as UniquePatientOVCID
-						,OE.ID as OvcUnique_ID,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientPID]  as nvarchar(36))), 2) PatientPKHash,   
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(P.[PatientCccNumber]  as nvarchar(36))), 2) PatientIDHash,
-						convert(nvarchar(64), hashbytes('SHA2_256', cast(LTRIM(RTRIM(STR(F.Code))) + '-' +  LTRIM(RTRIM(STR(P.[PatientPID])))  as nvarchar(36))), 2) CKVHash
-
+						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate]
+						,P.ID 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 					WHERE P.gender != 'Unknown' ) AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
-						and a.PatientUnique_ID = b.UniquePatientOVCID
-						--and a.OvcUnique_ID = b.OvcUnique_ID
+						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID,PatientPKHash,PatientIDHash,CKVHash) 
-						VALUES(PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,DateImported,CKV,PatientUnique_ID,OvcUnique_ID,PatientPKHash,PatientIDHash,CKVHash)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
 						a.FacilityName				=b.FacilityName,						
-						a.OVCEnrollmentDate			=b.OVCEnrollmentDate,
 						a.RelationshipToClient		=b.RelationshipToClient,
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
 						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
-						a.OVCExitReason				=b.OVCExitReason,
-						a.ExitDate					=b.ExitDate;
+						a.OVCExitReason				=b.OVCExitReason;
 
-					--WHEN NOT MATCHED BY SOURCE 
-					--	THEN
-					--	/* The Record is in the target table but doen't exit on the source table*/
-					--		Delete;
-					--				WITH CTE AS   
-					--(  
-					--	SELECT [PatientPK],[SiteCode],VisitID,VisitDate,ROW_NUMBER() 
-					--	OVER (PARTITION BY [PatientPK],[SiteCode],VisitID,VisitDate
-					--	ORDER BY [PatientPK],[SiteCode],VisitID,VisitDate ) AS dump_ 
-					--	FROM [ODS].[dbo].[CT_Ovc] 
-					--	)  
-			
-				--DELETE FROM CTE WHERE dump_ >1;		
+						with cte AS (
+						Select
+						PatientPK,
+						Sitecode,
+						visitID,
+						visitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						PatientPK,Sitecode,visitID,visitDate) Row_Num
+						FROM [ODS].[dbo].[CT_Ovc](NoLock)
+						)
+					delete from cte 
+						Where Row_Num >1 ;
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
 				INSERT INTO [ODS].[dbo].[CT_OvcCount_Log]([SiteCode],[CreatedDate],[OvcCount])
-				SELECT SiteCode,GETDATE(),COUNT(SiteCode) AS OVCCount 
+				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS OVCCount 
 				FROM [ODS].[dbo].[CT_Ovc] 
 				--WHERE @MaxCreatedDate  > @MaxCreatedDate
 				GROUP BY SiteCode;
-
-
-				--DROP INDEX CT_Ovz ON [ODS].[dbo].[CT_Ovc];
-				---Remove any duplicate from [ODS].[dbo].[CT_Ovc]
-				
-
 
 	END
