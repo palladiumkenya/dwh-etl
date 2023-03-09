@@ -34,6 +34,7 @@ BEGIN
 						)
 					
 					WHEN NOT MATCHED THEN 
+
 						INSERT(
 							  PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
 							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf
@@ -64,7 +65,6 @@ BEGIN
 								a.[Duration]				=b.[Duration],
 								a.[ExpectedReturn]			=b.[ExpectedReturn],
 								a.[Provider]				=b.[Provider],
-								a.[LastVisit]				=b.[LastVisit],
 								a.[ExitReason]				=b.[ExitReason]	,
 								a.[ExitDate]				=b.[ExitDate],
 								a.[Emr]						=b.[Emr],			
