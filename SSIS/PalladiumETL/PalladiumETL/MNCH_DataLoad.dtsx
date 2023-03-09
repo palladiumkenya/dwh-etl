@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{81CCD635-BD27-4A48-AA70-079BD1B1E6CC}">
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{1901A527-A836-40C5-AF10-DF0E2393B64E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -165,12 +165,12 @@
       DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Add FacilityID on MNCH_MotherBabyPairs Table"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="5">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{6C257101-59D1-46B1-9EDF-E9288291C64B}"
-          SQLTask:SqlStatementSource="&#xA;IF NOT EXISTS (  SELECT * FROM   MNCHCentral.sys.columns WHERE  object_id = OBJECT_ID(N'MNCHCentral.[dbo].[MotherBabyPairs]') AND name = 'FacilityId')&#xA;&#x9;&#x9;BEGIN&#xA;&#x9;&#x9;&#x9; alter TABLE MNCHCentral.[dbo].[MotherBabyPairs] add&#x9; &#xA;&#x9;&#x9;&#x9;[FacilityId] [uniqueidentifier] NOT NULL DEFAULT NEWID();&#xA;&#xA;&#x9;&#x9;END" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="&#xA;IF NOT EXISTS (  SELECT * FROM   MNCHCentral.sys.columns WHERE  object_id = OBJECT_ID(N'MNCHCentral.[dbo].[MotherBabyPairs]') AND name = 'FacilityId')&#xA;&#x9;&#x9;BEGIN&#xA;&#x9;&#x9;&#x9; alter TABLE MNCHCentral.[dbo].[MotherBabyPairs] add&#x9; &#xA;&#x9;&#x9;&#x9;[FacilityId] [uniqueidentifier] NOT NULL DEFAULT NEWID();&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;update [MNCHCentral].[dbo].[MotherBabyPairs]&#xA;&#x9;&#x9;set [MotherBabyPairs].FacilityId = [Facilities].id&#xA;&#x9;&#x9;FROM MNCHCentral.[dbo].[MotherBabyPairs], [MNCHCentral].[dbo].[Facilities]&#xA;&#x9;&#x9;where [MotherBabyPairs].SiteCode =Facilities.SiteCode;&#xA;&#xA;&#x9;&#x9;END&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -193,7 +193,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_AncVisits"
-          DTS:ThreadHint="4">
+          DTS:ThreadHint="5">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -211,7 +211,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Arts"
-          DTS:ThreadHint="5">
+          DTS:ThreadHint="6">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -229,7 +229,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_CwcEnrolments"
-          DTS:ThreadHint="3">
+          DTS:ThreadHint="7">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -247,7 +247,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_CwcVisits"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="9">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -265,7 +265,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Enrolments"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="10">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -283,7 +283,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_MotherBabyPairs"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="8">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -314,7 +314,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Heis"
-          DTS:ThreadHint="6">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -332,7 +332,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Labs"
-          DTS:ThreadHint="8">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -350,7 +350,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_MatVisits"
-          DTS:ThreadHint="7">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -368,7 +368,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Patient"
-          DTS:ThreadHint="9">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -386,7 +386,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_PncVisits"
-          DTS:ThreadHint="10">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -423,7 +423,7 @@
         <NodeLayout
           Size="304.8,41.6"
           Id="Package\Add FacilityID on MNCH_MotherBabyPairs Table"
-          TopLeft="25.7692317144405,170.793943165069" />
+          TopLeft="0,133.369699388912" />
         <NodeLayout
           Size="163.2,41.6"
           Id="Package\CHUNK_ONE\Load_MNCH_AncVisits"
@@ -454,7 +454,7 @@
           PanelSize="490.4,335.2"
           Size="490.4,378"
           Id="Package\CHUNK_ONE"
-          TopLeft="311.153857566902,57.3818196333473" />
+          TopLeft="323.076934927315,57.3818196333473" />
         <NodeLayout
           Size="163.2,41.6"
           Id="Package\CHUNK_TWO\Load_MNCH_Heis"
@@ -481,27 +481,27 @@
           PanelSize="436.4,293.6"
           Size="436.4,336.8"
           Id="Package\CHUNK_TWO"
-          TopLeft="899.646185715242,12.442426021259" />
+          TopLeft="911.569263075655,12.442426021259" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="178.169231714441,170.793943165069">
+          TopLeft="152.4,133.369699388912">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="132.984625852461,75.5878764682783"
+              EndConnector="170.676934927315,113.012120244435"
               Start="0,0"
-              End="125.484625852461,75.5878764682783">
+              End="163.176934927315,113.012120244435">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,71.5878764682783" />
+                    End="0,109.012120244435" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,71.5878764682783"
-                    Point2="0,75.5878764682783"
-                    Point3="4,75.5878764682783" />
+                    Point1="0,109.012120244435"
+                    Point2="0,113.012120244435"
+                    Point3="4,113.012120244435" />
                   <mssgle:LineSegment
-                    End="125.484625852461,75.5878764682783" />
+                    End="163.176934927315,113.012120244435" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
