@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="73"
-  DTS:VersionGUID="{8FD08D43-BD01-4028-94FA-20A746CCEADD}">
+  DTS:VersionBuild="74"
+  DTS:VersionGUID="{533ACC44-6C0B-4F65-A3AE-CB04E4190E9B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -24,6 +24,7 @@
       DTS:refId="Package\Execute HTS Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{12EFA63A-FCC9-45DA-B4AC-C7291065E807}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -96,6 +97,7 @@
       DTS:refId="Package\Execute MNCH Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{CDC9D587-8FD9-48CA-B382-3018FBFD3BE0}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -114,6 +116,7 @@
       DTS:refId="Package\Execute ODS Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{108DCBBB-2095-472B-B22E-99E00BF8A8BB}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -150,6 +153,7 @@
       DTS:refId="Package\Execute PrEP Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
+      DTS:Disabled="True"
       DTS:DTSID="{8A29AB20-0E3E-4EF5-AF3D-E7AC8819BB8E}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -168,6 +172,7 @@
       DTS:refId="Package\Script_Task_To_Send_Emails_On_Start"
       DTS:CreationName="Microsoft.ScriptTask"
       DTS:Description="Script Task"
+      DTS:Disabled="True"
       DTS:DTSID="{2c2abcc8-23a9-4f98-9690-7ebe48eafefc}"
       DTS:ExecutableType="Microsoft.ScriptTask"
       DTS:FailPackageOnFailure="True"
