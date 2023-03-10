@@ -65,8 +65,7 @@ select
     cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactHTSClientTests
 from ODS.dbo.Intermediate_EncounterHTSTests as hts_encounter
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(hts_encounter.PatientPK as nvarchar(36))), 2)
-    and patient.SiteCode = hts_encounter.SiteCode
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = hts_encounter.PatientPKHash
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = hts_encounter.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = hts_encounter.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
