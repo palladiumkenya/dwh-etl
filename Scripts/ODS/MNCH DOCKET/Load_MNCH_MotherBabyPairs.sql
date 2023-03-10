@@ -25,9 +25,18 @@ BEGIN
 							)
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,DateExtracted,Date_Created,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash) 
-						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,DateExtracted,Date_Created,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash)
+						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,DateExtracted,Date_Created,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash);
 				
-					WHEN MATCHED THEN
-						UPDATE SET 
-							a.FacilityName	 =b.FacilityName;
+					--WHEN MATCHED THEN
+					--	UPDATE SET 
+					--		a.FacilityName	 =b.FacilityName;
+
+					;with cte AS ( Select         
+								p.[PatientPk],           
+								p.[SiteCode],            
+								p.DateExtracted, ROW_NUMBER() OVER (PARTITION BY p.[PatientPk],p.[SiteCode]
+								ORDER BY p.DateExtracted desc) Row_Num
+							   FROM [ODS].[dbo].[MNCH_MotherBabyPairs] p)
+
+					 delete from cte where Row_Num>1
 END
