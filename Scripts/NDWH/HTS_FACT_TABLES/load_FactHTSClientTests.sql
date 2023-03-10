@@ -61,7 +61,7 @@ select
     case 
         when (hts_encounter.EverTestedForHiv = 'Yes' and hts_encounter.MonthsSinceLastTest < 12) then 'Retest' 
     else 'New' end as TestedBefore,
-    hts_encounter.Setting
+    hts_encounter.Setting,
     cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactHTSClientTests
 from ODS.dbo.Intermediate_EncounterHTSTests as hts_encounter
