@@ -1,11 +1,6 @@
-BEGIN TRAN
+
 BEGIN
     --truncate table [ODS].[dbo].[MNCH_MotherBabyPairs]
-
-			update [MNCHCentral].[dbo].[MotherBabyPairs]
-		set [MotherBabyPairs].FacilityId = [Facilities].id
-		FROM [MotherBabyPairs], Facilities
-		where [MotherBabyPairs].SiteCode =Facilities.SiteCode;
 
 	MERGE [ODS].[dbo].[MNCH_MotherBabyPairs] AS a
 			USING(
@@ -36,6 +31,3 @@ BEGIN
 						UPDATE SET 
 							a.FacilityName	 =b.FacilityName;
 END
-
-ROLLBACK TRAN
-
