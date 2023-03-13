@@ -10,7 +10,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_DrugAlcoholScreening]
 			MERGE [ODS].[dbo].[CT_DrugAlcoholScreening] AS a
-				USING(SELECT
+				USING(SELECT distinct
 							P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 							DAS.[VisitId] AS VisitID,DAS.[VisitDate] AS VisitDate,P.[Emr] AS Emr,
 							CASE

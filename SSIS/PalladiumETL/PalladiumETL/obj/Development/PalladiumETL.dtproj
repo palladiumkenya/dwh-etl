@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">DENNIS</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUBkSZr+6RUu5kdxdzs/rLQAAAAACAAAAAAAQZgAAAAEAACAAAACL56yK12xcBRuFuwj63WlBc/2sQSWUwzmqpSpASq+CKQAAAAAOgAAAAAIAACAAAABBNEyIHj02oINo94wgfZ7xrh4z4PKdIaIwvyTwtQA8v5AAAAC1+jcuTh73J0Fg8NfvDdCwi62ws6pXzTKHa75h4yhZs46XYpl3Nq/ZkCeDgmz+PUXz+Khw34pr+Nzb28S9M2nuGtDJAnqO3if701Bo9k27JNSqFjKVuCY0YS6Qo7XCSwc8db0tM+NIX9q6GCP2rl9nvucMgMn2KTpFiYjWI2xXFeLNt/5F9+IOM7zebzUykhtAAAAAuiogwiDuNloLyu5KQZ3S5hWP9O2Imd7gtYVbuXyTW1tWm2CihHPQ7OmFL0vUwBptTxqDRAensSDgMtilDqcs4A==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUBkSZr+6RUu5kdxdzs/rLQAAAAACAAAAAAAQZgAAAAEAACAAAACnqOtoz/5yOMHWzhq4JN5uDMhW3EVaEiooQLYOoJGUVQAAAAAOgAAAAAIAACAAAAB1ucz7qL4l6XIwB0Z8z17PfQL2lpEQONk5hPtwNqYw/pAAAAC9U+VnUbacUzbHAchTS3RBtAJJlwFa5JHFMfhFbc3mpVSILU+kaTnIWjYCivj8ht+y0zhPa5Ka23ct/GgxPIOxHOIzVh7y4GhObr5ovk6ocYXPLm3sBGq7iFfieLJaOMZXiL20Dkic/f+Dj6bAJEBXqK79xiEExFqvlKgTmUODECH7wHuXaBucVczokdKLAGpAAAAAB/tS+sudlvijyjq28QK34wVmB+V+O2AcwC9O4yLfg9qV5aRZ7EF7OuYF3wZVGzVSQrimeMDxM6pUM/VRbY7dMg==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -645,10 +645,10 @@
                 <SSIS:Property SSIS:Name="Name">Package1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">75</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">78</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{63DED9D2-DE00-4BC9-BC0F-42478FF3E486}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{250F8566-4882-4A09-9173-40520352E71C}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -979,10 +979,10 @@
                 <SSIS:Property SSIS:Name="Name">Package1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">9</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">10</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{24DEF1DC-4E2C-49C3-B860-3D4CACFB74F6}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{4BAA8616-05FB-4785-BA3C-097F6BAA5CC5}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -1341,10 +1341,10 @@
                 <SSIS:Property SSIS:Name="Name">C TMaster</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">60</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">62</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{5E857AAF-1215-4D5F-B7B8-0955411A7739}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{4423E1E2-E122-482F-AA8D-88F5507BD665}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -2305,10 +2305,10 @@
                 <SSIS:Property SSIS:Name="Name">Package2</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">15</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">21</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{B58619CA-687D-4B7A-8727-F8A89BF5DED4}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{37572143-05B5-4CB5-A26D-37CCECF35318}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -2790,6 +2790,36 @@
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\CT\HASH_PATIENTNUPI\Update_PatientNupiHash.sql</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="CM.Update_PatientPK_PrepNumberHash.sql.ConnectByProxy">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">false</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">3</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="CM.Update_PatientPK_PrepNumberHash.sql.ConnectionString">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\Update_PatientPK_PrepNumberHash.sql</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>

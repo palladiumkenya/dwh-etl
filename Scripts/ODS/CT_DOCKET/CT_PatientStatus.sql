@@ -12,7 +12,7 @@ BEGIN
 	       ---- Refresh [ODS].[dbo].[CT_PatientStatus]
 
 			MERGE [ODS].[dbo].[CT_PatientStatus] AS a
-				USING(SELECT 
+				USING(SELECT distinct
 							P.[PatientCccNumber] AS PatientID, 
 							P.[PatientPID] AS PatientPK,
 							F.Name AS FacilityName, 

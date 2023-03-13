@@ -1,7 +1,7 @@
 BEGIN
 
 
-		;with cte AS ( Select            
+		;with cte AS ( Select      distinct      
 			P.PatientPID,            
 			PV.PatientId,            
 			F.code,

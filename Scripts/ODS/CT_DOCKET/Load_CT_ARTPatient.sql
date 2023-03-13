@@ -1,7 +1,8 @@
-BEGIN
 
+BEGIN
+     --truncate table [ODS].[dbo].[CT_ARTPatients]
 			MERGE [ODS].[dbo].[CT_ARTPatients]  AS a
-				USING(SELECT  DISTINCT
+				USING(SELECT  DISTINCT PA.ID,
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName, PA.[AgeEnrollment]
 						,PA.[AgeARTStart],PA.[AgeLastVisit],PA.[RegistrationDate],PA.[PatientSource],PA.[Gender],PA.[StartARTDate],PA.[PreviousARTStartDate]
 						,PA.[PreviousARTRegimen],PA.[StartARTAtThisFacility],PA.[StartRegimen],PA.[StartRegimenLine],PA.[LastARTDate],PA.[LastRegimen]
@@ -30,17 +31,18 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.lastvisit = b.lastvisit
+						and a.ID = b.ID
 						
 						)
 					
 					WHEN NOT MATCHED THEN 
 
 						INSERT(
-							  PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
+							  ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
 							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf
 							  ) 
 						VALUES(
-								PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
+								ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
 								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf
 						      )
 				
@@ -70,19 +72,21 @@ BEGIN
 								a.[Emr]						=b.[Emr],			
 								a.[PreviousARTUse]			=b.[PreviousARTUse]	,
 								a.[PreviousARTPurpose]		=b.[PreviousARTPurpose],
-								a.[DateLastUsed]			=b.[DateLastUsed];
+								a.[DateLastUsed]			=b.[DateLastUsed],
+								a.lastvisit					=b.lastvisit;
 
 								with cte AS (
 								Select
 								PatientPK,
 								sitecode,
 								lastvisit,
-								 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,lastvisit ORDER BY
+								 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode ORDER BY
 								lastvisit desc) Row_Num
 								FROM [ODS].[dbo].[CT_ARTPatients](NoLock)
 								)
 							delete from cte 
 								Where Row_Num >1;
+
 
 					--UPDATE CT_ARTPatient_Log
 					--SET LoadEndDateTime = GETDATE()
@@ -93,5 +97,7 @@ BEGIN
 					FROM [ODS].[dbo].[CT_ARTPatients]
 					group by SiteCode
 
-			
 	END
+
+	
+

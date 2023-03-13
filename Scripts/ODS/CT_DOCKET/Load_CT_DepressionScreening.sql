@@ -36,7 +36,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_DepressionScreening]
 			MERGE [ODS].[dbo].[CT_DepressionScreening]AS a
-				USING(SELECT
+				USING(SELECT distinct
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 						DS.[VisitId] AS VisitID,DS.[VisitDate] AS VisitDate,P.[Emr],
 						CASE

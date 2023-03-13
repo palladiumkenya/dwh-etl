@@ -9,7 +9,7 @@ BEGIN
 		VALUES(@MaxVisitDate_Hist,GETDATE())
 	       ---- Refresh [ODS].[dbo].[CT_DefaulterTracing]
 			MERGE [ODS].[dbo].[CT_DefaulterTracing] AS a
-				USING(SELECT P.[PatientPID] AS PatientPK
+				USING(SELECT distinct P.[PatientPID] AS PatientPK
 						  ,P.[PatientCccNumber] AS PatientID
 						  ,P.[Emr]
 						  ,P.[Project]

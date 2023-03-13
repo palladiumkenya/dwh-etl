@@ -39,7 +39,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_Ipt]
 			MERGE [ODS].[dbo].[CT_Ipt] AS a
-				USING(SELECT
+				USING(SELECT Distinct
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 						IE.[VisitId] AS VisitID,IE.[VisitDate] AS VisitDate,P.[Emr] AS Emr,
 						CASE

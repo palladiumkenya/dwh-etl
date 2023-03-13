@@ -10,7 +10,7 @@ BEGIN
 		VALUES(@MaxDateCreated_Hist,GETDATE())
 	       ---- Refresh [ODS].[dbo].[CT_ContactListing]
 			MERGE [ODS].[dbo].[CT_ContactListing] AS a
-				USING(SELECT
+				USING(SELECT distinct
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,
 						F.Name AS FacilityName,P.[Emr] AS Emr,
 						CASE
