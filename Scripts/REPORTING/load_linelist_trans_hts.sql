@@ -81,3 +81,5 @@ LEFT JOIN NDWH.dbo.FactHTSClientLinkages link on link.PatientKey = hts.PatientKe
 LEFT JOIN NDWH.dbo.DimDate e on e.DateKey = DateEnrolledKey
 LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
 WHERE  ( DATEDIFF ( MONTH, DOB, d.Date ) > 18 AND DATEDIFF ( MONTH, DOB, d.Date ) <= 1500 )
+AND FinalTestResult IS NOT NULL 
+AND d.[Date] >= CAST ( '2015-01-01' AS DATE )
