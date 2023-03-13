@@ -3,7 +3,7 @@ TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSUptake]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateHTSUptake (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,
-	year, month, MonthName, Tested, Positive, Linked
+	TestedBefore, year, month, MonthName, Tested, Positive, Linked
 )
 SELECT DISTINCT
 MFLCode,
@@ -14,6 +14,7 @@ p.PartnerName,
 a.AgencyName,
 Gender,
 age.DATIMAgeGroup as AgeGroup,
+TestedBefore,
 year,
 month,
 FORMAT(cast(date as date), 'MMMM') MonthName,
@@ -22,11 +23,11 @@ Sum(Positive) Positive,
 Sum(Linked) Linked
 
 FROM NDWH.dbo.FactHTSClientTests hts
-INNER join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
-INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey
-INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = hts.PatientKey
-INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=hts.AgeGroupKey
-INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
+LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
+LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey
+LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = hts.PatientKey
+LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=hts.AgeGroupKey
+LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
 LEFT JOIN NDWH.dbo.FactHTSClientLinkages link on link.PatientKey = hts.PatientKey
 LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, year, month, FORMAT(cast(date as date), 'MMMM')
+GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, TestedBefore, year, month, FORMAT(cast(date as date), 'MMMM')
