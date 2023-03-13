@@ -237,6 +237,7 @@ ARTOutcomesCompuation as (
     left join patient_art_and_enrollment_info on patient_art_and_enrollment_info.PatientID = last_encounter.PatientID
         and patient_art_and_enrollment_info.PatientPK = last_encounter.PatientPK
         and patient_art_and_enrollment_info.SiteCode = last_encounter.SiteCode
+    where patient_art_and_enrollment_info.startARTDate is not null
 )
 insert into dbo.HistoricalARTOutcomesBaseTable
 select 
