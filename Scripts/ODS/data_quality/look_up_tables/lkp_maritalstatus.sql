@@ -1,0 +1,82 @@
+IF OBJECT_ID(N'[ODS].[DBO].[lkp_MaritalStatus]', N'U') IS NOT NULL 
+	DROP TABLE [ODS].[DBO].[lkp_MaritalStatus];
+BEGIN
+		 CREATE TABLE [ODS].[DBO].[lkp_MaritalStatus](
+			[ident] [int] IDENTITY(1,1) NOT NULL,
+			[Source_MaritalStatus] [varchar](150) NULL,
+			[Target_MaritalStatus] [varchar](150) NULL,
+			[DateImported] [date] NULL DEFAULT (getdate())
+			)
+
+		INSERT INTO [ODS].[DBO].[lkp_MaritalStatus](
+				   Source_MaritalStatus,
+				   Target_MaritalStatus,
+				   DateImported
+		)
+				VALUES
+				('NULL','NOT PROVIDED',GETDATE()),
+				('','NOT PROVIDED',GETDATE()),
+				(' AUNT"','NOT PROVIDED',GETDATE()),
+				(' FATHER"','NOT PROVIDED',GETDATE()),
+				(' MOTHER"','NOT PROVIDED',GETDATE()),
+				(' OTHER FAMILY MEMBER"','NOT PROVIDED',GETDATE()),
+				(' SISTER"','NOT PROVIDED',GETDATE()),
+				(' UNCLE"','NOT PROVIDED',GETDATE()),
+				('Allergynone','NOT PROVIDED',GETDATE()),
+				('Child','MINOR',GETDATE()),
+				('Cohabitating','COHABITING',GETDATE()),
+				('Cohabiting','COHABITING',GETDATE()),
+				('Dead','WIDOWED',GETDATE()),
+				('Widow','WIDOWED', GETDATE()),
+				('Divorced','DIVORCED',GETDATE()),
+				('Dropped Out of Care','NOT PROVIDED',GETDATE()),
+				('FRIEND','COHABITING',GETDATE()),
+				('Legal','MARRIED MONOGAMOUS',GETDATE()),
+				('MARRIED, MONOGAMOUS','MARRIED MONOGAMOUS',GETDATE()),
+				('Lives Alone','SEPARATED',GETDATE()),
+				('LIVING WITH PARTNER','COHABITING',GETDATE()),
+				('MARRIED','MARRIED MONOGAMOUS',GETDATE()),
+				('Married Monogamous','MARRIED MONOGAMOUS',GETDATE()),
+				('MARRIED/LIVING APART','MARRIED MONOGAMOUS', GETDATE()),
+				('MARRIED/LIVING TOGETHER','MARRIED MONOGAMOUS',GETDATE()),
+				('Married Polygamous','MARRIED POLYGAMOUS',GETDATE()),
+				('Medical specialty','NOT PROVIDED',GETDATE()),
+				('Minor','MINOR',GETDATE()),
+				('NOT PROVIDED','UNKNOWN',GETDATE()),
+				('NOT MARRIED','SINGLE',GETDATE()),
+				('Seperated/Divorced','DIVORCED',GETDATE()),
+				('Missing','NOT PROVIDED',GETDATE()),
+				('N/A','NOT PROVIDED',GETDATE()),
+				('NEVER MARRIED','Single',GETDATE()),
+				('Not Applicable','NOT PROVIDED',GETDATE()),
+				('NULL','NOT PROVIDED',GETDATE()),
+				('Nutritional support','NOT PROVIDED',GETDATE()),
+				('Other','OTHER',GETDATE()),
+				('Other (specify)','OTHER',GETDATE()),
+				('OTHER NON-CODED','OTHER',GETDATE()),
+				('Polygamous','MARRIED POLYGAMOUS',GETDATE()),
+				('Separated','SEPARATED',GETDATE()),
+				('Separeted','SEPARATED',GETDATE()),
+				('Sexual Partner','COHABITING',GETDATE()),
+				('Single','SINGLE',GETDATE()),
+				('SINGLE/SEPARATED/DIVORCED','DIVORCED',GETDATE()),
+				('Separated/Divorced','DIVORCED',GETDATE()),
+				('Widowed','WIDOWED',GETDATE()),
+				('separated.','SEPARATED',GETDATE()),
+				('Seperated','SEPARATED',GETDATE()),
+				('Divorced/separated','DIVORCED',GETDATE()),
+				('Divorced/Seperated','DIVORCED',GETDATE()),
+				('MM','MARRIED MONOGAMOUS',GETDATE()),
+				('MP','MARRIED POLYGAMOUS',GETDATE()),
+				('C','COHABITING',GETDATE()),
+				('D','DIVORCED',GETDATE()),
+				('W','WIDOWED',GETDATE()),
+				('WIDOWED/MARRIED','WIDOWED',GETDATE()),
+				('WIDOWED/SINGLE','WIDOWED',GETDATE()),
+				('LIVING WITH PARTNER (COHABITATING)','COHABITING',GETDATE()),
+				('Unknown','UNKNOWN',GETDATE()),
+				('MARRIED, POLYGAMOUS','MARRIED POLYGAMOUS',GETDATE()),
+				('isnull','NOT PROVIDED',GETDATE())
+
+
+END
