@@ -135,4 +135,4 @@ from(
 	d on d.PartnerPatientPk = b.PartnerPatientPk and d.SiteCode=i.MFLCode
 )tested
 where FinalTestResult='Positive'
-Group by Mflcode,FacilityName,County,subcounty,PartnerName, year,month,monthName,Gender,Agegroup
+Group by Mflcode,FacilityName,County,subcounty,PartnerName, year,month,monthName,Gender,Agegroup, AgencyName
