@@ -19,8 +19,9 @@ on M.MaritalStatus = T.Source_MaritalStatus;
 
 Go
 -------------------Update EducationLevel-------------------------------------------------------------
-UPDATE   M  SET  M.EducationLevel= T.TargetEducationLevel   from [ODS].[DBO].[CT_Patient]M 
-INNER JOIN Lkp_EducationLevel T  ON M.EducationLevel = T.SourceEducationLevel
+UPDATE   M  SET  M.EducationLevel= T.TargetEducationLevel   
+from [ODS].[DBO].[CT_Patient] M 
+INNER JOIN [ODS].[dbo].[Lkp_EducationLevel] T  ON M.EducationLevel = T.SourceEducationLevel
 --WHERE M.DateImported = CAST(GETDATE() AS DATE) OR M.DateImported = CAST(GETDATE()-1 AS DATE)
 GO
 
@@ -90,7 +91,7 @@ Go
 
 -------------------Update Regimen-------------------------------------------------------------
 UPDATE   M  SET  M.PreviousARTExposure= T.Target_Regimen   from [ODS].[DBO].[CT_Patient]M 
-INNER JOIN lkp_RegimenMap T  ON M.PreviousARTExposure = T.Source_Regimen
+INNER JOIN [ODS].[dbo].[lkp_RegimenMap] T  ON M.PreviousARTExposure = T.Source_Regimen
 
 GO
 -------------------Update Inschool-------------------------------------------------------------
@@ -117,14 +118,15 @@ UPDATE [ODS].[DBO].[CT_Patient] SET KeyPopulationType = CASE
 			where KeyPopulationType in ('MSM','MSW','FSW','PWID','N/A','Transgender','')
 GO
 -------------------Update PatientResidentCounty-------------------------------------------------------------
-Use All_Staging_2016_2
 Go
-UPDATE   stg_Patients  SET  stg_Patients.PatientResidentCounty=NULL
+UPDATE   [ODS].[DBO].[CT_Patient]  SET  [ODS].[DBO].[CT_Patient].PatientResidentCounty=NULL
 Go 
 
 ---------------------------------UpdatePatientSource--------------------------------------------------
-UPDATE   M  SET  M.PatientSource= T.target_name  from [ODS].[DBO].[CT_Patient]M 
-INNER JOIN lkp_patient_source T  ON M.PatientSource = T.source_name
+UPDATE M  SET  M.PatientSource= T.target_name  
+from [ODS].[DBO].[CT_Patient] M 
+INNER JOIN [ODS].[dbo].[lkp_patient_source] T  
+ON M.PatientSource = T.source_name
 GO
 
 --Update DateConfirmedHIVPositive
