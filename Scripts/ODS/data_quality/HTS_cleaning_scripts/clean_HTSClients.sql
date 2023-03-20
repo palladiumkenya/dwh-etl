@@ -17,6 +17,24 @@ Go
                 END
 WHERE Gender in ('F','M')
 
-Select 
-Dob
-from ODS.[dbo].[HTS_clients]
+-------------------Update MaritalStatus-------------------------------------------------------------
+UPDATE M SET MaritalStatus = T.Target_MaritalStatus
+from ODS.[dbo].[HTS_clients] M
+inner JOIN ODS.[dbo].lkp_MaritalStatus T
+on M.MaritalStatus = T.Source_MaritalStatus
+
+Go
+-------------------Update Disability-------------------------------------------------------------
+UPDATE M SET DisabilityType = T.Target_Disability
+from ODS.[dbo].[HTS_clients] M
+inner JOIN ODS.[dbo].lkp_htsDisability T
+on M.DisabilityType = T.Source_Disability
+
+Go
+---------------Update PatientDisabled------------------------------------
+ UPDATE ODS.[dbo].[HTS_clients] SET PatientDisabled =  CASE 
+            WHEN PatientDisabled = 'No' THEN 'No'          
+           ELSE 'Yes'    
+                END
+WHERE PatientDisabled is not NULL
+Go
