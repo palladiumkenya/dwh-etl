@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[ODS].[DBO].[Intermediate_LastestWeightHeight]', N'U') IS NOT NUL
 BEGIN
 	with source_LatestWeightHeight as (
 		select  
-			row_number() over (partition by PatientID ,SiteCode,PatientPK order by VisitDate desc) as rank,
+			row_number() over (partition by SiteCode,PatientPK order by VisitDate desc) as rank,
 			VisitDate,
 			PatientID ,
 			SiteCode,

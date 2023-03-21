@@ -3,13 +3,14 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastVisitDate]', N'U') IS NOT NULL
 BEGIN
 	---Load_LatestVisit
 	With LatestVisit AS (
-	SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY VisitDate DESC) AS NUM,
+	SELECT  row_number() OVER (PARTITION BY SiteCode,PatientPK ORDER BY VisitDate DESC) AS NUM,
 		PatientID,
 		SiteCode,
 		PatientPK,
 		cast( '' as nvarchar(100))PatientPKHash,
 	    cast( '' as nvarchar(100))PatientIDHash,
 		VisitDate as LastVisitDate,
+		visitID,
 	CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End AS NextAppointment,
 	cast(getdate() as date) as LoadDate
 

@@ -44,15 +44,16 @@ GO
 UPDATE [ODS].[DBO].[CT_PatientVisits]
     SET FamilyPlanningMethod = lkp_family_planning_method.target_name 
 FROM [ODS].[DBO].[CT_PatientVisits]AS PatientVisits
-INNER JOIN lkp_family_planning_method ON lkp_family_planning_method.source_name = PatientVisits.FamilyPlanningMethod
+INNER JOIN [ODS].[DBO].lkp_family_planning_method ON lkp_family_planning_method.source_name = PatientVisits.FamilyPlanningMethod
 
 GO
 
 -- clean PwP
 UPDATE [ODS].[DBO].[CT_PatientVisits]
-    SET PwP = lkp_pwp.target_name 
-FROM [ODS].[DBO].[CT_PatientVisits]AS PatientVisits
-INNER JOIN lkp_pwp ON lkp_pwp.source_name = PatientVisits.PwP
+    SET PwP = lkp_pwp.target_name
+	FROM [ODS].[DBO].[CT_PatientVisits]AS PatientVisits
+INNER JOIN [ODS].[DBO].lkp_pwp 
+	ON lkp_pwp.source_name = PatientVisits.PwP
 
 GO
 
