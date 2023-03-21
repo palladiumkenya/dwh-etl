@@ -14,7 +14,6 @@ BEGIN
 				DateImported
 	)
 	VALUES          
-	('NULL','NULL',GETDATE()),
 ('Blind/Visually Impaired','Visually Impaired',GETDATE()),
 ('Deaf/Hearing Impaired','Hearing Impaired',GETDATE()),
 ('Mental','Mentally Challenged',GETDATE()),
