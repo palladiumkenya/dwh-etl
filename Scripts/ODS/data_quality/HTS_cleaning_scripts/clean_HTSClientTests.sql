@@ -12,3 +12,9 @@ from [ODS].[DBO].[HTS_ClientTests] M
 INNER JOIN [ODS].[dbo].[lkp_patient_source] T  
 ON M.EntryPoint = T.source_name
 GO
+-----------------Update Test Strategy-------------------------------------------
+UPDATE M  SET  M.TestStrategy= T.Target_htsStrategy  
+from [ODS].[DBO].[HTS_ClientTests] M 
+INNER JOIN [ODS].[dbo].[lkp_htsStrategy] T  
+ON M.TestStrategy = T.Source_htsStrategy
+GO
