@@ -20,8 +20,8 @@ BEGIN
 		StartARTDate,
 			CASE WHEN VisitDate >= ART.StartARTDate THEN 1 ELSE 0 END AS PregnantDuringART
 	 FROM [ODS].[DBO].[CT_PatientVisits] Visits
-	 INNER JOIN [ODS].[DBO].[CT_Patient] Patients ON Visits.PatientID=Patients.PatientID AND Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
-	 INNER JOIN [ODS].[DBO].[CT_ARTPatients] ART ON ART.PatientID=Patients.PatientID AND ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
+	 INNER JOIN [ODS].[DBO].[CT_Patient] Patients ON  Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
+	 INNER JOIN [ODS].[DBO].[CT_ARTPatients] ART ON ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
 	  WHERE Visits.Pregnant = 'Yes' OR Visits.Pregnant = 'Y'
   
 	) X 

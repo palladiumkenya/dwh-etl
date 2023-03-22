@@ -21,7 +21,7 @@ BEGIN
 			cast( '' as nvarchar(100)) PatientIDHash
 	 FROM ODS.dbo.Intermediate_LastVisitAsAt  LastVisit
 	 FULL JOIN ODS.dbo.Intermediate_PharmacyDispenseAsAtDate  LastDispense
-	 ON  LastVisit.PatientID=LastDispense.PatientID AND LastVisit.SiteCode=LastDispense.SiteCode AND LastVisit.PatientPK =LastDispense.PatientPK
+	 ON   LastVisit.SiteCode=LastDispense.SiteCode AND LastVisit.PatientPK =LastDispense.PatientPK
 
 	)
 	 Select LastPatientEncounterAsAt.* 
