@@ -3,6 +3,7 @@ IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[R
 GO
 --- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)
 INSERT INTO REPORTING.dbo.LineListOTZEligibilityAndEnrollments (
+	patientPKHash,
 	MFLCode,
 	FacilityName,
 	County,
@@ -35,6 +36,7 @@ INSERT INTO REPORTING.dbo.LineListOTZEligibilityAndEnrollments (
 	Enrolled
 )
 SELECT DISTINCT
+	patientPKHash,
 	MFLCode,
 	f.FacilityName,
 	County,
@@ -75,9 +77,7 @@ SELECT DISTINCT
 	COUNT(CASE
 	WHEN art.PatientKey is not null THEN 1
 	ELSE 0 END) as Eligible,
-	COUNT(CASE
-	WHEN otz.PatientKey is not null THEN 1
-	ELSE NULL END) as Enrolled
+	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled
 
 FROM NDWH.dbo.FACTART art
 
@@ -91,7 +91,7 @@ FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 
 WHERE age.Age BETWEEN 10 AND 24  AND IsTXCurr = 1
 
-GROUP BY MFLCode,
+GROUP BY patientPKHash, MFLCode,
 	f.FacilityName,
 	County,
 	SubCounty,
