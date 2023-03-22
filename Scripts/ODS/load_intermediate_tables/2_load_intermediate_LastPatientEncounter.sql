@@ -4,13 +4,11 @@ BEGIN
 
 --Pick the latest LastVisit and Next Appointment dates from Pharmacy
     WITH Pharmacy AS (
-    SELECT   ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY DispenseDate Desc ) As NUM ,
-         PatientID,
+    SELECT   ROW_NUMBER()OVER (PARTITION by SiteCode,PatientPK  ORDER BY DispenseDate Desc ) As NUM ,
          SiteCode,
          PatientPK ,
          DispenseDate As LastEncounterDate,
         Case When DATEDIFF(dd,GETDATE(),ExpectedReturn) >= 365 or ExpectedReturn ='1900-01-01' or  ExpectedReturn is null  THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End as NextAppointmentDate
-
      FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
      where DispenseDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 ),
@@ -31,8 +29,7 @@ ART_expected_dates_logic AS (
 ),
 --Pick latestVisit and TCA from the visits Table
 LatestVisit As (
-    Select ROW_NUMBER()OVER (PARTITION by PatientID,SiteCode,PatientPK  ORDER BY VisitDate Desc ) As NUM,
-        PatientID,
+    Select ROW_NUMBER()OVER (PARTITION by SiteCode,PatientPK  ORDER BY VisitDate Desc ) As NUM,
         SiteCode,
         PatientPK ,
         VisitDate as LastVisitDate,
@@ -57,8 +54,8 @@ OrderedVisits As (
     Then Pharmacy.LastEncounterDate Else ART_expected_dates_logic.Lastvisit End As LastVisitART_Pharmacy,
      Case when Pharmacy.NextAppointmentdate>=ART_expected_dates_logic.expectedReturn or ART_expected_dates_logic.expectedReturn is null  Then Pharmacy.NextAppointmentdate else ART_expected_dates_logic.expectedReturn End as NextappointmentDate
     from Patients
-    left join Pharmacy on Patients.PatientId=Pharmacy.PatientId and Patients.PatientPk=Pharmacy.PatientPk and Patients.Sitecode=Pharmacy.Sitecode and Num=1
-    left join ART_expected_dates_logic on Patients.PatientId=ART_expected_dates_logic.PatientId and Patients.PatientPk=ART_expected_dates_logic.PatientPk and Patients.Sitecode=ART_expected_dates_logic.Sitecode
+    left join Pharmacy on  Patients.PatientPk=Pharmacy.PatientPk and Patients.Sitecode=Pharmacy.Sitecode and Num=1
+    left join ART_expected_dates_logic on Patients.PatientPk=ART_expected_dates_logic.PatientPk and Patients.Sitecode=ART_expected_dates_logic.Sitecode
 ),
 --compare the results of the Pharmacy and ART above with when date add has been applied for the patients mising  TCAs and pick the greater
 PharmacyART_Combined As (
@@ -70,7 +67,7 @@ PharmacyART_Combined As (
     OrderedVisits.LastVisitART_Pharmacy Else ART_expected_dates_logic.last_visit_plus_30_days  End As LastEncounterDate,
     NextappointmentDate
     from OrderedVisits
-    left join ART_expected_dates_logic on OrderedVisits.PatientId=ART_expected_dates_logic.PatientId and OrderedVisits.PatientPk=ART_expected_dates_logic.PatientPk and OrderedVisits.Sitecode=ART_expected_dates_logic.Sitecode
+    left join ART_expected_dates_logic on  OrderedVisits.PatientPk=ART_expected_dates_logic.PatientPk and OrderedVisits.Sitecode=ART_expected_dates_logic.Sitecode
 ),
 CombinedVisits As (
     Select
@@ -80,7 +77,7 @@ CombinedVisits As (
     Case when PharmacyART_Combined.LastEncounterDate>=LatestVisit.LastVisitDate Then PharmacyART_Combined.LastEncounterDate Else LatestVisit.LastVisitDate End as LastEncounterDate,
     Case When PharmacyART_Combined.NextappointmentDate>=LatestVisit.NextappointmentDate then PharmacyART_Combined.NextappointmentDate Else LatestVisit.NextappointmentDate end as NextAppointmentDate
   from PharmacyART_Combined
-    left join LatestVisit on PharmacyART_Combined.PatientId=LatestVisit.PatientId and PharmacyART_Combined.PatientPk=LatestVisit.PatientPk and PharmacyART_Combined.Sitecode=LatestVisit.Sitecode and Num=1
+    left join LatestVisit on PharmacyART_Combined.PatientPk=LatestVisit.PatientPk and PharmacyART_Combined.Sitecode=LatestVisit.Sitecode and Num=1
 )
 
     Select distinct 
