@@ -4,7 +4,6 @@ GO
 
 INSERT INTO REPORTING.dbo.AggregateOTZ
 SELECT DISTINCT
-PatientPKHash,
 MFLCode,
 f.FacilityName,
 County,
@@ -52,7 +51,7 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
 WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
-GROUP BY PatientPKHash, MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23), TransferInStatus, ModulesPreviouslyCovered, vl.FirstVL, vl.LastVL, vl.Last12MonthVLResults,
+GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23), TransferInStatus, ModulesPreviouslyCovered, vl.FirstVL, vl.LastVL, vl.Last12MonthVLResults,
 CASE 
 	WHEN ISNUMERIC(vl.Last12MonthVLResults) = 1 
 		THEN CASE WHEN CAST(Replace(vl.Last12MonthVLResults,',','')AS FLOAT) < 400.00 THEN 'VL' 
