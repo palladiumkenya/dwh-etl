@@ -41,6 +41,7 @@ latest_adherence as (
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate  
+		and visits.VisitID = last_visit.visitID
 		and AdherenceCategory in ('ARVAdherence', 'ART','ART|CTX','ARV','ARV Adherence')
 ),
 latest_differentiated_care as (
@@ -52,7 +53,9 @@ latest_differentiated_care as (
 	from ODS.dbo.CT_PatientVisits as visits
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
 		and visits.PatientPK = last_visit.PatientPK 
-		and visits.VisitDate = last_visit.LastVisitDate  
+		and visits.VisitDate = last_visit.LastVisitDate 
+		and visits.VisitID = last_visit.visitID
+		where DifferentiatedCare is not null
 ),
 latest_mmd as (
 	select
@@ -76,6 +79,7 @@ lastest_stability_assessment as (
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate  
+		and visits.VisitID = last_visit.visitID
 ),
 latest_pregnancy as (
 	select
@@ -87,6 +91,7 @@ latest_pregnancy as (
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate
+		and visits.VisitID = last_visit.visitID
 	    and Pregnant is not null
 ),
 latest_fp_method as (
@@ -99,6 +104,7 @@ latest_fp_method as (
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate
+		and visits.VisitID = last_visit.visitID
 	    and FamilyPlanningMethod is not null
 		and FamilyPlanningMethod <> ''
 ),
