@@ -1,4 +1,3 @@
-
 BEGIN
      --truncate table [ODS].[dbo].[CT_ARTPatients]
 			MERGE [ODS].[dbo].[CT_ARTPatients]  AS a
@@ -98,6 +97,3 @@ BEGIN
 					group by SiteCode
 
 	END
-
-	
-

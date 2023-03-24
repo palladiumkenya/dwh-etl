@@ -16,6 +16,7 @@ BEGIN
             distinct convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
             SiteCode
         from ODS.dbo.PrEP_Patient
+        where Patients.PrepNumber is not null
     ),
     exits_ordering as (
         select  
@@ -97,11 +98,11 @@ BEGIN
         latest_prep_assessments.ScreenedPrep,
         latest_exits.ExitReason,
         exits.DateKey as ExitdateKey,  
-        refills.RefilMonth1,
+        refills.Refil1DiffInDays,
         refills.TestResultsMonth1,
         refill_month_1.DateKey as DateTestMonth1Key,
         dispense_month_1.DateKey as DateDispenseMonth1,
-        refills.RefilMonth3,
+        refills.Refil3DiffInDays,
         refills.TestResultsMonth3,
         refill_month_3.DateKey as DateTestMonth3Key,
         dispense_month_3.DateKey as DateDispenseMonth3,

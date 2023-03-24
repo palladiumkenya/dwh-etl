@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_PharmacyDispenseAsAtDate]', N'U') IS NO
 	DROP TABLE [ODS].[dbo].[Intermediate_PharmacyDispenseAsAtDate];
 BEGIN
 	With PharmacyDispenseAsAtDate AS (
-	SELECT row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
+	SELECT row_number() OVER (PARTITION BY SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
 		PatientID ,
 		SiteCode,
 		PatientPK,
