@@ -5,7 +5,7 @@ BEGIN
 
     with source_data as (
         select 
-            distinct row_number() over (partition by PrepNumber, SiteCode, PatientPK order by VisitDate desc) as num,
+            distinct row_number() over (partition by SiteCode, PatientPK order by VisitDate desc) as num,
             PatientPk,
             SiteCode,
             EncounterId,
