@@ -84,21 +84,7 @@ BEGIN
 							a.Abdomen				=b.Abdomen,
 							a.CNS					=b.CNS,
 							a.Genitourinary			=b.Genitourinary;
-
-						
-						with cte AS (
-						Select
-						Sitecode,
-						PatientPK,
-						visitID,
-						VisitDate,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
-						PatientPK,Sitecode,visitID,VisitDate) Row_Num
-						FROM [ODS].[dbo].[CT_AllergiesChronicIllness](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+												
 
 					
 					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]

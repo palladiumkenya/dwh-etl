@@ -32,17 +32,7 @@ BEGIN
 							on P.PatientPID = tn.PatientPID and F.code = tn.code and PA.Created = tn.MaxCreated
 				WHERE p.gender!='Unknown';
 
-					with cte AS (
-				Select
-				PatientPK,
-				sitecode,
-				lastvisit,
-				 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,lastvisit ORDER BY
-				lastvisit desc) Row_Num
-				FROM [ODS].[dbo].[CT_ARTPatients](NoLock)
-				)
-			delete from cte 
-				Where Row_Num >1;
+				
 			--TRUNCATE TABLE [ODS].[dbo].[CT_ARTPatientsCount_Log]
 			INSERT INTO  [ODS].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
 				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount 

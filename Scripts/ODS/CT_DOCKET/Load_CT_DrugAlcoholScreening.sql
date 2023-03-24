@@ -44,20 +44,7 @@ BEGIN
 						a.DrinkingAlcohol	=b.DrinkingAlcohol,
 						a.Smoking			=b.Smoking,
 						a.DrugUse			=b.DrugUse;		
-						
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						visitDate,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						visitDate desc) Row_Num
-						FROM [ODS].[dbo].[CT_DrugAlcoholScreening](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
+											
 					
 					UPDATE [ODS].[dbo].[CT_DrugAlcoholScreening_Log]
 						SET LoadEndDateTime = GETDATE()

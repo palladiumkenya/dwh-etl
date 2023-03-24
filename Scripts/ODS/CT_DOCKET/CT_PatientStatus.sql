@@ -72,20 +72,7 @@ BEGIN
 								a.SpecificDeathReason			=b.SpecificDeathReason,
 								a.DeathDate						=b.DeathDate;
 						
-							with cte AS (
-									Select
-									PatientPK,
-									SiteCode,
-									ExitDate,
-									ExitReason,
-									Lastvisit,
-
-									 ROW_NUMBER() OVER (PARTITION BY PatientPK,ExitDate,SiteCode,ExitReason,Lastvisit ORDER BY
-									ExitDate desc) Row_Num
-									FROM [ODS].[dbo].[CT_PatientStatus]PS WITH (NoLock)
-									)
-								delete  from cte 
-									Where Row_Num >1
+							
 
 						UPDATE [ODS].[dbo].[CT_patientStatus_Log]
 							SET LoadEndDateTime = GETDATE()

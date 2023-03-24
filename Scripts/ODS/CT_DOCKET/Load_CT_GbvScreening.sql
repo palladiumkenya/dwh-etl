@@ -44,20 +44,7 @@ BEGIN
 						a.EmotionalIPV		=b.EmotionalIPV,
 						a.SexualIPV			=b.SexualIPV,
 						a.IPVRelationship	=b.IPVRelationship;
-
-						with cte AS (
-						Select
-						PatientPK,
-						Sitecode,
-						visitID,
-						visitDate,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
-						visitDate desc) Row_Num
-						FROM [ODS].[dbo].[CT_GbvScreening](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1 ;
+					
 					
 					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]
 						SET LoadEndDateTime = GETDATE()
