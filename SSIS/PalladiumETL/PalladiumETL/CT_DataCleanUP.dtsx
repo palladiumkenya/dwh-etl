@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="5"
-  DTS:VersionGUID="{0D1B9576-0D73-47FB-BFB8-60A81B8B05BC}">
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{D3D46DFB-48D1-411D-85D9-E382687B1FA5}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -28,7 +28,7 @@
         DTS:Name="ConnectionString">@[User::ClningScriptsFilePath] +"\\"+ @[User::ClningScriptsFileName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts\" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\CT_cleaning_scripts\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -52,7 +52,7 @@
         DTS:Name="ConnectionString">@[User::LookUpTablesFilePath]+"\\"+  @[User::LookUpFileName]</DTS:PropertyExpression>
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts\look_up_tables\" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\look_up_tables\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -74,7 +74,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="ClningScriptsFilePath">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts</DTS:VariableValue>
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\CT_cleaning_scripts</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -93,7 +93,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="LookUpTablesFilePath">
       <DTS:VariableValue
-        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts\look_up_tables</DTS:VariableValue>
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\look_up_tables</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
@@ -113,7 +113,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts\look_up_tables" />
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\look_up_tables" />
             <FEFEProperty
               FileSpec="*.sql" />
             <FEFEProperty
@@ -147,8 +147,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{7E23657F-9C2E-4DE4-B622-0351DA26E076}"
-          DTS:ObjectName="{7E23657F-9C2E-4DE4-B622-0351DA26E076}"
+          DTS:DTSID="{EEB917A5-5518-4814-92A1-981D3CEBDBC2}"
+          DTS:ObjectName="{EEB917A5-5518-4814-92A1-981D3CEBDBC2}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::LookUpFileName" />
       </DTS:ForEachVariableMappings>
@@ -169,7 +169,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\DQS\CT_cleaning_scripts" />
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\data_quality\CT_cleaning_scripts" />
             <FEFEProperty
               FileSpec="*.sql" />
             <FEFEProperty
@@ -203,8 +203,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{A65070ED-782A-4A3A-9743-57BFBCE029ED}"
-          DTS:ObjectName="{A65070ED-782A-4A3A-9743-57BFBCE029ED}"
+          DTS:DTSID="{47E5C18C-E0FA-425D-864A-167EF048A441}"
+          DTS:ObjectName="{47E5C18C-E0FA-425D-864A-167EF048A441}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::ClningScriptsFileName" />
       </DTS:ForEachVariableMappings>

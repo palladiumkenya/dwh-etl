@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastVisitAsAt]', N'U') IS NOT NULL
 BEGIN
 	--Load_LastVisitAsAt
 	With LastVisitAsAt AS (
-	SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY VisitDate DESC) AS NUM,
+	SELECT  row_number() OVER (PARTITION BY SiteCode,PatientPK ORDER BY VisitDate DESC) AS NUM,
 		PatientID ,
 		SiteCode,
 		PatientPK,
