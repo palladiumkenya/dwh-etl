@@ -37,9 +37,9 @@ BEGIN
 			,[Positive_25_Plus_M]
 			,[Positive_25_Plus_F]
 			,Sites.SDP PartnerName
-			,Sites.[SDP Agency] AgencyName
+			,Sites.SDP_Agency AgencyName
 		FROM NDWH.dbo.FACT_HTS_DHIS2 CT
-		LEFT JOIN HIS_Implementation.dbo.ALL_EMRSites Sites on CT.SiteCode COLLATE Latin1_General_CI_AS=Sites.MFL_Code
+		LEFT JOIN ODS.dbo.ALL_EMRSites Sites on CT.SiteCode=Sites.MFL_Code
 	)Y 
 	WHERE PartnerName IS NOT NULL
 

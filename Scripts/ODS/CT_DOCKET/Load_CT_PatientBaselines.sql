@@ -20,7 +20,7 @@ BEGIN
 
 		
 		MERGE INTO [ODS].[DBO].CT_PatientBaselines AS a
-		USING(SELECT  P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,PB.ID
+		USING(SELECT  Distinct P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,PB.ID
 			  ,PB.[eCD4],PB.[eCD4Date],PB.[eWHO],PB.[eWHODate],PB.[bCD4],PB.[bCD4Date]
 			  ,PB.[bWHO],PB.[bWHODate],PB.[lastWHO],PB.[lastWHODate],PB.[lastCD4],PB.[lastCD4Date],PB.[m12CD4]
 			  ,PB.[m12CD4Date],PB.[m6CD4],PB.[m6CD4Date],P.[Emr]

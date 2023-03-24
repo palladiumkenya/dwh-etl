@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="9"
-  DTS:VersionGUID="{24DEF1DC-4E2C-49C3-B860-3D4CACFB74F6}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{4BAA8616-05FB-4785-BA3C-097F6BAA5CC5}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -69,6 +69,7 @@
       DTS:Description="Foreach Loop Container"
       DTS:DTSID="{358244B4-06F0-4B23-8BAB-23F5C5F2E8DE}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Remove Duplicates">
       <DTS:ForEachEnumerator
@@ -96,6 +97,7 @@
           DTS:Description="Execute SQL Task"
           DTS:DTSID="{A0C867E9-13E8-4642-8AAE-23DF3A8C44B4}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
           DTS:ThreadHint="0">
@@ -131,14 +133,14 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="164,42.6666666666667"
+          Size="164,42.8"
           Id="Package\Remove Duplicates\Execute SQL Task"
           TopLeft="27.6666645059984,32.583331415554" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="235.333333333334,130.666666666667"
-          Size="235.333333333334,173.333333333334"
+          PanelSize="235.2,130.8"
+          Size="235.2,173.2"
           Id="Package\Remove Duplicates"
           TopLeft="117.499998249114,34.449999383986" />
       </GraphLayout>

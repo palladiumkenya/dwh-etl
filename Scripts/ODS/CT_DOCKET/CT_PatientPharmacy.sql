@@ -35,7 +35,7 @@ BEGIN
 			VALUES(@DispenseDate,GETDATE())
 
 			MERGE [ODS].[dbo].[CT_PatientPharmacy] AS a
-				USING(SELECT
+				USING(SELECT Distinct
 					  P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PP.[VisitID] VisitID,PP.[Drug] Drug
 					  ,PP.[DispenseDate] DispenseDate,PP.[Duration] Duration,PP.[ExpectedReturn] ExpectedReturn,PP.[TreatmentType] TreatmentType
 					  ,PP.[PeriodTaken] PeriodTaken,PP.[ProphylaxisType] ProphylaxisType,P.[Emr] Emr

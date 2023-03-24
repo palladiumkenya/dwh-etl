@@ -10,7 +10,7 @@ BEGIN
 		VALUES(@MaxVisitDate_Hist,GETDATE())
 	       ---- Refresh [ODS].[dbo].[CT_GbvScreening]
 			MERGE [ODS].[dbo].[CT_GbvScreening] AS a
-				USING(SELECT
+				USING(SELECT Distinct
 							P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 							GSE.[VisitId] AS VisitID,GSE.[VisitDate] AS VisitDate,P.[Emr],
 							CASE

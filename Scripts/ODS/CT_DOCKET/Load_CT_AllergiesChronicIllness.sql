@@ -36,7 +36,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_AllergiesChronicIllness]
 			MERGE [ODS].[dbo].[CT_AllergiesChronicIllness] AS a
-				USING(SELECT
+				USING(SELECT distinct
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,ACI.ID,
 						F.Name AS FacilityName,ACI.[VisitId] AS VisitID,ACI.[VisitDate] AS VisitDate, P.[Emr] AS Emr,
 						CASE

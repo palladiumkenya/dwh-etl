@@ -36,7 +36,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_Ovc]
 			MERGE [ODS].[dbo].[CT_Ovc] AS a
-				USING(SELECT
+				USING(SELECT Distinct
 						P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 						OE.[VisitId] AS VisitID,OE.[VisitDate] AS VisitDate,P.[Emr],
 						CASE

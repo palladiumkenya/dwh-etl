@@ -33,7 +33,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_EnhancedAdherenceCounselling]
 			MERGE [ODS].[dbo].[CT_EnhancedAdherenceCounselling] AS a
-				USING(SELECT
+				USING(SELECT Distinct
 							P.[PatientCccNumber] AS PatientID,P.[PatientPID] AS PatientPK,F.Code AS SiteCode,F.Name AS FacilityName,
 							EAC.[VisitId] AS VisitID,EAC.[VisitDate] AS VisitDate,P.[Emr] AS Emr,
 							CASE

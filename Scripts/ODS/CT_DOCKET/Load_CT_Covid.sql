@@ -35,7 +35,7 @@ BEGIN
 
 	       ---- Refresh [ODS].[dbo].[CT_Covid]
 			MERGE [ODS].[dbo].[CT_Covid] AS a
-				USING(SELECT P.[PatientPID] AS PatientPK
+				USING(SELECT distinct P.[PatientPID] AS PatientPK
 							,P.[PatientCccNumber] AS PatientID
 							,P.[Emr]
 							,P.[Project]

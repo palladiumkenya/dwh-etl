@@ -38,7 +38,7 @@ BEGIN
 			--CREATE INDEX CT_AdverseEvents  ON [ODS].[dbo].[CT_AdverseEvents] (sitecode,PatientPK);
 	       ---- Refresh [ODS].[dbo].[CT_AdverseEvents]
 			MERGE [ODS].[dbo].[CT_AdverseEvents] AS a
-				USING(SELECT 
+				USING(SELECT Distinct
 							P.[PatientCccNumber] AS PatientID, 
 							P.[PatientPID] AS PatientPK,
 							F.Name AS FacilityName, 

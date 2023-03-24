@@ -36,7 +36,7 @@ BEGIN
 					and a.SiteCode = b.SiteCode	
 					and a.encounterID = b.encounterID
 					and a.visitID = b.visitID
-					--and a.ID = b.ID
+					and a.ID = b.ID
 					
 
 				)

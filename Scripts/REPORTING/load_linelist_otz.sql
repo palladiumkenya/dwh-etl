@@ -5,9 +5,10 @@ GO
 
 
 
-INSERT INTO REPORTING.dbo.LineListOTZ (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentDateKey, LastVisitDateKey, TransitionAttritionReason, TransferInStatus, CompletedTraining, ModulesPreviouslyCovered, ModulesCompletedToday_OTZ_Orientation, ModulesCompletedToday_OTZ_Participation, ModulesCompletedToday_OTZ_Leadership, ModulesCompletedToday_OTZ_MakingDecisions, ModulesCompletedToday_OTZ_Transition, ModulesCompletedToday_OTZ_TreatmentLiteracy, ModulesCompletedToday_OTZ_SRH, ModulesCompletedToday_OTZ_Beyond, FirstVL, LastVL, EligibleVL, Last12MonthVLResults, Last12MVLResult, Last12MonthVL, startARTDate) 
+INSERT INTO REPORTING.dbo.LineListOTZ (patientPKHash, MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentDateKey, LastVisitDateKey, TransitionAttritionReason, TransferInStatus, CompletedTraining, ModulesPreviouslyCovered, ModulesCompletedToday_OTZ_Orientation, ModulesCompletedToday_OTZ_Participation, ModulesCompletedToday_OTZ_Leadership, ModulesCompletedToday_OTZ_MakingDecisions, ModulesCompletedToday_OTZ_Transition, ModulesCompletedToday_OTZ_TreatmentLiteracy, ModulesCompletedToday_OTZ_SRH, ModulesCompletedToday_OTZ_Beyond, FirstVL, LastVL, EligibleVL, Last12MonthVLResults, Last12MVLResult, Last12MonthVL, startARTDate) 
 
 SELECT DISTINCT
+	patientPKHash,
 	MFLCode,
 	f.FacilityName,
 	County,

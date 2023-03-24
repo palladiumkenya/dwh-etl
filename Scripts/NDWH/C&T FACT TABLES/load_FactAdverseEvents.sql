@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
+IF OBJECT_ID(N'[NDWH].[dbo].[FactAdverseEvents]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FactAdverseEvents];
 BEGIN
 

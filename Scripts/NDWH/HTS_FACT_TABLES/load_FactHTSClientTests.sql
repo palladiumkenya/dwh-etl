@@ -61,11 +61,11 @@ select
     case 
         when (hts_encounter.EverTestedForHiv = 'Yes' and hts_encounter.MonthsSinceLastTest < 12) then 'Retest' 
     else 'New' end as TestedBefore,
-    hts_encounter.Setting
+    hts_encounter.Setting,
     cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactHTSClientTests
 from ODS.dbo.Intermediate_EncounterHTSTests as hts_encounter
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(hts_encounter.PatientPK as nvarchar(36))), 2)
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = hts_encounter.PatientPKHash
     and patient.SiteCode = hts_encounter.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = hts_encounter.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = hts_encounter.SiteCode
