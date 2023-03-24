@@ -10,8 +10,8 @@ BEGIN
 			cast(getdate() as date) as LoadDate
 
 	 FROM ODS.dbo.CT_PatientVisits Visits
-	 INNER JOIN ODS.dbo.CT_Patient Patients ON Visits.PatientID=Patients.PatientID AND Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
-	 INNER JOIN ODS.dbo.CT_ARTPatients ART ON ART.PatientID=Patients.PatientID AND ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
+	 INNER JOIN ODS.dbo.CT_Patient Patients ON  Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
+	 INNER JOIN ODS.dbo.CT_ARTPatients ART ON ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
 	  WHERE (Visits.Pregnant = 'YES' or Visits.Pregnant = 'Y')  AND Patients.Gender= 'F' 
 	  GROUP BY Patients.PatientID ,Patients.PatientPK ,Patients.SiteCode, ART.StartARTDate, Visits.VisitDate
 	)

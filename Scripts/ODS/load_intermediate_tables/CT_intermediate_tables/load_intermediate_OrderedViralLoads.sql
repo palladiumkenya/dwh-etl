@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_OrderedViralLoads]', N'U') IS NOT NULL
 BEGIN
 	with source_OrderedViralLoads as (
 		select
-			row_number() over(partition by SiteCode, PatientPK order by OrderedbyDate desc) as rank, 
+			row_number() over(partition by  SiteCode, PatientPK order by OrderedbyDate desc) as rank, 
 			PatientID,
 			SiteCode,
 			PatientPK,

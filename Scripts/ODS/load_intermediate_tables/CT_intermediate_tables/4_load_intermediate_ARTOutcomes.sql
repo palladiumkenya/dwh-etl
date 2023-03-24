@@ -53,6 +53,7 @@ BEGIN
 					When LatestExits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE())) and LatestExits.ExitReason='DIED' THEN 'V'
 					WHEN LatestExits.ExitDate IS NOT NULL THEN SUBSTRING(LatestExits.ExitReason,1,1)--When exit date is available then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
 					WHEN ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'-- When StartARTDate is after Last Day of Previous EOM 
+					WHEN LastPatientEncounter.NextAppointmentDate is NULL THEN 'NV'
 					WHEN EOMONTH(DATEADD(mm,-1,GETDATE())) < ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn)-- When last day of previous month is less than TCA
 					OR DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days
 					WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 THEN 'uL'--Date diff btw TCA  and Last day of Previous month
