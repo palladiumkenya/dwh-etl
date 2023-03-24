@@ -82,19 +82,7 @@ BEGIN
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
 						a.StopRegimenReason			=b.StopRegimenReason;
 
-				with cte AS (
-						Select
-						PatientPK,
-						sitecode,
-						visitID,
-						DispenseDate,
-						drug,
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode,visitID,DispenseDate,drug ORDER BY
-						DispenseDate desc) Row_Num
-						FROM [ODS].[dbo].[CT_PatientPharmacy](NoLock)
-						)
-					delete from cte 
-						Where Row_Num >1;
+				
 			
 				UPDATE [ODS].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()

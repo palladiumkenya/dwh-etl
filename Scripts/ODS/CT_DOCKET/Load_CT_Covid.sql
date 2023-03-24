@@ -115,22 +115,7 @@ BEGIN
 						a.BoosterDoseVerified				=b.BoosterDoseVerified,
 						a.[Sequence]						=b.[Sequence],
 						a.COVID19TestResult					=b.COVID19TestResult;
-						
-
-					
-						with cte AS (
-						Select
-						Sitecode,
-						PatientPK,
-						visitID,
-						Covid19AssessmentDate,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,Covid19AssessmentDate ORDER BY
-						PatientPK,Sitecode,visitID,Covid19AssessmentDate) Row_Num
-						FROM [ODS].[dbo].[CT_Covid](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+											
 
 				UPDATE [ODS].[dbo].[CT_Covid_Log]
 					SET LoadEndDateTime = GETDATE()
