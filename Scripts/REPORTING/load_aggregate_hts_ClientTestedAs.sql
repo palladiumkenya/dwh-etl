@@ -1,6 +1,7 @@
 IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateClientTestedAs]') AND type in (N'U')) 
 TRUNCATE TABLE REPORTING.[dbo].[AggregateClientTestedAs]
 GO
+
 INSERT INTO REPORTING.dbo.AggregateClientTestedAs
 		(MFLCode,
 		FacilityName, 
@@ -16,8 +17,7 @@ INSERT INTO REPORTING.dbo.AggregateClientTestedAs
 		MonthName,
 		Tested,
 		Linked,
-		Positive,
-		ClientSelfTested
+		Positive
 		)
 SELECT DISTINCT 
 		MFLCode,		

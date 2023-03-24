@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastPharmacyDispenseDate]', N'U') IS NO
 BEGIN
 	--Load_LastPharmacyDispenseDate
 	With LastPharmacyDispenseDate AS (
-	SELECT  row_number() OVER (PARTITION BY PatientID ,SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
+	SELECT  row_number() OVER (PARTITION BY SiteCode,PatientPK ORDER BY DispenseDate DESC) AS NUM,
 		PatientID ,
 		SiteCode,
 		PatientPK,

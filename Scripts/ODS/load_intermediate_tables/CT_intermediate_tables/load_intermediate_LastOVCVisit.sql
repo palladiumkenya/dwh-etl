@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastOVCVisit]', N'U') IS NOT NULL
 BEGIN
 	with source_LasttOVCVisit as (
 		select 
-			row_number() over (partition by PatientID, SiteCode, PatientPK, EMR order by VisitDate desc) as rank,
+			row_number() over (partition by SiteCode, PatientPK, EMR order by VisitDate desc) as rank,
 			VisitDate, 
 			PatientID ,
 			SiteCode,
