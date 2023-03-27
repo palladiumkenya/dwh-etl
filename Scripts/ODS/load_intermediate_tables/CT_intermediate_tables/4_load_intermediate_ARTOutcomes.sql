@@ -51,13 +51,14 @@ BEGIN
 					When LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and LastPatientEncounter.NextAppointmentDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'
                     When LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and LatestExits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'
 					When LatestExits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE())) and LatestExits.ExitReason='DIED' THEN 'V'
-					WHEN LatestExits.ExitDate IS NOT NULL THEN SUBSTRING(LatestExits.ExitReason,1,1)--When exit date is available then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
+					--WHEN LatestExits.ExitDate IS NOT NULL THEN SUBSTRING(LatestExits.ExitReason,1,1)--When exit date is available then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
 					WHEN ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'-- When StartARTDate is after Last Day of Previous EOM 
 					WHEN LastPatientEncounter.NextAppointmentDate is NULL THEN 'NV'
-					WHEN EOMONTH(DATEADD(mm,-1,GETDATE())) < ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn)-- When last day of previous month is less than TCA
-					OR DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days
+					WHEN  ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn) > EOMONTH(DATEADD(mm,-1,GETDATE()))   Then 'V'   -- When last day of previous month is less than TCA
+					When  DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days
 					WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 THEN 'uL'--Date diff btw TCA  and Last day of Previous month
 					WHEN LastPatientEncounter.NextAppointmentDate IS NULL and ART.ExpectedReturn IS NULL THEN 'NV'
+                    ELSE SUBSTRING(LatestExits.ExitReason,1,1)
 
 				END
 			)
