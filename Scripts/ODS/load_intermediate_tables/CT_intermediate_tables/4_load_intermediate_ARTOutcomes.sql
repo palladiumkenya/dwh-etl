@@ -51,6 +51,7 @@ BEGIN
 					When LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and LastPatientEncounter.NextAppointmentDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'
                     When LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and LatestExits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'
 					When LatestExits.ExitDate >EOMONTH(DATEADD(mm,-1,GETDATE())) and LatestExits.ExitReason='DIED' THEN 'V'
+					When LatestExits.ExitReason='DIED' Then SUBSTRING(LatestExits.ExitReason,1,1)
 					--WHEN LatestExits.ExitDate IS NOT NULL THEN SUBSTRING(LatestExits.ExitReason,1,1)--When exit date is available then Inserts the exit reasons , Extracts 1 character from Exit reasons starting from position 1
 					WHEN ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'-- When StartARTDate is after Last Day of Previous EOM 
 					WHEN LastPatientEncounter.NextAppointmentDate is NULL THEN 'NV'
