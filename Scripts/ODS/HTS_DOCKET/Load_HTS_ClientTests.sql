@@ -67,23 +67,22 @@ BEGIN
 					--a.ID = b.ID
 					a.sitecode = b.sitecode
 					and a.PatientPK  = b.PatientPK 
-					--and coalesce(a.TestResult1,'Empty') = coalesce(b.TestResult1,'Empty')
-					--and coalesce(a.TestResult2,'Empty') = coalesce(b.TestResult2,'Empty')
+					and coalesce(a.TestResult1,'Empty') = coalesce(b.TestResult1,'Empty')
+					and coalesce(a.TestResult2,'Empty') = coalesce(b.TestResult2,'Empty')
 					and a.FinalTestResult = b.FinalTestResult
 					and a.TestDate = b.TestDate
-					--and coalesce(a.TestType,'Empty') = coalesce(b.TestType,'Empty')
-					--and coalesce(a.EntryPoint ,'Empty') = coalesce(b.EntryPoint ,'Empty')
-					--and coalesce(a.TestStrategy,'Empty') = coalesce(b.TestStrategy,'Empty')
+					and coalesce(a.TestType,'Empty') = coalesce(b.TestType,'Empty')
+					and coalesce(a.EntryPoint ,'Empty') = coalesce(b.EntryPoint ,'Empty')
+					and coalesce(a.TestStrategy,'Empty') = coalesce(b.TestStrategy,'Empty')
 					and a.EncounterId = b.EncounterId
 
 					)		
 	   WHEN MATCHED THEN
 			UPDATE SET 
-					a.[FacilityName]		=b.[FacilityName],    
+					   
 					a.[EverTestedForHiv]	=b.[EverTestedForHiv],
 					a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
-					a.[ClientTestedAs]		=b.[ClientTestedAs],
-					a.[EntryPoint]			=b.[EntryPoint],
+					a.[ClientTestedAs]		=b.[ClientTestedAs],					
 					a.[PatientGivenResult]	=b.[PatientGivenResult],
 					a.[TbScreening]			=b.[TbScreening],
 					a.[ClientSelfTested]	=b.[ClientSelfTested],

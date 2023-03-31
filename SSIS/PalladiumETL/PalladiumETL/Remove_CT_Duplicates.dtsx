@@ -1,0 +1,152 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\CT\Checkpoint.xml"
+  DTS:CheckpointUsage="1"
+  DTS:CreationDate="3/24/2023 5:20:13 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="WIN-LQ135V1RIG4"
+  DTS:CreatorName="WIN-LQ135V1RIG4\Administrator"
+  DTS:DTSID="{3FDFA117-EE1B-4EF0-AD62-0E5139213C07}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.845.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package2"
+  DTS:PackageType="5"
+  DTS:SaveCheckpoints="True"
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{E1A88F92-D565-41E8-AC12-E7B411B37BE9}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[CT_Remove_Dup_FileConn.sql]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{F8F49220-AA43-40E5-AAAA-8C8C007179C0}"
+      DTS:ObjectName="CT_Remove_Dup_FileConn.sql">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::FilePath] +"\\"+ @[User::FileName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Remove_CT_ODS_Duplicates\" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.ODS]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{8AF3D1C7-20BF-4118-8627-B43E80461F5E}"
+      DTS:ObjectName="LocalHost.ODS">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{8AF3D1C7-20BF-4118-8627-B43E80461F5E}LocalHost.ODS;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7A88A5C4-1469-4098-BA6D-6B91F66F32A6}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C875F530-238C-4CCB-82C0-B828DB060166}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Remove_CT_ODS_Duplicates</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Remove CT Duplicate Loop"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{FA07FD51-6E29-4A07-B808-B3157AD1064C}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Remove CT Duplicate Loop">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{AA0A7304-4686-45CF-9FDB-0A295423E4C9}"
+        DTS:ObjectName="{AA0A7304-4686-45CF-9FDB-0A295423E4C9}">
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\CT_DOCKET\Remove_CT_ODS_Duplicates" />
+            <FEFEProperty
+              FileSpec="*.SQL" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Remove CT Duplicate Loop\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{B2FA7A32-8B6C-47EA-8FC6-1FB1EEF3B1BA}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{8AF3D1C7-20BF-4118-8627-B43E80461F5E}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="CT_Remove_Dup_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{47E6D410-1C70-4DB9-A7AE-8D17B25FB831}"
+          DTS:ObjectName="{47E6D410-1C70-4DB9-A7AE-8D17B25FB831}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FileName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="163,42"
+          Id="Package\Remove CT Duplicate Loop\Execute SQL Task"
+          TopLeft="37,38" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="254,137"
+          Size="254,180"
+          Id="Package\Remove CT Duplicate Loop"
+          TopLeft="232,35" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
