@@ -319,6 +319,7 @@ ARTOutcomesCompuation as (
 			  or datediff(dd, last_encounter.NextAppointmentDate, eomonth(@as_of_date)) <= 30 then 'V'
             when datediff(dd, last_encounter.NextAppointmentDate, eomonth(@as_of_date)) > 30 then 'uL'
             when NextAppointmentDate is null then 'NV'
+              ELSE SUBSTRING(last_exit_as_of_date.ExitReason,1,1)
         end as ARTOutcome,
         second_last_encounter.second_last_NextAppointmentDate as ExpectedNextAppointmentDate,
         datediff(mm, patient_art_and_enrollment_info.StartARTDate, eomonth(@as_of_date)) ARTDurationMonths,
@@ -362,7 +363,7 @@ ARTOutcomesCompuation as (
 
     else 	
      Case when last_exit_as_of_date.exitReason	in ('dead','Death','Died') Then 'Dead'
-        when last_exit_as_of_date.exitReason in ('Lost','Lost to followup','LTFU','ltfu') Then 'LTFU'
+        when last_exit_as_of_date.exitReason in ('Lost','Lost to followup','LTFU','ltfu') Then 'Still IIT'
         When last_exit_as_of_date.exitReason in ('Stopped','Stopped Treatment') Then 'Stopped'
         When last_exit_as_of_date.exitReason in ('Transfer','Transfer Out','transfer_out','Transferred out') Then 'Transfer-Out'
         When last_exit_as_of_date.exitReason not in ('dead','Death','Died','Lost','Lost to followup','LTFU','ltfu','Stopped','Stopped Treatment','Transfer','Transfer Out','transfer_out','Transferred out') Then 'Other'
@@ -388,7 +389,9 @@ and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
    select * from Summary 
     --Select top 1* into ODS.dbo.Intermediate_Appointments
    -- from Summary
-     where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out')
+     where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') and 
+  NextAppointmentDate > LastencounterDate 
+
 fetch next from cursor_AsOfDates into @as_of_date
 end
 
@@ -399,11 +402,7 @@ end
 
 
 
-
-
-
-
-
-
+--Truncate table ODS.dbo.Intermediate_Appointments
+ --drop table ODS.dbo.Intermediate_Appointments
 
 
