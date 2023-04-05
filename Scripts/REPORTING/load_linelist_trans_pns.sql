@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[LineListTransPNS]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[LineListTransPNS]
+IF OBJECT_ID(N'REPORTING.[dbo].[LineListTransPNS]', N'U') IS NOT NULL 			
+	TRUNCATE TABLE REPORTING.[dbo].[LineListTransPNS]
 GO
 
 With cte1 as (

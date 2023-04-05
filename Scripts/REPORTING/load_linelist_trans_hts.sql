@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[LineListTransHTS]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[LineListTransHTS]
+IF OBJECT_ID(N'REPORTING.[dbo].[LineListTransHTS]', N'U') IS NOT NULL 			
+	TRUNCATE TABLE REPORTING.[dbo].[LineListTransHTS]
 GO
 
 INSERT INTO REPORTING.dbo.LineListTransHTS (MFLCode, EMR, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,

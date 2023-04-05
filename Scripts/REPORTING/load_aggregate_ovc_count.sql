@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateOVCCount]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].AggregateOVCCount
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateOVCCount', N'U') IS NOT NULL 	
+	TRUNCATE TABLE [REPORTING].[dbo].AggregateOVCCount
 GO
 
 INSERT INTO [REPORTING].[dbo].AggregateOVCCount
