@@ -1,6 +1,5 @@
-GO
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToARTGrp]') AND type in (N'U'))
-TRUNCATE TABLE [dbo].AggregateTimeToARTGrp
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateTimeToARTGrp', N'U') IS NOT NULL 	
+	TRUNCATE TABLE [REPORTING].[dbo].AggregateTimeToARTGrp
 GO
 
 INSERT INTO [REPORTING].[dbo].[AggregateTimeToARTGrp]

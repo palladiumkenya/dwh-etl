@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDUnstable]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDUnstable]
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDUnstable]', N'U') IS NOT NULL 
+	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDUnstable]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateDSDUnstable

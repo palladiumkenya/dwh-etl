@@ -9,7 +9,7 @@ BEGIN
 						  ,a.[PatientPk]
 						  ,a.[Emr]
 						  ,a.[Project]
-						  ,a.[EncounterId]
+						  ,coalesce(a.[EncounterId],-1)EncounterId
 						  ,a.[TestDate]
 						  --,a.DateExtracted
 						  ,[EverTestedForHiv]
@@ -17,12 +17,12 @@ BEGIN
 						  ,a.[ClientTestedAs]
 						  --,a.[EntryPoint]
 						  --,mm.target_name as Entrypoint
-						  ,coalesce(mm.target_name,NULL,a.[EntryPoint]) as Entrypoint
+						  ,coalesce(mm.target_name,NULL,a.[EntryPoint],null,'Empty') as Entrypoint
 						  --,a.[TestStrategy]
 						 -- ,mp.Target_htsStrategy as TestStrategy
-						  ,coalesce(mp.Target_htsStrategy,NULL,a.[TestStrategy]) as TestStrategy
-						  ,a.[TestResult1]
-						  ,a.[TestResult2]
+						  ,coalesce(mp.Target_htsStrategy,NULL,a.[TestStrategy],null,'Empty') as TestStrategy
+						  ,coalesce(a.[TestResult1],'empty')TestResult1
+						  ,coalesce(a.[TestResult2],'empty')TestResult2
 						  ,a.[FinalTestResult]
 						  ,[PatientGivenResult]
 						  ,[TbScreening]
@@ -58,9 +58,9 @@ BEGIN
 									and a.FinalTestResult = tn.FinalTestResult
 									and coalesce(a.TestDate,'Empty') = coalesce(tn.TestDate,'Empty')
 									and coalesce(a.TestType,'Empty') = coalesce(tn.TestType,'Empty')
-									and coalesce(mm.target_name,NULL,a.[EntryPoint]) = coalesce(tn.target_name,NULL,a.[EntryPoint])
-									and coalesce(mp.Target_htsStrategy,NULL,a.[TestStrategy]) = coalesce(tn.Target_htsStrategy,NULL,tn.[TestStrategy])
-									and a.EncounterId = tn.EncounterId
+									and coalesce(mm.target_name,NULL,a.[EntryPoint],null,'Empty') = coalesce(tn.target_name,NULL,a.[EntryPoint],null,'Empty')
+									and coalesce(mp.Target_htsStrategy,NULL,a.[TestStrategy],null,'Empty') = coalesce(tn.Target_htsStrategy,NULL,tn.[TestStrategy],null,'Empty')
+									and coalesce(a.EncounterId,-1) = coalesce(tn.EncounterId,-1)
 					INNER JOIN  [HTSCentral].[dbo].Clients(NoLock) c								
 						ON a.[SiteCode] = c.[SiteCode] and a.PatientPK=c.PatientPK 			
 				
@@ -80,21 +80,20 @@ BEGIN
 					and a.EncounterId = b.EncounterId
 
 					)		
-	   WHEN MATCHED THEN
-			UPDATE SET 
+	  -- WHEN MATCHED THEN
+			--UPDATE SET 
 					   
-					a.[EverTestedForHiv]	=b.[EverTestedForHiv],
-					a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
-					a.[ClientTestedAs]		=b.[ClientTestedAs],					
-					a.[PatientGivenResult]	=b.[PatientGivenResult],
-					a.[TbScreening]			=b.[TbScreening],
-					a.[ClientSelfTested]	=b.[ClientSelfTested],
-					a.[CoupleDiscordant]	=b.[CoupleDiscordant],
-					a.[Consent]				=b.[Consent]
+			--		a.[EverTestedForHiv]	=b.[EverTestedForHiv],
+			--		a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
+			--		a.[ClientTestedAs]		=b.[ClientTestedAs],					
+			--		a.[PatientGivenResult]	=b.[PatientGivenResult],
+			--		a.[TbScreening]			=b.[TbScreening],
+			--		a.[ClientSelfTested]	=b.[ClientSelfTested],
+			--		a.[CoupleDiscordant]	=b.[CoupleDiscordant],
+			--		a.[Consent]				=b.[Consent]
 
 		WHEN NOT MATCHED THEN 
 			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
 			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
 
-		
 END
