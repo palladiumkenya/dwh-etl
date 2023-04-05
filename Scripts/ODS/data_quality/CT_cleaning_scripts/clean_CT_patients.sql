@@ -4,10 +4,10 @@
 ------Update Date of Birth to missing where Year <1910------------------------------
 
 ------Update Date of Birth to missing where Year <1910------------------------------
-UPDATE ODS.dbo.CT_Patient   SET DOB =CAST ('1900-01-01' as DATE) where (DOB) < CAST ('1910-01-01' AS DATE)
+UPDATE ODS.dbo.CT_Patient   SET DOB = NULL where (DOB) < CAST ('1910-01-01' AS DATE)
 Go
 
-UPDATE [ODS].[DBO].[CT_Patient]  SET DOB =CAST ('1900-01-01' as DATE) where (DOB) > GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET DOB = NULL where (DOB) > GETDATE()
 Go
 
 
@@ -26,35 +26,35 @@ INNER JOIN [ODS].[dbo].[Lkp_EducationLevel] T  ON M.EducationLevel = T.SourceEdu
 GO
 
 -------------------Update RegistrationDates-------------------------------------------------------------
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationDate =cast ('1900-01-01' as date) where Year (RegistrationDate) <1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationDate = NULL where Year (RegistrationDate) <1980
 Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationDate =cast ('1900-01-01' as date) where Year (RegistrationDate) > GETDATE()
-Go
-
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtCCC =cast ('1900-01-01' as date) where Year (RegistrationAtCCC) <1980
-Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtCCC =cast ('1900-01-01' as date) where Year (RegistrationAtCCC) > GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationDate = NULL where Year (RegistrationDate) > GETDATE()
 Go
 
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtCCC = NULL where Year (RegistrationAtCCC) <1980
+Go
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtCCC = NULL where Year (RegistrationAtCCC) > GETDATE()
+Go
 
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtPMTCT =cast ('1900-01-01' as date) where Year (RegistrationAtPMTCT) <1980
+
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtPMTCT = NULL where Year (RegistrationAtPMTCT) <1980
 Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtPMTCT =cast ('1900-01-01' as date) where Year (RegistrationAtPMTCT) > GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtPMTCT = NULL where Year (RegistrationAtPMTCT) > GETDATE()
 Go
 
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtTBClinic =cast ('1900-01-01' as date) where Year (RegistrationAtTBClinic) <1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtTBClinic = NULL where Year (RegistrationAtTBClinic) <1980
 Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtTBClinic =cast ('1900-01-01' as date) where Year (RegistrationAtTBClinic) > GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET RegistrationAtTBClinic = NULL where Year (RegistrationAtTBClinic) > GETDATE()
 Go
 -------------------Update PreviousARTStartDates-------------------------------------------------------------
-UPDATE [ODS].[DBO].[CT_Patient]  SET PreviousARTStartDate =cast ('1900-01-01' as date) where Year (PreviousARTStartDate) <1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET PreviousARTStartDate = NULL where Year (PreviousARTStartDate) <1980
 Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET PreviousARTStartDate =cast ('1900-01-01' as date) where Year (PreviousARTStartDate) > GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET PreviousARTStartDate = NULL where Year (PreviousARTStartDate) > GETDATE()
 Go
 -------------------Update LastVisitDates-------------------------------------------------------------
-UPDATE [ODS].[DBO].[CT_Patient]  SET LastVisit =cast ('1900-01-01' as date) where Year (LastVisit) <1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET LastVisit = NULL where Year (LastVisit) <1980
 Go
-UPDATE [ODS].[DBO].[CT_Patient]  SET LastVisit =cast ('1900-01-01' as date) where Year (LastVisit) >GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET LastVisit = NULL where Year (LastVisit) >GETDATE()
 Go
 
 -------------------Update EMR-------------------------------------------------------------
@@ -130,17 +130,17 @@ ON M.PatientSource = T.source_name
 GO
 
 --Update DateConfirmedHIVPositive
-UPDATE [ODS].[DBO].[CT_Patient]  SET DateConfirmedHIVPositive =cast ('1900-01-01' as date) where Year (DateConfirmedHIVPositive) >GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET DateConfirmedHIVPositive = NULL where Year (DateConfirmedHIVPositive) >GETDATE()
 Go
 
-UPDATE [ODS].[DBO].[CT_Patient]  SET DateConfirmedHIVPositive =cast ('1900-01-01' as date) where Year (DateConfirmedHIVPositive) < 1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET DateConfirmedHIVPositive = NULL where Year (DateConfirmedHIVPositive) < 1980
 Go
 
 --Update TransferInDate
-UPDATE [ODS].[DBO].[CT_Patient]  SET TransferInDate =cast ('1900-01-01' as date) where Year (TransferInDate) >GETDATE()
+UPDATE [ODS].[DBO].[CT_Patient]  SET TransferInDate = NULL where Year (TransferInDate) >GETDATE()
 Go
 
-UPDATE [ODS].[DBO].[CT_Patient]  SET TransferInDate =cast ('1900-01-01' as date) where Year (TransferInDate) < 1980
+UPDATE [ODS].[DBO].[CT_Patient]  SET TransferInDate = NULL where Year (TransferInDate) < 1980
 Go
 
 

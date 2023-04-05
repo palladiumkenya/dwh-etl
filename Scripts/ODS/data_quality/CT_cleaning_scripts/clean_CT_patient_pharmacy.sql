@@ -15,7 +15,7 @@ GO
 
 -- clean ExpectedReturn
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
-    SET ExpectedReturn = CAST('1900-01-01' AS DATE)
+    SET ExpectedReturn = NULL
 WHERE ExpectedReturn < CAST('1900-01-01' AS DATE) 
 
 GO

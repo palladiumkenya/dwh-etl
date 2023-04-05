@@ -8,12 +8,12 @@ GO
 
 -- clean AdverseEventStartDate
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
-    SET AdverseEventStartDate = CAST('1900-01-01' AS DATE)
+    SET AdverseEventStartDate = NULL
 WHERE AdverseEventStartDate < CAST('1980-01-01' AS DATE) OR AdverseEventStartDate > GETDATE()
 
 -- clean AdverseEventEndDate
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
-    SET AdverseEventEndDate = CAST('1900-01-01' AS DATE)
+    SET AdverseEventEndDate = NULL
 WHERE AdverseEventEndDate < CAST('1980-01-01' AS DATE) OR AdverseEventEndDate > GETDATE()
 
 GO
