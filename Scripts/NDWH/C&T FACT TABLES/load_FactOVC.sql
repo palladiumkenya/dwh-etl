@@ -10,7 +10,9 @@ with MFL_partner_agency_combination as (
 ),
 source_ovc as (
 	select
-		distinct ovc.PatientIDHash,
+		distinct 
+		ovc.PatientIDHash,
+		row_number () over (partition by ovc.SiteCode, ovc.PatientPK order by ovc.OVCEnrollmentDate desc) as rank,
 		ovc.PatientPKHash,
 		ovc.SiteCode,
 		OVCEnrollmentDate,
@@ -53,7 +55,8 @@ left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_C
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_ovc.AgeLastVisit
-left join NDWH.dbo.DimRelationshipWithPatient as relationship_client on relationship_client.RelationshipWithPatient = source_ovc.RelationshipToClient;
+left join NDWH.dbo.DimRelationshipWithPatient as relationship_client on relationship_client.RelationshipWithPatient = source_ovc.RelationshipToClient
+where source_ovc.rank = 1;
 
 alter table NDWH.dbo.FactOVC add primary key(FactKey);
 END
