@@ -119,3 +119,4 @@ BEGIN
 	 left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
 	 	
 END
+
