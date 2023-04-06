@@ -1,6 +1,5 @@
-
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateCovid]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].[AggregateCovid]
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateCovid]', N'U') IS NOT NULL 
+	TRUNCATE TABLE [REPORTING].[dbo].[AggregateCovid]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateCovid (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup,VaccinationStatus,PatientStatus,AdmissionStatus,AdmissionUnit,EverCOVID19Positive,MissedAppointmentDueToCOVID19,adults_count)

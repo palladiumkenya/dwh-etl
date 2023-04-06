@@ -42,6 +42,17 @@ Select distinct
     vl.Last12MVLSup,
     vl.LastVL,
     cast(vl.LastVlDateKey as date) LastVLDate,
+    CASE
+		WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN
+			CASE
+				WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) < 400.00 THEN 'VL' 
+				WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) BETWEEN 400.00 AND 1000.00 THEN 'LVL' 
+				WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) > 1000.00 THEN 'HVL' ELSE NULL 
+			END ELSE
+				CASE
+					WHEN vl.Last12MonthVLResults IN ( 'Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level' ) THEN 'VL' ELSE NULL 
+				END 
+    END AS	[Last12MVLResult],
     vl.HighViremia,
     vl.LowViremia,
     pat.ISTxCurr,

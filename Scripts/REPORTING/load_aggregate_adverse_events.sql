@@ -1,12 +1,5 @@
-IF EXISTS (
-    SELECT
-        *
-    FROM
-        [REPORTING].sys.objects
-    WHERE
-        object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateAdverseEvents]')
-        AND type in (N'U')
-) TRUNCATE TABLE [REPORTING].[dbo].AggregateAdverseEvents
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAdverseEvents', N'U') IS NOT NULL 
+	TRUNCATE TABLE [REPORTING].[dbo].AggregateAdverseEvents
 
 GO
 
