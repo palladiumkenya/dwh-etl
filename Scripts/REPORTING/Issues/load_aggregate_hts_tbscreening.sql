@@ -2,33 +2,69 @@ IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPO
 TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSTBscreening]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateHTSTBscreening (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,
-	tbScreening, year, month, MonthName, Tested, Positive, Linked
+WITH tested AS (
+    SELECT distinct 
+        MFLCode,
+        FacilityName,
+        County,
+        SubCounty,
+        PartnerName,
+        AgencyName,
+        Gender,
+        DATIMAgeGroup,
+        tbScreening,
+        case 
+            when TBScreening IS NOT NULL THEN 'Screened for TB'
+        ELSE 'Not Screened for TB' END AS TBScreening_Grp,
+        year,
+        month,
+        FORMAT(cast(date as date), 'MMMM') MonthName,      
+        Tested,        
+        Positive,         
+        Linked
+    FROM NDWH.dbo.FactHTSClientTests hts
+    LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
+    LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey
+    LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = hts.PatientKey
+    LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=hts.AgeGroupKey
+    LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
+    LEFT JOIN NDWH.dbo.FactHTSClientLinkages link on link.PatientKey = hts.PatientKey
+    LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
 )
-SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender,
-age.DATIMAgeGroup as AgeGroup,
-tbScreening,
--- TBScreening_Grp,
-year,
-month,
-FORMAT(cast(date as date), 'MMMM') MonthName,
-Sum(Tested) Tested,
-Sum(Positive) Positive,
-Sum(Linked) Linked
-
-FROM NDWH.dbo.FactHTSClientTests hts
-LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
-LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey
-LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = hts.PatientKey
-LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=hts.AgeGroupKey
-LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
-LEFT JOIN NDWH.dbo.FactHTSClientLinkages link on link.PatientKey = hts.PatientKey
-LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, tbScreening, year, month, FORMAT(cast(date as date), 'MMMM')
+INSERT INTO REPORTING.dbo.AggregateHTSTBscreening (
+	MFLCode, 
+	FacilityName, 
+	County, 
+	SubCounty, 
+	PartnerName, 
+	AgencyName, 
+	Gender, 
+	AgeGroup,
+	tbScreening, 
+	TBScreening_Grp,
+	year, 
+	month, 
+	MonthName, 
+	Tested, 
+	Positive, 
+	Linked
+)
+SELECT 
+    MFLCode,
+    FacilityName,
+    County,
+    SubCounty,
+    PartnerName,
+    AgencyName,
+    Gender,
+    DATIMAgeGroup as AgeGroup,
+    tbScreening,
+    TBScreening_Grp,
+    year,
+    month,
+    MonthName,
+    Sum(Tested) Tested,
+    Sum(Positive) Positive,
+    Sum(Linked) Linked
+FROM tested
+GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, DATIMAgeGroup, tbScreening, year, month, MonthName, TBScreening_Grp

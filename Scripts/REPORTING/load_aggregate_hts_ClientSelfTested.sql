@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateClientSelfTested]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateClientSelfTested]
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateClientSelfTested]', N'U') IS NOT NULL 
+	TRUNCATE TABLE REPORTING.[dbo].[AggregateClientSelfTested]
 GO
 INSERT INTO REPORTING.dbo.AggregateClientSelfTested
 		(MFLCode,

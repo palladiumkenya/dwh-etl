@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToFirstVLGrp]') AND type in (N'U')) 
-TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToFirstVLGrp]
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToFirstVLGrp]', N'U') IS NOT NULL 	
+	TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToFirstVLGrp]
 GO
 
 INSERT INTO REPORTING.[dbo].[AggregateTimeToFirstVLGrp]

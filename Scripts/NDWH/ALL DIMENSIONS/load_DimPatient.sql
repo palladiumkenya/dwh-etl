@@ -105,7 +105,7 @@ BEGIN
             and prep_patient_source.SiteCode = combined_data_ct_hts.SiteCode            
     )
 	select
-    	PatientKey = IDENTITY(INT, 1, 1),
+        PatientKey = IDENTITY(INT, 1, 1),
         combined_data_ct_hts_prep.PatientIDHash,
 		combined_data_ct_hts_prep.PatientPKHash,
         combined_data_ct_hts_prep.HtsNumberHash,

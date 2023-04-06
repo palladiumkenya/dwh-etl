@@ -65,19 +65,7 @@ BEGIN
 						a.PnsApproach					=b.PnsApproach;
 
 						
-						with cte AS (
-						Select
-						Sitecode,
-						PatientPK,
-						Contactage,
-						RelationshipWithPatient,
-
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,Contactage,RelationshipWithPatient ORDER BY
-						PatientPK,Sitecode,Contactage,RelationshipWithPatient) Row_Num
-						FROM [ODS].[dbo].[CT_ContactListing](NoLock)
-						)
-						delete from cte 
-						Where Row_Num >1 ;
+						
 
 				UPDATE [ODS].[dbo].[CT_ContactListing_Log]
 					SET LoadEndDateTime = GETDATE()

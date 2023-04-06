@@ -1,6 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListViralLoad]') AND type in (N'U'))
-
-TRUNCATE TABLE [REPORTING].[dbo].[LineListViralLoad]
+IF OBJECT_ID(N'[REPORTING].[dbo].[LineListViralLoad]', N'U') IS NOT NULL 			
+	TRUNCATE TABLE [REPORTING].[dbo].[LineListViralLoad]
 GO
 
 INSERT INTO REPORTING.dbo.LineListViralLoad (
