@@ -130,7 +130,8 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET LastRegimen = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.LastRegimen
+INNER JOIN ODS.dbo.lkp_regimen AS lkpRegimen ON lkpRegimen.source_name = ARTPatients.LastRegimen
+
 
 GO
 

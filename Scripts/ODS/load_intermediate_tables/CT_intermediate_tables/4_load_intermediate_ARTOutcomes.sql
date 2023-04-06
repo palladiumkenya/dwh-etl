@@ -1,3 +1,4 @@
+
 IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_ARTOutcomes]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[Intermediate_ARTOutcomes];
 BEGIN
@@ -109,3 +110,4 @@ BEGIN
 	 left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
 	 	
 END
+
