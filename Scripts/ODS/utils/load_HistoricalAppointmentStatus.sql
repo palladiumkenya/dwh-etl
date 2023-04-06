@@ -347,7 +347,7 @@ ARTOutcomesCompuation as (
     when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 15 and 30 Then 'Missed 15-30 days'
     when   last_upload_as_of_date.DateRecieved < ARTOutcomesCompuation.ExpectedNextAppointmentDate   Then 'LostinHMIS'
     when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 31 and 60 Then 'IIT and RTT within 30 days'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)  between 61 and 90 Then 'IIT and RTT beyond 30 days'
+    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)  > 60 Then 'IIT and RTT beyond 30 days'
     When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'Still IIT'
    -- When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'IIT and RTT beyond 30 days'
 
@@ -369,13 +369,15 @@ from ARTOutcomesCompuation
 left join last_exit_as_of_date on last_exit_as_of_date.PatientIDHash=ARTOutcomesCompuation.PatientIDHash
 and last_exit_as_of_date.PatientPK= ARTOutcomesCompuation.PatientPK
 and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
- left join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode
+ left  join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode
 
 
     )
  
-    Insert into ODS.dbo.[HistoricalAppointmentStatus]
-      select * from Summary 
+  Insert into ODS.dbo.[HistoricalAppointmentStatus]
+     select * from Summary 
+	   --Select top 1* into ODS.dbo.[HistoricalAppointmentStatus]
+   --from Summary
       where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') and 
       NextAppointmentDate > LastencounterDate 
 
