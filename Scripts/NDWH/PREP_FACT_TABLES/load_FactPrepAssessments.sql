@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'[NDWH].[dbo].[FactPrepAssessments]', N'U') IS NOT NULL 
-DROP TABLE [NDWH].[dbo].[FactPrep];
+DROP TABLE [NDWH].[dbo].[FactPrepAssessments];
 
 BEGIN
 
