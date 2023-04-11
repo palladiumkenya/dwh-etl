@@ -13,7 +13,7 @@ BEGIN
     prep_patients as
     (
         select
-            distinct convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
+            PatientPKHash,
             SiteCode
         from ODS.dbo.PrEP_Patient
         where ODS.dbo.PrEP_Patient.PrepNumber is not null
@@ -21,7 +21,7 @@ BEGIN
 
 PrepDiscontinuation as (
         select 
-              convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
+             PatientPKHash,
                 SiteCode,
                 ExitDate,
                 ExitReason                  
@@ -43,9 +43,9 @@ PrepDiscontinuation as (
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrepDiscontinuation
     from prep_patients
-    left join PrepDiscontinuation on convert(nvarchar(64), hashbytes('SHA2_256', cast(PrepDiscontinuation.PatientPK as nvarchar(36))), 2) =  prep_patients.PatientPK
+    left join PrepDiscontinuation on PrepDiscontinuation.PatientPKHash =  prep_patients.PatientPKHash
         and PrepDiscontinuation.SiteCode = prep_patients.SiteCode
-    left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = prep_patients.PatientPK
+    left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = prep_patients.PatientPKHash
         and patient.SiteCode = prep_patients.SiteCode
     left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = prep_patients.SiteCode
     left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP 
