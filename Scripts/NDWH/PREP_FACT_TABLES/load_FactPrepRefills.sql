@@ -105,6 +105,7 @@ select
     agency.AgencyKey,
     partner.PartnerKey,
     age_group.AgeGroupKey,
+    patient.Gender,
     dispense_date.DateKey as DispenseDateKey,
     source_data.RefillFirstMonthDiffInDays,
     source_data.TestResultsMonth1,

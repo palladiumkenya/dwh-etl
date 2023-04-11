@@ -49,6 +49,7 @@ select
     agency.AgencyKey,
     partner.PartnerKey,
     age_group.AgeGroupKey,
+    patient.Gender,
     VisitID,
     SexPartnerHIVStatus,
     IsHIVPositivePartnerCurrentonART,
