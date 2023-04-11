@@ -1,6 +1,6 @@
 -- clean ExitDate
 UPDATE [ODS].[DBO].[CT_PatientStatus]
-    SET ExitDate = CAST('1900-01-01' AS DATE)
+    SET ExitDate = NULL
 WHERE ExitDate < CAST('2004-01-01' AS DATE) OR ExitDate > GETDATE()
 
 GO

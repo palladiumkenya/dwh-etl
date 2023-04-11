@@ -1,6 +1,6 @@
 -- clean OTZEnrollmentDate
 UPDATE [ODS].[DBO].[CT_Otz]
-    SET OTZEnrollmentDate = CAST('1900-01-01' AS DATE)
+    SET OTZEnrollmentDate = NULL
 WHERE OTZEnrollmentDate < CAST('2012-01-01' AS DATE) OR OTZEnrollmentDate >  GETDATE()
 
 GO

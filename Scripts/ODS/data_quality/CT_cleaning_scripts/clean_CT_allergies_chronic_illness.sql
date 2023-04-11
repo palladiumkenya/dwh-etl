@@ -8,7 +8,7 @@ GO
 
 -- clean ChronicOnsetDate
 UPDATE [ODS].[DBO].[CT_AllergiesChronicIllness] 
-    SET ChronicOnsetDate = CAST('1900-01-01' AS DATE)
+    SET ChronicOnsetDate = NULL
 WHERE ChronicOnsetDate < CAST('1900-01-01' AS DATE) OR ChronicOnsetDate > GETDATE()
 
 GO
