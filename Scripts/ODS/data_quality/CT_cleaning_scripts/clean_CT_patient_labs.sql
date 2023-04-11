@@ -8,14 +8,14 @@ GO
 
 -- clean ReportedbyDate
 UPDATE [ODS].[DBO].[CT_PatientLabs] 
-    SET ReportedbyDate = CAST('1900-01-01' AS DATE)
+    SET ReportedbyDate = NULL
 WHERE ReportedbyDate < CAST('1900-01-01' AS DATE) OR ReportedbyDate > GETDATE()
 
 GO
 
 -- clean OrderedbyDate
 UPDATE [ODS].[DBO].[CT_PatientLabs] 
-    SET OrderedbyDate = CAST('1900-01-01' AS DATE)
+    SET OrderedbyDate = NULL
 WHERE OrderedbyDate < CAST('1900-01-01' AS DATE) OR OrderedbyDate > GETDATE()
 
 GO
