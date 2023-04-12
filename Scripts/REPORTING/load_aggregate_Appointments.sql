@@ -12,8 +12,8 @@ select
     agency.AgencyName,
     patient.Gender,
     AppointmentStatus,
-    age_group.DATIMAgeGroup,
     count(*) NumOfPatients,
+    age_group.DATIMAgeGroup,
     AsOfDate
 from NDWH.dbo.FACTAppointments as apt
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = apt.FacilityKey
