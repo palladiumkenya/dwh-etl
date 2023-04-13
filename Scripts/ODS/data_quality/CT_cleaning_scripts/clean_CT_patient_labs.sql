@@ -2,7 +2,7 @@
 UPDATE [ODS].[DBO].[CT_PatientLabs] 
     SET TestName = lkp_test_name.target_name
 FROM [ODS].[DBO].[CT_PatientLabs] AS patient_labs
-INNER JOIN lkp_test_name ON lkp_test_name.source_name = patient_labs.TestName
+INNER JOIN ods.dbo.lkp_test_name ON lkp_test_name.source_name = patient_labs.TestName
 
 GO
 

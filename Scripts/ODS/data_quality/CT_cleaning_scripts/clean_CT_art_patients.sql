@@ -75,7 +75,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET ExitReason = lkp_exit_reason.target_name
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_exit_reason ON lkp_exit_reason.source_name = ARTPatients.ExitReason
+INNER JOIN ods.dbo.lkp_exit_reason ON lkp_exit_reason.source_name = ARTPatients.ExitReason
 
 GO
 
@@ -122,13 +122,13 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET PreviousARTRegimen = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.PreviousARTRegimen
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = ARTPatients.PreviousARTRegimen
 
 GO
 
 -- clean LastRegimen
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET LastRegimen = lkp_regimen.target_name 
+    SET LastRegimen = lkpRegimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
 INNER JOIN ODS.dbo.lkp_regimen AS lkpRegimen ON lkpRegimen.source_name = ARTPatients.LastRegimen
 
@@ -139,7 +139,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET StartRegimen = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.StartRegimen
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = ARTPatients.StartRegimen
 
 GO
 
@@ -147,7 +147,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET PatientSource = lkp_patient_source.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_patient_source ON lkp_patient_source.source_name = ARTPatients.PatientSource
+INNER JOIN ods.dbo.lkp_patient_source ON lkp_patient_source.source_name = ARTPatients.PatientSource
 
 GO
 

@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSTeststrategy]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSTeststrategy]
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSTeststrategy]', N'U') IS NOT NULL 
+	TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSTeststrategy];
 GO
 
 INSERT INTO REPORTING.dbo.AggregateHTSTeststrategy (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,

@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{D3D46DFB-48D1-411D-85D9-E382687B1FA5}">
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{78E00169-7318-4EBD-9C26-8DAD22CEEF05}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -101,6 +101,7 @@
       DTS:refId="Package\LOOP THRGH LOOPUP TABLES"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
+      DTS:Disabled="True"
       DTS:DTSID="{42644B83-6352-42DE-AE5C-E4F0CE8DD52D}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:FailPackageOnFailure="True"
@@ -233,25 +234,25 @@
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="163.2,41.6"
+          Size="163.333333333334,41.3333333333334"
           Id="Package\LOOP THRGH LOOPUP TABLES\Execute SQL Task"
           TopLeft="56.5384683806518,33.4727313284705" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="336.8,130.4"
-          Size="336.8,173.6"
+          PanelSize="336.666666666667,130.666666666667"
+          Size="336.666666666667,173.333333333334"
           Id="Package\LOOP THRGH LOOPUP TABLES"
           TopLeft="130.000004768372,35.4545467353065" />
         <NodeLayout
-          Size="163.2,41.6"
+          Size="163.333333333334,41.3333333333334"
           Id="Package\LOOP THRGH UPDATE STMNTS\Execute SQL Task"
           TopLeft="35.8461719603237,26.7333372467698" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="252.8,120"
-          Size="252.8,163.2"
+          PanelSize="252.666666666667,120"
+          Size="252.666666666667,163.333333333334"
           Id="Package\LOOP THRGH UPDATE STMNTS"
           TopLeft="563.846174527908,42.5454560823678" />
         <EdgeLayout

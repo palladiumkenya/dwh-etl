@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2023-03-15T05:49:11.2876046Z</LastWriteTime>
+    <LastWriteTime>2023-04-12T22:03:35.2717273Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -18,12 +18,12 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2023-03-16T12:51:16.9601617Z</LastWriteTime>
+      <LastWriteTime>2023-04-12T22:04:39.0040462Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Intermediate_CT_Tables.dtsx</Name>
-      <LastWriteTime>2023-02-17T11:00:07.6897915Z</LastWriteTime>
+      <LastWriteTime>2023-04-06T09:09:19.2368615Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -38,12 +38,12 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Aggregate_Tables.dtsx</Name>
-      <LastWriteTime>2023-03-15T05:48:07.2322935Z</LastWriteTime>
+      <LastWriteTime>2023-04-12T22:03:35.227726Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>C$TMaster.dtsx</Name>
-      <LastWriteTime>2023-03-13T16:42:41.9280106Z</LastWriteTime>
+      <LastWriteTime>2023-04-12T17:30:38.5588937Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -63,7 +63,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>HashODSPIIColumns.dtsx</Name>
-      <LastWriteTime>2023-03-12T17:55:16.2968766Z</LastWriteTime>
+      <LastWriteTime>2023-04-12T17:49:53.261825Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -103,7 +103,37 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>CT_DataCleanUP.dtsx</Name>
-      <LastWriteTime>2023-03-15T13:27:26.1095529Z</LastWriteTime>
+      <LastWriteTime>2023-04-12T06:08:08.373919Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Remove_CT_Duplicates.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2508677Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>HTSMaster.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2328628Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>HTS_DataCleanUP.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2328628Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Remove_HTS_Duplicates.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2518622Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>PrEPMaster.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2498645Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>PrEP_DataCleanUP.dtsx</Name>
+      <LastWriteTime>2023-04-06T09:09:19.2508677Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>
