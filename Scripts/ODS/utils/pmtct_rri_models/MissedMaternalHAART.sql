@@ -83,6 +83,7 @@ Select
         [Period],
         Count (*) As HIVPosPreg,
         count (StartARTDate) As onART,
+        Count (*) - count (StartARTDate) As NotonART,
         Sum (KnownPositive) As KnownPositives,
         Sum (New) As New
    from Linelist
