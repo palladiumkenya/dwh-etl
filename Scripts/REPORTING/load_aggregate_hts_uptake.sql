@@ -1,4 +1,4 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSUptake]') AND type in (N'U')) 
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSUptake]', N'U') IS NOT NULL 
 TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSUptake]
 GO
 

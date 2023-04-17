@@ -1,7 +1,7 @@
 
 -- clean bWHODate
 UPDATE [ODS].[DBO].[CT_PatientBaselines]
-    SET bWHODate = CAST('1900-01-01' AS DATE)
+    SET bWHODate = NULL
 WHERE bWHODate < CAST('1980-01-01' AS DATE) OR bWHODate > GETDATE()
 
 GO
@@ -15,7 +15,7 @@ GO
 
 -- clean bCD4Date
 UPDATE [ODS].[DBO].[CT_PatientBaselines]
-    SET bCD4Date = CAST('1900-01-01' AS DATE)
+    SET bCD4Date = NULL
 WHERE bCD4Date < CAST('1980-01-01' AS DATE) OR bCD4Date > GETDATE()
 
 GO
