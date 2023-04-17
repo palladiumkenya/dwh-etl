@@ -93,6 +93,8 @@ PrepVisits as (
         PrepVisits.BMI,
         PrepVisits.STIScreening,
         PrepVisits.STISymptoms,
+        case when   PrepVisits.STISymptoms  is not null then 1 else 0 end as STIPositive,
+        case when   PrepVisits.STISymptoms  is  null then 1 else 0 end as STINegative,
         PrepVisits.STITreated,
         PrepVisits.Circumcised,
         PrepVisits.VMMCReferral,
@@ -147,3 +149,4 @@ PrepVisits as (
     
     alter table NDWH.dbo.FactPrep add primary key(FactKey);
 END
+
