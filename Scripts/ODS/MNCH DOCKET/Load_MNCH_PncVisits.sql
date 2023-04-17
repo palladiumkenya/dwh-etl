@@ -16,9 +16,10 @@ BEGIN
 						  ,P.[Date_Last_Modified]
 
 					  FROM [MNCHCentral].[dbo].[PncVisits] P (nolock)
-					  inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[PncVisits] (NoLock)tn
-						group by tn.PatientPK,tn.SiteCode)tm
-					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
+					  inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted 
+									FROM [MNCHCentral].[dbo].[PncVisits] (NoLock)tn
+								  group by tn.PatientPK,tn.SiteCode)tm
+								on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
 					   INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
 							on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
