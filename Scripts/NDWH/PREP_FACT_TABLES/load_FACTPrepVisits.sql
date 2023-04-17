@@ -147,6 +147,6 @@ PrepVisits as (
     left join NDWH.dbo.DimDate as pregnancy on pregnancy.Date = PrepVisits.PregnancyEndDate
     left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment;
     
-    alter table NDWH.dbo.FactPrep add primary key(FactKey);
+    alter table NDWH.dbo.FactPrepVisits add primary key(FactKey);
 END
 
