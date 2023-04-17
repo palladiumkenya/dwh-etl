@@ -14,11 +14,21 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="26"
-  DTS:VersionGUID="{5EF7B5D8-6B70-4152-BDA9-69E5AE8FE33B}">
+  DTS:VersionBuild="32"
+  DTS:VersionGUID="{C7D36941-8F46-4DCA-AD5C-51820C9FCC7E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Intermediate_PatientPK.sql]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{2016487A-11A1-431D-81A1-51BBA0381428}"
+      DTS:ObjectName="Intermediate_PatientPK.sql">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\HTS\INTERMIADIATE\Intermediate_PatientPK.sql" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[LocalHost.ODS]"
       DTS:CreationName="OLEDB"
@@ -152,26 +162,6 @@
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PatientPKHash.sql 1]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{AFAFD8F2-F37F-40EA-93F7-D0A87444D59E}"
-      DTS:ObjectName="Update_PatientPKHash.sql 1">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\HTS\HASH_PATIENTPK\Update_PatientPKHash.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PatientPKHash.sql 2]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{2CA69FCD-986A-4B30-B5B5-C50FE18E11EB}"
-      DTS:ObjectName="Update_PatientPKHash.sql 2">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\HASH_PATIENTPK\Update_PatientPKHash.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Update_PatientPKHash_HtsNumberHash.sql]"
       DTS:CreationName="FILE"
       DTS:DTSID="{97C26019-6463-46DF-81C5-3D7A37A98A38}"
@@ -202,43 +192,13 @@
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PrEPINtermidiatePatientIDHash.sql]"
+      DTS:refId="Package.ConnectionManagers[Update_PrEPIntermidiatePatientPK_PrepNumberHash.sql]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{92495F78-B62A-4B02-B6AF-F09A12980D91}"
-      DTS:ObjectName="Update_PrEPINtermidiatePatientIDHash.sql">
+      DTS:DTSID="{812F3EE6-8CC3-4875-9173-62420A130C42}"
+      DTS:ObjectName="Update_PrEPIntermidiatePatientPK_PrepNumberHash.sql">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\INTERMIADIATE_TABLES\HASH_PrEPNumber\Update_PrEPINtermidiatePatientIDHash.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PrEPIntermidiatePatientPKHash.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{E6A878DE-61D8-4EBC-B00B-1F2B2A637F77}"
-      DTS:ObjectName="Update_PrEPIntermidiatePatientPKHash.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\INTERMIADIATE_TABLES\HASH_PATIENTPK\Update_PrEPIntermidiatePatientPKHash.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PrepNumberHash.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{7616BC5B-68B3-4375-8019-61BEF62C084C}"
-      DTS:ObjectName="Update_PrepNumberHash.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\HASH_PrEPNumber\Update_PrepNumberHash.sql" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[Update_PrEPPatientPKHash.sql]"
-      DTS:CreationName="FILE"
-      DTS:DTSID="{F57A937D-195B-409F-A8B0-A423F3A94266}"
-      DTS:ObjectName="Update_PrEPPatientPKHash.sql">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\HASH_PATIENTPK\Update_PrEPPatientPKHash.sql" />
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\ODS\utils\COLUMN_HASHING\PrEP\INTERMIADIATE_TABLES\PATIENTPK_PrEPNumber\Update_PrEPIntermidiatePatientPK_PrepNumberHash.sql" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -265,7 +225,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_CT_IntermidiatePatientIDHash"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -284,7 +244,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_CT_IntermidiatePatientPKHash"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -303,7 +263,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_CT_PatientIDHash"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="5">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -321,7 +281,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_CT_PatientNupiHash"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -340,13 +300,30 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_CT_PatientPKHash"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="5">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
               SQLTask:SqlStmtSourceType="FileConnection"
               SQLTask:SqlStatementSource="Update_PatientPKHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Sequence Container\Update_htsIntermidiatePatientPKHash"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{F08D5D3B-3792-4636-8B86-117591A19E18}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Update_htsIntermidiatePatientPKHash"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="Intermediate_PatientPK.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
         <DTS:Executable
@@ -359,7 +336,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_HtsNumberHash"
-          DTS:ThreadHint="3">
+          DTS:ThreadHint="6">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -377,7 +354,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_htsPatientNupiHash"
-          DTS:ThreadHint="4">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -396,7 +373,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_htsPatientPKHash"
-          DTS:ThreadHint="3">
+          DTS:ThreadHint="6">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -414,7 +391,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_IntermidiatePatientPKHash_PatientIDHash"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -432,7 +409,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_mnchPatientNupiHash"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -451,7 +428,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_mnchPatientPKHash"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -469,7 +446,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_mnchPatientPK_PatientMnchIDHash"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -487,7 +464,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_PatientPKHash_HtsNumberHash"
-          DTS:ThreadHint="4">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -505,7 +482,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_PatientPKHash_PatientIDHash"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -518,35 +495,18 @@
           DTS:refId="Package\Sequence Container\Update_PatientPK_PrepNumberHash"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Execute SQL Task"
-          DTS:DTSID="{13ABA406-D309-4101-BA1D-4FE2475AD41F}"
+          DTS:DTSID="{7176F147-9506-48F0-87A5-4A3435F8265C}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_PatientPK_PrepNumberHash"
-          DTS:ThreadHint="5">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
               SQLTask:SqlStmtSourceType="FileConnection"
               SQLTask:SqlStatementSource="Update_PatientPK_PrepNumberHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-          </DTS:ObjectData>
-        </DTS:Executable>
-        <DTS:Executable
-          DTS:refId="Package\Sequence Container\Update_PrEPINtermidiatePatientIDHash"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{5a0458ac-640e-4a38-afc9-e18e21097354}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:FailPackageOnFailure="True"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="Update_PrEPINtermidiatePatientIDHash"
-          DTS:ThreadHint="5">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
-              SQLTask:SqlStmtSourceType="FileConnection"
-              SQLTask:SqlStatementSource="Update_PrEPINtermidiatePatientIDHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
         <DTS:Executable
@@ -559,13 +519,31 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_PrEPIntermidiatePatientPKHash"
-          DTS:ThreadHint="6">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
               SQLTask:SqlStmtSourceType="FileConnection"
               SQLTask:SqlStatementSource="Update_PrEPIntermidiatePatientPKHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Sequence Container\Update_PrEPIntermidiatePatientPK_PrepNumberHash"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{5A904EE3-9A21-479C-A20A-AF0C71C82889}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:FailPackageOnFailure="True"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Update_PrEPIntermidiatePatientPK_PrepNumberHash"
+          DTS:ThreadHint="1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="Update_PrEPIntermidiatePatientPK_PrepNumberHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
         <DTS:Executable
@@ -578,31 +556,13 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Update_PrepNumberHash"
-          DTS:ThreadHint="6">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
               SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
               SQLTask:SqlStmtSourceType="FileConnection"
               SQLTask:SqlStatementSource="Update_PrepNumberHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-          </DTS:ObjectData>
-        </DTS:Executable>
-        <DTS:Executable
-          DTS:refId="Package\Sequence Container\Update_PrEPPatientPKHash"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{fe69a801-0f50-4e55-8a26-acd832f4e770}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:FailPackageOnFailure="True"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="Update_PrEPPatientPKHash"
-          DTS:ThreadHint="5">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{45A0E0A9-F680-4047-9264-35C60DC3651A}"
-              SQLTask:SqlStmtSourceType="FileConnection"
-              SQLTask:SqlStatementSource="Update_PrEPPatientPKHash.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
           </DTS:ObjectData>
         </DTS:Executable>
       </DTS:Executables>
@@ -640,6 +600,14 @@
           DTS:ObjectName="Constraint 11"
           DTS:To="Package\Sequence Container\Update_mnchPatientPK_PatientMnchIDHash" />
         <DTS:PrecedenceConstraint
+          DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 12]"
+          DTS:CreationName=""
+          DTS:DTSID="{661F4228-AED8-42CD-8A0D-23FDE19B51B7}"
+          DTS:From="Package\Sequence Container\Update_htsPatientNupiHash"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 12"
+          DTS:To="Package\Sequence Container\Update_htsIntermidiatePatientPKHash" />
+        <DTS:PrecedenceConstraint
           DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 2]"
           DTS:CreationName=""
           DTS:DTSID="{66B73C01-D51A-4A00-8CDB-6F1D0A45B880}"
@@ -674,19 +642,11 @@
         <DTS:PrecedenceConstraint
           DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 6]"
           DTS:CreationName=""
-          DTS:DTSID="{E95CA8F9-D036-4A49-A62D-7C3657713A5D}"
+          DTS:DTSID="{BCB76F18-B389-4D03-B139-A0FDC5317918}"
           DTS:From="Package\Sequence Container\Update_PatientPK_PrepNumberHash"
           DTS:LogicalAnd="True"
           DTS:ObjectName="Constraint 6"
-          DTS:To="Package\Sequence Container\Update_PrEPINtermidiatePatientIDHash" />
-        <DTS:PrecedenceConstraint
-          DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 7]"
-          DTS:CreationName=""
-          DTS:DTSID="{5BBAC5ED-8EDB-447D-9511-5D45ADE34404}"
-          DTS:From="Package\Sequence Container\Update_PrEPINtermidiatePatientIDHash"
-          DTS:LogicalAnd="True"
-          DTS:ObjectName="Constraint 7"
-          DTS:To="Package\Sequence Container\Update_PrEPPatientPKHash" />
+          DTS:To="Package\Sequence Container\Update_PrEPIntermidiatePatientPK_PrepNumberHash" />
         <DTS:PrecedenceConstraint
           DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 8]"
           DTS:CreationName=""
@@ -787,7 +747,7 @@
           Id="Package\Sequence Container\Update_CT_PatientNupiHash"
           TopLeft="34.6307660847717,471.769700328137" />
         <NodeLayout
-          Size="205,42"
+          Size="205.333333333334,42"
           Id="Package\Sequence Container\Update_CT_PatientPKHash"
           TopLeft="32.7846135647342,255.424255046853" />
         <NodeLayout
@@ -799,11 +759,11 @@
           Id="Package\Sequence Container\Update_htsPatientNupiHash"
           TopLeft="599.461553994015,208.612131984743" />
         <NodeLayout
-          Size="201,42"
+          Size="201.333333333334,42"
           Id="Package\Sequence Container\Update_htsPatientPKHash"
           TopLeft="630.538479751384,5.73333677715641" />
         <NodeLayout
-          Size="317,42"
+          Size="317.333333333334,42.6666666666667"
           Id="Package\Sequence Container\Update_IntermidiatePatientPKHash_PatientIDHash"
           TopLeft="16.8615380383103,642.018194455024" />
         <NodeLayout
@@ -819,21 +779,13 @@
           Id="Package\Sequence Container\Update_mnchPatientPKHash"
           TopLeft="27.5692282298609,72.1090981667362" />
         <NodeLayout
-          Size="212,42"
-          Id="Package\Sequence Container\Update_PatientPK_PrepNumberHash"
-          TopLeft="299.630780573286,140.375764207253" />
-        <NodeLayout
-          Size="269,42"
+          Size="269.333333333334,42"
           Id="Package\Sequence Container\Update_PatientPKHash_HtsNumberHash"
           TopLeft="586.661559129185,122.036367307879" />
         <NodeLayout
-          Size="259,42"
+          Size="258.666666666667,42"
           Id="Package\Sequence Container\Update_PatientPKHash_PatientIDHash"
           TopLeft="28.1692306140469,313.115160167404" />
-        <NodeLayout
-          Size="266,42"
-          Id="Package\Sequence Container\Update_PrEPINtermidiatePatientIDHash"
-          TopLeft="289.907700095093,226.545457021591" />
         <NodeLayout
           Size="266,42"
           Id="Package\Sequence Container\Update_PrEPIntermidiatePatientPKHash"
@@ -842,10 +794,6 @@
           Size="200,42"
           Id="Package\Sequence Container\Update_PrepNumberHash"
           TopLeft="275.276925573971,13.2181902285123" />
-        <NodeLayout
-          Size="208,42"
-          Id="Package\Sequence Container\Update_PrEPPatientPKHash"
-          TopLeft="336.046158572203,299.612139968154" />
         <EdgeLayout
           Id="Package\Sequence Container.PrecedenceConstraints[Constraint]"
           TopLeft="132.873075343025,47.1">
@@ -908,9 +856,9 @@
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="20.4076958769157,35.8484790992909"
+              EndConnector="20.5743625435824,35.8484790992909"
               Start="0,0"
-              End="20.4076958769157,28.3484790992909">
+              End="20.5743625435824,28.3484790992909">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -921,13 +869,13 @@
                     Point2="0,17.9242395496454"
                     Point3="4,17.9242395496454" />
                   <mssgle:LineSegment
-                    End="16.4076958769157,17.9242395496454" />
+                    End="16.5743625435824,17.9242395496454" />
                   <mssgle:CubicBezierSegment
-                    Point1="16.4076958769157,17.9242395496454"
-                    Point2="20.4076958769157,17.9242395496454"
-                    Point3="20.4076958769157,21.9242395496454" />
+                    Point1="16.5743625435824,17.9242395496454"
+                    Point2="20.5743625435824,17.9242395496454"
+                    Point3="20.5743625435824,21.9242395496454" />
                   <mssgle:LineSegment
-                    End="20.4076958769157,28.3484790992909" />
+                    End="20.5743625435824,28.3484790992909" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1071,74 +1019,6 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Sequence Container.PrecedenceConstraints[Constraint 6]"
-          TopLeft="405.430780573286,181.975764207253">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="17.2769195218062,44.5696928143376"
-              Start="0,0"
-              End="17.2769195218062,37.0696928143376">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,18.2848464071688" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,18.2848464071688"
-                    Point2="0,22.2848464071688"
-                    Point3="4,22.2848464071688" />
-                  <mssgle:LineSegment
-                    End="13.2769195218062,22.2848464071688" />
-                  <mssgle:CubicBezierSegment
-                    Point1="13.2769195218062,22.2848464071688"
-                    Point2="17.2769195218062,22.2848464071688"
-                    Point3="17.2769195218062,26.2848464071688" />
-                  <mssgle:LineSegment
-                    End="17.2769195218062,37.0696928143376" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Sequence Container.PrecedenceConstraints[Constraint 7]"
-          TopLeft="422.707700095093,268.145457021591">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="17.3384584771102,31.4666829465629"
-              Start="0,0"
-              End="17.3384584771102,23.9666829465629">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,11.7333414732814" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,11.7333414732814"
-                    Point2="0,15.7333414732814"
-                    Point3="4,15.7333414732814" />
-                  <mssgle:LineSegment
-                    End="13.3384584771102,15.7333414732814" />
-                  <mssgle:CubicBezierSegment
-                    Point1="13.3384584771102,15.7333414732814"
-                    Point2="17.3384584771102,15.7333414732814"
-                    Point3="17.3384584771102,19.7333414732814" />
-                  <mssgle:LineSegment
-                    End="17.3384584771102,23.9666829465629" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
           Id="Package\Sequence Container.PrecedenceConstraints[Constraint 8]"
           TopLeft="156.984614848526,428.448504458359">
           <EdgeLayout.Curve>
@@ -1206,15 +1086,83 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <NodeLayout
+          Size="258.666666666667,42.6666666666667"
+          Id="Package\Sequence Container\Update_htsIntermidiatePatientPKHash"
+          TopLeft="604.416657521079,296.533329056104" />
+        <EdgeLayout
+          Id="Package\Sequence Container.PrecedenceConstraints[Constraint 12]"
+          TopLeft="722.461553994015,250.612131984743">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="11.2884368603973,45.9211970713611"
+              Start="0,0"
+              End="11.2884368603973,38.4211970713611">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.9605985356805" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,18.9605985356805"
+                    Point2="0,22.9605985356805"
+                    Point3="4,22.9605985356805" />
+                  <mssgle:LineSegment
+                    End="7.28843686039727,22.9605985356805" />
+                  <mssgle:CubicBezierSegment
+                    Point1="7.28843686039727,22.9605985356805"
+                    Point2="11.2884368603973,22.9605985356805"
+                    Point3="11.2884368603973,26.9605985356805" />
+                  <mssgle:LineSegment
+                    End="11.2884368603973,38.4211970713611" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="210,42.6666666666667"
+          Id="Package\Sequence Container\Update_PatientPK_PrepNumberHash"
+          TopLeft="315.833328527709,140.399998884201" />
+        <NodeLayout
+          Size="295.333333333334,42.6666666666667"
+          Id="Package\Sequence Container\Update_PrEPIntermidiatePatientPK_PrepNumberHash"
+          TopLeft="272.708329170322,230.09999728024" />
+        <EdgeLayout
+          Id="Package\Sequence Container.PrecedenceConstraints[Constraint 6]"
+          TopLeft="420.604162182349,183.066665550868">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,47.0333317293723"
+              Start="0,0"
+              End="0,39.5333317293723">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,39.5333317293723" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="860,740"
-          Size="860,783"
+          PanelSize="874,740"
+          Size="874,782.666666666667"
           Id="Package\Sequence Container"
           TopLeft="9.55384546257295,108.818185532389" />
         <NodeLayout
-          Size="181,42"
+          Size="181.333333333334,42"
           Id="Package\Update_EndDateTime"
           TopLeft="946.953880491766,530.96364818933" />
         <NodeLayout
@@ -1227,9 +1175,9 @@
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="239.769228229861,53.8181850627766"
+              EndConnector="246.769228229861,53.8181850627766"
               Start="0,0"
-              End="239.769228229861,46.3181850627766">
+              End="246.769228229861,46.3181850627766">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -1240,13 +1188,13 @@
                     Point2="0,26.9090925313883"
                     Point3="4,26.9090925313883" />
                   <mssgle:LineSegment
-                    End="235.769228229861,26.9090925313883" />
+                    End="242.769228229861,26.9090925313883" />
                   <mssgle:CubicBezierSegment
-                    Point1="235.769228229861,26.9090925313883"
-                    Point2="239.769228229861,26.9090925313883"
-                    Point3="239.769228229861,30.9090925313883" />
+                    Point1="242.769228229861,26.9090925313883"
+                    Point2="246.769228229861,26.9090925313883"
+                    Point3="246.769228229861,30.9090925313883" />
                   <mssgle:LineSegment
-                    End="239.769228229861,46.3181850627766" />
+                    End="246.769228229861,46.3181850627766" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1257,30 +1205,30 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="869.553845462573,500.318185532389">
+          TopLeft="883.553845462573,500.151518865722">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="77.4000350291931,51.645462656941"
+              EndConnector="63.400035029193,51.8121293236077"
               Start="0,0"
-              End="69.9000350291931,51.645462656941">
+              End="55.900035029193,51.8121293236077">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="34.7000175145965,0" />
+                    End="27.7000175145965,0" />
                   <mssgle:CubicBezierSegment
-                    Point1="34.7000175145965,0"
-                    Point2="38.7000175145965,0"
-                    Point3="38.7000175145965,4" />
+                    Point1="27.7000175145965,0"
+                    Point2="31.7000175145965,0"
+                    Point3="31.7000175145965,4" />
                   <mssgle:LineSegment
-                    End="38.7000175145965,47.645462656941" />
+                    End="31.7000175145965,47.8121293236077" />
                   <mssgle:CubicBezierSegment
-                    Point1="38.7000175145965,47.645462656941"
-                    Point2="38.7000175145965,51.645462656941"
-                    Point3="42.7000175145965,51.645462656941" />
+                    Point1="31.7000175145965,47.8121293236077"
+                    Point2="31.7000175145965,51.8121293236077"
+                    Point3="35.7000175145965,51.8121293236077" />
                   <mssgle:LineSegment
-                    End="69.9000350291931,51.645462656941" />
+                    End="55.900035029193,51.8121293236077" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

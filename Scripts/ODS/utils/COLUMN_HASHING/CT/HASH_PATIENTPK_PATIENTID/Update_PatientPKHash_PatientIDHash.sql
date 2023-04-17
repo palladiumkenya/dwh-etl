@@ -137,6 +137,14 @@
 		on Ipt.SiteCode = p.SiteCode and Ipt.PatientPK = p.PatientPK
 	WHERE Ipt.PatientPKHash IS NULL OR Ipt.PatientIDHash IS NULL;
 
+		update Phar 
+		set PatientPKHash = p.PatientPKHash,
+		    Phar.PatientIDHash = p.PatientIDHash
+	from ODS.dbo.CT_PatientPharmacy   Phar
+	JOIN ODS.dbo.CT_Patient p
+	on Phar .SiteCode = p.SiteCode and Phar .PatientPK = p.PatientPK
+	WHERE Phar.PatientPKHash IS NULL OR Phar.PatientIDHash IS NULL;
+
 	update Labs 
 		set PatientPKHash = p.PatientPKHash,
 			Labs.PatientIDHash = p.PatientIDHash
@@ -144,14 +152,8 @@
 		JOIN ODS.dbo.CT_Patient p
 		on Labs .SiteCode = p.SiteCode and Labs .PatientPK = p.PatientPK
 		WHERE Labs.PatientPKHash IS NULL OR Labs.PatientIDHash IS NULL;
+	
 
-	update Phar 
-		set PatientPKHash = p.PatientPKHash,
-		    Phar.PatientIDHash = p.PatientIDHash
-	from ODS.dbo.CT_PatientPharmacy   Phar
-	JOIN ODS.dbo.CT_Patient p
-	on Phar .SiteCode = p.SiteCode and Phar .PatientPK = p.PatientPK
-	WHERE Phar.PatientPKHash IS NULL OR Phar.PatientIDHash IS NULL;
 
 
 

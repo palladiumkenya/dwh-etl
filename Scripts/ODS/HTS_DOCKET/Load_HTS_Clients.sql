@@ -1,3 +1,4 @@
+
 BEGIN
 
 			MERGE [ODS].[dbo].[HTS_clients] AS a
@@ -11,9 +12,10 @@ BEGIN
 					  ,CAST ([Dob] AS DATE) AS [Dob]
 					  ,LEFT([Gender],1) AS Gender
 					  ,[MaritalStatus]
-					  ,[KeyPopulationType]
-					  ,[PatientDisabled] AS [DisabilityType]
-					  ,PatientDisabled
+					  ,coalesce([KeyPopulationType],'',null) AS [KeyPopulationType]
+					  ,coalesce([PatientDisabled],'',null) AS [DisabilityType]
+					 -- ,PatientDisabled
+					  ,coalesce([PatientDisabled],'',null) as PatientDisabled
 					  ,[County]
 					  ,[SubCounty]
 					  ,[Ward]
@@ -36,13 +38,12 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType  ) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName,Serial,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType)
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType  ) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType)
 				
 					WHEN MATCHED THEN
 						UPDATE SET       
 							
-							a.FacilityName	   =b.FacilityName,
 							a.Dob			   =b.Dob,
 							a.Gender		   =b.Gender,
 							a.MaritalStatus	   =b.MaritalStatus,

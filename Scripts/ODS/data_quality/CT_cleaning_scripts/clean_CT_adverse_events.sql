@@ -2,18 +2,18 @@
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
     SET AdverseEvent = lkp_adverse_events.target_name
 FROM [ODS].[DBO].[CT_AdverseEvents] AS adverse_events
-INNER JOIN lkp_adverse_events ON lkp_adverse_events.source_name = adverse_events.AdverseEvent
+INNER JOIN ods.dbo.lkp_adverse_events ON lkp_adverse_events.source_name = adverse_events.AdverseEvent
 
 GO
 
 -- clean AdverseEventStartDate
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
-    SET AdverseEventStartDate = CAST('1900-01-01' AS DATE)
+    SET AdverseEventStartDate = NULL
 WHERE AdverseEventStartDate < CAST('1980-01-01' AS DATE) OR AdverseEventStartDate > GETDATE()
 
 -- clean AdverseEventEndDate
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
-    SET AdverseEventEndDate = CAST('1900-01-01' AS DATE)
+    SET AdverseEventEndDate = NULL
 WHERE AdverseEventEndDate < CAST('1980-01-01' AS DATE) OR AdverseEventEndDate > GETDATE()
 
 GO
@@ -33,7 +33,7 @@ GO
 UPDATE [ODS].[DBO].[CT_AdverseEvents]
     SET AdverseEventRegimen = lkp_regimen.target_name
 FROM [ODS].[DBO].[CT_AdverseEvents] AS adverse_events
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = adverse_events.AdverseEventRegimen
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = adverse_events.AdverseEventRegimen
 
 GO
 

@@ -1,7 +1,13 @@
 -- ----------------------------
 -- procedure structure for generate_consistency_uploads
 -- ----------------------------
-IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[generate_consistency_uploads]') AND type IN ('P', 'PC', 'RF', 'X'))
+--IF OBJECT_ID(N'[dbo].[generate_consistency_uploads]', N'U') IS NOT NULL 
+
+IF EXISTS ( SELECT  *
+            FROM    sys.objects
+            WHERE   object_id = OBJECT_ID(N'generate_consistency_uploads')
+                    AND type IN ( N'P', N'PC' ) ) 
+
 	DROP PROCEDURE [dbo].[generate_consistency_uploads]
 GO
 

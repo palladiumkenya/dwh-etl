@@ -17,7 +17,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						--and a.ID  = b.ID
+						 and a.[DNAPCR1Date]  = b.[DNAPCR1Date]
 							)
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified) 
@@ -30,10 +30,11 @@ BEGIN
 
 					;with cte AS ( Select            
 									P.PatientPK,            
-									P.SiteCode,            
+									P.SiteCode,  
+									[DNAPCR1Date],
 					
 					ROW_NUMBER() OVER (PARTITION BY P.PatientPK,P.SiteCode
-					ORDER BY P.PatientPK,P.SiteCode) Row_Num
+					ORDER BY P.PatientPK,P.SiteCode,[DNAPCR1Date]) Row_Num
 					FROM [ODS].[dbo].[MNCH_Heis] p)   
 		
 				delete from cte

@@ -61,12 +61,12 @@ BEGIN
 				and a.PartnerPatientPk  = b.PartnerPatientPk 				
 				and a.DateElicited  = b.DateElicited
 				and a.Dob  = b.Dob
-				--and a.ID = b.ID
+				and a.ID = b.ID
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,Dateextracted) 
-		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,Dateextracted)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare/*,Dateextracted*/) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare/*,Dateextracted*/)
 
 	WHEN MATCHED THEN
 		UPDATE SET 
@@ -91,7 +91,7 @@ BEGIN
 					ROW_NUMBER() OVER (PARTITION BY a.FacilityName,a.SiteCode,a.PatientPk,a.HtsNumber,a.Emr,a.Project,a.PartnerPatientPk,a.KnowledgeOfHivStatus,a.PartnerPersonID,a.CccNumber,a.IpvScreeningOutcome,a.ScreenedForIpv,a.PnsConsent,a.
 													RelationsipToIndexClient,a.LinkedToCare,a.PnsApproach,a.FacilityLinkedTo,a.CurrentlyLivingWithIndexClient,a.Age,a.DateElicited,a.Dob,a.LinkDateLinkedToCare
 									
-					ORDER BY a.DateExtracted desc) Row_Num
+					ORDER BY a.SiteCode,a.PatientPk desc) Row_Num
 			from [ODS].[dbo].[HTS_PartnerNotificationServices] a
 			-- where a.HtsNumber = 'mggwca' and a.SiteCode = 12483 and a.PatientPk = 953 
 			  ) 

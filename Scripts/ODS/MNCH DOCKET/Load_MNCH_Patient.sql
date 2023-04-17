@@ -18,11 +18,23 @@ BEGIN
 						
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI) 
-						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI)
+						INSERT(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI) 
+						VALUES(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Status]	 =b.[Status];
+							a.Occupation	 =b.Occupation;
+
+				with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode ORDER BY
+						PatientPK,Sitecode) Row_Num
+						FROM  [ODS].[dbo].[MNCH_Patient](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 END
 
