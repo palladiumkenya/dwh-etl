@@ -1,62 +1,62 @@
 -- clean DOB
 UPDATE [ODS].[DBO].[CT_ARTPatients] 
-    SET DOB = CAST('1900-01-01' AS DATE)
+    SET DOB = NULL
 WHERE DOB < CAST('1900-01-01' AS DATE) OR DOB >  GETDATE()
 
 GO
 
 -- clean StartARtDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET StartARTDate = CAST('1900-01-01' AS DATE)
+    SET StartARTDate = NULL
 WHERE StartARTDate < CAST('1980-01-01' AS DATE) OR StartARTDate > GETDATE()
 
 GO
 
 -- clean StartARTAtThisFacility
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET StartARTAtThisFacility = CAST('1900-01-01' AS DATE)
+    SET StartARTAtThisFacility = NULL
 WHERE StartARTAtThisFacility < CAST('1980-01-01' AS DATE) OR StartARTAtThisFacility > GETDATE()
 
 GO
 
 -- clean LastARTDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET LastARTDate = CAST('1900-01-01' AS DATE)
+    SET LastARTDate = NULL
 WHERE LastARTDate < CAST('1980-01-01' AS DATE) OR LastARTDate > GETDATE()
 
 GO
 
 -- clean RegistrationDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET RegistrationDate = CAST('1900-01-01' AS DATE)
+    SET RegistrationDate = NULL
 WHERE RegistrationDate < CAST('1980-01-01' AS DATE) OR RegistrationDate > GETDATE()
 
 GO
 
 -- clean PreviousARTStartDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET PreviousARTStartDate = CAST('1900-01-01' AS DATE)
+    SET PreviousARTStartDate = NULL
 WHERE PreviousARTStartDate < CAST('1980-01-01' AS DATE) OR PreviousARTStartDate > GETDATE()
 
 GO
 
 -- clean ExpectedReturn
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET ExpectedReturn = CAST('1900-01-01' AS DATE)
+    SET ExpectedReturn = NULL
 WHERE ExpectedReturn < CAST('1980-01-01' AS DATE) 
 
 GO
 
 -- clean LastVisit
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET LastVisit = CAST('1900-01-01' AS DATE)
+    SET LastVisit = NULL
 WHERE LastVisit < CAST('1980-01-01' AS DATE) OR LastVisit > GETDATE()
 
 GO
 
 -- clean ExitDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET ExitDate = CAST('1900-01-01' AS DATE)
+    SET ExitDate = NULL
 WHERE ExitDate < CAST('1980-01-01' AS DATE) OR ExitDate > GETDATE()
 
 GO
@@ -75,7 +75,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET ExitReason = lkp_exit_reason.target_name
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_exit_reason ON lkp_exit_reason.source_name = ARTPatients.ExitReason
+INNER JOIN ods.dbo.lkp_exit_reason ON lkp_exit_reason.source_name = ARTPatients.ExitReason
 
 GO
 
@@ -122,15 +122,16 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET PreviousARTRegimen = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.PreviousARTRegimen
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = ARTPatients.PreviousARTRegimen
 
 GO
 
 -- clean LastRegimen
 UPDATE [ODS].[DBO].[CT_ARTPatients]
-    SET LastRegimen = lkp_regimen.target_name 
+    SET LastRegimen = lkpRegimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.LastRegimen
+INNER JOIN ODS.dbo.lkp_regimen AS lkpRegimen ON lkpRegimen.source_name = ARTPatients.LastRegimen
+
 
 GO
 
@@ -138,7 +139,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET StartRegimen = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = ARTPatients.StartRegimen
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = ARTPatients.StartRegimen
 
 GO
 
@@ -146,7 +147,7 @@ GO
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET PatientSource = lkp_patient_source.target_name 
 FROM [ODS].[DBO].[CT_ARTPatients] AS ARTPatients
-INNER JOIN lkp_patient_source ON lkp_patient_source.source_name = ARTPatients.PatientSource
+INNER JOIN ods.dbo.lkp_patient_source ON lkp_patient_source.source_name = ARTPatients.PatientSource
 
 GO
 

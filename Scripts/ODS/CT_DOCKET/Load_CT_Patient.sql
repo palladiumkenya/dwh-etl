@@ -11,7 +11,10 @@ BEGIN
 			VALUES(@RegistrationDate,GETDATE())
 			--truncate table [ODS].[dbo].[CT_Patient] 
 			MERGE [ODS].[dbo].[CT_Patient] AS a
-				USING(SELECT  DISTINCT P.ID,P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,PKV,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
+				USING(SELECT  DISTINCT P.ID,P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC
+										,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village
+									   ,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,PKV,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,
+									   PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
 
 						FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F with (NoLock)  
@@ -36,10 +39,7 @@ BEGIN
 						WHEN MATCHED THEN
 							UPDATE SET 				
 							
-							a.PatientSource				=b.PatientSource,
-							a.Region					=b.Region,
-							a.District					=b.District,
-							a.Village					=b.Village,
+							a.PatientSource				=b.PatientSource,							
 							a.ContactRelation			=b.ContactRelation,
 							a.LastVisit					=b.LastVisit,
 							a.MaritalStatus				=b.MaritalStatus,
@@ -86,4 +86,5 @@ BEGIN
 					GROUP BY SiteCode;
 
 	END
+
 

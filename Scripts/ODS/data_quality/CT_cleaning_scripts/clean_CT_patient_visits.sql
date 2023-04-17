@@ -1,6 +1,6 @@
 -- clean OIDate
 UPDATE [ODS].[DBO].[CT_PatientVisits]
-    SET OIDate = CAST('1900-01-01' AS DATE)
+    SET OIDate = NULL
 WHERE OIDate < CAST('2000-01-01' AS DATE) OR OIDate > GETDATE()
 
 GO
@@ -76,14 +76,14 @@ GO
 
 -- clean VisitDate
 UPDATE [ODS].[DBO].[CT_PatientVisits]
-    SET VisitDate = CAST('1900-01-01' AS DATE)
+    SET VisitDate = NULL
 WHERE VisitDate < CAST('1980-01-01' AS DATE) OR VisitDate > GETDATE()
 
 GO
 
 -- clean NextAppointmentDate
 UPDATE [ODS].[DBO].[CT_PatientVisits]
-    SET NextAppointmentDate = CAST('1900-01-01' AS DATE)
+    SET NextAppointmentDate = NULL
 WHERE NextAppointmentDate < CAST('1900-01-01' AS DATE) OR DATEDIFF(day, VisitDate, NextAppointmentDate) > 365
 
 GO

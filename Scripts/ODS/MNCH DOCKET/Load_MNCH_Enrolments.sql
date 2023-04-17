@@ -25,6 +25,18 @@ BEGIN
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.ServiceType	 =b.ServiceType;
+
+				with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode ORDER BY
+						PatientPK,Sitecode) Row_Num
+						FROM  [ODS].[dbo].[MNCH_Enrolments] (NoLock)
+						)
+						select * from cte 
+						Where Row_Num >1 ;
 END
 
 
