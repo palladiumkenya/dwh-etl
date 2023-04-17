@@ -10,6 +10,8 @@ INSERT INTO REPORTING.dbo.AggegateTestingAt3MonthRefill
 		PartnerName, 
 		AgencyName, 
 		Gender, 
+		Month,
+		Year,
 		AgeGroup,
 		tested,
 		nottested
@@ -22,19 +24,21 @@ SELECT DISTINCT
 		SubCounty,
 		p.PartnerName,
 		a.AgencyName,
-		Gender,
+		pat.Gender,
+		test.Month,
+		test.Year,
 		age.DATIMAgeGroup as AgeGroup,
-		sum(case when Refil3DiffInDays is not null then 1 else 0 end) tested,
-        sum(case when Refil3DiffInDays is null then 1 else 0 end) nottested
+		sum(case when TestResultsMonth3 is not null then 1 else 0 end) tested,
+        sum(case when TestResultsMonth3 is null then 1 else 0 end) nottested
 
-FROM NDWH.dbo.FactPrep prep
+FROM NDWH.dbo.FactPrepRefills prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
 LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
- LEFT JOIN NDWH.dbo.DimDate visit ON visit.DateKey = prep.VisitDateKey 
+
  LEFT JOIN NDWH.dbo.DimDate test ON test.DateKey = DateTestMonth3Key 
 
 GROUP BY  MFLCode,		
@@ -43,6 +47,8 @@ GROUP BY  MFLCode,
 		SubCounty,
 		p.PartnerName,
 		a.AgencyName,
-		Gender,
-		age.DATIMAgeGroup	
+		pat.Gender,
+		age.DATIMAgeGroup,
+		test.Month,
+		test.Year
 		

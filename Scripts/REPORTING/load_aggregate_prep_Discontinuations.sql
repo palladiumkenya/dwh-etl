@@ -29,7 +29,7 @@ SELECT DISTINCT
 	    Datepart (year,d.Date) As ExitYear,
 	    Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepDiscontinuations
 
-FROM NDWH.dbo.FactPrep prep
+FROM NDWH.dbo.FactPrepDiscontinuation prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey

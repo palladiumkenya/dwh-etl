@@ -9,7 +9,9 @@ INSERT INTO REPORTING.dbo.AggregateSTIOutcomes
 		SubCounty,
 		PartnerName, 
 		AgencyName, 
-		Gender, 
+		Gender,
+		Month,
+		Year,
 		AgeGroup,
 		Positive,
 		Negative
@@ -23,11 +25,13 @@ SELECT DISTINCT
 		p.PartnerName,
 		a.AgencyName,
 		Gender,
+		d.Month,
+		d.Year,
 		age.DATIMAgeGroup as AgeGroup,
-		sum(case  when STISymptoms is not null or STISymptoms <> '' then 1 else 0 END) as Positive,
-        sum(case  when STISymptoms is null or STISymptoms = '' then 1 else 0 END) as Negative
+		sum(STIPositive) as Positive,
+        sum(STINegative) as Negative
 
-FROM NDWH.dbo.FactPrep prep
+FROM NDWH.dbo.FactPrepVisits prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
@@ -43,5 +47,7 @@ GROUP BY  MFLCode,
 		p.PartnerName,
 		a.AgencyName,
 		Gender,
-		age.DATIMAgeGroup	
+		age.DATIMAgeGroup,
+		d.Month,
+		d.Year
 		
