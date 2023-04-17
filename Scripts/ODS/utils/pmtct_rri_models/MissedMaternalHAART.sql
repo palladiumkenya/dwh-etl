@@ -1,3 +1,7 @@
+IF OBJECT_ID(N'[PMTCTRRI.dbo.MissedMaternalHaart]', N'U') IS NOT NULL 
+	DROP TABLE [PMTCTRRI.dbo.MissedMaternalHaart];
+BEGIN
+
 with MFL_partner_agency_combination as (
 	select 
 		distinct MFL_Code,
@@ -86,6 +90,7 @@ Select
         Count (*) - count (StartARTDate) As NotonART,
         Sum (KnownPositive) As KnownPositives,
         Sum (New) As New
+   into PMTCTRRI.dbo.MissedMaternalHaart
    from Linelist
 Group by 
         County,
@@ -96,9 +101,5 @@ Group by
         Agency,
         Facilitytype,
         [Period]
-       
-     
-
-
-
-
+  
+END
