@@ -22,7 +22,7 @@ Select
     HIVTestFinalResult
     from ODS.dbo.MNCH_AncVisits
     where HIVTestFinalResult='Positive'
-UNION ALL
+UNION 
     SELECT
     PatientPKHash,
     sitecode ,
@@ -30,7 +30,7 @@ UNION ALL
     HIVTestFinalResult
     from ODS.dbo.MNCH_PncVisits
     where HIVTestFinalResult='Positive' 
-UNION ALL
+UNION 
     SELECT
     PatientPKHash,
     sitecode ,
