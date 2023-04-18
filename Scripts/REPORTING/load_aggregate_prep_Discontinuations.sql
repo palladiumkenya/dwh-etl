@@ -25,8 +25,8 @@ SELECT DISTINCT
 		a.AgencyName,
 		Gender,
 		age.DATIMAgeGroup as AgeGroup,
-		DATENAME(month, d.Date) AS ExitMonth,		
-	    Datepart (year,d.Date) As ExitYear,
+		d.Month AS ExitMonth,		
+	    d.Year As ExitYear,
 	    Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepDiscontinuations
 
 FROM NDWH.dbo.FactPrepDiscontinuation prep
@@ -46,5 +46,6 @@ GROUP BY  MFLCode,
 		a.AgencyName,
 		Gender,
 		age.DATIMAgeGroup,		
-		d.Date
+		d.Month,
+		d.Year
 		
