@@ -46,6 +46,5 @@ GROUP BY  MFLCode,
 		a.AgencyName,
 		Gender,
 		age.DATIMAgeGroup,		
-		d.year,
-		d.month,
 		d.Date
+		
