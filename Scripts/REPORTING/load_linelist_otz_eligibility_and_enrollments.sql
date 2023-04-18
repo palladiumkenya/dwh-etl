@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]') AND type in (N'U'))
+IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]', N'U') IS NOT NULL 			
 	TRUNCATE TABLE [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
 GO
 --- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)

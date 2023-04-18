@@ -1,6 +1,5 @@
-
-IF  EXISTS (SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListVLNonSuppressed]') AND type in (N'U'))
-TRUNCATE TABLE [REPORTING].[dbo].[LineListVLNonSuppressed]
+IF OBJECT_ID(N'[REPORTING].[dbo].[LineListVLNonSuppressed]', N'U') IS NOT NULL 			
+	TRUNCATE TABLE [REPORTING].[dbo].[LineListVLNonSuppressed]
 GO
 
 INSERT INTO [REPORTING].[dbo].[LineListVLNonSuppressed] (MFLCode,FacilityName,SubCounty,County,PartnerName,AgencyName,Gender, AgeGroup,AgeLastVisit, StartARTDate,Last12MonthVLResults,LastVisitDate,NextAppointmentDate, ARTOutcome

@@ -1,6 +1,5 @@
-
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateOTZOutcome]') AND type in (N'U'))
-TRUNCATE TABLE REPORTING.[dbo].[AggregateOTZOutcome]
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateOTZOutcome]', N'U') IS NOT NULL 	
+	TRUNCATE TABLE REPORTING.[dbo].[AggregateOTZOutcome]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateOTZOutcome (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentYearMonth, Outcome, patients_totalOutcome)

@@ -1,7 +1,5 @@
-if  exists (select * from sys.objects where object_id = OBJECT_ID(N'[REPORTING].[dbo].[AggregateTXCurr]') and type in (N'U'))
-
-truncate table [REPORTING].[dbo].AggregateTXCurr
-
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateTXCurr', N'U') IS NOT NULL 		
+	truncate table [REPORTING].[dbo].AggregateTXCurr
 GO
 
 insert into [REPORTING].[dbo].AggregateTXCurr

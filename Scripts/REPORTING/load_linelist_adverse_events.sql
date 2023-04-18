@@ -1,12 +1,5 @@
-IF EXISTS (
-    SELECT
-        *
-    FROM
-        [REPORTING].sys.objects
-    WHERE
-        object_id = OBJECT_ID(N'[REPORTING].[dbo].[LineListAdverseEvents]')
-        AND type in (N'U')
-) TRUNCATE TABLE [REPORTING].[dbo].LineListAdverseEvents
+IF OBJECT_ID(N'[REPORTING].[dbo].LineListAdverseEvents', N'U') IS NOT NULL 		
+	TRUNCATE TABLE [REPORTING].[dbo].LineListAdverseEvents
 
 GO
 

@@ -2,7 +2,7 @@
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
     SET Drug = lkp_regimen.target_name 
 FROM [ODS].[DBO].[CT_PatientPharmacy] AS PatientPharmacy
-INNER JOIN lkp_regimen ON lkp_regimen.source_name = PatientPharmacy.Drug
+INNER JOIN ods.dbo.lkp_regimen ON lkp_regimen.source_name = PatientPharmacy.Drug
 
 GO
 
@@ -15,7 +15,7 @@ GO
 
 -- clean ExpectedReturn
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
-    SET ExpectedReturn = CAST('1900-01-01' AS DATE)
+    SET ExpectedReturn = NULL
 WHERE ExpectedReturn < CAST('1900-01-01' AS DATE) 
 
 GO
@@ -24,7 +24,7 @@ GO
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
     SET TreatmentType = lkp_treatment_type.target_name
 FROM [ODS].[DBO].[CT_PatientPharmacy] AS PatientPharmacy
-INNER JOIN lkp_treatment_type ON lkp_treatment_type.source_name = PatientPharmacy.TreatmentType
+INNER JOIN ods.dbo.lkp_treatment_type ON lkp_treatment_type.source_name = PatientPharmacy.TreatmentType
 
 GO
 
@@ -40,7 +40,7 @@ GO
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
     SET ProphylaxisType = lkp_prophylaxis_type.target_name
 FROM [ODS].[DBO].[CT_PatientPharmacy] AS PatientPharmacy
-INNER JOIN lkp_prophylaxis_type ON lkp_prophylaxis_type.source_name = PatientPharmacy.ProphylaxisType
+INNER JOIN ods.dbo.lkp_prophylaxis_type ON lkp_prophylaxis_type.source_name = PatientPharmacy.ProphylaxisType
 
 GO
 
