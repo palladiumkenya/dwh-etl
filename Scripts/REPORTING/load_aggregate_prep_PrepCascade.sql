@@ -33,7 +33,7 @@ SELECT DISTINCT
 		enrol.month EnrollmentMonth, 
         enrol.year EnrollmentYear,
         Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As StartedPrep
-		--Count (distinct (concat(PrepNumber,PatientPkHash,SiteCode))) As PrepCT
+		
 		
 
 FROM NDWH.dbo.FactPrepAssessments prep
@@ -43,7 +43,7 @@ LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
 LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
---LEFT JOIN NDWH.dbo.DimDate visit ON visit.DateKey = prep.AssessmentVisitDateKey
+
 LEFT JOIN NDWH.dbo.DimDate enrol ON enrol.DateKey = PrepEnrollmentDateKey 
  
 
