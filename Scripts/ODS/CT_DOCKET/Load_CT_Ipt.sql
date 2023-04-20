@@ -1,6 +1,4 @@
 BEGIN
-
-
 				;with cte AS ( Select            
 					P.PatientPID,            
 					IE.PatientId,            
@@ -24,18 +22,15 @@ BEGIN
 				and cte.VisitDate = pb.VisitDate
 			where  Row_Num  > 1;
 
-
-
-
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
 				
-		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Ipt_Log]  (NoLock)
-		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock)
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Ipt_Log]  (NoLock);
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock);
 	
 					
 		INSERT INTO  [ODS].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
-		VALUES(@VisitDate,GETDATE())
+		VALUES(@VisitDate,GETDATE());
 
 	       ---- Refresh [ODS].[dbo].[CT_Ipt]
 			MERGE [ODS].[dbo].[CT_Ipt] AS a

@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="2"
-  DTS:VersionGUID="{F002EB3F-FFD3-4169-84FA-AB4B85BE1629}">
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{21F55695-0757-481A-B4BE-FF2E4F174B2F}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -40,7 +40,7 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package2-{1925C82A-1F0B-41AD-AB00-001DB03317E1}LocalHost.ODS;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.;Initial Catalog=ODS;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package2-{1925C82A-1F0B-41AD-AB00-001DB03317E1}LocalHost.ODS;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -86,7 +86,7 @@
             <FEFEProperty
               FileSpec="*.SQL" />
             <FEFEProperty
-              FileNameRetrievalType="0" />
+              FileNameRetrievalType="1" />
             <FEFEProperty
               Recurse="0" />
           </ForEachFileEnumeratorProperties>
@@ -115,8 +115,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{CF0E6E17-3DF2-4E80-94E5-3C9464D3A6CA}"
-          DTS:ObjectName="{CF0E6E17-3DF2-4E80-94E5-3C9464D3A6CA}"
+          DTS:DTSID="{8AD444DE-CCFF-488C-BF50-4008035B192C}"
+          DTS:ObjectName="{8AD444DE-CCFF-488C-BF50-4008035B192C}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -135,14 +135,14 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="163,42"
+          Size="162.666666666667,42"
           Id="Package\HTS Cleaning Loop\Execute SQL Task"
           TopLeft="44,26" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="299,123"
-          Size="299,166"
+          PanelSize="298.666666666667,122.666666666667"
+          Size="298.666666666667,166"
           Id="Package\HTS Cleaning Loop"
           TopLeft="176,39" />
       </GraphLayout>

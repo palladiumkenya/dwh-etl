@@ -11,8 +11,8 @@ BEGIN
 					INNER JOIN (SELECT tn.PatientPk,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[Heis] (NOLOCK)tn
 								GROUP BY  tn.PatientPk,tn.SiteCode)tm
 					 on p.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
-					 INNER JOIN  [MNCHCentral].[dbo].[MnchPatients](NOLOCK)  Mnchp
-					 ON p.patientpk = Mnchp.PatientPK and p.Sitecode = Mnchp.sitecode
+					 --INNER JOIN  [MNCHCentral].[dbo].[MnchPatients](NOLOCK)  Mnchp  -- to be reviwed later
+					 --ON p.patientpk = Mnchp.PatientPK and p.Sitecode = Mnchp.sitecode
 					 INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
