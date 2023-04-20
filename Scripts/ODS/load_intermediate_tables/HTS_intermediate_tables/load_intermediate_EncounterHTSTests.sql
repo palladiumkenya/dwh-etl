@@ -5,7 +5,7 @@ BEGIN
     with source_data as (
         select
             /* partition for the same SiteCode, PatientPK, TestDate and pick the latest Encounter ID */
-            row_number() over (partition by SiteCode,PatientPK,TestDate order by EncounterId desc) as num,
+            row_number() over (partition by SiteCode,PatientPK,TestDate,TestType order by EncounterId desc) as num,
             TestDate,
             EncounterId,
             SiteCode,
