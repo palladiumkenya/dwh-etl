@@ -76,6 +76,7 @@ Select
         hei.SDP,
         hei.Agency,
         hei.period,
+        MFL_partner_agency_combination.Facilitytype,
         Count (*) As TotalHEI,
         count (HEIPCRAt2Months) As HEIPCRAt2Months,
         Count (*)-  count (HEIPCRAt2Months) As MissingPCRTests,
@@ -87,6 +88,8 @@ Select
    from HEIs hei
    left join PCR2Months pcr on pcr.PatientPKHash=hei.PatientPKHash
     and pcr.SiteCode=hei.sitecode
+left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=hei.SiteCode
+
 Group by 
         hei.County,
         hei.SubCounty,
@@ -94,7 +97,8 @@ Group by
         hei.Facility_Name,
         hei.SDP,
         hei.Agency,
-        hei.period
+        hei.period,
+        MFL_partner_agency_combination.Facilitytype
       
        
         
