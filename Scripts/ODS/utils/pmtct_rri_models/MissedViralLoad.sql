@@ -37,9 +37,9 @@ ViralLoad As (
             ELSE NULL END END AS VLResult,
             
             CASE WHEN ISNUMERIC(LatestVL1) = 1 THEN 
-            CASE WHEN CAST(Replace(LatestVL1,',','') AS FLOAT) <=200.00 THEN 1 
-            WHEN CAST(Replace(LatestVL1,',','') AS FLOAT) > 200.00 THEN 0 ELSE NULL END ELSE CASE 
-            WHEN LatestVL1 IN ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') THEN 1 ELSE NULL END END AS Suppressed,
+            CASE WHEN datediff (month,VL1date.[Date], GETDATE())<=6 and CAST(Replace(LatestVL1,',','') AS FLOAT) <=200.00 THEN 1 
+            WHEN datediff (month,VL1date.[Date], GETDATE())<=6 and CAST(Replace(LatestVL1,',','') AS FLOAT) > 200.00 THEN 0 ELSE NULL END ELSE CASE 
+            WHEN datediff (month,VL1date.[Date], GETDATE())<=6 and LatestVL1 IN ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') THEN 1 ELSE NULL END END AS Suppressed,
         VL2date.[Date] as VL2Date,
         LatestVL2,
             Case when datediff (month,VL1date.[Date], GETDATE())<=6 Then 1 
