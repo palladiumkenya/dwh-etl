@@ -13,6 +13,7 @@ INSERT INTO REPORTING.dbo.AggregatePrepDiscontinuation
 		AgeGroup,
 		ExitMonth,
 		ExitYear,
+		ExitReason,
 		PrepDiscontinuations
 		)
 
@@ -26,8 +27,9 @@ SELECT DISTINCT
 		Gender,
 		age.DATIMAgeGroup as AgeGroup,
 		d.Month AS ExitMonth,		
-	    d.Year As ExitYear,
-	    Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepDiscontinuations
+		d.Year As ExitYear,
+		ExitReason,
+		Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepDiscontinuations
 
 FROM NDWH.dbo.FactPrepDiscontinuation prep
 
@@ -47,5 +49,5 @@ GROUP BY  MFLCode,
 		Gender,
 		age.DATIMAgeGroup,		
 		d.Month,
-		d.Year
-		
+		d.Year,
+		ExitReason
