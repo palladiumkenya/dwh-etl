@@ -22,7 +22,7 @@ calhiv as (
         SiteCode,
         count(*) as calhiv 
     from REPORTING.dbo.Linelist_FACTART
-    where  age <= 19
+    where  age <= 19 and IsTXCurr = 1
     group by 
         SiteCode   
 ),
@@ -32,7 +32,7 @@ on_dtg as (
         count(*) as calhiv_on_DTG
     from REPORTING.dbo.Linelist_FACTART
     where CurrentRegimen like '%DTG%'
-        and age <= 19
+        and age <= 19 and IsTXCurr = 1
     group by 
         SiteCode  
 )
