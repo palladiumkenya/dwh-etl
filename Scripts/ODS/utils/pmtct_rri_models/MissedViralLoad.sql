@@ -49,7 +49,7 @@ ViralLoad As (
     Left join REPORTING.dbo.LineListViralLoad VL on VL.PatientPK=ART.PatientPKHash and VL.MFLCode=ART.SiteCode
     left join NDWH.dbo.DimDate VL1date on VL1date.DateKey= VL.LatestVLDate1Key
     left join NDWH.dbo.DimDate VL2date on VL2date.DateKey= VL.LatestVLDate2Key
-    where VL.AgeGroup in ('1 to 4','10 to 14','Under 1','15 to 19') and ARTOutcome='V'
+   where age <=19 and ISTxCurr=1 and ARTOutcome='V'
 
 )
 SELECT
@@ -79,4 +79,5 @@ Group by
      AgeGroup,
      Facilitytype
 END
+
 
