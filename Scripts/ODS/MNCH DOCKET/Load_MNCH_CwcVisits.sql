@@ -12,8 +12,8 @@ BEGIN
 					  inner join (select tn.PatientPK,tn.SiteCode,tn.[VisitDate],max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[CwcVisits] (NoLock)tn
 						group by tn.PatientPK,tn.SiteCode,tn.[VisitDate])tm
 					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
-					  INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
-						on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+					 -- INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
+						--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
@@ -28,5 +28,18 @@ BEGIN
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.[Dewormed]	 =b.[Dewormed];
+
+				with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+						VisitDate,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,VisitDate ORDER BY
+						PatientPK,Sitecode,VisitDate) Row_Num
+						FROM  [ODS].[dbo].[MNCH_CwcVisits](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 END
 

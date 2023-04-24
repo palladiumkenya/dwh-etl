@@ -1,7 +1,7 @@
 truncate table [ods].[dbo].[all_EMRSites];
 
 	MERGE [ods].[dbo].[all_EMRSites] AS a
-	USING(SELECT DISTINCT MFL_Code,[Facility Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[HTS Deployment],[HTS Status],[IL Status],[Registration IE],[Phamarmacy IE],mlab,Ushauri,Nishauri,[Appointment Management IE],OVC,OTZ,PrEP,[3PM],AIR,KP,MCH,TB,[Lab Manifest],Comments,Project
+	USING(SELECT DISTINCT MFL_Code,[Facility Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[HTS Deployment],[HTS Status],null[IL Status],null[Registration IE],null[Phamarmacy IE],mlab,Ushauri,Nishauri,null[Appointment Management IE],OVC,OTZ,PrEP,null[3PM],AIR,KP,MCH,null TB,[Lab Manifest],Comments,Project
 	FROM [HIS_Implementation].[dbo].[All_EMRSites] WHERE MFL_Code !='') AS b 
 	ON(a.MFL_Code  =b.MFL_Code )
     WHEN MATCHED THEN
