@@ -104,7 +104,7 @@ BEGIN
 			LatestUpload.DateUploaded,
 			LatestVisits.SiteAbstractionDate,
 			cast(getdate() as date) as LoadDate
-	  INTO  [ODS].[dbo].[Intermediate_ARTOutcomes_Test26042023]
+	  INTO  [ODS].[dbo].[Intermediate_ARTOutcomes]
 	 from ARTOutcomes
 	 left join LatestUpload ON LatestUpload.SiteCode = ARTOutcomes.SiteCode 
 	 left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
