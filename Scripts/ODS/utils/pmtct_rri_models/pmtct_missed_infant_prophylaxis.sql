@@ -148,9 +148,11 @@ indicators as (
 select
     positive_mothers_summary.SiteCode,
     positive_mothers_summary.period,
+    positive_mothers_summary.NoOfPositiveMothers,
     coalesce(given_infant_prophylaxis_summary.NoOfInfantsGivenProphylaxis, 0) as NoOfInfantsGivenProphylaxis,
-    coalesce(anc_not_given_infant_prophylaxis_known_positives_summary.NoOfInfantsNotGivenProphylaxis, 0) as NoOfInfantsNotGivenProphylaxisKnownPos,
-    coalesce(anc_not_given_infant_prophylaxis_new_positives_summary.NoOfInfantsNotGivenProphylaxis, 0) as NoOfInfantsNotGivenProphylaxisNewPos
+    NoOfPositiveMothers - coalesce(given_infant_prophylaxis_summary.NoOfInfantsGivenProphylaxis, 0) as NoOfInfantsNotGivenProphylaxis,
+    coalesce(anc_not_given_infant_prophylaxis_known_positives_summary.NoOfInfantsNotGivenProphylaxis, 0) as NoOfInfantsNotGivenProphylaxisKnownPosANC,
+    coalesce(anc_not_given_infant_prophylaxis_new_positives_summary.NoOfInfantsNotGivenProphylaxis, 0) as NoOfInfantsNotGivenProphylaxisNewPosANC
 from positive_mothers_summary
 left join given_infant_prophylaxis_summary on given_infant_prophylaxis_summary.SiteCode = positive_mothers_summary.SiteCode
     and given_infant_prophylaxis_summary.period = positive_mothers_summary.period
@@ -172,3 +174,4 @@ from indicators
 left join facility_data on indicators.SiteCode = facility_data.MFL_Code
 
 END
+
