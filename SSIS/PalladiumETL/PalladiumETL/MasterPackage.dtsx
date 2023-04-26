@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="101"
-  DTS:VersionGUID="{3E43A2D4-04D1-48A6-80DC-013F570DE855}">
+  DTS:VersionBuild="102"
+  DTS:VersionGUID="{4BE6993A-FA63-42BB-8E89-40C7C3062C62}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -1493,7 +1493,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
       DTS:refId="Package\Script_Task_To_Send_Emails_On_Success"
       DTS:CreationName="Microsoft.ScriptTask"
       DTS:Description="Script Task"
-      DTS:Disabled="True"
       DTS:DTSID="{091eb8b5-3930-43ec-b04b-3ed169743bd5}"
       DTS:ExecutableType="Microsoft.ScriptTask"
       DTS:FailPackageOnFailure="True"

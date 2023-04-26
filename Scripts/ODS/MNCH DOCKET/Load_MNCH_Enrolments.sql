@@ -35,7 +35,7 @@ BEGIN
 						PatientPK,Sitecode) Row_Num
 						FROM  [ODS].[dbo].[MNCH_Enrolments] (NoLock)
 						)
-						select * from cte 
+						delete from cte 
 						Where Row_Num >1 ;
 END
 

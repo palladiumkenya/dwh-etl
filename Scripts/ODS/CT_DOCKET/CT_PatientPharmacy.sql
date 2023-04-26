@@ -74,6 +74,7 @@ BEGIN
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
+						a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
 						a.PeriodTaken				=b.PeriodTaken,
 						a.ProphylaxisType			=b.ProphylaxisType,

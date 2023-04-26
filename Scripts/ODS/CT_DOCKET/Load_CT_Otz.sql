@@ -67,7 +67,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
-												
+						a.PatientID						=b.PatientID,						
 						a.TransferInStatus			=b.TransferInStatus,
 						a.ModulesPreviouslyCovered	=b.ModulesPreviouslyCovered,
 						a.ModulesCompletedToday		=b.ModulesCompletedToday,

@@ -84,8 +84,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
-					
-						a.FacilityName						=b.FacilityName,					
+						a.PatientID						=b.PatientID,					
 						a.DateGivenFirstDose				=b.DateGivenFirstDose,
 						a.FirstDoseVaccineAdministered		=b.FirstDoseVaccineAdministered,
 						a.DateGivenSecondDose				=b.DateGivenSecondDose,

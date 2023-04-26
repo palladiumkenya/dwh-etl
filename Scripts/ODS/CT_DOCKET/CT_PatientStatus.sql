@@ -96,6 +96,7 @@ BEGIN
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
+								a.PatientID						=b.PatientID,
 								a.FacilityName					=b.FacilityName,
 								a.ExitDescription				=b.ExitDescription,
 								a.TOVerified					=b.TOVerified	,							
