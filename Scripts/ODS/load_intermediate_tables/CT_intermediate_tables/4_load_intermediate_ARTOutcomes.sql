@@ -44,24 +44,27 @@ BEGIN
 		CASE WHEN ISNULL(LastPatientEncounter.LastEncounterDate, ART.LastVisit) <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 		THEN
 		(CASE
-            WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--1
-            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and  Latestexits.ReEnrollmentDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'--2
-            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and  Latestexits.EffectiveDiscontinuationDate >=  EOMONTH(DATEADD(mm,-1,GETDATE())) THEN 'V'--3
- 	        WHEN ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'--4
-            WHEN LastPatientEncounter.NextAppointmentDate IS NULL OR ART.ExpectedReturn IS NULL THEN 'NV' --5
-            WHEN LatestExits.EffectiveDiscontinuationDate is not null and Latestexits.ReEnrollmentDate is Null Then SUBSTRING(LatestExits.ExitReason,1,1) --6
-			WHEN LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and LatestExits.EffectiveDiscontinuationDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN SUBSTRING(LatestExits.ExitReason,1,1)--When a TO and LFTU has an discontinuationdate during the reporting Month --7
-            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason<>'DIED' and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--8
+            
+            When  Latestexits.ExitReason  in ('DIED','dead','Death','Died') THEN 'D'--1
+            WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
+            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.ReEnrollmentDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'--3
+            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.EffectiveDiscontinuationDate >=  EOMONTH(DATEADD(mm,-1,GETDATE())) THEN 'V'--4
+ 	        WHEN  ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'--5
+            WHEN  LatestExits.EffectiveDiscontinuationDate is not null and Latestexits.ReEnrollmentDate is Null Then SUBSTRING(LatestExits.ExitReason,1,1) --6
+            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and LatestExits.EffectiveDiscontinuationDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN SUBSTRING(LatestExits.ExitReason,1,1)--When a TO and LFTU has an discontinuationdate during the reporting Month --7
+            WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--8
             WHEN  DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days -- 9
 			WHEN  ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn) > EOMONTH(DATEADD(mm,-1,GETDATE()))   Then 'V' --10
-        ELSE SUBSTRING(LatestExits.ExitReason,1,1)
+            WHEN LastPatientEncounter.NextAppointmentDate IS NULL OR ART.ExpectedReturn IS NULL THEN 'NV' --11
+		ELSE SUBSTRING(LatestExits.ExitReason,1,1)
 
 		END
 			)
+             WHEN  Latestexits.ExitReason  in ('DIED','dead','Death','Died')  and LastPatientEncounter.LastEncounterDate is null  THEN 'D' --12
 		ELSE 'FV' END 
 	AS ARTOutcome, 
-	   cast (Patients.SiteCode as nvarchar) As SiteCode,
-		Patients.Emr,
+	     cast (Patients.SiteCode as nvarchar) As SiteCode,
+		 Patients.Emr,
 		 Patients.Project
     
 	FROM ODS.dbo.CT_Patient Patients
@@ -108,5 +111,10 @@ BEGIN
 	 from ARTOutcomes
 	 left join LatestUpload ON LatestUpload.SiteCode = ARTOutcomes.SiteCode 
 	 left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
+
 	 	
 END
+
+
+ 
+
