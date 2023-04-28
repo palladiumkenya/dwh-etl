@@ -18,11 +18,10 @@ BEGIN
         from ODS.dbo.PrEP_Patient
         where ODS.dbo.PrEP_Patient.PrepNumber is not null
     ),
-   
+
 PrepVisits as (
         select 
-              convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
-          
+            convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
             SiteCode,    
             VisitID,
             VisitDate,
@@ -73,8 +72,7 @@ PrepVisits as (
         where VisitDate is not null
 
     )
-   
-  
+
     select 
         FactKey = IDENTITY(INT, 1, 1),
         patient.PatientKey,
@@ -132,7 +130,7 @@ PrepVisits as (
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrepVisits
     from prep_patients
-    left join PrepVisits as  PrepVisits on convert(nvarchar(64), hashbytes('SHA2_256', cast(PrepVisits.PatientPK as nvarchar(36))), 2) =  prep_patients.PatientPK
+    left join PrepVisits as  PrepVisits on PrepVisits.PatientPK = prep_patients.PatientPK
         and PrepVisits.SiteCode = prep_patients.SiteCode
     left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = prep_patients.PatientPK
         and patient.SiteCode = prep_patients.SiteCode
