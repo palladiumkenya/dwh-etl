@@ -1,8 +1,8 @@
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggegateTestingAt3MonthRefill]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggegateTestingAt3MonthRefill]
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepDiscontinuation]') AND type in (N'U')) 
+TRUNCATE TABLE REPORTING.[dbo].[AggregatePrepDiscontinuation]
 GO
 
-INSERT INTO REPORTING.dbo.AggegateTestingAt3MonthRefill
+INSERT INTO REPORTING.dbo.AggregatePrepDiscontinuation
 		(MFLCode,
 		FacilityName, 
 		County,
@@ -10,11 +10,11 @@ INSERT INTO REPORTING.dbo.AggegateTestingAt3MonthRefill
 		PartnerName, 
 		AgencyName, 
 		Gender, 
-		Month,
-		Year,
 		AgeGroup,
-		tested,
-		nottested
+		ExitMonth,
+		ExitYear,
+		ExitReason,
+		PrepDiscontinuations
 		)
 
 SELECT DISTINCT 
@@ -24,22 +24,21 @@ SELECT DISTINCT
 		SubCounty,
 		p.PartnerName,
 		a.AgencyName,
-		pat.Gender,
-		test.Month,
-		test.Year,
+		Gender,
 		age.DATIMAgeGroup as AgeGroup,
-		sum(case when TestResultsMonth3 is not null then 1 else 0 end) tested,
-        sum(case when TestResultsMonth3 is null then 1 else 0 end) nottested
+		d.Month AS ExitMonth,		
+		d.Year As ExitYear,
+		ExitReason,
+		Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepDiscontinuations
 
-FROM NDWH.dbo.FactPrepRefills prep
+FROM NDWH.dbo.FactPrepDiscontinuation prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
 LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
-
- LEFT JOIN NDWH.dbo.DimDate test ON test.DateKey = DateDispenseMonth3 
+LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = prep.ExitdateKey
 
 GROUP BY  MFLCode,		
 		f.FacilityName,
@@ -47,8 +46,8 @@ GROUP BY  MFLCode,
 		SubCounty,
 		p.PartnerName,
 		a.AgencyName,
-		pat.Gender,
-		age.DATIMAgeGroup,
-		test.Month,
-		test.Year
-		
+		Gender,
+		age.DATIMAgeGroup,		
+		d.Month,
+		d.Year,
+		ExitReason
