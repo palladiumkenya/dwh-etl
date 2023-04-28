@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{BC46E272-E46F-4268-88C7-F85190EF0C45}">
+  DTS:VersionBuild="2"
+  DTS:VersionGUID="{45F50ABD-EB86-41DA-9364-58D9847185B9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -86,7 +86,7 @@
             <FEFEProperty
               FileSpec="*.SQL" />
             <FEFEProperty
-              FileNameRetrievalType="0" />
+              FileNameRetrievalType="1" />
             <FEFEProperty
               Recurse="0" />
           </ForEachFileEnumeratorProperties>
@@ -115,8 +115,8 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{609E52B9-A135-4D44-9D18-0146E767ED6B}"
-          DTS:ObjectName="{609E52B9-A135-4D44-9D18-0146E767ED6B}"
+          DTS:DTSID="{4BE54249-6F0D-48F5-B2B8-3CF425DC566D}"
+          DTS:ObjectName="{4BE54249-6F0D-48F5-B2B8-3CF425DC566D}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
@@ -135,14 +135,14 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="163,42"
+          Size="162.666666666667,42"
           Id="Package\Remove HTS Duplicates Loop\Execute SQL Task"
           TopLeft="42,38" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="242,136"
-          Size="242,179"
+          Size="242,178.666666666667"
           Id="Package\Remove HTS Duplicates Loop"
           TopLeft="298,16" />
       </GraphLayout>

@@ -44,8 +44,8 @@ BEGIN
 						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate)
 				
 					WHEN MATCHED THEN
-						UPDATE SET 												
-						a.FacilityName	=b.FacilityName,
+						UPDATE SET 	
+						a.PatientID		=b.PatientID,
 						a.TracingType	=b.TracingType,
 						a.TracingOutcome=b.TracingOutcome,
 						a.AttemptNumber	=b.AttemptNumber,

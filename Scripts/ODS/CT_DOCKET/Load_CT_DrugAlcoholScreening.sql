@@ -40,7 +40,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.FacilityName		=b.FacilityName,					
+						a.PatientID			=b.PatientID,					
 						a.DrinkingAlcohol	=b.DrinkingAlcohol,
 						a.Smoking			=b.Smoking,
 						a.DrugUse			=b.DrugUse;		

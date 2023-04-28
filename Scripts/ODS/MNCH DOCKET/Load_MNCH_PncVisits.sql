@@ -20,8 +20,8 @@ BEGIN
 									FROM [MNCHCentral].[dbo].[PncVisits] (NoLock)tn
 								  group by tn.PatientPK,tn.SiteCode)tm
 								on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
-					   INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
-							on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+					  -- INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
+							--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
@@ -35,3 +35,5 @@ BEGIN
 						UPDATE SET 
 							a.ClinicalNotes	 =b.ClinicalNotes;
 END
+
+

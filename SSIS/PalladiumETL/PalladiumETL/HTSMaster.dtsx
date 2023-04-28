@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="4"
-  DTS:VersionGUID="{EE8985E7-8001-4823-9E9B-A877C300879F}">
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{72A72B3E-0529-47E6-AD71-0F6A5A6E959B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -57,14 +57,14 @@
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
-      DTS:refId="Package\Execute Package Task"
+      DTS:refId="Package\Execute Remove Duplicate Package"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
       DTS:DTSID="{CE894620-B07B-4BFD-9182-36402EC44B26}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Execute Package Task"
+      DTS:ObjectName="Execute Remove Duplicate Package"
       DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
       <DTS:ObjectData>
@@ -91,7 +91,7 @@
       DTS:From="Package\Execute HTS_DataCleanUP Package"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
-      DTS:To="Package\Execute Package Task" />
+      DTS:To="Package\Execute Remove Duplicate Package" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -106,13 +106,17 @@
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="231,42"
+          Size="246.666666666667,42"
+          Id="Package\Execute HTS_DataCleanUP Package"
+          TopLeft="208,103" />
+        <NodeLayout
+          Size="230.666666666667,42"
           Id="Package\Execute HTS_DataLoad Package"
           TopLeft="73,23" />
         <NodeLayout
-          Size="247,42"
-          Id="Package\Execute HTS_DataCleanUP Package"
-          TopLeft="208,103" />
+          Size="246.666666666667,42.6666666666667"
+          Id="Package\Execute Remove Duplicate Package"
+          TopLeft="400,190" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="188.5,65">
@@ -147,19 +151,15 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="183,42"
-          Id="Package\Execute Package Task"
-          TopLeft="400,190" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="331.5,145">
+          TopLeft="331.333333333333,145">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="160,45"
+              EndConnector="192,45"
               Start="0,0"
-              End="160,37.5">
+              End="192,37.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -170,13 +170,13 @@
                     Point2="0,22.5"
                     Point3="4,22.5" />
                   <mssgle:LineSegment
-                    End="156,22.5" />
+                    End="188,22.5" />
                   <mssgle:CubicBezierSegment
-                    Point1="156,22.5"
-                    Point2="160,22.5"
-                    Point3="160,26.5" />
+                    Point1="188,22.5"
+                    Point2="192,22.5"
+                    Point3="192,26.5" />
                   <mssgle:LineSegment
-                    End="160,37.5" />
+                    End="192,37.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

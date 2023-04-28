@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="7"
-  DTS:VersionGUID="{78E00169-7318-4EBD-9C26-8DAD22CEEF05}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{D435511F-C997-4CC0-B2BA-831482F59BAF}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -101,7 +101,6 @@
       DTS:refId="Package\LOOP THRGH LOOPUP TABLES"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
-      DTS:Disabled="True"
       DTS:DTSID="{42644B83-6352-42DE-AE5C-E4F0CE8DD52D}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:FailPackageOnFailure="True"
@@ -251,7 +250,7 @@
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="252.666666666667,120"
+          PanelSize="252.666666666667,120.666666666667"
           Size="252.666666666667,163.333333333334"
           Id="Package\LOOP THRGH UPDATE STMNTS"
           TopLeft="563.846174527908,42.5454560823678" />

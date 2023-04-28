@@ -66,6 +66,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
+						a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,						
 						a.RelationshipToClient		=b.RelationshipToClient,
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,

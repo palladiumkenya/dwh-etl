@@ -73,6 +73,7 @@ BEGIN
 						UPDATE SET 
 							a.EMR							=b.EMR,
 							a.Project						=b.Project,
+							a.PatientID						=b.PatientID,
 							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant;	
 
 					-----Remove duplicates from CT_AdverseEvents
