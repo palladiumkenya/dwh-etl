@@ -13,6 +13,7 @@ INSERT INTO REPORTING.dbo.AggregatePrepTestingAt1MonthRefill
 	Month,
 	Year,
 	AgeGroup,
+	refilled,
 	tested,
 	nottested
 	)
