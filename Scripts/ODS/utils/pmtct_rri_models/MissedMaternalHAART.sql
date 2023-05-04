@@ -1,5 +1,10 @@
-IF OBJECT_ID(N'[PMTCTRRI.dbo.MissedMaternalHaart]', N'U') IS NOT NULL 
-	DROP TABLE [PMTCTRRI.dbo.MissedMaternalHaart];
+
+
+IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedMaternalHaart]') AND type in (N'U')) 
+Drop TABLE PMTCTRRI.[dbo].MissedMaternalHaart
+GO
+
+
 BEGIN
 
 with MFL_partner_agency_combination as (
@@ -10,40 +15,41 @@ with MFL_partner_agency_combination as (
 	    SDP_Agency as Agency,
         County,
         SubCounty,
-        case when EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
-        When EMR in ('No EMR','No-EMR','NonEMR') Then 'Paper Based' Else 'Unclassified' End as Facilitytype
-	from ODS.dbo.All_EMRSites 
+        case when emr.EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
+        When emr.EMR in ('No EMR','No-EMR','NonEMR','Ushauri') Then 'Paper Based' Else 'Unclassified' End as Facilitytype
+	from ODS.dbo.All_EMRSites emr
+	left join PMTCT_STG.dbo.MNCH_Patient as pat on emr.MFL_Code=pat.SiteCode
 ),
 HIVPositiveANC As (
 Select 
     PatientPKHash,
     sitecode ,
-    VisitDate,
+    cast (VisitDate as date) As Visitdate,
     HIVTestFinalResult
-    from ODS.dbo.MNCH_AncVisits
+    from PMTCT_STG.dbo.MNCH_AncVisits
     where HIVTestFinalResult='Positive'
 UNION 
     SELECT
     PatientPKHash,
     sitecode ,
-    VisitDate,
+    cast (VisitDate as date) As Visitdate,
     HIVTestFinalResult
-    from ODS.dbo.MNCH_PncVisits
+    from PMTCT_STG.dbo.MNCH_PncVisits
     where HIVTestFinalResult='Positive' 
 UNION 
     SELECT
     PatientPKHash,
     sitecode ,
-    VisitDate,
+    cast (VisitDate as date) As Visitdate,
     HIVTestFinalResult
-    from ODS.dbo.MNCH_MatVisits
+    from PMTCT_STG.dbo.MNCH_MatVisits
     where HIVTestFinalResult='Positive'
 ),
 Combined As (Select 
 ROW_NUMBER()OVER (PARTITION by SiteCode,PatientPKHash  ORDER BY VisitDate Asc ) As NUM ,
     PatientPKHash,
     Sitecode,
-    Visitdate,
+     cast (VisitDate as date) As Visitdate,
     CONCAT(DATENAME(month,VisitDate),' ',DATEPART(YEAR,VisitDate)) As Period,
     HIVTestFinalResult
  from HIVPositiveANC
@@ -55,10 +61,10 @@ Patients as (
 Linelist as (Select 
         Pat.PatientPKHash,
         Pat.SiteCode,
-        Pat.VisitDate,
+        cast (Pat.VisitDate as nvarchar) As Visitdate,
         Pat.[Period],
         Pat.HIVTestFinalResult,
-        art.StartARTDate ,
+        cast (art.StartARTDate as date) As StartARTDate ,
         Case When art.StartARTDate < Pat.VisitDate Then  1 else 0 End as KnownPositive,
         Case When art.StartARTDate>=Pat.VisitDate Then 1 else 0 End As New ,
         --Case when art.StartARTDate < Pat.VisitDate and art.StartARTDate is not null Then 1 else 0 end as knownPositiveOnART,
@@ -70,7 +76,7 @@ Linelist as (Select
         mfl.Facilitytype,
         mfl.SDP
 from Patients as pat
-left join ods.dbo.MNCH_Arts as art on pat.PatientPKHash=art.PatientPKHash
+left join PMTCT_STG.dbo.MNCH_Arts as art on pat.PatientPKHash=art.PatientPKHash
 and pat.SiteCode=art.SiteCode
 left join MFL_partner_agency_combination mfl on mfl.MFL_Code=pat.SiteCode
 )
