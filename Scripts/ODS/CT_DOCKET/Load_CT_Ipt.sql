@@ -69,7 +69,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-												
+						a.PatientID				=b.PatientID,						
 						a.OnTBDrugs				=b.OnTBDrugs,
 						a.OnIPT					=b.OnIPT,
 						a.EverOnIPT				=b.EverOnIPT,

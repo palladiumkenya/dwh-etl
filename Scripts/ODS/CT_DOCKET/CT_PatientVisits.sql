@@ -1,6 +1,5 @@
+
 BEGIN
-
-
 		;with cte AS ( Select      distinct      
 			P.PatientPID,            
 			PV.PatientId,            
@@ -12,7 +11,7 @@ BEGIN
 			FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 			INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
 			INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
-			WHERE p.gender!='Unknown')      
+			WHERE p.gender!='Unknown'  )      
 		
 			delete pv from  [DWAPICentral].[dbo].[PatientVisitExtract] (NoLock) PV
 			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PV.[PatientId]= P.ID AND PV.Voided = 0       
@@ -80,8 +79,8 @@ BEGIN
 							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes)
 			
 					WHEN MATCHED THEN
-						UPDATE SET 
-						a.FacilityName				= B.FacilityName,
+						UPDATE SET 	
+						a.PatientID					=b.PatientID,
 						a.[SERVICE]					= b.[SERVICE],
 						a.VisitType					= b.VisitType,
 						a.WHOStage					= b.WHOStage,
@@ -129,7 +128,8 @@ BEGIN
 						a.CVS						=b.CVS,
 						a.Abdomen					=b.Abdomen,
 						a.CNS						=b.CNS,
-						a.Genitourinary				=b.Genitourinary;
+						a.Genitourinary				=b.Genitourinary,
+						a.NextAppointmentDate       =b.NextAppointmentDate;
 
 						
 
@@ -147,3 +147,5 @@ BEGIN
 			GROUP BY SiteCode;
 			
 END
+
+

@@ -39,6 +39,7 @@ BEGIN
 		
 				delete from cte
 				where  Row_Num  > 1;
+
 END
 
 

@@ -1,8 +1,8 @@
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateSTIOutcomes]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateSTIOutcomes]
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepSTIOutcomes]') AND type in (N'U')) 
+TRUNCATE TABLE REPORTING.[dbo].[AggregatePrepSTIOutcomes]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateSTIOutcomes
+INSERT INTO REPORTING.dbo.AggregatePrepSTIOutcomes
 		(MFLCode,
 		FacilityName, 
 		County,
@@ -13,10 +13,12 @@ INSERT INTO REPORTING.dbo.AggregateSTIOutcomes
 		Month,
 		Year,
 		AgeGroup,
-		Positive,
-		Negative
+		NumberSTIScreened,
+		NumberSTIPositive,
+		NumberSTINegative,
+		NumberSTITreated,
+		NumberSTINotTreated
 		)
-
 SELECT DISTINCT 
 		MFLCode,		
 		f.FacilityName,
@@ -28,8 +30,11 @@ SELECT DISTINCT
 		d.Month,
 		d.Year,
 		age.DATIMAgeGroup as AgeGroup,
-		sum(STIPositive) as Positive,
-        sum(STINegative) as Negative
+		SUM(CASE WHEN STIScreening = 'Yes' THEN 1 ELSE 0 END) NumberSTIScreened,
+		sum(case  when STISymptoms is not null or STISymptoms <> '' then 1 else 0 END) as NumberSTIPositive,
+		sum(case  when STISymptoms is null or STISymptoms = '' then 1 else 0 END) as NumberSTINegative,
+		sum(case  when [STITreated] = 'Yes' then 1 else 0 END) as NumberSTITreated,
+		sum(case  when [STITreated] = 'No' then 1 else 0 END) as NumberSTINotTreated
 
 FROM NDWH.dbo.FactPrepVisits prep
 
@@ -50,4 +55,3 @@ GROUP BY  MFLCode,
 		age.DATIMAgeGroup,
 		d.Month,
 		d.Year
-		

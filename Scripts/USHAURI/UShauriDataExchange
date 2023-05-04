@@ -1,0 +1,33 @@
+ALTER proc UShauriDataExchange
+As
+BEGIN
+
+		IF OBJECT_ID(N'[USHAURI].[dbo].[pmtct_mnch_anc_visits]', N'U') IS NOT NULL 
+			DROP TABLE [USHAURI].[dbo].[pmtct_mnch_anc_visits];
+
+		SELECT * Into [USHAURI].[dbo].[pmtct_mnch_anc_visits]
+		FROM openquery(MYSQL, 'SELECT * FROM vw_pmtct_mnch_anc_visits');
+
+		execute [10.230.50.83].[USHAURI_STG].SYS.sp_executesql N'TRUNCATE TABLE [dbo].[pmtct_mnch_anc_visits]';
+
+		INSERT INTO [10.230.50.83].[USHAURI_STG].[dbo].[pmtct_mnch_anc_visits](PatientPK,PatientPKHash,SiteCode,FacilityReceivingARTCare,PatientMNCH_ID,Emr,Project,FacilityName,
+					VisitID,VisitDate,ANCClinicNumber,ANCVisitNo,GestationWeeks,Height,[Weight],Temp,PulseRate,RespiratoryRate,OxygenSaturation,MUAC,BP,
+					BreastExam,AntenatalExercises,FGM,FGMComplications,Haemoglobin,DiabetesTesty,TBScreening,CACxScreen,CACxScreenMethod,WHOStaging,
+					VLSampleTaken,[Last VLDate],[Last VLResult],SyphilisTreatment,HIVStatusBeforeANC,HIVTestingDone,HIVTestType,[HIVTest-1],[HIVTest-1Result],[HIVTest-2],
+					HIVTestFinalResult,SyphilisTestDone,SyphilisTestType,SyphilisTestResults,SyphilisTreated,MotherProphylaxisGiven,DateMotherStartedHAART,
+					AZTBabyDispense,NVPBabyDispense,ChronicIllness,[Counselled on],HepatitisBScreening,TreatedHepatitisB,PartnerHIVTestingANC,PartnerHIVStatusANC,PostParturmFP,
+					Deworming,MalariaProphylaxis,TetanusDose,IronSupplementsGiven,ReceivedMosquitoNet,PreventiveServices,PresumptiveTreatmentGiven,PresumptiveTreatmentDose,
+					MiminumPackageofCareReceived,MiminumPackageofCareServices,UrinalysisVariables,ReferredFrom,ReferredTo,ReferralReasons,NextAppointmentANC,ClinicalNotes,
+					DateCreated,DateModified)
+		SELECT PatientPK,PatientPKHash,SiteCode,FacilityReceivingARTCare,PatientMNCH_ID,Emr,Project,FacilityName,
+					VisitID,VisitDate,ANCClinicNumber,ANCVisitNo,GestationWeeks,Height,[Weight],Temp,PulseRate,RespiratoryRate,OxygenSaturation,MUAC,BP,
+					BreastExam,AntenatalExercises,FGM,FGMComplications,Haemoglobin,DiabetesTesty,TBScreening,CACxScreen,CACxScreenMethod,WHOStaging,
+					VLSampleTaken,[Last VLDate],[Last VLResult],SyphilisTreatment,HIVStatusBeforeANC,HIVTestingDone,HIVTestType,[HIVTest-1],[HIVTest-1Result],[HIVTest-2],
+					HIVTestFinalResult,SyphilisTestDone,SyphilisTestType,SyphilisTestResults,SyphilisTreated,MotherProphylaxisGiven,DateMotherStartedHAART,
+					AZTBabyDispense,NVPBabyDispense,ChronicIllness,[Counselled on],HepatitisBScreening,TreatedHepatitisB,PartnerHIVTestingANC,PartnerHIVStatusANC,PostParturmFP,
+					Deworming,MalariaProphylaxis,TetanusDose,IronSupplementsGiven,ReceivedMosquitoNet,PreventiveServices,PresumptiveTreatmentGiven,PresumptiveTreatmentDose,
+					MiminumPackageofCareReceived,MiminumPackageofCareServices,UrinalysisVariables,ReferredFrom,ReferredTo,ReferralReasons,NextAppointmentANC,ClinicalNotes,
+					DateCreated,DateModified
+	FROM [USHAURI].[dbo].[pmtct_mnch_anc_visits]
+
+END

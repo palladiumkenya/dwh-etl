@@ -66,7 +66,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.FacilityName				=b.FacilityName,
+						a.PatientID					=b.PatientID,
 						a.PHQ9_1					=b.PHQ9_1,
 						a.PHQ9_2					=b.PHQ9_2,
 						a.PHQ9_3					=b.PHQ9_3,

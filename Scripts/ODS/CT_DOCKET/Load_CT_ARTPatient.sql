@@ -46,7 +46,8 @@ BEGIN
 						      )
 				
 					WHEN MATCHED THEN
-						UPDATE SET 																								
+						UPDATE SET 
+								a.PatientID					=b.PatientID,
 								a.[AgeEnrollment]			=b.[AgeEnrollment],
 								a.[AgeARTStart]				=b.[AgeARTStart],	
 								a.[AgeLastVisit]			=b.[AgeLastVisit],

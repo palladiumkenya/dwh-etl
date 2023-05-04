@@ -55,9 +55,11 @@ prepStart AS (
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 	LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 	LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
-	LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
+	LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 	LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
-	LEFT JOIN NDWH.dbo.DimDate enrol ON enrol.DateKey = PrepEnrollmentDateKey 
+	LEFT JOIN NDWH.dbo.DimDate enrol ON enrol.DateKey = PrepEnrollmentDateKey
+	
+	WHERE PrepEnrollmentDateKey IS NOT NULL
 
 	GROUP BY MFLCode,
 			f.FacilityName,

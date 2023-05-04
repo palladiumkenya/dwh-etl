@@ -38,7 +38,7 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.FacilityName		=b.FacilityName,
+						a.PatientID			=b.PatientID,
 						a.IPV				=b.IPV,
 						a.PhysicalIPV		=b.PhysicalIPV,
 						a.EmotionalIPV		=b.EmotionalIPV,

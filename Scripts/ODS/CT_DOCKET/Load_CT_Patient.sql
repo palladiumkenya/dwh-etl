@@ -1,4 +1,3 @@
-
 BEGIN
 			
 			 DECLARE @MaxRegistrationDate_Hist			DATETIME,
@@ -38,7 +37,7 @@ BEGIN
 				
 						WHEN MATCHED THEN
 							UPDATE SET 				
-							
+							a.PatientID					=b.PatientID,
 							a.PatientSource				=b.PatientSource,							
 							a.ContactRelation			=b.ContactRelation,
 							a.LastVisit					=b.LastVisit,
@@ -84,7 +83,5 @@ BEGIN
 					FROM [ODS].[dbo].[CT_Patient] 
 					--WHERE @MaxCreatedDate  > @MaxCreatedDate
 					GROUP BY SiteCode;
-
 	END
-
-
+ 

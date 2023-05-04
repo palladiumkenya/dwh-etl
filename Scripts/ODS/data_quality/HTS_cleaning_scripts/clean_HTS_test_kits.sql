@@ -1,7 +1,7 @@
 --clean TestResults2
 UPDATE ODS.dbo.HTS_TestKits
-    SET TestResults2 = NULL
-WHERE TestResults2 = 'N/A'
+    SET TestResult2 = NULL
+WHERE TestResult2 = 'N/A'
 
 --clean TestKitName2
 UPDATE ODS.dbo.HTS_TestKits
@@ -69,7 +69,7 @@ inner join combined_dates on combined_dates.TestKitExpiry1 = kits.TestKitExpiry1
 
 
 -- clean TestKitExpiry2
-with cleaned_up_dates as (
+;with cleaned_up_dates as (
     select
         TestKitExpiry2,
         try_cast(TestKitExpiry2 as datetime) as TestKitExpiryCleanedVersion1

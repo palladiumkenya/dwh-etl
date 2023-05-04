@@ -51,8 +51,8 @@ BEGIN
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated)
 				
 					WHEN MATCHED THEN
-						UPDATE SET 					
-						a.FacilityName					=b.FacilityName,
+						UPDATE SET 	
+						a.PatientID						=b.PatientID,
 						a.ContactAge					=b.ContactAge,
 						a.ContactSex					=b.ContactSex,
 						a.ContactMaritalStatus			=b.ContactMaritalStatus,
