@@ -1,8 +1,8 @@
 
+
 IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedEIDTesting]') AND type in (N'U')) 
 Drop TABLE PMTCTRRI.[dbo].MissedEIDTesting
 GO
-
 BEGIN
 
 with MFL_partner_agency_combination as (
@@ -25,11 +25,11 @@ Select
     enr.FirstEnrollmentAtMnch,
     enr.DOB,
     CONCAT(DATENAME(month,FirstEnrollmentAtMnch),' ',DATEPART(YEAR,FirstEnrollmentAtMnch)) As Period ,
-    DATEDIFF(month,enr.DOB,DNAPCR1Date) PCRduration,
-    Case when DATEDIFF(month,enr.DOB,DNAPCR1Date) <=2 Then 1 else 0 end As '0-2',
-    Case When DATEDIFF(month,enr.DOB,DNAPCR1Date) >2 and DATEDIFF(month,enr.DOB,DNAPCR1Date) <=12 Then  1 else 0 end As '2-12',
-    Case When DATEDIFF(month,enr.DOB,DNAPCR1Date) > 12  Then  1 else 0 end As'Above1' ,
-    Case When enr.DOB is null or DNAPCR1Date is null   Then 1 else 0 end as 'MissingAge' ,
+    DATEDIFF(month,DOB,DNAPCR1Date) PCRduration,
+    Case when DATEDIFF(month,DOB,DNAPCR1Date) <=2 Then 1 else 0 end As '0-2',
+    Case When DATEDIFF(month,DOB,DNAPCR1Date) >2 and DATEDIFF(month,DOB,DNAPCR1Date) <=12 Then  1 else 0 end As '2-12',
+    Case When DATEDIFF(month,DOB,DNAPCR1Date) > 12  Then  1 else 0 end As'Above1' ,
+    Case When DOB is null or DNAPCR1Date is null   Then 1 else 0 end as 'MissingAge' ,
     hei.DNAPCR1,
     hei.DNAPCR1Date,
     mfl.County,
@@ -46,7 +46,7 @@ Select
 ),
 PCR2Months As (
     Select 
-        PatientPK ,
+        PatientPKHash ,
         Sitecode,
         County,
         SubCounty,
@@ -59,7 +59,7 @@ PCR2Months As (
     from HEIs
     where PCRduration <= 2
     Group by 
-       PatientPK ,
+       PatientPKHash ,
         Sitecode,
         County,
         SubCounty,
@@ -70,7 +70,6 @@ PCR2Months As (
        CONCAT(DATENAME(month,FirstEnrollmentAtMnch),' ',DATEPART(YEAR,FirstEnrollmentAtMnch))
 
 )
-
 
 Select 
         hei.County,
@@ -89,8 +88,9 @@ Select
         sum (MissingAge) As MissingAge
    into PMTCTRRI.dbo.MissedEIDTesting
    from HEIs hei
-   left join PCR2Months pcr on pcr.PatientPK=hei.PatientPK
+   left join PCR2Months pcr on pcr.PatientPKHash=hei.PatientPKHash
     and pcr.SiteCode=hei.sitecode
+   left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=hei.SiteCode
 Group by 
         hei.County,
         hei.SubCounty,
@@ -98,10 +98,7 @@ Group by
         hei.Facility_Name,
         hei.SDP,
         hei.Agency,
-        hei.period
-      
-       
-        
+        hei.period,
+        MFL_partner_agency_combination.Facilitytype        
 END
-
 

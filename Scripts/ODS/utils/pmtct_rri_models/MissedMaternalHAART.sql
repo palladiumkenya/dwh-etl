@@ -1,9 +1,7 @@
 
-
 IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedMaternalHaart]') AND type in (N'U')) 
 Drop TABLE PMTCTRRI.[dbo].MissedMaternalHaart
 GO
-
 
 BEGIN
 
@@ -24,7 +22,7 @@ HIVPositiveANC As (
 Select 
     PatientPKHash,
     sitecode ,
-    cast (VisitDate as date) As Visitdate,
+    VisitDate,
     HIVTestFinalResult
     from PMTCT_STG.dbo.MNCH_AncVisits
     where HIVTestFinalResult='Positive'
@@ -32,7 +30,7 @@ UNION
     SELECT
     PatientPKHash,
     sitecode ,
-    cast (VisitDate as date) As Visitdate,
+    VisitDate,
     HIVTestFinalResult
     from PMTCT_STG.dbo.MNCH_PncVisits
     where HIVTestFinalResult='Positive' 
@@ -61,10 +59,10 @@ Patients as (
 Linelist as (Select 
         Pat.PatientPKHash,
         Pat.SiteCode,
-        cast (Pat.VisitDate as nvarchar) As Visitdate,
+        Pat.VisitDate,
         Pat.[Period],
         Pat.HIVTestFinalResult,
-        cast (art.StartARTDate as date) As StartARTDate ,
+        art.StartARTDate ,
         Case When art.StartARTDate < Pat.VisitDate Then  1 else 0 End as KnownPositive,
         Case When art.StartARTDate>=Pat.VisitDate Then 1 else 0 End As New ,
         --Case when art.StartARTDate < Pat.VisitDate and art.StartARTDate is not null Then 1 else 0 end as knownPositiveOnART,
