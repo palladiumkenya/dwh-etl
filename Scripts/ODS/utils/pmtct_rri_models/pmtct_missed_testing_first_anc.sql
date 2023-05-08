@@ -1,6 +1,6 @@
-IF OBJECT_ID(N'[PMTCTRRI].[dbo].[MissedTestingFirstANC]', N'U') IS NOT NULL 
-DROP TABLE [PMTCTRRI].[dbo].[MissedTestingFirstANC];
-
+IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedTestingFirstANC]') AND type in (N'U')) 
+Drop TABLE PMTCTRRI.[dbo].MissedTestingFirstANC
+Go
 BEGIN
 
 with facility_data as (
@@ -17,6 +17,7 @@ with facility_data as (
     End as Facilitytype
 from ODS.dbo.All_EMRSites emr
 left join PMTCT_STG.dbo.MNCH_AncVisits visits on emr.MFL_Code=visits.SiteCode
+
 ),
 visits_ordering as (
 select
@@ -30,6 +31,8 @@ group by
     PatientPK,
     SiteCode,
     VisitDate
+from PMTCT_STG.dbo.MNCH_AncVisits
+
 ),
 first_anc_visits_summary as (
     select
@@ -53,6 +56,7 @@ tested_hiv_clients_visits_ordering as (
     PatientPK,
     SiteCode,
     VisitDate
+
 ),
 hiv_testing_summary as (
 select
@@ -76,6 +80,7 @@ tested_syphillis_clients_visits_ordering as (
      PatientPK,
      SiteCode,
      VisitDate
+
 ),
 tested_syphillis_summary as (
     select

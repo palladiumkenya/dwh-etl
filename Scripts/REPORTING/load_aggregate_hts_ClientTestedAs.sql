@@ -36,8 +36,6 @@ SELECT DISTINCT
 		SUM(Linked) as Linked,
 		SUM(Positive) as Positive
 
-
-
 FROM NDWH.dbo.FactHTSClientTests hts
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
@@ -46,7 +44,7 @@ LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = hts.PatientKey
 LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=hts.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
 LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
-
+where TestType in ('Initial test','Initial')
 GROUP BY  MFLCode,		
 		f.FacilityName,
 		County,

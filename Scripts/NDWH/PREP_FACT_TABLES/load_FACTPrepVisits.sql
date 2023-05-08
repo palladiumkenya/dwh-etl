@@ -91,6 +91,8 @@ PrepVisits as (
         PrepVisits.BMI,
         PrepVisits.STIScreening,
         PrepVisits.STISymptoms,
+        case when   PrepVisits.STISymptoms  is not null then 1 else 0 end as STIPositive,
+        case when   PrepVisits.STISymptoms  is  null then 1 else 0 end as STINegative,
         PrepVisits.STITreated,
         PrepVisits.Circumcised,
         PrepVisits.VMMCReferral,
@@ -144,4 +146,6 @@ PrepVisits as (
     left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment;
     
     alter table NDWH.dbo.FactPrepVisits add primary key(FactKey);
+
 END
+
