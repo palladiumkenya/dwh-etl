@@ -12,18 +12,24 @@ with facility_data as (
     County,
     SubCounty,
     case 
-        when EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
-        When EMR in ('No EMR','No-EMR','NonEMR') Then 'Paper Based' Else 'Unclassified' 
+        when emr.EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
+        When emr.EMR in ('No EMR','No-EMR','NonEMR','Ushauri') Then 'Paper Based' Else 'Unclassified' 
     End as Facilitytype
-from ODS.dbo.All_EMRSites
+from ODS.dbo.All_EMRSites emr
+left join PMTCT_STG.dbo.MNCH_AncVisits visits on emr.MFL_Code=visits.SiteCode
 ),
 visits_ordering as (
 select
-    row_number() over(partition by PatientPK, SiteCode order by VisitDate) as rank,
+ COUNT(DISTINCT CONCAT(PatientPK,'-',SiteCode)) AS FirstANC,
     PatientPK,
     SiteCode,
     VisitDate
-from ODS.dbo.MNCH_AncVisits
+from PMTCT_STG.dbo.MNCH_AncVisits
+where ANCVisitNo=1
+group by 
+    PatientPK,
+    SiteCode,
+    VisitDate
 ),
 first_anc_visits_summary as (
     select
@@ -31,19 +37,22 @@ first_anc_visits_summary as (
         concat(year(VisitDate), '-', month(VisitDate)) as YearMonth,
         count(concat(PatientPK,SiteCode)) as NoOfMothers
     from visits_ordering
-    where rank = 1
     group by 
         SiteCode, 
         concat(year(VisitDate), '-', month(VisitDate))
 ),
 tested_hiv_clients_visits_ordering as (
     select
-        row_number() over(partition by PatientPK, SiteCode order by VisitDate) as rank,
+        COUNT(DISTINCT CONCAT(PatientPK,'-',SiteCode)) AS MothersTested,
         PatientPK,
         SiteCode,
         VisitDate
-    from ODS.dbo.MNCH_AncVisits
-    where HIVTestingDone = 'Yes'
+    from PMTCT_STG.dbo.MNCH_AncVisits
+    where HIVTestingDone = 'Yes' and ANCVisitNo=1
+    Group by 
+    PatientPK,
+    SiteCode,
+    VisitDate
 ),
 hiv_testing_summary as (
 select
@@ -51,19 +60,22 @@ select
     concat(year(VisitDate), '-', month(VisitDate)) as YearMonth,
     count(concat(PatientPK,SiteCode)) as NoOfMothersTested
 from tested_hiv_clients_visits_ordering
-where rank = 1
 group by 
     SiteCode, 
     concat(year(VisitDate), '-', month(VisitDate))
 ),
 tested_syphillis_clients_visits_ordering as (
     select
-        row_number() over(partition by PatientPK, SiteCode order by VisitDate) as rank,
+        COUNT(DISTINCT CONCAT(PatientPK,'-',SiteCode)) AS SyphilisTested,
         PatientPK,
         SiteCode,
         VisitDate
-    from ODS.dbo.MNCH_AncVisits
-    where SyphilisTestDone = 'Yes'
+    from PMTCT_STG.dbo.MNCH_AncVisits
+    where SyphilisTestDone = 'Yes' and ANCVisitNo=1
+    Group by 
+     PatientPK,
+     SiteCode,
+     VisitDate
 ),
 tested_syphillis_summary as (
     select
@@ -71,7 +83,6 @@ tested_syphillis_summary as (
         concat(year(VisitDate), '-', month(VisitDate)) as YearMonth,
         count(concat(PatientPK,SiteCode)) as NoOfMothersTested
     from tested_syphillis_clients_visits_ordering
-    where rank = 1
     group by 
         SiteCode, 
         concat(year(VisitDate), '-', month(VisitDate))
