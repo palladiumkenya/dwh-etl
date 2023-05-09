@@ -1,98 +1,95 @@
-IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]', N'U') IS NOT NULL 
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]') AND type in (N'U')) 
 TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]
 GO
 
-With cte1 as (
-    SELECT distinct 
-		a.PartnerPatientPk,
-		fac.[MFLCODE] SiteCode,
-		fac.County,
-		fac.SubCounty,
-		a.ScreenedForIpv,
-		a.CccNumber,
-		c.FinalTestResult as FinalResult, 
-		e.Date DateElicited,
-		f.Date TestDate 
-	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
-	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
-	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
-	INNER JOIN NDWH.dbo.FactHTSClientTests c on c.PatientKey=a.PatientKey and c.FacilityKey=a.FacilityKey
-	LEFT JOIN NDWH.dbo.DimDate e on a.DateElicitedKey = e.DateKey
-	LEFT JOIN NDWH.dbo.DimDate f on c.DateTestedKey = f.DateKey
-), cte2 as (
-    SELECT distinct 
-		a.PartnerPatientPk,
-		fac.MFLCode SiteCode,
-		fac.County,
-		fac.SubCounty,
-		a.ScreenedForIpv,
-		a.CccNumber,
-		c.FinalTestResult as FinalResult, 
-		e.Date DateElicited,
-		f.Date TestDate, 
-		d.ReportedCCCNumber
--- 			d.ReportedStartARTDate 
-	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
-	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
-	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
-	INNER JOIN NDWH.dbo.FactHTSClientTests c on c.PatientKey=a.PatientKey and c.FacilityKey=a.FacilityKey
-	INNER JOIN NDWH.dbo.FactHTSClientLinkages d on d.PatientKey=a.PatientKey and d.FacilityKey=a.FacilityKey
-	LEFT JOIN NDWH.dbo.DimDate e on a.DateElicitedKey = e.DateKey
-	LEFT JOIN NDWH.dbo.DimDate f on c.DateTestedKey = f.DateKey
-), combined as (
-    SELECT distinct 
-		f.MFLCode Mflcode,
-		f.FacilityName,
-		f.County,
-		f.SubCounty,
-		AgencyName,
-		p.PartnerName, 
-		a.FinalTestResult,
-		RelationsipToIndexClient,
-		pat.PatientPkHash PatientPk,
-		e.Date DateElicited, 
-		j.Date TestDate, 
-		j.month, 
-		j.year,
-		FORMAT(cast(j.date as date), 'MMMM') MonthName, 
+with pns_and_tests as ( 
+	select distinct 
+		pns.PatientKey,
+		facility.MFLCode,
+        facility.FacilityKey,
+        pns.AgencyKey,
+        pns.PartnerKey,
+        pns.AgeGroupKey,
+		pns.ScreenedForIpv,
+		pns.CccNumber,
+        pns.RelationsipToIndexClient,
+        pns.KnowledgeOfHivStatus,
+		tests.FinalTestResult,
+		pns.DateElicitedKey,
+        pns.DateLinkedToCareKey,
+		tests.DateTestedKey
+	from NDWH.dbo.FactHTSPartnerNotificationServices as pns
+    left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = pns.FacilityKey
+	left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = pns.PartnerPatientPk
+        and patient.SiteCode = facility.MFLCode
+    left join NDWH.dbo.FactHTSClientTests as tests on tests.PatientKey = patient.PatientKey
+    where 
+        TestType in ('Initial Test', 'Initial') 
+),
+pns_tests_linkages as ( 
+select 
+    pns_and_tests.*,
+    linkages.ReportedCCCNumber  
+from pns_and_tests
+left join NDWH.dbo.FactHTSClientLinkages as linkages on linkages.PatientKey = pns_and_tests.PatientKey
+),
+line_list_dataset as (
+	select distinct
+        dataset.PatientKey,
+		facility.MFLCode,
+		facility.FacilityName,
+		facility.County,
+		facility.SubCounty,
+		patner.PartnerName,
+		agency.AgencyName,
+		RelationsipToIndexClient, 
+		FinalTestResult,
+		elicited.Date as DateElicited,
+		tested.Date as TestDate,
+		tested.year,
+		tested.month,
+		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
 		Gender,
-		g.DATIMAgeGroup as Agegroup,
-		Case 
-			WHEN (b.PartnerPatientPk  is not null and b.PartnerPatientPk<> '') then 1            
-		ELSE 0 End  ContactPatientPk,        
-		Case 
-			WHEN (c.FinalResult  is not null ) then 1 
-		ELSE 0 End  FinalResult,        
-		Case 
-			WHEN (c.FinalResult  is not null and c.FinalResult='Positive' ) then 1
-		ELSE 0 End  NewPositives, 
-		Case 
-			WHEN (c.FinalResult  is not null and c.FinalResult='Negative' ) then 1
-		ELSE 0 End  NewNegatives,
-		Case 
-			WHEN (d.ReportedCCCNumber  is not null and d.ReportedCCCNumber<>'') then 1 
-		ELSE 0 End  Linked,
-		Case 
-			WHEN (b.KnowledgeOfHivStatus='Positive' or b.KnowledgeOfHivStatus='703') then 1 
-		ELSE 0 End  KP,
-		Case 
-			WHEN (b.KnowledgeOfHivStatus='Unknown' or b.KnowledgeOfHivStatus='1067') then 1
-		ELSE 0 End  UnknownStatus
-	FROM  NDWH.dbo.FactHTSClientTests a
-	INNER JOIN NDWH.dbo.FactHTSPartnerNotificationServices b on b.PatientKey=a.PatientKey and b.FacilityKey=a.FacilityKey
-	LEFT JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = b.PatientKey
-	LEFT JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = a.PartnerKey
-	LEFT JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = a.FacilityKey
-	LEFT JOIN NDWH.dbo.DimAgency age ON a.AgencyKey = age.AgencyKey
-	LEFT JOIN NDWH.dbo.DimFacility i ON i.FacilityKey = b.FacilityKey
-	LEFT JOIN NDWH.dbo.DimDate e on b.DateElicitedKey = e.DateKey
-	LEFT JOIN NDWH.dbo.DimDate j on a.DateTestedKey = j.DateKey
-	LEFT JOIN NDWH.dbo.DimAgeGroup g on b.AgeGroupKey = g.AgeGroupKey
-	LEFT JOIN cte1 c on c.PartnerPatientPk = b.PartnerPatientPk and c.SiteCode=i.MFLCode
-	LEFT JOIN cte2 d on d.PartnerPatientPk = b.PartnerPatientPk and d.SiteCode=i.MFLCode
+		DATIMAgeGroup as Agegroup,
+		case 
+			when (dataset.PatientKey is not null) then 1 
+		    else 0 
+        end  elicited,
+		case 
+			when (FinalTestResult is not null ) then 1
+		    else 0 
+        end as tested,
+		case 
+			when (FinalTestResult = 'Positive') then 1
+		    else 0 
+        end  NewPositives, 
+		case 
+			when (FinalTestResult = 'Negative') then 1
+		    else 0 
+        end as  NewNegatives,    
+		case 
+			when (FinalTestResult = 'Positive' and ReportedCCCNumber is not null ) then 1 
+		    else 0 
+        end  Linked,
+		case 
+			when (KnowledgeOfHivStatus = 'Positive') then 1 
+		    else 0 
+        end as  KP,
+        case 
+			when (KnowledgeOfHivStatus='Unknown') then 1
+		    else 0 
+        end as  UnknownStatus
+	from  pns_tests_linkages as dataset
+	left join NDWH.dbo.DimPatient as patient ON patient.PatientKey = dataset.PatientKey
+	left join NDWH.dbo.DimPartner as patner ON patner.PartnerKey = dataset.PartnerKey
+	left join NDWH.dbo.DimFacility as facility  ON facility.FacilityKey = dataset.FacilityKey
+	left join NDWH.dbo.DimAgency agency ON agency.AgencyKey = dataset.AgencyKey	
+	left join NDWH.dbo.DimDate as elicited on elicited.DateKey = dataset.DateElicitedKey
+	left join NDWH.dbo.DimDate as tested on tested.DateKey = dataset.DateTestedKey
+	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
+	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
 )
-
-INSERT INTO REPORTING.dbo.AggregateHTSPNSKnowledgeHIVStatus (
+insert into REPORTING.dbo.AggregateHTSPNSKnowledgeHIVStatus (
 	MFLCode, 
 	FacilityName, 
 	County, 
@@ -106,14 +103,13 @@ INSERT INTO REPORTING.dbo.AggregateHTSPNSKnowledgeHIVStatus (
 	MonthName, 
 	ContactElicited, 
 	ContactTested,
-	Positive, 
 	Linked,
 	KnownPositive, 
 	NewNegatives,
 	NewPositives, 
 	UnknownStatus
 )
-SELECT 
+select 
 	Mflcode,
 	FacilityName,
 	County,
@@ -125,14 +121,23 @@ SELECT
 	year, 
 	month, 
 	MonthName, 
-	count(PatientPk)ContactElicited, 
-	sum(ContactPatientPk)ContactTested,
-	sum(FinalResult)Positive, 
-	sum(Linked)Linked,
-	sum(KP)KnownPositive, 
-	sum(NewNegatives)NewNegatives,
-	sum(NewPositives)NewPositives, 
-	sum(UnknownStatus)UnknownStatus
-from combined
-where FinalTestResult='Positive'
-Group by Mflcode,FacilityName,County,subcounty,PartnerName, year,month,monthName,Gender,Agegroup, AgencyName
+	sum(elicited) as ContactElicited, 
+	sum(tested) as ContactTested,
+	sum(Linked) as Linked,
+	sum(KP) as KnownPositive, 
+	sum(NewNegatives) as NewNegatives,
+	sum(NewPositives) as NewPositives, 
+	sum(UnknownStatus) as UnknownStatus
+from line_list_dataset
+group by 
+    Mflcode,
+    FacilityName,
+    County,
+    subcounty,
+    PartnerName, 
+    year,
+    month,
+    monthName,
+    Gender,
+    Agegroup, 
+    AgencyName
