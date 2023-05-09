@@ -1,4 +1,4 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSSexualPartner]') AND type in (N'U')) 
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSSexualPartner]', N'U') IS NOT NULL 
 TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSSexualPartner]
 GO
 

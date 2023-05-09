@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSChildren]', N'U') IS NOT NULL 	
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSChildren]
+IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSUptake]', N'U') IS NOT NULL 	
+TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSUptake]
 GO
 
 with pns_and_tests as ( 
@@ -82,7 +82,7 @@ line_list_dataset as (
 	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
 	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
 )
-insert into REPORTING.dbo.AggregateHTSPNSChildren (
+insert into REPORTING.dbo.AggregateHTSUptake (
     MFLCode,
     FacilityName, 
     County,
