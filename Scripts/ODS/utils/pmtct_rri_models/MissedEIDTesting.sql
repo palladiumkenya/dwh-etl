@@ -1,5 +1,8 @@
-IF OBJECT_ID(N'[PMTCTRRI.dbo.MissedEIDTesting]', N'U') IS NOT NULL 
-	DROP TABLE [PMTCTRRI.dbo.MissedEIDTesting];
+
+
+IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedEIDTesting]') AND type in (N'U')) 
+Drop TABLE PMTCTRRI.[dbo].MissedEIDTesting
+GO
 BEGIN
 
 with MFL_partner_agency_combination as (
@@ -10,9 +13,10 @@ with MFL_partner_agency_combination as (
 	    SDP_Agency as Agency,
         County,
         SubCounty,
-        case when EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
-        When EMR in ('No EMR','No-EMR','NonEMR') Then 'Paper Based' Else 'Unclassified' End as Facilitytype
-	from ODS.dbo.All_EMRSites 
+        case when emr.EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
+        When emr.EMR in ('No EMR','No-EMR','NonEMR','Ushauri') Then 'Paper Based' Else 'Unclassified' End as Facilitytype
+	from ODS.dbo.All_EMRSites emr 
+	left join [PMTCT_STG].[dbo].[MNCH_HEIs] hei on emr.MFL_Code=hei.SiteCode
 ),
 HEIs As (
 Select 
@@ -34,10 +38,11 @@ Select
     mfl.Facility_Name,
     mfl.Facilitytype,
     mfl.SDP
-    from ODS.dbo.MNCH_HEIs hei
-    left join ODS.dbo.MNCH_Patient enr on hei.PatientPKHash=enr.PatientPKHash and hei.SiteCode=enr.SiteCode
+    from PMTCT_STG.dbo.MNCH_HEIs   hei
+	inner join PMTCT_STG.dbo.MNCH_CwcVisits visits on hei.PatientPKHash=visits.PatientPKHash and hei.SiteCode = visits.SiteCode
+    left join PMTCT_STG.dbo.MNCH_Patient enr on hei.PatientPKHash=enr.PatientPKHash and hei.SiteCode=enr.SiteCode
     left join MFL_partner_agency_combination mfl on mfl.MFL_Code=hei.SiteCode
-    where FirstEnrollmentAtMnch is not null and PatientHeiID is not null
+    --where FirstEnrollmentAtMnch is not null and PatientHeiID is not null
 
 ),
 PCR2Months As (
@@ -55,7 +60,7 @@ PCR2Months As (
     from HEIs
     where PCRduration <= 2
     Group by 
-       PatientPKHash ,
+        PatientPKHash ,
         Sitecode,
         County,
         SubCounty,
@@ -66,7 +71,6 @@ PCR2Months As (
        CONCAT(DATENAME(month,FirstEnrollmentAtMnch),' ',DATEPART(YEAR,FirstEnrollmentAtMnch))
 
 )
-
 
 Select 
         hei.County,
@@ -87,6 +91,7 @@ Select
    from HEIs hei
    left join PCR2Months pcr on pcr.PatientPKHash=hei.PatientPKHash
     and pcr.SiteCode=hei.sitecode
+   left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=hei.SiteCode
 Group by 
         hei.County,
         hei.SubCounty,
@@ -94,9 +99,9 @@ Group by
         hei.Facility_Name,
         hei.SDP,
         hei.Agency,
-        hei.period
-      
-       
-        
+        hei.period,
+        MFL_partner_agency_combination.Facilitytype        
 END
+
+
 

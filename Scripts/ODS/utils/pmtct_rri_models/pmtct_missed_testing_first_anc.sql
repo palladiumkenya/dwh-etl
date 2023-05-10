@@ -1,6 +1,6 @@
-IF OBJECT_ID(N'[PMTCTRRI].[dbo].[MissedTestingFirstANC]', N'U') IS NOT NULL 
-DROP TABLE [PMTCTRRI].[dbo].[MissedTestingFirstANC];
-
+IF EXISTS(SELECT * FROM PMTCTRRI.sys.objects WHERE object_id = OBJECT_ID(N'PMTCTRRI.[dbo].[MissedTestingFirstANC]') AND type in (N'U')) 
+Drop TABLE PMTCTRRI.[dbo].MissedTestingFirstANC
+Go
 BEGIN
 
 with facility_data as (
@@ -12,11 +12,10 @@ with facility_data as (
     County,
     SubCounty,
     case 
-        when emr.EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
-        When emr.EMR in ('No EMR','No-EMR','NonEMR','Ushauri') Then 'Paper Based' Else 'Unclassified' 
+        when EMR in ('KenyaEMR',' IQCare-KeHMIS','AMRS','DREAMSOFTCARE','ECare','kenyaEMR') Then 'EMR Based'
+        When EMR in ('No EMR','No-EMR','NonEMR') Then 'Paper Based' Else 'Unclassified' 
     End as Facilitytype
-from ODS.dbo.All_EMRSites emr
-left join PMTCT_STG.dbo.MNCH_AncVisits visits on emr.MFL_Code=visits.SiteCode
+from ODS.dbo.All_EMRSites
 ),
 visits_ordering as (
 select
@@ -30,6 +29,7 @@ group by
     PatientPK,
     SiteCode,
     VisitDate
+from PMTCT_STG.dbo.MNCH_AncVisits
 ),
 first_anc_visits_summary as (
     select
@@ -71,11 +71,7 @@ tested_syphillis_clients_visits_ordering as (
         SiteCode,
         VisitDate
     from PMTCT_STG.dbo.MNCH_AncVisits
-    where SyphilisTestDone = 'Yes' and ANCVisitNo=1
-    Group by 
-     PatientPK,
-     SiteCode,
-     VisitDate
+    where SyphilisTestDone = 'Yes'
 ),
 tested_syphillis_summary as (
     select
