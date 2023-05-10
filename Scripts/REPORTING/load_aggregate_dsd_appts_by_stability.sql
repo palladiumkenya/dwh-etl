@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSD]', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSD]
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDApptsByStability]', N'U') IS NOT NULL 
+	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDApptsByStability]
 GO
 
 INSERT INTO REPORTING.dbo.AggregateDSDApptsByStability (MFLCode,FacilityName,County,SubCounty,PartnerName,AgencyName,Gender,AgeGroup, AppointmentsCategory,StabilityAssessment,Stability, patients_number)

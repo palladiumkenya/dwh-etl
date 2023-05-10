@@ -37,6 +37,7 @@ PrepDiscontinuation as (
         facility.FacilityKey,
         agency.AgencyKey,
         partner.PartnerKey,
+        age_group.AgeGroupKey,
         Discontinuation.DateKey as ExitDateKey,
         PrepDiscontinuation.ExitDate,
         PrepDiscontinuation.ExitReason,
@@ -51,7 +52,8 @@ PrepDiscontinuation as (
     left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP 
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimFacility as facility on facility.MFLCode = prep_patients.SiteCode
-    left join NDWH.dbo.DimDate as Discontinuation on Discontinuation.Date = PrepDiscontinuation.ExitDate;
+    left join NDWH.dbo.DimDate as Discontinuation on Discontinuation.Date = PrepDiscontinuation.ExitDate
+    left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, PrepDiscontinuation.ExitDate);
 
     alter table NDWH.dbo.FactPrepDiscontinuation add primary key(FactKey);
 END
