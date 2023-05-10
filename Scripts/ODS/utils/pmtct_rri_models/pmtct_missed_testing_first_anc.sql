@@ -90,6 +90,8 @@ tested_syphillis_summary as (
         SiteCode, 
         concat(year(VisitDate), '-', month(VisitDate))
 ),
+
+
 joined_data as (
 select 
      first_anc_visits_summary.SiteCode,
