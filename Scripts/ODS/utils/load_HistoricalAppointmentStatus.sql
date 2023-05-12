@@ -1,6 +1,6 @@
 declare 
 @start_date date = '2019-01-31',
-@end_date date = '2023-02-28';
+@end_date date = '2023-04-30';
 
 with dates as (
       select datefromparts(year(@start_date), month(@start_date), 1) as dte
@@ -14,6 +14,7 @@ select
 into #months
 from dates
 option (maxrecursion 0);   
+
 
 --declare as of date
 declare @as_of_date as date;
@@ -314,6 +315,7 @@ ARTOutcomesCompuation as (
         patient_art_and_enrollment_info.Gender,
         datediff(year, patient_art_and_enrollment_info.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
         second_last_encounter.second_last_NextAppointmentDate as ExpectedNextAppointmentDate,
+		second_last_encounter.Second_Last_EncounterDate as ExpectedLastEncounter,
         datediff(mm, patient_art_and_enrollment_info.StartARTDate, eomonth(@as_of_date)) ARTDurationMonths,
         @as_of_date as AsOfDate
     from last_encounter
@@ -336,19 +338,21 @@ ARTOutcomesCompuation as (
     ARTOutcomesCompuation.PatientID,
     ARTOutcomesCompuation.PatientPK,
     ARTOutcomesCompuation.SiteCode as MFLCode,
+	
+    cast (ARTOutcomesCompuation.ExpectedLastEncounter as date) as ExpectedLastEncounter ,
     cast (ARTOutcomesCompuation.ExpectedNextAppointmentDate as date) as ExpectedNextAppointmentDate ,
     cast (ARTOutcomesCompuation.LastEncounterDate as date) as LastEncounterDate,
     cast (ARTOutcomesCompuation.NextAppointmentDate as date) as NextAppointmentDate,
-    DATEDIFF(dd, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) As DiffExpectedTCADateLastEncounter,
-    case when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) < 0 Then 'Came before'
-    When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)= 0 Then 'On time'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 1 and 7 Then 'Missed 1-7 days'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 8 and 14 Then 'Missed 8-14 days'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 15 and 30 Then 'Missed 15-30 days'
-    when   last_upload_as_of_date.DateRecieved < ARTOutcomesCompuation.ExpectedNextAppointmentDate   Then 'LostinHMIS'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 31 and 60 Then 'IIT and RTT within 30 days'
-    when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)  > 60 Then 'IIT and RTT beyond 30 days'
-    When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'Still IIT'
+    DATEDIFF(dd, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) As DiffExpectedTCADateLastEncounter,
+    case when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) < 0 Then 'Came before'
+    When   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter)= 0 Then 'On time'
+    when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) between 1 and 7 Then 'Missed 1-7 days'
+    when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) between 8 and 14 Then 'Missed 8-14 days'
+    when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) between 15 and 30 Then 'Missed 15-30 days'
+    when   last_upload_as_of_date.DateRecieved < ARTOutcomesCompuation.NextAppointmentDate   Then 'LostinHMIS'
+    when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) between 31 and 60 Then 'IIT and RTT within 30 days'
+    when   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter)  > 60 Then 'IIT and RTT beyond 30 days'
+    When   DATEDIFF(day, ARTOutcomesCompuation.NextAppointmentDate, ARTOutcomesCompuation.ExpectedLastEncounter) >= 91 and ARTOutcomesCompuation.NextAppointmentDate <>'1900-01-01'  Then 'Still IIT'
    -- When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'IIT and RTT beyond 30 days'
 
     else 	
@@ -374,10 +378,10 @@ and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
 
     )
  
-  Insert into ODS.dbo.[HistoricalAppointmentStatus]
-     select * from Summary 
-	   --Select top 1* into ODS.dbo.[HistoricalAppointmentStatus]
-   --from Summary
+  --Insert into ODS.dbo.[HistoricalAppointmentStatus]
+   -- select * from Summary 
+	   Select * into ODS.dbo.[HistoricalAppointmentStatus]
+   from Summary
       where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') and 
       NextAppointmentDate > LastencounterDate 
 
