@@ -6,6 +6,7 @@ WITH tested AS (
     SELECT distinct 
         MFLCode,
         FacilityName,
+        hts.PatientKey,
         County,
         SubCounty,
         PartnerName,
@@ -14,8 +15,9 @@ WITH tested AS (
         DATIMAgeGroup,
         tbScreening,
         case 
-            when TBScreening IS NOT NULL THEN 'Screened for TB'
-        ELSE 'Not Screened for TB' END AS TBScreening_Grp,
+            when TBScreening is not null then 'Screened for TB'
+            else 'Not Screened for TB' 
+        end as TBScreening_Grp,
         year,
         month,
         FORMAT(cast(date as date), 'MMMM') MonthName,      
@@ -30,6 +32,7 @@ WITH tested AS (
     LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = hts.PartnerKey
     LEFT JOIN NDWH.dbo.FactHTSClientLinkages link on link.PatientKey = hts.PatientKey
     LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
+    WHERE TestType in ('Initial Test', 'Initial')
 )
 INSERT INTO REPORTING.dbo.AggregateHTSTBscreening (
 	MFLCode, 
@@ -67,4 +70,17 @@ SELECT
     Sum(Positive) Positive,
     Sum(Linked) Linked
 FROM tested
-GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, DATIMAgeGroup, tbScreening, year, month, MonthName, TBScreening_Grp
+GROUP BY 
+    MFLCode, 
+    FacilityName, 
+    County,
+    SubCounty, 
+    PartnerName, 
+    AgencyName, 
+    Gender, 
+    DATIMAgeGroup, 
+    tbScreening, 
+    year, 
+    month, 
+    MonthName, 
+    TBScreening_Grp
