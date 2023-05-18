@@ -27,6 +27,9 @@ Select
 		agency.AgencyKey,
 		patient.PatientKey,
 		as_of.DateKey as AsOfDateKey,
+        patient.Gender,
+        AppointmentStatus,
+        AsofDate,
         cast(getdate() as date) as LoadDate
         into NDWH.dbo.FACTAppointments
         from ODS.dbo.[HistoricalAppointmentStatus] as apt
