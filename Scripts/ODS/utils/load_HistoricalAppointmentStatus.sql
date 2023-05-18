@@ -1,6 +1,6 @@
 declare 
 @start_date date = '2019-01-31',
-@end_date date = '2023-02-28';
+@end_date date = '2023-04-30';
 
 with dates as (
       select datefromparts(year(@start_date), month(@start_date), 1) as dte
@@ -14,6 +14,7 @@ select
 into #months
 from dates
 option (maxrecursion 0);   
+
 
 --declare as of date
 declare @as_of_date as date;
@@ -314,6 +315,7 @@ ARTOutcomesCompuation as (
         patient_art_and_enrollment_info.Gender,
         datediff(year, patient_art_and_enrollment_info.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
         second_last_encounter.second_last_NextAppointmentDate as ExpectedNextAppointmentDate,
+		second_last_encounter.Second_Last_EncounterDate as ExpectedLastEncounter,
         datediff(mm, patient_art_and_enrollment_info.StartARTDate, eomonth(@as_of_date)) ARTDurationMonths,
         @as_of_date as AsOfDate
     from last_encounter
@@ -336,9 +338,9 @@ ARTOutcomesCompuation as (
     ARTOutcomesCompuation.PatientID,
     ARTOutcomesCompuation.PatientPK,
     ARTOutcomesCompuation.SiteCode as MFLCode,
+    cast (ARTOutcomesCompuation.ExpectedLastEncounter as date) as ExpectedLastEncounter ,
     cast (ARTOutcomesCompuation.ExpectedNextAppointmentDate as date) as ExpectedNextAppointmentDate ,
     cast (ARTOutcomesCompuation.LastEncounterDate as date) as LastEncounterDate,
-    cast (ARTOutcomesCompuation.NextAppointmentDate as date) as NextAppointmentDate,
     DATEDIFF(dd, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) As DiffExpectedTCADateLastEncounter,
     case when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) < 0 Then 'Came before'
     When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)= 0 Then 'On time'
@@ -369,8 +371,8 @@ from ARTOutcomesCompuation
 left join last_exit_as_of_date on last_exit_as_of_date.PatientIDHash=ARTOutcomesCompuation.PatientIDHash
 and last_exit_as_of_date.PatientPK= ARTOutcomesCompuation.PatientPK
 and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
- left  join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode
-
+ left  join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode 
+    where  NextAppointmentDate > LastencounterDate 
 
     )
  
@@ -378,8 +380,7 @@ and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
      select * from Summary 
 	   --Select top 1* into ODS.dbo.[HistoricalAppointmentStatus]
    --from Summary
-      where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') and 
-      NextAppointmentDate > LastencounterDate 
+      where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') 
 
 fetch next from cursor_AsOfDates into @as_of_date
 end
@@ -388,9 +389,8 @@ end
 --drop table #months
 --close cursor_AsOfDates 
 --deallocate cursor_AsOfDates 
-
-
-
+--truncate table ODS.dbo.[HistoricalAppointmentStatus]
+--alter table ODS.dbo.[HistoricalAppointmentStatus] drop column NextappointmentDate
 
 
 
