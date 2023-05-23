@@ -37,6 +37,6 @@ BEGIN
         source_data.*
     into ODS.dbo.Intermediate_EncounterHTSTests
     from source_data
-    where TestType in ('Initial','Initial Test')
+    where num=1
 
 END
