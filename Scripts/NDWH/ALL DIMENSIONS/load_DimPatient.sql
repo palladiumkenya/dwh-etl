@@ -13,7 +13,7 @@ BEGIN
             Gender,
             cast(DOB as date) as DOB,
             MaritalStatus,
-            Nupi,
+            NupiHash,
             PatientType,
             PatientSource,
             baselines.eWHO as EnrollmentWHOKey,
