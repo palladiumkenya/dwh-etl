@@ -37,6 +37,6 @@ BEGIN
         source_data.*,cast(getdate() as date) as LoadDate
     into ODS.dbo.Intermediate_EncounterHTSTests
     from source_data
-    where num = 1
+    where num=1
 
 END
