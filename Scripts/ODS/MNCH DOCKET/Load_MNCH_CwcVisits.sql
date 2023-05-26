@@ -27,7 +27,30 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Dewormed]	 =b.[Dewormed];
+							a.Height				=b.Height,
+							a.Weight				=b.Weight,
+							a.Temp					=b.Temp,
+							a.PulseRate				=b.PulseRate,
+							a.RespiratoryRate		=b.RespiratoryRate	,
+							a.OxygenSaturation		=b.OxygenSaturation	,
+							a.MUAC					=b.MUAC	,
+							a.WeightCategory		=b.WeightCategory,
+							a.Stunted				=b.Stunted,
+							a.InfantFeeding			=b.InfantFeeding,
+							a.MedicationGiven		=b.MedicationGiven,
+							a.TBAssessment			=b.TBAssessment	,
+							a.MNPsSupplementation	=b.MNPsSupplementation	,
+							a.Immunization			=b.Immunization	,
+							a.DangerSigns			=b.DangerSigns,
+							a.Milestones			=b.Milestones,
+							a.VitaminA				=b.VitaminA	,
+							a.Disability			=b.Disability,
+							a.ReceivedMosquitoNet	=b.ReceivedMosquitoNet,
+							a.Dewormed				=b.Dewormed	,
+							a.ReferredFrom			=b.ReferredFrom	,
+							a.ReferredTo			=b.ReferredTo,
+							a.ReferralReasons		=b.ReferralReasons,
+							a.FollowUP				=b.FollowUP;
 
 				with cte AS (
 						Select
@@ -42,4 +65,5 @@ BEGIN
 						delete from cte 
 						Where Row_Num >1 ;
 END
+
 

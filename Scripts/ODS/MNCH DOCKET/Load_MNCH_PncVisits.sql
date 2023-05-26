@@ -24,8 +24,11 @@ BEGIN
 							--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
-						 a.PatientPK  = b.PatientPK 
-						and a.SiteCode = b.SiteCode
+						 a.PatientPK	= b.PatientPK 
+						and a.SiteCode	= b.SiteCode
+						and a.visitID	= b.visitID
+						and a.VisitDate = b.VisitDate
+
 							)
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientMnchID,PatientPk,PNCRegisterNumber,SiteCode,EMR,FacilityName,Project,DateExtracted,VisitID,VisitDate,PNCVisitNo,DeliveryDate,ModeOfDelivery,PlaceOfDelivery,Height,Weight,Temp,PulseRate,RespiratoryRate,OxygenSaturation,MUAC,BP,BreastExam,GeneralCondition,HasPallor,Pallor,Breast,PPH,CSScar,UterusInvolution,Episiotomy,Lochia,Fistula,MaternalComplications,TBScreening,ClientScreenedCACx,CACxScreenMethod,CACxScreenResults,PriorHIVStatus,HIVTestingDone,HIVTest1,HIVTest1Result,HIVTest2,HIVTest2Result,HIVTestFinalResult,InfantProphylaxisGiven,MotherProphylaxisGiven,CoupleCounselled,PartnerHIVTestingPNC,PartnerHIVResultPNC,CounselledOnFP,ReceivedFP,HaematinicsGiven,DeliveryOutcome,BabyConditon,BabyFeeding,UmbilicalCord,Immunization,InfantFeeding,PreventiveServices,ReferredFrom,ReferredTo,NextAppointmentPNC,ClinicalNotes,Date_Last_Modified) 
@@ -33,7 +36,13 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.ClinicalNotes	 =b.ClinicalNotes;
+							a.ClinicalNotes	 =b.ClinicalNotes,
+							a.PriorHIVStatus =b.PriorHIVStatus,
+							a.HIVTest1Result =b.HIVTest1Result,
+							a.HIVTest2 = b.HIVTest2,
+							a.HIVTest2Result	= b.HIVTest2Result,
+							a.HIVTestFinalResult =b.HIVTestFinalResult;
 END
+
 
 

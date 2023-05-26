@@ -3,7 +3,7 @@ BEGIN
     --truncate table [ODS].[dbo].[MNCH_Heis]
 	MERGE [ODS].[dbo].[MNCH_Heis] AS a
 			USING(
-					SELECT distinct P.[PatientPk],P.[SiteCode],P.[Emr],P.[Project],P.[Processed],P.[QueueId],P.[Status],P.[StatusDate],P.[DateExtracted]
+					SELECT distinct P.[PatientPk],P.[SiteCode],P.[Emr],P.[Project],P.[Processed],P.[QueueId],P.[Status],P.[StatusDate]/*,P.[DateExtracted]*/
 						  ,P.[FacilityId],P.[FacilityName],P.[PatientMnchID],[DNAPCR1Date],[DNAPCR2Date],[DNAPCR3Date],[ConfirmatoryPCRDate],[BasellineVLDate]
 						  ,[FinalyAntibodyDate],[DNAPCR1],[DNAPCR2],[DNAPCR3],[ConfirmatoryPCR],[BasellineVL],[FinalyAntibody]
 						  ,[HEIExitDate],[HEIHIVStatus],[HEIExitCritearia],P.[Date_Created],P.[Date_Last_Modified]
@@ -17,30 +17,39 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						 and a.[DNAPCR1Date]  = b.[DNAPCR1Date]
+						 --vand a.[DNAPCR1Date]  = b.[DNAPCR1Date]
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified) 
-						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified)
+						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified) 
+						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified)
 
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Status]	 =b.[Status];
+							a.[Status]		=b.[Status],
+							a.DNAPCR1Date	=b.DNAPCR1Date,
+							a.DNAPCR2Date	= b.DNAPCR2Date,
+							a.DNAPCR3Date			= b.DNAPCR3Date,
+							a.ConfirmatoryPCRDate = b.ConfirmatoryPCRDate,
+							a.BasellineVLDate   = b.BasellineVLDate,
+							a.FinalyAntibodyDate  =b.FinalyAntibodyDate;
 
 					;with cte AS ( Select            
 									P.PatientPK,            
 									P.SiteCode,  
-									[DNAPCR1Date],
+									[DNAPCR1Date],HEIExitCritearia,
 					
-					ROW_NUMBER() OVER (PARTITION BY P.PatientPK,P.SiteCode
+					ROW_NUMBER() OVER (PARTITION BY P.PatientPK,P.SiteCode,HEIExitCritearia
 					ORDER BY P.PatientPK,P.SiteCode,[DNAPCR1Date]) Row_Num
-					FROM [ODS].[dbo].[MNCH_Heis] p)   
+					FROM [ODS].[dbo].[MNCH_Heis] p
+					where HEIExitCritearia like '%Confirmed HIV Positive%')   
 		
 				delete from cte
-				where  Row_Num  > 1;
+				where  Row_Num  > 1;  	
 
+				
 END
+
 
 
 

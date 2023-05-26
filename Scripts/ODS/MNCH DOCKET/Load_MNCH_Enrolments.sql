@@ -17,6 +17,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.[EnrollmentDateAtMnch] = b.[EnrollmentDateAtMnch]
 							)
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientMnchID,PatientPk,SiteCode,FacilityName,EMR,Project,DateExtracted,ServiceType,EnrollmentDateAtMnch,MnchNumber,FirstVisitAnc,Parity,Gravidae,LMP,EDDFromLMP,HIVStatusBeforeANC,HIVTestDate,PartnerHIVStatus,PartnerHIVTestDate,BloodGroup,StatusAtMnch,Date_Last_Modified) 
@@ -24,19 +25,31 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.ServiceType	 =b.ServiceType;
+							a.ServiceType	 =b.ServiceType,
+							a.Parity = b.Parity,
+							a.Gravidae = b.Gravidae,
+							a.LMP = b.LMP,
+							a.EDDFromLMP = b.EDDFromLMP,
+							a.HIVStatusBeforeANC = b.HIVStatusBeforeANC,
+							a.HIVTestDate = b.HIVTestDate,
+							a.PartnerHIVStatus = b.PartnerHIVStatus,
+							a.PartnerHIVTestDate = b.PartnerHIVTestDate,
+							a.BloodGroup = b.BloodGroup,
+							a.StatusAtMnch = b.StatusAtMnch;
 
 				with cte AS (
 						Select
 						Sitecode,
 						PatientPK,
+						[EnrollmentDateAtMnch],
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode ORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,[EnrollmentDateAtMnch] ORDER BY
 						PatientPK,Sitecode) Row_Num
 						FROM  [ODS].[dbo].[MNCH_Enrolments] (NoLock)
 						)
 						delete from cte 
 						Where Row_Num >1 ;
 END
+
 
 

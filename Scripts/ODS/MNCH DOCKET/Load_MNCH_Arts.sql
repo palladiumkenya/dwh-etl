@@ -17,6 +17,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.[PatientMnchID] = b.[PatientMnchID]
 						
 							)
 					WHEN NOT MATCHED THEN 
@@ -25,8 +26,12 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Status]	 =b.[Status];
+							a.[Status]	 =b.[Status],
+							a.LastRegimen = b.LastRegimen,
+							a.StartRegimen = b.StartRegimen,
+							a.StartRegimenLine = b.StartRegimenLine;
 END
+
 
 
 

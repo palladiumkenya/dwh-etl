@@ -18,6 +18,8 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.[OrderedbyDate] = b.[OrderedbyDate]
+						and a.[PatientMNCH_ID] = b.[PatientMNCH_ID]
+						and a.visitID = b.visitID
 						--and a.[TestName] = b.[TestName]
 						--and a.[TestResult] = b.[TestResult]
 	
@@ -28,7 +30,11 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Status]	 =b.[Status];
+							a.[Status]	 =b.[Status],
+							a.TestName = b.TestName,
+							a.TestResult = b.TestResult,
+							a.LabReason = b.LabReason,
+							a.visitID	= b.visitID;
 
 				with cte AS (
 						Select
@@ -42,4 +48,6 @@ BEGIN
 						)
 						Delete from cte 
 						Where Row_Num >1 ;
+
 END
+

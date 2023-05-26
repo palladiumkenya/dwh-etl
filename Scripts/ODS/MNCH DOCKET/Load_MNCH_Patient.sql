@@ -23,7 +23,16 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.Occupation	 =b.Occupation;
+							a.Gender = b.Gender,
+							a.DOB = b.DOB,
+							a.FirstEnrollmentAtMnch = b.FirstEnrollmentAtMnch,
+							a.Occupation = b.Occupation,
+							a.MaritalStatus = b.MaritalStatus,
+							a.EducationLevel = b.EducationLevel,
+							a.PatientResidentCounty = b.PatientResidentCounty,
+							a.PatientResidentSubCounty = b.PatientResidentSubCounty,
+							a.PatientResidentWard = b.PatientResidentWard,
+							a.InSchool = b.InSchool;
 
 				with cte AS (
 						Select

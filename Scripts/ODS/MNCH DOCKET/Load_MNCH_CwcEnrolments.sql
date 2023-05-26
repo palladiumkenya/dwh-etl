@@ -22,6 +22,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.visitID =b.visitID
 						--and a.ID  = b.ID
 							)
 					WHEN NOT MATCHED THEN 
@@ -30,20 +31,40 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PlaceOfDelivery	 =b.PlaceOfDelivery;
+							a.BirthWeight		=b.BirthWeight,
+							a.BirthLength		=b.BirthLength,
+							a.BirthOrder		=b.BirthOrder,
+							a.BirthType			=b.BirthType,
+							a.PlaceOfDelivery	=b.PlaceOfDelivery,
+							a.ModeOfDelivery	=b.ModeOfDelivery,
+							a.SpecialNeeds		=b.SpecialNeeds,
+							a.SpecialCare		=b.SpecialCare,
+							a.HEI				=b.HEI,
+							a.MotherAlive		=b.MotherAlive,
+							a.TransferIn		=b.TransferIn,
+							a.TransferInDate	=b.TransferInDate,
+							a.TransferredFrom	=b.TransferredFrom,
+							a.HEIDate			=b.HEIDate,
+							a.NVP				=b.NVP,
+							a.BreastFeeding		=b.BreastFeeding,
+							a.ReferredFrom		=b.ReferredFrom	,
+							a.ARTMother			=b.ARTMother,
+							a.ARTRegimenMother	=b.ARTRegimenMother;
 
 					
 					with cte AS (
 						Select
 						Sitecode,
 						PatientPK,
+						visitID,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode ORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID ORDER BY
 						PatientPK,Sitecode) Row_Num
 						FROM  [ODS].[dbo].[MNCH_CwcEnrolments](NoLock)
 						)
 						delete from cte 
 						Where Row_Num >1 ;
 END
+
 
 
