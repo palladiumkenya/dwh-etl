@@ -81,6 +81,7 @@ PrepRefil1stMonth As (
       ,PrepRefil3rdMonth.FinalTestResult As TestResultsMonth3
       ,PrepRefil3rdMonth.TestDate As TestDateMonth3
       ,PrepRefil3rdMonth.DispenseDate As DispenseDateMonth3
+	  ,cast(getdate() as date) as LoadDate
   INTO ODS.dbo.Intermediate_PrepRefills
   from PrepPatients
   LEFT JOIN PrepRefil1stMonth on PrepPatients.PatientPk=PrepRefil1stMonth.PatientPk and PrepPatients.SiteCode=PrepRefil1stMonth.SiteCode 

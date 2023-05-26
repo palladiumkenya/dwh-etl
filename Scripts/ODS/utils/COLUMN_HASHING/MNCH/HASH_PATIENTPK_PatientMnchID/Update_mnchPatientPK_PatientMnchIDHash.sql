@@ -1,6 +1,6 @@
 update ODS.dbo.MNCH_Patient 
 	set PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPk  as nvarchar(36))), 2),
-		PatientMnchIDHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientMnchID  as nvarchar(36))), 2)
+		PatientMnchIDHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientMnchID  as nvarchar(36))), 2);
 
 	
   UPDATE AV
@@ -24,6 +24,12 @@ update ODS.dbo.MNCH_Patient
   FROM  ODS.dbo.MNCH_HEIs   HEIs
   join ODS.dbo.MNCH_Patient p  on HEIs.SiteCode = P.SiteCode and HEIs.PatientPk = p.PatientPk
   where HEIs.PatientPKHash is null or HEIs.PatientMnchIDHash is null;
+
+  --Heis orphan records
+  update ODS.dbo.MNCH_HEIs
+	set PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPk  as nvarchar(36))), 2)
+	where PatientPKHash is null;
+
 
 
 			  UPDATE MV

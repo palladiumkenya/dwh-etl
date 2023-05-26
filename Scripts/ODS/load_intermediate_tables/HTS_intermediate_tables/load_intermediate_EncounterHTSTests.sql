@@ -34,7 +34,7 @@ BEGIN
             and  TestDate >= cast('2015-01-01' as date) and TestDate <= getdate()
     )
     select 
-        source_data.*
+        source_data.*,cast(getdate() as date) as LoadDate
     into ODS.dbo.Intermediate_EncounterHTSTests
     from source_data
     where num = 1
