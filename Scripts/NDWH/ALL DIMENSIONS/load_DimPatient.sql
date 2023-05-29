@@ -62,7 +62,7 @@ BEGIN
             coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
             --coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
             coalesce(ct_patient_source.SiteCode, hts_patient_source.SiteCode) as SiteCode,
-            coalesce(ct_patient_source.NUPI, hts_patient_source.NUPI) as NUPI,
+            coalesce(ct_patient_source.NupiHash, hts_patient_source.NUPI) as NUPI,
             coalesce(ct_patient_source.DOB, hts_patient_source.DOB) as DOB,
             coalesce(ct_patient_source.MaritalStatus, hts_patient_source.MaritalStatus) as MaritalStatus,
             coalesce(ct_patient_source.Gender, hts_patient_source.Gender) as Gender,
