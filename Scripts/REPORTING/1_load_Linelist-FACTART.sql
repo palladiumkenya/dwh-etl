@@ -42,6 +42,7 @@ Select distinct
     vl.Last12MVLSup,
     vl.LastVL,
     cast(vl.LastVlDateKey as date) LastVLDate,
+    vl.Last12MonthVLResults,
     CASE
 		WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN
 			CASE
