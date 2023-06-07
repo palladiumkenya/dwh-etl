@@ -12,9 +12,9 @@ select
     agency.AgencyName,
     patient.Gender,
     AppointmentStatus,
-    count(*) NumOfPatients,
-    age_group.DATIMAgeGroup,
-    AsOfDate
+    count(*) NumOfPatients,  
+    AsOfDate,
+    age_group.DATIMAgeGroup
 from NDWH.dbo.FACTAppointments as apt
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = apt.FacilityKey
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = apt.PartnerKey
@@ -31,5 +31,5 @@ group by
     agency.AgencyName,
     patient.Gender,
     AppointmentStatus,
-    DATIMAgeGroup,
-    AsOfDate
+    AsOfDate,
+    age_group.DATIMAgeGroup
