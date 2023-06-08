@@ -12,7 +12,7 @@ select
     agency.AgencyName,
     patient.Gender,
     AppointmentStatus,
-    count(*) NumOfPatients,  
+    count(*) NumOfPatients,
     AsOfDate,
     age_group.DATIMAgeGroup
 from NDWH.dbo.FACTAppointments as apt
