@@ -39,4 +39,11 @@ WHERE TRY_CAST(TestResult AS FLOAT) < 0
 
 GO
 
+-- clean TestResult  ---Added by Dennis to replace "Not detected" with "LDL" 
+UPDATE [ODS].[DBO].[CT_PatientLabs]
+    SET TestResult = 'LDL'
+WHERE TestResult like '%Not Detected%'
+
+GO
+
 
