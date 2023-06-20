@@ -41,6 +41,7 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 
 			a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode
+			and a.Id = b.ID
 		)  
 	WHEN NOT MATCHED THEN 
 
@@ -62,7 +63,19 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 		a.AdverseEventActionTaken		=b.AdverseEventActionTaken,
 		a.AdverseEventClinicalOutcome	=b.AdverseEventClinicalOutcome,
 		a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
-		a.Date_Last_Modified            =b.Date_Last_Modified;			
+		a.Date_Last_Modified            =b.Date_Last_Modified;
+		
+		with cte AS (
+						Select
+						Sitecode,
+						PatientPK,
+
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode ORDER BY
+						PatientPK,Sitecode) Row_Num
+						FROM  [ODS].[dbo].[PrEP_AdverseEvent](NoLock)
+						)
+						Delete from cte 
+						Where Row_Num >1 ;
 						
 END
 
