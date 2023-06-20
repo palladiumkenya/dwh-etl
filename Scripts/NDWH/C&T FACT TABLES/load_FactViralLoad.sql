@@ -57,7 +57,7 @@ BEGIN
 			end as	Last12MVLResult
 		 from last_12M_VL
 	 ),
-	 patient_baselines as (
+	 patient_viral_load_intervals as (
 		select
 			distinct PatientPK,
 			SiteCode,
@@ -69,55 +69,11 @@ BEGIN
 			[_18MonthVLDate],
 			[_24MonthVL],
 			[_24MonthVLDate],
-			case 
-				when isnumeric([_6MonthVL]) = 1 then 
-					case 
-						when cast(replace([_6MonthVL], ',', '') as  float) < 1000.00 then 1 
-						else 0 
-					end 
-				else 
-					case 
-						when [_6MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
-						else 0 
-					end  
-			end as	[6MonthVLSup],
-			case 
-				when isnumeric([_12MonthVL]) = 1 then 
-					case 
-						when cast(replace([_12MonthVL], ',', '') as  float) < 1000.00 then 1 
-						else 0 
-					end 
-				else 
-					case 
-						when [_12MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
-						else 0 
-					end  
-			end as	[12MonthVLSup],
-			case 
-				when isnumeric([_18MonthVL]) = 1 then 
-					case 
-						when cast(replace([_18MonthVL], ',', '') as  float) < 1000.00 then 1 
-						else 0 
-					end 
-				else 
-					case 
-						when [_18MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
-						else 0 
-					end  
-			end as	[18MonthVLSup],
-			case 
-				when isnumeric([_24MonthVL]) = 1 then 
-					case 
-						when cast(replace([_24MonthVL], ',', '') as  float) < 1000.00 then 1 
-						else 0 
-					end 
-				else 
-					case 
-						when [_24MonthVL]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
-						else 0 
-					end  
-			end as	[24MonthVLSup]
-		from ODS.dbo.CT_PatientBaselines
+			[_6MonthVLSup],
+			[_12MonthVLSup],
+			[_18MonthVLSup],
+			[_24MonthVLSup]
+		from ODS.dbo.Intermediate_ViralLoadsIntervals
 	 ),
 	 first_vl as (
 		select 
@@ -203,18 +159,18 @@ BEGIN
 			last_12M_VL_indicators.Last12MVLResult,
 			last_12M_VL_indicators.Last12MVLSup,
 			last_12M_VL_indicators.Last12MVLDate,
-			patient_baselines.[_6MonthVLDate],
-			patient_baselines.[_6MonthVL],
-			patient_baselines.[_12MonthVLDate],
-			patient_baselines.[_12MonthVL],
-			patient_baselines.[_18MonthVLDate],
-			patient_baselines.[_18MonthVL],
-			patient_baselines.[_24MonthVLDate],
-			patient_baselines.[_24MonthVL],
-			patient_baselines.[6MonthVLSup],
-			patient_baselines.[12MonthVLSup],
-			patient_baselines.[18MonthVLSup],
-			patient_baselines.[24MonthVLSup],
+			patient_viral_load_intervals.[_6MonthVLDate],
+			patient_viral_load_intervals.[_6MonthVL],
+			patient_viral_load_intervals.[_12MonthVLDate],
+			patient_viral_load_intervals.[_12MonthVL],
+			patient_viral_load_intervals.[_18MonthVLDate],
+			patient_viral_load_intervals.[_18MonthVL],
+			patient_viral_load_intervals.[_24MonthVLDate],
+			patient_viral_load_intervals.[_24MonthVL],
+			patient_viral_load_intervals.[_6MonthVLSup],
+			patient_viral_load_intervals.[_12MonthVLSup],
+			patient_viral_load_intervals.[_18MonthVLSup],
+			patient_viral_load_intervals.[_24MonthVLSup],
 			first_vl.FirstVL,
 			first_vl.FirstVLDate,
 			last_vl.LastVL,
@@ -239,8 +195,8 @@ BEGIN
 			and eligible_for_VL.SiteCode = patient.SiteCode
 		left join last_12M_VL_indicators on last_12M_VL_indicators.PatientPK = patient.PatientPK
 			and last_12M_VL_indicators.SiteCode = patient.SiteCode
-		left join patient_baselines on patient_baselines.PatientPK = patient.PatientPK
-			and patient_baselines.SiteCode = patient.SiteCode
+		left join patient_viral_load_intervals on patient_viral_load_intervals.PatientPK = patient.PatientPK
+			and patient_viral_load_intervals.SiteCode = patient.SiteCode
 		left join first_vl on first_vl.PatientPK = patient.PatientPK
 			and first_vl.SiteCode = patient.SiteCode
 		left join last_vl on last_vl.PatientPK = patient.PatientPK
@@ -287,10 +243,10 @@ BEGIN
 		combined_viral_load_dataset.[_12MonthVL],
 		combined_viral_load_dataset.[_18MonthVL],
 		combined_viral_load_dataset.[_24MonthVL],
-		combined_viral_load_dataset.[6MonthVLSup],
-		combined_viral_load_dataset.[12MonthVLSup],
-		combined_viral_load_dataset.[18MonthVLSup],
-		combined_viral_load_dataset.[24MonthVLSup],	
+		combined_viral_load_dataset.[_6MonthVLSup] as 6MonthVLSup,
+		combined_viral_load_dataset.[_12MonthVLSup] as 12MonthVLSup,
+		combined_viral_load_dataset.[_18MonthVLSup] as 18MonthVLSup,
+		combined_viral_load_dataset.[_24MonthVLSup] as 24MonthVLSup,	
 		combined_viral_load_dataset.FirstVL,
 		combined_viral_load_dataset.LastVL,
 		combined_viral_load_dataset.TimetoFirstVL,
