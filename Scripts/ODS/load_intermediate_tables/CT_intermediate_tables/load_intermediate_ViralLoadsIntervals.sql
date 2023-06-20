@@ -8,6 +8,7 @@ with source_viral_loads as (
 		labs.PatientID,
 		labs.SiteCode,
 		labs.PatientPK,
+		Null PatientPKHash,
 		VisitID,
 		[OrderedbyDate],
 		[ReportedbyDate],
