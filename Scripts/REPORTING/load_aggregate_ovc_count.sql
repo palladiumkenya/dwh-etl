@@ -14,6 +14,7 @@ Gender,
 g.DATIMAgeGroup,
 pat.IsTXCurr as TXCurr,
 ao.ARTOutcome,
+SUM(CASE WHEN CPIMSUniqueIdentifier IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
 count(*) as OVCElligiblePatientCount
 from [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey

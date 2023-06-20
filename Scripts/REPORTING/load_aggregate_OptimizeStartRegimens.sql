@@ -14,6 +14,7 @@ SELECT
 	StartRegimen,
 	StartARTMonth,
 	StartARTYr,
+	CurrentVL,
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
 	Last12MVLResult 
@@ -56,6 +57,7 @@ FROM
 					'VL' ELSE NULL 
 				END 
 		END AS Last12MVLResult,
+		vl.LastVL AS CurrentVL,
 		ISTxCurr 
 	FROM NDWH.dbo.FACTART art
 	INNER JOIN NDWH.dbo.DimAgeGroup age ON art.AgeGroupKey = age.AgeGroupKey
@@ -66,4 +68,4 @@ FROM
 	LEFT JOIN NDWH.dbo.FACTViralLoads vl ON art.PatientKey = vl.PatientKey 
 	WHERE ISTxCurr = 1 
 	) H 
-	GROUP BY SiteCode, FacilityName, County, Subcounty,	PartnerName, AgencyName, StartRegimen, Agegroup, [DATIMAgeGroup], Gender, StartARTMonth, StartARTYr, Firstregimen, Last12MVLResult;
+	GROUP BY SiteCode, FacilityName, County, Subcounty,	PartnerName, AgencyName, StartRegimen, Agegroup, [DATIMAgeGroup], Gender, StartARTMonth, StartARTYr, Firstregimen, Last12MVLResult,CurrentVL;
