@@ -7,7 +7,7 @@ BEGIN
 				@Date_Last_Modified		DATETIME
 				
 		SELECT @MaxCreated_Hist			= MAX(MaxCreatedDate_Hist) FROM [ODS_Optimized_Test].[dbo].[CT_PatientVisitCreated_Log]  (NoLock);
-		SELECT @MaxCreated				= MAX(Created)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK)WHERE  Created <=GETDATE();
+		SELECT @MaxCreated				= MAX(Date_Created)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK)WHERE  Created <=GETDATE();
 		SELECT @MaxModifiedDate_Hist	= MAX(MaxModifiedDate_Hist)	FROM [ODS_Optimized_Test].[dbo].[CT_PatientVisitModified_Log] WITH (NOLOCK) ;
 		SELECT @Date_Last_Modified		= MAX(Date_Last_Modified)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK)  WHERE  Date_Last_Modified <=GETDATE();
 				
@@ -23,7 +23,6 @@ BEGIN
 				
 					INSERT INTO  [ODS_Optimized_Test].[dbo].[CT_PatientVisitCreated_Log]([MaxCreatedDate_Hist],MaxModifiedDate_Hist,LoadDate)
 					VALUES(@MaxCreated,@Date_Last_Modified,GETDATE());
-
 						
 						   ---- Refresh [ODS_Optimized_Test].[dbo].[CT_PatientVisits]
 						   --truncate table [ODS_Optimized_Test].[dbo].[CT_PatientVisits]
@@ -48,11 +47,15 @@ BEGIN
 										  ,PV.PatientId as UniquePatientVisitId
 										  ,PV.ID as PatientVisitUnique_ID
 										  ,PV.Date_Last_Modified
+										  ,PV.Date_Created
 										FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 										LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
 										INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
 										INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
-										WHERE p.gender!='Unknown' and( PV.Date_Created > @MaxCreated_Hist or PV.Date_Last_Modified > @MaxModifiedDate_Hist)) AS b 
+										--WHERE p.gender!='Unknown' and( PV.Date_Created > @MaxCreated_Hist or PV.Date_Last_Modified > @MaxModifiedDate_Hist)
+										--and PV.Date_created <=Getdate()) AS b 
+											WHERE p.gender!='Unknown' and( PV.Date_Created <= '2020-12-14 09:57:39.000' or PV.Date_Last_Modified <= '2020-12-14 09:57:39.000')
+										and PV.Date_created <=Getdate()) AS b 
 										ON(
 											 a.PatientPK  = b.PatientPK 
 											AND a.SiteCode = b.SiteCode
@@ -60,8 +63,8 @@ BEGIN
 											and a.visitDate = b.visitDate					
 											)
 									WHEN NOT MATCHED THEN 
-											INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,Date_Last_Modified) 
-											VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,Date_Last_Modified)
+											INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,Date_Last_Modified,Date_Created) 
+											VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,Date_Last_Modified,Date_Created)
 									WHEN MATCHED THEN									
 											UPDATE SET	
 											a.PatientID					=b.PatientID,
