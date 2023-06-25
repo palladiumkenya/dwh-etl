@@ -66,3 +66,6 @@ update ODS.dbo.Intermediate_PregnancyDuringART
 
 update ODS.dbo.Intermediate_PrepLastVisit 
 	set PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2);
+
+update [ODS].[dbo].[Intermediate_ViralLoadsIntervals]
+	set PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2);
