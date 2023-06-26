@@ -50,7 +50,6 @@ BEGIN
 							F.Code AS SiteCode
 							,PS.[ExitDescription] ExitDescription
 							,PS.[ExitDate] ExitDate
-							,P.Lastvisit
 							,PS.[ExitReason] ExitReason
 							,P.[Emr] Emr
 							,CASE P.[Project] 
@@ -87,12 +86,11 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.exitdate = b.exitdate
 						and a.ExitReason = b.ExitReason
-						and a.Lastvisit = b.Lastvisit
 
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
-							VALUES(PatientID,SiteCode,FacilityName,Lastvisit,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
 			
 						WHEN MATCHED THEN
 							UPDATE SET 

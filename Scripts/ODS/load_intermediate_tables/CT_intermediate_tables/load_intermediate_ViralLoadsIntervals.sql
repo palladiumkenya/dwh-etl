@@ -8,7 +8,6 @@ with source_viral_loads as (
 		labs.PatientID,
 		labs.SiteCode,
 		labs.PatientPK,
-		Null PatientPKHash,
 		VisitID,
 		[OrderedbyDate],
 		[ReportedbyDate],
@@ -92,6 +91,7 @@ select
 	/* filter for rank = 1 to pick the latest result 
         because a client can have more than one result in a month 
     */
+	cast( '' as nvarchar(100)) PatientPKHash,
 	distinct_viral_load_clients.PatientPk,
 	distinct_viral_load_clients.SiteCode,
 	_6monthVL_data._6monthVL,
