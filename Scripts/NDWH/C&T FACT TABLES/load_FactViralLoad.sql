@@ -1,3 +1,4 @@
+
 IF OBJECT_ID(N'[NDWH].[dbo].[FactViralLoads]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FactViralLoads];
 BEGIN
@@ -19,43 +20,79 @@ BEGIN
 			end as EligibleVL
 		from ODS.dbo.CT_ARTPatients
 	 ),
-	 last_12M_VL as (
+	 valid_vl as (
+		/*clients who are 24 yrs and below have a valid VL that is within the last 6 months from reporting period*/
 		select 
-	 		distinct PatientID,
-			 SiteCode,
-			 PatientPK,
+	 		distinct viral_loads.PatientID,
+			 viral_loads.SiteCode,
+			 viral_loads.PatientPK,
 			 OrderedbyDate,
 			 Replace(TestResult ,',','') as TestResult	 
-		from ODS.dbo.Intermediate_LatestViralLoads
-		where datediff(month, OrderedbyDate, getdate()) <= 12
+		from ODS.dbo.Intermediate_LatestViralLoads as viral_loads
+		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
+			and art_patient.SiteCode = viral_loads.SiteCode
+		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
+		and art_patient.AgeLastVisit <= 24
+		union 
+			/*clients who are above 24 years have a valid VL that is within the last 12 months from reporting period*/
+		select 
+	 		distinct viral_loads.PatientID,
+			 viral_loads.SiteCode,
+			 viral_loads.PatientPK,
+			 OrderedbyDate,
+			 Replace(TestResult ,',','') as TestResult	 
+		from ODS.dbo.Intermediate_LatestViralLoads as viral_loads
+		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
+			and art_patient.SiteCode = viral_loads.SiteCode
+		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 12
+		and art_patient.AgeLastVisit > 24
 	 ),
-	 last_12M_VL_indicators as (
+	 valid_VL_indicators as (
 		select 
 			PatientPK,
 			SiteCode,
-			TestResult as Last12MonthVLResults,
+			TestResult as ValidVLResult,
 			case 
-				when TestResult is not null then 1
-				else 0 	
-			end as	Last12MonthVL,
-			case 
-				when TestResult in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
-			end as Last12MVLSup,
-			OrderedbyDate as Last12MVLDate,
+				when isnumeric([TestResult]) = 1 then 
+					case 
+						when cast(replace([TestResult], ',', '') as  float) < 200.00 then 1 
+						else 0 
+					end 
+				else 
+					case 
+						when [TestResult]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						else 0 
+					end  
+			end as ValidVLSup,
+			OrderedbyDate as ValidVLDate,
 			case 
 				when ISNUMERIC(TestResult) = 1 then 
 					case 
-						when CAST(replace(TestResult,',','') AS float) > 1000.00 then '>1000' 
-						when cast(replace(TestResult,',','') as float) between 400.00 and 999.00  then '400-900'
-						when CAST(replace(TestResult,',','') as float) between 51.00 and 399.00 then '51-399'
-						when CAST(replace(TestResult,',','') as float) < 50 then '<50'
-						end 
+						when cast(replace(TestResult,',','') AS float) >= 1000.00 then '>1000' 
+						when cast(replace(TestResult,',','') as float) between 200.00 and 999.00  then '200-999'
+						when cast(replace(TestResult,',','') as float) between 51.00 and 199.00 then '51-199'
+						when cast(replace(TestResult,',','') as float) < 50 then '<50'
+					end 
 				else 
 					case 
 						when TestResult  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 'Undetectable'
-					end  
-			end as	Last12MVLResult
-		 from last_12M_VL
+					end
+			end as ValidVLResultCategory1,
+			case
+				when ISNUMERIC(TestResult) = 1 then
+					case 
+						when cast(replace(TestResult,',','') AS float) >= 1000.00 then 'UNSUPPRESSED' 
+						when cast(replace(TestResult,',','') as float) between 200.00 and 999.00  then 'High Risk LLV '
+						when cast(replace(TestResult,',','') as float) between 51.00 and 199.00 then 'Low Risk LLV'
+						when cast(replace(TestResult,',','') as float) < 50 then 'LDL'
+					end
+			else
+				case
+					when TestResult IN ('Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level') then 'LDL' 
+					else null 
+				end 
+    	end as ValidVLResultCategory2
+		 from valid_vl
 	 ),
 	 patient_viral_load_intervals as (
 		select
@@ -154,11 +191,12 @@ BEGIN
 			patient.PatientPKHash,
 			patient.SiteCode,
 			eligible_for_VL.EligibleVL,
-			last_12M_VL_indicators.Last12MonthVLResults,
-			last_12M_VL_indicators.Last12MonthVL,
-			last_12M_VL_indicators.Last12MVLResult,
-			last_12M_VL_indicators.Last12MVLSup,
-			last_12M_VL_indicators.Last12MVLDate,
+			valid_VL_indicators.ValidVLResult,
+			case when valid_VL_indicators.ValidVLResult is not null then 1 else 0 end as HasValidVL,
+			valid_VL_indicators.ValidVLResultCategory1,
+			valid_VL_indicators.ValidVLResultCategory2,
+			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
+			valid_VL_indicators.ValidVLDate,
 			patient_viral_load_intervals.[_6MonthVLDate],
 			patient_viral_load_intervals.[_6MonthVL],
 			patient_viral_load_intervals.[_12MonthVLDate],
@@ -183,18 +221,20 @@ BEGIN
 			latest_VL_2.LatestVL2,
 			latest_VL_3.LatestVLDate3,
 			latest_VL_3.LatestVL3,
-			Case WHEN ISNUMERIC(last_12M_VL_indicators.Last12MonthVLResults) = 1 
-				THEN CASE WHEN CAST(Replace(last_12M_VL_indicators.Last12MonthVLResults,',','')AS FLOAT) > 1000.00 THEN 1 ELSE 0 END
+			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
+				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) >= 200.00 then 1 ELSE 0 END
 			END as HighViremia,
-			Case WHEN ISNUMERIC(last_12M_VL_indicators.Last12MonthVLResults) = 1 
-				THEN CASE WHEN CAST(Replace(last_12M_VL_indicators.Last12MonthVLResults,',','')AS FLOAT) between 400.00 and 1000.00 THEN 1 ELSE 0 END
+			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
+				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) < 200.00 then 1 ELSE 0 END
 			END as LowViremia,
 			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
 		from ODS.dbo.CT_Patient as patient
+		inner join ODS.dbo.CT_ARTPatients art on art.PatientPK = patient.Patientpk 
+			and art.SiteCode = patient.SiteCode
 		left join eligible_for_VL on eligible_for_VL.PatientPK = patient.PatientPK
 			and eligible_for_VL.SiteCode = patient.SiteCode
-		left join last_12M_VL_indicators on last_12M_VL_indicators.PatientPK = patient.PatientPK
-			and last_12M_VL_indicators.SiteCode = patient.SiteCode
+		left join valid_VL_indicators on valid_VL_indicators.PatientPK = patient.PatientPK
+			and valid_VL_indicators.SiteCode = patient.SiteCode
 		left join patient_viral_load_intervals on patient_viral_load_intervals.PatientPK = patient.PatientPK
 			and patient_viral_load_intervals.SiteCode = patient.SiteCode
 		left join first_vl on first_vl.PatientPK = patient.PatientPK
@@ -221,7 +261,7 @@ BEGIN
 		partner.PartnerKey,
 		agency.AgencyKey,
 		age_group.AgeGroupKey,
-		last_12MVL_date.DateKey as Last12MVLDateKey,
+		validVL_date.DateKey as ValidVLDateKey,
 		_6_monthVL_date.DateKey as [6MonthVLDateKey],
 		_12_monthVL_date.DateKey as [12MonthVLDateKey],
 		_18_monthVL_date.DateKey as [18MonthVLDateKey],
@@ -235,10 +275,11 @@ BEGIN
 		combined_viral_load_dataset.LatestVL2,
 		combined_viral_load_dataset.LatestVL3,
 		combined_viral_load_dataset.EligibleVL,
-		combined_viral_load_dataset.Last12MonthVLResults,
-		combined_viral_load_dataset.Last12MonthVL,
-		combined_viral_load_dataset.Last12MVLResult,
-		combined_viral_load_dataset.Last12MVLSup,
+		combined_viral_load_dataset.ValidVLResult,
+		combined_viral_load_dataset.HasValidVL,
+		combined_viral_load_dataset.ValidVLResultCategory1,
+		combined_viral_load_dataset.ValidVLResultCategory2,		
+		combined_viral_load_dataset.ValidVLSup,
 		combined_viral_load_dataset.[_6MonthVL],
 		combined_viral_load_dataset.[_12MonthVL],
 		combined_viral_load_dataset.[_18MonthVL],
@@ -262,7 +303,7 @@ BEGIN
 	left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 	left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 	left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_viral_load_dataset.AgeLastVisit
-	left join NDWH.dbo.DimDate as last_12MVL_date on last_12MVL_date.Date = combined_viral_load_dataset.Last12MVLDate
+	left join NDWH.dbo.DimDate as validVL_date on validVL_date.Date = combined_viral_load_dataset.ValidVLDate
 	left join NDWH.dbo.DimDate as _6_monthVL_date on _6_monthVL_date.Date = combined_viral_load_dataset.[_6MonthVLDate]
 	left join NDWH.dbo.DimDate as _12_monthVL_date on _12_monthVL_date.Date = combined_viral_load_dataset.[_12MonthVLDate]
 	left join NDWH.dbo.DimDate as _18_monthVL_date on _18_monthVL_date.Date = combined_viral_load_dataset.[_18MonthVLDate]
