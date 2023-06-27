@@ -96,6 +96,7 @@ select
 	/* filter for rank = 1 to pick the latest result 
         because a client can have more than one result in a month 
     */
+	cast( '' as nvarchar(100)) PatientPKHash,
 	distinct_viral_load_clients.PatientPk,
 	distinct_viral_load_clients.PatientID,
 	distinct_viral_load_clients.SiteCode,

@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="5"
-  DTS:VersionGUID="{72A72B3E-0529-47E6-AD71-0F6A5A6E959B}">
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{BF3EE7C1-04F9-4D47-94A4-5F36EE3AB920}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -74,6 +74,23 @@
         </ExecutePackageTask>
       </DTS:ObjectData>
     </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loop Through Intermediate Tables"
+      DTS:CreationName="Microsoft.ExecutePackageTask"
+      DTS:Description="Execute Package Task"
+      DTS:DTSID="{43E3A484-BC42-4664-9260-3CD2A737D632}"
+      DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loop Through Intermediate Tables"
+      DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <ExecutePackageTask>
+          <UseProjectReference>True</UseProjectReference>
+          <PackageName>Load_Intermediate_HTS_Tables.dtsx</PackageName>
+        </ExecutePackageTask>
+      </DTS:ObjectData>
+    </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
     <DTS:PrecedenceConstraint
@@ -92,6 +109,14 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
       DTS:To="Package\Execute Remove Duplicate Package" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{7922A1BC-ED35-4ECC-A5A5-CAF0508D110B}"
+      DTS:From="Package\Execute Remove Duplicate Package"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Loop Through Intermediate Tables" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -177,6 +202,44 @@
                     Point3="192,26.5" />
                   <mssgle:LineSegment
                     End="192,37.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="242.666666666667,42.6666666666667"
+          Id="Package\Loop Through Intermediate Tables"
+          TopLeft="455.624993210659,275.599995071888" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="523.333333333333,232.666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="53.6249932106585,42.9333284052213"
+              Start="0,0"
+              End="53.6249932106585,35.4333284052213">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17.4666642026107" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17.4666642026107"
+                    Point2="0,21.4666642026107"
+                    Point3="4,21.4666642026107" />
+                  <mssgle:LineSegment
+                    End="49.6249932106585,21.4666642026107" />
+                  <mssgle:CubicBezierSegment
+                    Point1="49.6249932106585,21.4666642026107"
+                    Point2="53.6249932106585,21.4666642026107"
+                    Point3="53.6249932106585,25.4666642026107" />
+                  <mssgle:LineSegment
+                    End="53.6249932106585,35.4333284052213" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
