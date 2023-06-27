@@ -60,8 +60,7 @@ TXNEW_DATASET AS (
     LEFT JOIN NDWH.dbo.DimPartner AS partner ON partner.PartnerKey = art.PartnerKey
     LEFT JOIN NDWH.dbo.DimPatient AS patient ON patient.PatientKey = art.PatientKey
     LEFT JOIN NDWH.dbo.DimAgeGroup AS age_group ON age_group.AgeGroupKey = art.AgeGroupKey
-    LEFT JOIN NDWH.dbo.DimAgency AS agency ON agency.AgencyKey = art.AgencyKey
-    LEFT JOIN NDWH.dbo.DimARTOutcome AS outcome ON outcome.ARTOutcomeKey = art.ARTOutcomeKey
+    LEFT JOIN NDWH.dbo.DimAgency AS agency ON agency.AgencyKey = art.AgencyKey    
     LEFT JOIN NDWH.dbo.DimDate AS startDate ON startDate.DateKey = art.StartARTDateKey
     GROUP BY 
         facility.MFLCode,
