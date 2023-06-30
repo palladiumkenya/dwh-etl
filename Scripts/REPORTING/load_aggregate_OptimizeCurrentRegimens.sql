@@ -3,7 +3,7 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]', N'U') IS N
 	DROP table [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens];
 
 SELECT 
-	SiteCode,
+	MFLCode,
 	FacilityName,
 	County, 
 	Subcounty, 
@@ -25,7 +25,7 @@ SELECT
 INTO [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]
 from (
 	Select 
-		cast (MFLCode as nvarchar) As SiteCode,
+		cast (MFLCode as nvarchar)  as MFLCode,
 		FacilityName,
 		County, 
 		Subcounty, 
@@ -110,6 +110,6 @@ from (
 	where IsTXCurr = 1
 ) H 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen
-order by SiteCode;
+Group By MFLCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen
+order by MFLCode;
 

@@ -8,7 +8,7 @@ BEGIN
 		SELECT
 			[id]
 			,[DHISOrgId]
-			,[SiteCode]
+			,[SiteCode]  as MFLCode
 			,[FacilityName]
 			,CT.County
 			,CT.SubCounty

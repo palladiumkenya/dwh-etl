@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT
 	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
 
 SELECT
-	SiteCode,
+	 MFLCode,
 	FacilityName,
 	County,
 	Subcounty,
@@ -21,7 +21,7 @@ INTO [REPORTING].[dbo].[AggregateOptimizeStartRegimens]
 FROM
 	(
 	SELECT
-		SiteCode,
+		SiteCode  as MFLCode,
 		FacilityName,
 		County,
 		Subcounty,
@@ -66,4 +66,4 @@ FROM
 	LEFT JOIN NDWH.dbo.FACTViralLoads vl ON art.PatientKey = vl.PatientKey 
 	WHERE ISTxCurr = 1 
 	) H 
-	GROUP BY SiteCode, FacilityName, County, Subcounty,	PartnerName, AgencyName, StartRegimen, Agegroup, [DATIMAgeGroup], Gender, StartARTMonth, StartARTYr, Firstregimen, Last12MVLResult;
+	GROUP BY MFLCode, FacilityName, County, Subcounty,	PartnerName, AgencyName, StartRegimen, Agegroup, [DATIMAgeGroup], Gender, StartARTMonth, StartARTYr, Firstregimen, Last12MVLResult;

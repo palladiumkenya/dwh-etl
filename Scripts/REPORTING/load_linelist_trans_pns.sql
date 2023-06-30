@@ -5,7 +5,7 @@ GO
 With cte1 as (
     SELECT distinct 
 		a.PartnerPatientPk,
-		fac.[MFLCODE] SiteCode,
+		fac.[MFLCODE] ,
 		fac.County,
 		fac.SubCounty,
 		a.ScreenedForIpv,
@@ -22,7 +22,7 @@ With cte1 as (
 ), cte2 as (
     SELECT distinct 
 		a.PartnerPatientPk,
-		fac.MFLCode SiteCode,
+		fac.MFLCode ,
 		fac.County,
 		fac.SubCounty,
 		a.ScreenedForIpv,
@@ -84,8 +84,8 @@ With cte1 as (
     LEFT JOIN NDWH.dbo.DimDate j on a.DateTestedKey = j.DateKey
     LEFT JOIN NDWH.dbo.DimDate h on DateLinkedToCareKey = h.DateKey
     LEFT JOIN NDWH.dbo.DimAgeGroup g on b.AgeGroupKey = g.AgeGroupKey
-    LEFT JOIN cte1 c on c.PartnerPatientPk = b.PartnerPatientPk and c.SiteCode=i.MFLCode
-    LEFT JOIN cte2 d on d.PartnerPatientPk = b.PartnerPatientPk and d.SiteCode=i.MFLCode
+    LEFT JOIN cte1 c on c.PartnerPatientPk = b.PartnerPatientPk and c.MFLCode=i.MFLCode
+    LEFT JOIN cte2 d on d.PartnerPatientPk = b.PartnerPatientPk and d.MFLCode=i.MFLCode
     where a.FinalTestResult='Positive'
 )
 INSERT INTO REPORTING.dbo.LineListTransPNS (

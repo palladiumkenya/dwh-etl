@@ -12,7 +12,7 @@ Select distinct
     pat.Nupi,
     pat.PatientSource,
     pat.ClientType,
-    pat.SiteCode,
+    pat.SiteCode as MFLCode,
     fac.FacilityName,
     fac.County,
     fac.SubCounty,
