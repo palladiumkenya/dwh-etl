@@ -9,7 +9,7 @@ BEGIN
 		SELECT
 			id
 			,DHISOrgId
-			,SiteCode   as MFLCode
+			,SiteCode
 			,FacilityName
 			,CT.County
 			,CT.SubCounty

@@ -26,16 +26,16 @@ BEGIN
 																   ) 
 
 		INSERT INTO [REPORTING].[dbo].[Linelist_FACTART_Palantir]([PatientIDHash],[PatientPKHash],[SiteCode],Gender,UniquePatientIDGuidHash)
-		SELECT
+		SELECT 
 			a.PatientIDHash,
 			a.PatientPKHash,
-			a.MFLCode,
+			a.SiteCode,
 			a.Gender,
 			--convert(nvarchar(64), hashbytes('SHA2_256', cast(b.Id  as nvarchar(36))), 2) UniquePatientIDGuid
 			CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', UPPER(CAST(b.id as NVARCHAR(36)))), 2) as PatientID
 		FROM REPORTING.DBO.Linelist_FACTART a
 		LEFT JOIN [ODS].[DBO].CT_Patient b
-		ON a.MFLCode = b.SiteCode and a.PatientPKHash = b.PatientPKHash
+		ON a.SiteCode = b.SiteCode and a.PatientPKHash = b.PatientPKHash
 		WHERE county in ('Bomet','Uasin Gishu', 'Siaya') and ARTOutcome='V'
 
 END
