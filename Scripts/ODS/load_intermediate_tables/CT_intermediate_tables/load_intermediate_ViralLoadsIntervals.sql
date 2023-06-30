@@ -8,7 +8,8 @@ with source_viral_loads as (
 		labs.PatientID,
 		labs.SiteCode,
 		labs.PatientPK,
-		Null PatientPKHash,
+		cast( '' as nvarchar(100)) PatientPKHash,
+		cast( '' as nvarchar(100)) PatientIDHash,
 		VisitID,
 		[OrderedbyDate],
 		[ReportedbyDate],
@@ -17,7 +18,7 @@ with source_viral_loads as (
 		case 
 			when isnumeric([TestResult]) = 1 then 
 				case 
-					when cast(replace([TestResult], ',', '') as  float) < 1000.00 then 1 
+					when cast(replace([TestResult], ',', '') as  float) < 200.00 then 1 
 					else 0 
 				end 
 			else 
@@ -85,15 +86,22 @@ _24monthVL_data as (
 distinct_viral_load_clients as (
 	select
 		distinct Sitecode,
-		PatientPK
+		PatientPK,
+		PatientID,
+		PatientPKHash,
+		PatientIDHash
 	from source_viral_loads
 )
 select 
 	/* filter for rank = 1 to pick the latest result 
         because a client can have more than one result in a month 
     */
+	cast( '' as nvarchar(100)) PatientPKHash,
 	distinct_viral_load_clients.PatientPk,
+	distinct_viral_load_clients.PatientID,
 	distinct_viral_load_clients.SiteCode,
+	distinct_viral_load_clients.PatientPKHash,
+	distinct_viral_load_clients.PatientIDHash,
 	_6monthVL_data._6monthVL,
 	_6monthVL_data._6monthVLDate,
 	_6monthVL_data._6MonthVLSup,
@@ -123,4 +131,3 @@ left join _24monthVL_data on _24monthVL_data.PatientPk = distinct_viral_load_cli
 	and _24monthVL_data.rank = 1
 	
 END
-

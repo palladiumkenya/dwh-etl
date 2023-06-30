@@ -23,6 +23,7 @@ BEGIN
 					  ,HtsRecencyId
 		              ,Occupation 
                      ,PriorityPopulationType 
+					 ,pkv
 					FROM [HTSCentral].[dbo].[Clients](NoLock) a
 				INNER JOIN (
 								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
@@ -38,8 +39,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType  ) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType)
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv  ) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv)
 				
 					WHEN MATCHED THEN
 						UPDATE SET       
@@ -52,5 +53,6 @@ BEGIN
 							a.PatientDisabled  =b.PatientDisabled ,
 							a.County		   =b.County,
 							a.SubCounty		   =b.SubCounty,
-							a.Ward			   =b.Ward;
+							a.Ward			   =b.Ward,
+							a.pkv				=b.pkv;
 	END
