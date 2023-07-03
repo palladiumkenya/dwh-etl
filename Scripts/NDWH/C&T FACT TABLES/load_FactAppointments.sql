@@ -28,7 +28,10 @@ Select
 		patient.PatientKey,
 		as_of.DateKey as AsOfDateKey,
         patient.Gender,
-        AppointmentStatus,
+		LastEncounterDate,
+		ExpectedNextAppointmentDate,
+		AppointmentStatus,
+		DiffExpectedTCADateLastEncounter,
         AsofDate,
         cast(getdate() as date) as LoadDate
         into NDWH.dbo.FACTAppointments
