@@ -3,7 +3,9 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[LineListVLNonSuppressed]', N'U') IS NOT NULL
 GO
 
 SELECT DISTINCT
-	MFLCode,
+	PatientIDHash,
+    PatientPKHash,
+    MFLCode,
 	f.FacilityName,
 	SubCounty,
 	County,
