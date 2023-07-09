@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOTZEligibilityAndEnrollments]', N'U') IS NOT NULL 	
-	DROP NCATE TABLE [REPORTING].[dbo].[AggregateOTZEligibilityAndEnrollments]
+	DROP TABLE [REPORTING].[dbo].[AggregateOTZEligibilityAndEnrollments]
 GO
 SELECT DISTINCT
 	MFLCode,
@@ -29,7 +29,8 @@ SELECT DISTINCT
 	vl.ValidVLResultCategory2 as ValidVLResultCategory,
 	SUM ( vl.HasValidVL ) AS HasValidVL,
 	COUNT ( * ) patients_eligible,
-	COUNT(otz.PatientKey) as Enrolled	
+	COUNT(otz.PatientKey) as Enrolled
+	INTO [REPORTING].[dbo].[AggregateOTZEligibilityAndEnrollments]
 FROM NDWH.dbo.FACTART art
 INNER JOIN NDWH.dbo.DimAgeGroup age ON age.AgeGroupKey= art.AgeGroupKey
 INNER JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = art.FacilityKey
