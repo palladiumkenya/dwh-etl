@@ -18,6 +18,8 @@ BEGIN
 		select 'NP' as ARTOutcome
 			union all
 		select'uL' as ARTOutcome
+			union all
+		select'FV' as ARTOutcome
 	)
 	select 
 		ARTOutcomeKey = IDENTITY(INT, 1, 1),
@@ -31,6 +33,7 @@ BEGIN
 			when ARTOutcome = 'V' then 'Active'
 			when ARTOutcome = 'NP' then 'New Patient'
 			when ARTOutcome = 'uL' then 'Undocumented Loss'
+			when ARTOutcome = 'FV' then 'Future Visit'
 		end as ARTOutcomeDescription,
 		cast(getdate() as date) as LoadDate
 	INTO [NDWH].[dbo].[DimARTOutcome]

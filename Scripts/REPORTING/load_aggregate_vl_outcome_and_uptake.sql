@@ -38,7 +38,7 @@ LEFT JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = vl.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = vl.PartnerKey
 LEFT JOIN NDWH.dbo.FactART art ON art.PatientKey = vl.PatientKey 
 LEFT join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
-WHERE IsTXCurr=1 and outcome.ARTOutcome = 'V'
+WHERE IsTXCurr = 1 and outcome.ARTOutcome = 'V'
 GROUP BY 
 	MFLCode, 
 	f.FacilityName, 
