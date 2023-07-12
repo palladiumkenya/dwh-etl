@@ -19,7 +19,6 @@ cov.AdmissionUnit,
 cov.EverCOVID19Positive,
 cov.MissedAppointmentDueToCOVID19,
 Count(*) adults_count
-
 FROM NDWH.dbo.FactCovid cov
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = cov.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = cov.AgencyKey

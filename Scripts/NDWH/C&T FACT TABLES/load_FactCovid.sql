@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[NDWH].[Dbo].[FactCovid]', N'U') IS NOT NULL
 	DROP TABLE [NDWH].[Dbo].[FactCovid];
 BEGIN
 With Covid As  (
-SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
+SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientPKHash, Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
         Covid.PatientIDHash  ,
         Covid.PatientPKHash ,
         Covid.SiteCode ,
@@ -14,7 +14,10 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Cov
         FirstDoseVaccineAdministered,
         DateGivenSecondDose,
         SecondDoseVaccineAdministered ,
-        VaccinationStatus ,
+        case 
+           when VaccinationStatus is null or VaccinationStatus = '' then 'Not Accessed'
+           else VaccinationStatus
+        end as VaccinationStatus,
         VaccineVerification ,
         BoosterGiven ,
         BoosterDose ,
