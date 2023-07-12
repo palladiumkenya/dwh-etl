@@ -1,4 +1,7 @@
-with source_agegroup as (
+IF OBJECT_ID(N'NDWH.dbo.DimAgeGroup', N'U') IS NOT NULL 
+	DROP TABLE  NDWH.dbo.DimAgeGroup;
+BEGIN
+	with source_agegroup as (
     select 0 as Age,  ' Under 1' as MOHAgeGroup,   ' Under 1' as DATIMAgeGroup  union all 
     select 1 as Age,  '01 to 09' as MOHAgeGroup,   '01 to 04' as DATIMAgeGroup  union all 
     select 2 as Age,  '01 to 09' as MOHAgeGroup,   '01 to 04' as DATIMAgeGroup  union all 
@@ -129,3 +132,4 @@ into NDWH.dbo.DimAgeGroup
 from source_agegroup;
 
 alter table NDWH.dbo.DimAgeGroup add primary key(AgeGroupKey);
+END

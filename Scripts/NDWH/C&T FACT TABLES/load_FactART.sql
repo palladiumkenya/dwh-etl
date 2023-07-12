@@ -97,8 +97,8 @@ left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.A
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 
-
 END
+
 
 
 

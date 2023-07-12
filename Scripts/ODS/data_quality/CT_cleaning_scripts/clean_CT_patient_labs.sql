@@ -42,7 +42,19 @@ GO
 -- clean TestResult  ---Added by Dennis to replace "Not detected" with "LDL" 
 UPDATE [ODS].[DBO].[CT_PatientLabs]
     SET TestResult = 'LDL'
-WHERE TestResult like '%Not Detected%'
+WHERE TestResult like '%Not Detected%';
+
+UPDATE [ODS].[DBO].[CT_PatientLabs]
+    SET TestResult = 'LDL'
+WHERE TestResult like '%NoDetected;%';
+
+UPDATE [ODS].[DBO].[CT_PatientLabs]
+    SET TestResult = 'LDL'
+WHERE TestResult like '%NoDetected;NoDetected%';
+
+UPDATE [ODS].[DBO].[CT_PatientLabs]
+    SET TestResult = 'LDL'
+WHERE TestResult like '%Low;NoDetected%';
 
 GO
 

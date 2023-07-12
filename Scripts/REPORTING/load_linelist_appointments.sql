@@ -16,9 +16,9 @@ select
     partner.PartnerName,
     agency.AgencyName,
     patient.Gender,
-    ExpectedNextAppointmentDate,
-    LastEncounterDate,
- 	DiffExpectedTCADateLastEncounter,
+  --  ExpectedNextAppointmentDate,
+  --  LastEncounterDate,
+ 	--DiffExpectedTCADateLastEncounter,
     apt.AppointmentStatus,
     apt.AsOfDate,
     age_group.DATIMAgeGroup

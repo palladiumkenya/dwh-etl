@@ -69,4 +69,4 @@ update ODS.dbo.Intermediate_PrepLastVisit
 
 update ODS.dbo.Intermediate_ViralLoadsIntervals 
 	set PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK  as nvarchar(36))), 2),
-		PatientIDHash = convert(nvarchar(100), hashbytes('SHA2_256', cast(PatientID  as nvarchar(100))), 2);
+		PatientIDHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientID  as nvarchar(36))), 2)
