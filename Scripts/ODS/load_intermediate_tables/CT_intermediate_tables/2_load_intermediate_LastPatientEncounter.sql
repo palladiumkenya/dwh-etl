@@ -1,4 +1,3 @@
-
 IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_LastPatientEncounter]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[Intermediate_LastPatientEncounter]
 BEGIN
@@ -75,8 +74,8 @@ CombinedVisits As (
         PharmacyART_Computed.PatientID,
         PharmacyART_Computed.PatientPK,
         PharmacyART_Computed.Sitecode ,
-    Case when PharmacyART_Computed.LastEncounterDate>=LatestVisit.LastVisitDate Then PharmacyART_Computed.LastEncounterDate Else LatestVisit.LastVisitDate End as LastEncounterDate,
-    Case When PharmacyART_Computed.NextappointmentDate>=LatestVisit.NextappointmentDate then PharmacyART_Computed.NextappointmentDate Else LatestVisit.NextappointmentDate end as NextAppointmentDate
+   Case  When PharmacyART_Computed.LastEncounterDate >= COALESCE(LatestVisit.LastVisitDate, PharmacyART_Computed.LastEncounterDate) THEN PharmacyART_Computed.LastEncounterDate ELSE LatestVisit.LastVisitDate  END AS LastEncounterDate,
+   Case  When PharmacyART_Computed.NextappointmentDate>= COALESCE (LatestVisit.NextappointmentDate, PharmacyART_Computed.NextappointmentDate) THEN  PharmacyART_Computed.NextappointmentDate end As NextAppointmentDate
   from PharmacyART_Computed
     left join LatestVisit on PharmacyART_Computed.PatientPk=LatestVisit.PatientPk and PharmacyART_Computed.Sitecode=LatestVisit.Sitecode and Num=1
 )
