@@ -1,20 +1,21 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateOVCCount', N'U') IS NOT NULL 	
-	TRUNCATE TABLE [REPORTING].[dbo].AggregateOVCCount
+	drop TABLE [REPORTING].[dbo].AggregateOVCCount
 GO
 
-INSERT INTO [REPORTING].[dbo].AggregateOVCCount
 SELECT 
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender, 
-g.DATIMAgeGroup,
-pat.IsTXCurr as TXCurr,
-ao.ARTOutcome,
-count(*) as OVCElligiblePatientCount
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    Gender, 
+    g.DATIMAgeGroup,
+    pat.IsTXCurr as TXCurr,
+    ao.ARTOutcome,
+    count(*) as OVCElligiblePatientCount,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+  INTO [REPORTING].[dbo].AggregateOVCCount
 from [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

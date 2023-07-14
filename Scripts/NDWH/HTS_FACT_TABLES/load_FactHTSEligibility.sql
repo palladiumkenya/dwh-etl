@@ -68,7 +68,8 @@ BEGIN
             AssessmentOutcome,
             ForcedSex,
             ReceivedServices,
-            TypeGBV
+            TypeGBV,
+            cast(getdate() as date) as LoadDate
 
 
         from ODS.dbo.HTS_EligibilityExtract

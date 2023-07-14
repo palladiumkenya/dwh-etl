@@ -9,7 +9,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender, 
+	art.Gender, 
 	g.DATIMAgeGroup,
 	enrld.Date as  OVCEnrollmentDate,
 	rp.RelationshipWithPatient,
@@ -37,7 +37,8 @@ SELECT
 	ao.ARTOutcome,
 	EligibleVL,
 	HasValidVL as HasValidVL,
-	ValidVLSup as VirallySuppressed
+	ValidVLSup as VirallySuppressed,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].LineListOVCEnrollments
 FROM [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey

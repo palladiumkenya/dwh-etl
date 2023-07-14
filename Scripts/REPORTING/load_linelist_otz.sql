@@ -10,7 +10,7 @@ SELECT DISTINCT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	art.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
@@ -32,7 +32,8 @@ SELECT DISTINCT
 	ValidVLResult,
 	vl.ValidVLResultCategory2 as ValidVLResultCategory,
 	vl.HasValidVL as HasValidVL,
-	cast (art.StartARTDateKey as date) as startARTDate
+	cast (art.StartARTDateKey as date) as startARTDate,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[LineListOTZ]
 FROM NDWH.dbo.FactOTZ otz
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey

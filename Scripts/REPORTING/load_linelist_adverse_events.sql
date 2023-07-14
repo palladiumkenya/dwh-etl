@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].LineListAdverseEvents', N'U') IS NOT NULL 		
-	TRUNCATE TABLE [REPORTING].[dbo].LineListAdverseEvents
+	drop TABLE [REPORTING].[dbo].LineListAdverseEvents
 
 GO
 
@@ -8,7 +8,7 @@ with AdverseEvents as (
             MFLCode,
 			pat.PatientKey,
             g.DATIMAgeGroup,
-            Gender,
+            art.Gender,
             f.FacilityName,
             County,
             SubCounty,
@@ -18,7 +18,8 @@ with AdverseEvents as (
             AdverseEventCause,
             AdverseEventRegimen,
             AdverseEventActionTaken,
-            Severity
+            Severity,
+            CAST(GETDATE() AS DATE) AS LoadDate 
         FROM
             [NDWH].dbo.FactAdverseEvents it
             INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
@@ -30,21 +31,9 @@ with AdverseEvents as (
         WHERE
             pat.IsTXCurr = 1
 )
-INSERT INTO [REPORTING].[dbo].LineListAdverseEvents
+
 SELECT
-    MFLCode,
-	PatientKey,
-    DATIMAgeGroup,
-    Gender,
-    FacilityName,
-    County,
-    Subcounty,
-    PartnerName,
-    AgencyName,
-    AdverseEvent,
-    AdverseEventCause,
-    AdverseEventActionTaken,
-    AdverseEventRegimen,
-    Severity
+   *
+ INTO [REPORTING].[dbo].LineListAdverseEvents
 FROM AdverseEvents
 GO

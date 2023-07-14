@@ -57,7 +57,8 @@ select
     TracingType,
     TracingOutcome,
     Comments,
-    is_reached
+    is_reached,
+     cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactDefaulterTracing
 from visits_data
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = visits_data.SiteCode
