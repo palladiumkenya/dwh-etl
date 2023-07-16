@@ -3,7 +3,9 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[LineListVLNonSuppressed]', N'U') IS NOT NULL
 GO
 
 SELECT DISTINCT
-	MFLCode,
+	PatientIDHash,
+    PatientPKHash,
+    MFLCode,
 	f.FacilityName,
 	SubCounty,
 	County,
@@ -18,6 +20,10 @@ SELECT DISTINCT
 	art.NextAppointmentDate,
 	aro.ARTOutcome,
     CAST(GETDATE() AS DATE) AS LoadDate 
+	case 
+		when aro.ARTOutcome is null then 'Others'
+		else aro.ARTOutcomeDescription
+	end as ARTOutcomeDescription
 INTO [REPORTING].[dbo].[LineListVLNonSuppressed]
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey

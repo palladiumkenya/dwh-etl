@@ -6,7 +6,9 @@ GO
 with AdverseEvents as (
  SELECT
             MFLCode,
-			pat.PatientKey,
+            PatientIDHash,
+            PatientPKHash,
+            NUPI,
             g.DATIMAgeGroup,
             art.Gender,
             f.FacilityName,

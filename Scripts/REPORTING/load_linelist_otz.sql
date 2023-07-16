@@ -2,8 +2,10 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZ]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[LineListOTZ]
 GO
 
-SELECT DISTINCT
-	patientPKHash,
+SELECT 
+    PatientIDHash,
+	PatientPKHash,
+    NUPI,
 	MFLCode,
 	f.FacilityName,
 	County,

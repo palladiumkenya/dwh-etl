@@ -35,7 +35,10 @@ Select distinct
     StartARTAtThisfacility,
     PreviousARTStartDate,
     PreviousARTRegimen,
-    outcome.ARTOutcome,
+    case 
+        when outcome.ARTOutcome is null then 'Others'
+        else outcome.ARTOutcomeDescription
+    end as ARTOutcomeDescription,
     vl.EligibleVL as Eligible4VL,
     vl.HasValidVL,
     vl.ValidVLSup,

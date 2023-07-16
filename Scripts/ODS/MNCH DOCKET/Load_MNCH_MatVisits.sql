@@ -100,7 +100,8 @@ BEGIN
 						FROM  [ODS].[dbo].[MNCH_MatVisits] (NoLock)
 						)
 						delete from cte 
-						Where Row_Num >1 ;
+						Where Row_Num >1 
+						;
 END
 
 

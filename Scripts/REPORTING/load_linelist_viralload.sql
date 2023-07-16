@@ -21,7 +21,7 @@ SELECT DISTINCT
 	vl.LatestVLDate3Key,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LineListViralLoad
-FROM NDWH.dbo.FactViralLoads vl
+FROM NDWH.dbo.FactViralLoads vls
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=vl.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = vl.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = vl.AgencyKey

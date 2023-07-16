@@ -3,7 +3,8 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]', N'U') 
 GO
 --- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)
 SELECT DISTINCT
-	patientPKHash,
+	PatientPKHash,
+    PatientIDHash,
 	MFLCode,
 	f.FacilityName,
 	County,
@@ -30,8 +31,8 @@ SELECT DISTINCT
 	LastVL,
 	vl.EligibleVL,
 	ValidVLResult,
-	vl.ValidVLResultCategory2 as ValidVLResultCategory,
-	vl.HasValidVL as HasValidVL,
+	ValidVLResultCategory1,
+	HasValidVL,
 	COUNT(CASE
 	WHEN art.PatientKey is not null THEN 1
 	ELSE 0 END) as Eligible,
@@ -48,7 +49,9 @@ LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = art.PatientKey AND vl.Pa
 FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 WHERE age.Age BETWEEN 10 AND 24  AND IsTXCurr = 1
 GROUP BY 
-	patientPKHash, MFLCode,
+	PatientPKHash, 
+    PatientIDHash,
+    MFLCode,
 	f.FacilityName,
 	County,
 	SubCounty,
@@ -72,8 +75,8 @@ GROUP BY
 	ModulesCompletedToday_OTZ_Beyond,
 	FirstVL,
 	LastVL,
-	vl.EligibleVL,
+	EligibleVL,
 	ValidVLResult,
-	ValidVLResultCategory2,
-	vl.HasValidVL
+	ValidVLResultCategory1,
+	HasValidVL
 GO
