@@ -17,7 +17,7 @@ BEGIN
 			COUNT (NUPI)AS NumNUPI
 			INTO [REPORTING].[dbo].[AggregateNupi]
 			FROM [REPORTING].[dbo].[Linelist_FACTART]
-			WHERE ARTOutcome='V' and NUPI is not null-- and age between 0 and 120
+			WHERE ARTOutcome ='V' and NUPI is not null-- and age between 0 and 120
 			GROUP BY
 			SiteCode,
 			FacilityName,
