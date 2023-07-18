@@ -41,10 +41,7 @@ BEGIN
 		LatestExits.ExitDate,
 		LastPatientEncounter.LastEncounterDate,
 		LastPatientEncounter.NextAppointmentDate,
-		CASE WHEN ISNULL(LastPatientEncounter.LastEncounterDate, ART.LastVisit) <= EOMONTH(DATEADD(mm,-1,GETDATE()))
-		THEN
-		(CASE
-            
+		CASE
             When  Latestexits.ExitReason  in ('DIED','dead','Death','Died') THEN 'D'--1
             WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.ReEnrollmentDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'--3
@@ -55,13 +52,9 @@ BEGIN
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  LastPatientEncounter.NextAppointmentDate > EOMONTH(DATEADD(mm,-1,GETDATE()))  THEN 'V'--8
             WHEN  DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days -- 9
 			WHEN  ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn) > EOMONTH(DATEADD(mm,-1,GETDATE()))   Then 'V' --10
-            WHEN LastPatientEncounter.NextAppointmentDate IS NULL OR ART.ExpectedReturn IS NULL THEN 'NV' --11
+            WHEN LastPatientEncounter.NextAppointmentDate IS NULL THEN 'NV' --11
 		ELSE SUBSTRING(LatestExits.ExitReason,1,1)
-
 		END
-			)
-             WHEN  Latestexits.ExitReason  in ('DIED','dead','Death','Died')  and LastPatientEncounter.LastEncounterDate is null  THEN 'D' --12
-		ELSE 'FV' END 
 	AS ARTOutcome, 
 	     cast (Patients.SiteCode as nvarchar) As SiteCode,
 		 Patients.Emr,
@@ -69,7 +62,7 @@ BEGIN
     
 	FROM ODS.dbo.CT_Patient Patients
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
-	LEFT JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
+	INNER JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
 	LEFT JOIN  LatestExits   ON  Patients.PatientPK=Latestexits.PatientPK  and Patients.Sitecode=Latestexits.Sitecode
 
 	  WHERE  ART.startARTDate IS NOT NULL 

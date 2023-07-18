@@ -1,3 +1,4 @@
+
 IF OBJECT_ID(N'REPORTING.[dbo].[LineListTransPNS]', N'U') IS NOT NULL 			
 	drop TABLE REPORTING.[dbo].[LineListTransPNS]
 GO
@@ -87,37 +88,4 @@ With cte1 as (
     LEFT JOIN cte1 c on c.PartnerPatientPk = b.PartnerPatientPk and c.SiteCode=i.MFLCode
     LEFT JOIN cte2 d on d.PartnerPatientPk = b.PartnerPatientPk and d.SiteCode=i.MFLCode
     where a.FinalTestResult='Positive'
-)
 
-SELECT  
-    Mflcode,
-    FacilityName,
-    County,
-    SubCounty,
-    PartnerName,
-    AgencyName,
-    PatientPkHash,
-    HIVDiagnosisDate,
-    PartnerPersonID,
-    PartnerPatientPk,
-    Gender, 
-    Age,
-    Agegroup,
-    RelationsipToIndexClient,
-    CurrentlyLivingWithIndexClient,
-    ScreenedForIpv,
-    IpvScreeningOutcome,
-    Date,
-    KnownPositive,
-    PnsConsent, 
-    PartnerTestdate,
-    FinalResult,
-    PnsApproach,
-    Linked,
-    ReportedCCCNumber,
-    FacilityLinkedTo,
-    LinkedToCare,
-    LinkDateLinkedToCare,
-    CAST(GETDATE() AS DATE) AS LoadDate 
-    INTO REPORTING.dbo.LineListTransPNS
-FROM combined

@@ -1,4 +1,5 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[LineListCovid]', N'U') IS NOT NULL 		
+
 	drop TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
@@ -41,6 +42,7 @@ TracingFinalOutcome,
 CauseOfDeath,
 CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LineListCovid 
+
 FROM NDWH.dbo.FactCovid cov
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = cov.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = cov.AgencyKey

@@ -7,7 +7,6 @@ BEGIN
 			PatientID ,
 			SiteCode,
 			PatientPK, 
-
 			EMR,
 			VisitDate,
 			OTZEnrollmentDate,
@@ -49,7 +48,7 @@ BEGIN
 		ModulesCompletedToday_OTZ_SRH,
 		ModulesCompletedToday_OTZ_Beyond,		
 		cast(getdate() as date) as LoadDate
-	into [ODS].[dbo].[Intermediate_LastOTZVisit]
+	INTO [ODS].[dbo].[Intermediate_LastOTZVisit]
 	from source_LastOTZVisit
 	where rank = 1
 END

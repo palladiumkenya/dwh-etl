@@ -34,7 +34,10 @@ SELECT
 	else 'non DTG' 
 	end as LastRegimen,
 	onMMD,
-	ao.ARTOutcome,
+	case 
+		when ao.ARTOutcome is null then 'Others'
+		else ao.ARTOutcomeDescription
+	end as ARTOutcomeDescription,
 	EligibleVL,
 	HasValidVL as HasValidVL,
 	ValidVLSup as VirallySuppressed,

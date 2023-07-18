@@ -35,7 +35,10 @@ Select distinct
     StartARTAtThisfacility,
     PreviousARTStartDate,
     PreviousARTRegimen,
-    outcome.ARTOutcome,
+    case 
+        when outcome.ARTOutcome is null then 'Others'
+        else outcome.ARTOutcomeDescription
+    end as ARTOutcomeDescription,
     vl.EligibleVL as Eligible4VL,
     vl.HasValidVL,
     vl.ValidVLSup,
@@ -61,5 +64,6 @@ left join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey=ART.ARTOutc
 left join NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey
 left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
-left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey;
+left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
+WHERE ART.ARTOutcomeKey IS NOT NULL;
 END
