@@ -1,25 +1,26 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDUnstable]', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDUnstable]
+	drop TABLE [REPORTING].[dbo].[AggregateDSDUnstable]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateDSDUnstable
-SELECT 
-MFLCode,
-FacilityName,
-County,
-SubCounty,
-PartnerName,
-AgencyName,
-Gender,
-AgeGroup, 
-Sum ([OnART<12Months]) as onARTlessthan12mnths,
-Sum(Agelessthan20Yrs) as Agelessthan20Yrs ,
-Sum(Adherence) As Adherence,
-Sum(HighVL) as HighVL,
-Sum(BMI) as BMI,
-Sum(LatestPregnancy)as LatestPregnancy,
-Sum (isTXCurr) patients_number
 
+SELECT 
+    MFLCode,
+    FacilityName,
+    County,
+    SubCounty,
+    PartnerName,
+    AgencyName,
+    Gender,
+    AgeGroup, 
+    Sum ([OnART<12Months]) as onARTlessthan12mnths,
+    Sum(Agelessthan20Yrs) as Agelessthan20Yrs ,
+    Sum(Adherence) As Adherence,
+    Sum(HighVL) as HighVL,
+    Sum(BMI) as BMI,
+    Sum(LatestPregnancy)as LatestPregnancy,
+    Sum (isTXCurr) patients_number,
+    cast(getdate() as date) as LoadDate
+  INTO REPORTING.dbo.AggregateDSDUnstable
 FROM (
     SELECT DISTINCT
     MFLCode,

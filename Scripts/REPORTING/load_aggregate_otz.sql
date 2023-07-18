@@ -31,7 +31,8 @@ SELECT DISTINCT
 	ValidVLResult,
 	vl.ValidVLResultCategory2 as ValidVLResultCategory,
 	SUM(vl.HasValidVL) as HasValidVL,
-	Count(*) TotalOTZ
+	Count(*) TotalOTZ,
+     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOTZ]
 FROM NDWH.dbo.FactOTZ otz
 	INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey

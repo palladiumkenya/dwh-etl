@@ -1,8 +1,8 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAppointments', N'U') IS NOT NULL 		
-	truncate table [REPORTING].[dbo].AggregateAppointments
+	drop table [REPORTING].[dbo].AggregateAppointments
 GO
 
-Insert into [REPORTING].[dbo].AggregateAppointments
+
 select 
     facility.MFLCode,
     facility.FacilityName,
@@ -14,7 +14,9 @@ select
     AppointmentStatus,
     count(*) NumOfPatients,
     AsOfDate,
-    age_group.DATIMAgeGroup
+    age_group.DATIMAgeGroup,
+    cast(getdate() as date) as LoadDate
+   into [REPORTING].[dbo].AggregateAppointments
 from NDWH.dbo.FACTAppointments as apt
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = apt.FacilityKey
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = apt.PartnerKey

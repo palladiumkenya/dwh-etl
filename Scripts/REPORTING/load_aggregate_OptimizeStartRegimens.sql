@@ -16,7 +16,8 @@ SELECT
 	StartARTYr,
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
-	ValidVLResultCategory
+	ValidVLResultCategory,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOptimizeStartRegimens]
 FROM
 	(

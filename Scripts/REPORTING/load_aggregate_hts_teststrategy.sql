@@ -1,10 +1,7 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSTeststrategy]', N'U') IS NOT NULL 
-	TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSTeststrategy];
+	drop TABLE REPORTING.[dbo].[AggregateHTSTeststrategy];
 GO
 
-INSERT INTO REPORTING.dbo.AggregateHTSTeststrategy (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,
-	TestStrategy, year, month, MonthName, Tested, Positive, Linked
-)
 SELECT
     MFLCode,
     f.FacilityName,
@@ -20,7 +17,9 @@ SELECT
     FORMAT(cast(date as date), 'MMMM') MonthName,
     Sum(Tested) as TestedClients,
     Sum(Positive) as PositiveClients,
-    Sum(Linked) as LinkedClients
+    Sum(Linked) as LinkedClients,
+     CAST(GETDATE() AS DATE) AS LoadDate 
+    INTO REPORTING.dbo.AggregateHTSTeststrategy
 FROM NDWH.dbo.FactHTSClientTests hts
 LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey

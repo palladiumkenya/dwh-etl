@@ -1,22 +1,24 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL12M]', N'U') IS NOT NULL 	
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToVL12M]
+	drop  TABLE [REPORTING].[dbo].[AggregateTimeToVL12M]
 GO
-INSERT INTO [REPORTING].dbo.AggregateTimeToVL12M
+
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-SubCounty,
-County,
- p.PartnerName,
- a.AgencyName,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY p.PartnerName) AS MedianTimeToFirstVL_Partner,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY County) AS MedianTimeToFirstVL_County,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Subcounty) AS MedianTimeToFirstVL_SbCty,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY a.AgencyName) AS MedianTimeToFirstVL_CTAgency
+    MFLCode,
+    f.FacilityName,
+    SubCounty,
+    County,
+    p.PartnerName,
+    a.AgencyName,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY p.PartnerName) AS MedianTimeToFirstVL_Partner,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY County) AS MedianTimeToFirstVL_County,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Subcounty) AS MedianTimeToFirstVL_SbCty,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY a.AgencyName) AS MedianTimeToFirstVL_CTAgency,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+INTO [REPORTING].dbo.AggregateTimeToVL12M
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

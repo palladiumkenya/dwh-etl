@@ -35,7 +35,8 @@ BEGIN
 				MAX(m.SiteCode) AS facilityId,
 				MAX(COALESCE(h.emr, 'Unknown')) AS emrId,
 				'PKV' AS docketId, 
-				1 AS upload 
+				1 AS upload ,
+				 cast(getdate() as date) as LoadDate
 		FROM cbscentral.DBO.manifests m INNER JOIN his_implementation.DBO.all_emrsites h ON m.SiteCode = h.MFL_Code 
 		GROUP BY YEAR(DateArrived), 
 					MONTH(DateArrived), SiteCode

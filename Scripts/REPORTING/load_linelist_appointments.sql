@@ -21,7 +21,8 @@ select
  	--DiffExpectedTCADateLastEncounter,
     apt.AppointmentStatus,
     apt.AsOfDate,
-    age_group.DATIMAgeGroup
+    age_group.DATIMAgeGroup,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 	into [REPORTING].[dbo].LinelistAppointments
 from NDWH.dbo.FACTAppointments as apt
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = apt.FacilityKey

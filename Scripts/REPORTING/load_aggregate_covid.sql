@@ -1,25 +1,25 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateCovid]', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateCovid]
+	drop TABLE [REPORTING].[dbo].[AggregateCovid]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateCovid (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup,VaccinationStatus,PatientStatus,AdmissionStatus,AdmissionUnit,EverCOVID19Positive,MissedAppointmentDueToCOVID19,adults_count)
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender,
-age.DATIMAgeGroup as AgeGroup,
-cov.VaccinationStatus,
-cov.PatientStatus,
-cov.AdmissionStatus,
-cov.AdmissionUnit,
-cov.EverCOVID19Positive,
-cov.MissedAppointmentDueToCOVID19,
-Count(*) adults_count
-
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    Gender,
+    age.DATIMAgeGroup as AgeGroup,
+    cov.VaccinationStatus,
+    cov.PatientStatus,
+    cov.AdmissionStatus,
+    cov.AdmissionUnit,
+    cov.EverCOVID19Positive,
+    cov.MissedAppointmentDueToCOVID19,
+    Count(*) adults_count,
+    cast(getdate() as date) as LoadDate
+INTO REPORTING.dbo.AggregateCovid 
 FROM NDWH.dbo.FactCovid cov
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = cov.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = cov.AgencyKey

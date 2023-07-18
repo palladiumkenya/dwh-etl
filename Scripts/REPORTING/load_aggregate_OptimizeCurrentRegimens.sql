@@ -16,12 +16,12 @@ SELECT
 	StartARTMonth,
 	StartARTYr,
 	SUM(ISTxCurr) As TXCurr,
-	CurrentRegimen,
 	Lastregimen,
 	RegimenLine,
 	LastRegimenClean,
 	WeightBands,
-	AgeBands
+	AgeBands,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]
 from (
 	Select 
@@ -33,12 +33,12 @@ from (
 		AgencyName,
 		DateName(m,StartARTDateKey) AS StartARTMonth,
 		Year(StartARTDateKey) AS StartARTYr,
-		CASE 
-			WHEN CurrentRegimen like '3TC+DTG+TDF' THEN 'TLD'
-			WHEN CurrentRegimen like '3TC+EFV+TDF' THEN 'TLE'
-			WHEN CurrentRegimen like '%NVP%' THEN 'NVP'
-			ELSE  'Other Regimen' 
-		END AS CurrentRegimen,
+		--CASE 
+			--WHEN CurrentRegimen like '3TC+DTG+TDF' THEN 'TLD'
+			--WHEN CurrentRegimen like '3TC+EFV+TDF' THEN 'TLE'
+			--WHEN CurrentRegimen like '%NVP%' THEN 'NVP'
+			--ELSE  'Other Regimen' 
+		--END AS CurrentRegimen,
 		CurrentRegimen Lastregimen,
 		StartRegimen,
 		Gender,
@@ -110,6 +110,6 @@ from (
 	where IsTXCurr = 1
 ) H 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen
+Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen
 order by SiteCode;
 

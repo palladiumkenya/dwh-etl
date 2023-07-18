@@ -1,143 +1,123 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]', N'U') IS NOT NULL 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]
-GO
-
-with pns_and_tests as ( 
-	select distinct 
-		pns.PatientKey,
-		facility.MFLCode,
+    DROP TABLE REPORTING.[dbo].[AggregateHTSPNSKnowledgeHIVStatus]
+Go 
+  With pns_and_tests AS (
+    SELECT DISTINCT 
+        pns.PatientKey,
+        facility.MFLCode,
         facility.FacilityKey,
         pns.AgencyKey,
         pns.PartnerKey,
         pns.AgeGroupKey,
-		pns.ScreenedForIpv,
-		pns.CccNumber,
+        pns.ScreenedForIpv,
+        pns.CccNumber,
         pns.RelationsipToIndexClient,
         pns.KnowledgeOfHivStatus,
-		tests.FinalTestResult,
-		pns.DateElicitedKey,
+        tests.FinalTestResult,
+        pns.DateElicitedKey,
         pns.DateLinkedToCareKey,
-		tests.DateTestedKey
-	from NDWH.dbo.FactHTSPartnerNotificationServices as pns
-    left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = pns.FacilityKey
-	left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = pns.PartnerPatientPk
-        and patient.SiteCode = facility.MFLCode
-    left join NDWH.dbo.FactHTSClientTests as tests on tests.PatientKey = patient.PatientKey
-    where 
-        TestType in ('Initial Test', 'Initial') 
+        tests.DateTestedKey
+    FROM NDWH.dbo.FactHTSPartnerNotificationServices AS pns
+    LEFT JOIN NDWH.dbo.DimFacility AS facility ON facility.FacilityKey = pns.FacilityKey
+    LEFT JOIN NDWH.dbo.DimPatient AS patient ON patient.PatientPKHash = pns.PartnerPatientPk
+        AND patient.SiteCode = facility.MFLCode
+    LEFT JOIN NDWH.dbo.FactHTSClientTests AS tests ON tests.PatientKey = patient.PatientKey
+    WHERE TestType IN ('Initial Test', 'Initial')
 ),
-pns_tests_linkages as ( 
-select 
-    pns_and_tests.*,
-    linkages.ReportedCCCNumber  
-from pns_and_tests
-left join NDWH.dbo.FactHTSClientLinkages as linkages on linkages.PatientKey = pns_and_tests.PatientKey
+pns_tests_linkages AS (
+    SELECT 
+        pns_and_tests.*,
+        linkages.ReportedCCCNumber  
+    FROM pns_and_tests
+    LEFT JOIN NDWH.dbo.FactHTSClientLinkages AS linkages ON linkages.PatientKey = pns_and_tests.PatientKey
 ),
-line_list_dataset as (
-	select distinct
+line_list_dataset AS (
+    SELECT DISTINCT
         dataset.PatientKey,
-		facility.MFLCode,
-		facility.FacilityName,
-		facility.County,
-		facility.SubCounty,
-		patner.PartnerName,
-		agency.AgencyName,
-		RelationsipToIndexClient, 
-		FinalTestResult,
-		elicited.Date as DateElicited,
-		tested.Date as TestDate,
-		tested.year,
-		tested.month,
-		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
-		Gender,
-		DATIMAgeGroup as Agegroup,
-		case 
-			when (dataset.PatientKey is not null) then 1 
-		    else 0 
-        end  elicited,
-		case 
-			when (FinalTestResult is not null ) then 1
-		    else 0 
-        end as tested,
-		case 
-			when (FinalTestResult = 'Positive') then 1
-		    else 0 
-        end  NewPositives, 
-		case 
-			when (FinalTestResult = 'Negative') then 1
-		    else 0 
-        end as  NewNegatives,    
-		case 
-			when (FinalTestResult = 'Positive' and ReportedCCCNumber is not null ) then 1 
-		    else 0 
-        end  Linked,
-		case 
-			when (KnowledgeOfHivStatus = 'Positive') then 1 
-		    else 0 
-        end as  KP,
-        case 
-			when (KnowledgeOfHivStatus='Unknown') then 1
-		    else 0 
-        end as  UnknownStatus
-	from  pns_tests_linkages as dataset
-	left join NDWH.dbo.DimPatient as patient ON patient.PatientKey = dataset.PatientKey
-	left join NDWH.dbo.DimPartner as patner ON patner.PartnerKey = dataset.PartnerKey
-	left join NDWH.dbo.DimFacility as facility  ON facility.FacilityKey = dataset.FacilityKey
-	left join NDWH.dbo.DimAgency agency ON agency.AgencyKey = dataset.AgencyKey	
-	left join NDWH.dbo.DimDate as elicited on elicited.DateKey = dataset.DateElicitedKey
-	left join NDWH.dbo.DimDate as tested on tested.DateKey = dataset.DateTestedKey
-	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
-	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
+        facility.MFLCode,
+        facility.FacilityName,
+        facility.County,
+        facility.SubCounty,
+        patner.PartnerName,
+        agency.AgencyName,
+        RelationsipToIndexClient, 
+        FinalTestResult,
+        elicited.Date AS DateElicited,
+        tested.Date AS TestDate,
+        tested.[year],
+        tested.[month],
+        FORMAT(CAST(tested.Date AS date), 'MMMM') AS MonthName, 
+        Gender,
+        DATIMAgeGroup AS Agegroup,
+        CASE 
+            WHEN (dataset.PatientKey IS NOT NULL) THEN 1 
+            ELSE 0 
+        END AS elicited,
+        CASE 
+            WHEN (FinalTestResult IS NOT NULL) THEN 1
+            ELSE 0 
+        END AS tested,
+        CASE 
+            WHEN (FinalTestResult = 'Positive') THEN 1
+            ELSE 0 
+        END AS NewPositives, 
+        CASE 
+            WHEN (FinalTestResult = 'Negative') THEN 1
+            ELSE 0 
+        END AS NewNegatives,    
+        CASE 
+            WHEN (FinalTestResult = 'Positive' AND ReportedCCCNumber IS NOT NULL) THEN 1 
+            ELSE 0 
+        END AS Linked,
+        CASE 
+            WHEN (KnowledgeOfHivStatus = 'Positive') THEN 1 
+            ELSE 0 
+        END AS KP,
+        CASE 
+            WHEN (KnowledgeOfHivStatus = 'Unknown') THEN 1
+            ELSE 0 
+        END AS UnknownStatus
+    FROM pns_tests_linkages AS dataset
+    LEFT JOIN NDWH.dbo.DimPatient AS patient ON patient.PatientKey = dataset.PatientKey
+    LEFT JOIN NDWH.dbo.DimPartner AS patner ON patner.PartnerKey = dataset.PartnerKey
+    LEFT JOIN NDWH.dbo.DimFacility AS facility ON facility.FacilityKey = dataset.FacilityKey
+    LEFT JOIN NDWH.dbo.DimAgency AS agency ON agency.AgencyKey = dataset.AgencyKey   
+    LEFT JOIN NDWH.dbo.DimDate AS elicited ON elicited.DateKey = dataset.DateElicitedKey
+    LEFT JOIN NDWH.dbo.DimDate AS tested ON tested.DateKey = dataset.DateTestedKey
+    LEFT JOIN NDWH.dbo.DimDate AS linked ON linked.DateKey = dataset.DateLinkedToCareKey
+    LEFT JOIN NDWH.dbo.DimAgeGroup AS agegroup ON agegroup.AgeGroupKey = dataset.AgeGroupKey
 )
-insert into REPORTING.dbo.AggregateHTSPNSKnowledgeHIVStatus (
-	MFLCode, 
-	FacilityName, 
-	County, 
-	SubCounty, 
-	PartnerName, 
-	AgencyName, 
-	Gender, 
-	AgeGroup,
-	year, 
-	month, 
-	MonthName, 
-	ContactElicited, 
-	ContactTested,
-	Linked,
-	KnownPositive, 
-	NewNegatives,
-	NewPositives, 
-	UnknownStatus
-)
-select 
-	Mflcode,
-	FacilityName,
-	County,
-	SubCounty,
-	PartnerName,
-	AgencyName,
-	Gender,
-	Agegroup,
-	year, 
-	month, 
-	MonthName, 
-	sum(elicited) as ContactElicited, 
-	sum(tested) as ContactTested,
-	sum(Linked) as Linked,
-	sum(KP) as KnownPositive, 
-	sum(NewNegatives) as NewNegatives,
-	sum(NewPositives) as NewPositives, 
-	sum(UnknownStatus) as UnknownStatus
-from line_list_dataset
-group by 
+SELECT 
     Mflcode,
     FacilityName,
     County,
-    subcounty,
+    SubCounty,
+    PartnerName,
+    AgencyName,
+    Gender,
+    Agegroup,
+    [year], 
+    [month], 
+    MonthName, 
+    SUM(elicited) AS ContactElicited, 
+    SUM(tested) AS ContactTested,
+    SUM(Linked) AS Linked,
+    SUM(KP) AS KnownPositive, 
+    SUM(NewNegatives) AS NewNegatives,
+    SUM(NewPositives) AS NewPositives, 
+    SUM(UnknownStatus) AS UnknownStatus,
+    CAST(GETDATE() AS DATE) AS LoadDate
+INTO REPORTING.dbo.AggregateHTSPNSKnowledgeHIVStatus 
+FROM line_list_dataset
+GROUP BY 
+    Mflcode,
+    FacilityName,
+    County,
+    SubCounty,
     PartnerName, 
-    year,
-    month,
-    monthName,
+    [year],
+    [month],
+    MonthName,
     Gender,
     Agegroup, 
-    AgencyName
+    AgencyName;

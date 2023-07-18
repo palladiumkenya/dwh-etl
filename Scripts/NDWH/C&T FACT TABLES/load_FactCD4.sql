@@ -38,7 +38,8 @@ select
 	source_CD4.BaselineCD4,
 	source_CD4.BaselineCD4Date,
 	source_CD4.LastCD4,
-	source_CD4.LastCD4Date
+	source_CD4.LastCD4Date,
+	 cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactCD4
 from source_CD4 as source_CD4
 left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = source_CD4.PatientPKHash
