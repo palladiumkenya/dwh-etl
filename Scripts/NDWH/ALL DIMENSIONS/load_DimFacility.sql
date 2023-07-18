@@ -44,4 +44,15 @@ BEGIN
 	left join latest_upload on latest_upload.SiteCode = source_facility.MFLCode;
 
 	ALTER TABLE NDWH.dbo.DimFacility ADD PRIMARY KEY(FacilityKey);
+
+	with cte AS (
+						Select
+						MFLCode,
+						
+						 ROW_NUMBER() OVER (PARTITION BY MFLCode ORDER BY
+						MFLCode) Row_Num
+						FROM NDWH.dbo.DimFacility
+						)
+						delete from cte 
+						Where Row_Num >1 ;
 END

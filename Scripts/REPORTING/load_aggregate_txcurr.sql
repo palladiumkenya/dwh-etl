@@ -20,7 +20,7 @@ left join NDWH.dbo.DimPatient as patient on patient.PatientKey = art.PatientKey
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = art.AgeGroupKey
 left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = art.AgencyKey
 left join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
-where outcome.ARTOutcome = 'V'
+where outcome.ARTOutcomeDescription = 'Active'
 group by 
     facility.MFLCode,
     facility.FacilityName,

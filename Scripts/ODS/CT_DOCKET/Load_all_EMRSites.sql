@@ -1,4 +1,15 @@
 truncate table [ods].[dbo].[all_EMRSites];
+		
+with cte AS (
+					Select
+					MFL_Code,
+						
+						ROW_NUMBER() OVER (PARTITION BY MFL_Code ORDER BY
+					MFL_Code) Row_Num
+					FROM HIS_Implementation.dbo.All_EMRSites
+					)
+					delete from cte 
+					Where Row_Num >1 ;
 
 	MERGE [ods].[dbo].[all_EMRSites] AS a
 	USING(SELECT DISTINCT MFL_Code,[Facility Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[HTS Deployment],[HTS Status],null[IL Status],null[Registration IE],null[Phamarmacy IE],mlab,Ushauri,Nishauri,null[Appointment Management IE],OVC,OTZ,PrEP,null[3PM],AIR,KP,MCH,null TB,[Lab Manifest],Comments,null Project

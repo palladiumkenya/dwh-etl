@@ -13,7 +13,7 @@ BEGIN
 																   ) 
 
 		INSERT INTO [REPORTING].[dbo].[Linelist_FACTART_Palantir]([PatientIDHash],[PatientPKHash],[SiteCode],Gender,UniquePatientIDGuidHash)
-		SELECT�
+		SELECT
 			a.PatientIDHash,
 			a.PatientPKHash,
 			a.SiteCode,
@@ -23,7 +23,7 @@ BEGIN
 		FROM REPORTING.DBO.Linelist_FACTART a
 		LEFT JOIN [ODS].[DBO].CT_Patient b
 		ON a.SiteCode = b.SiteCode and a.PatientPKHash = b.PatientPKHash
-		WHERE county in ('Bomet','Uasin Gishu', 'Siaya') and ARTOutcome='V'
+		WHERE county in ('Bomet','Uasin Gishu', 'Siaya') and ARTOutcomeDescription='Active'
 
 END
 
