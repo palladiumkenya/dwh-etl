@@ -1,4 +1,3 @@
---IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[REPORTING].[dbo].load_aggregate_OptimizeCurrentRegimens]') AND type in (N'U'))
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeCurrentRegimens]', N'U') IS NOT NULL	
 	DROP table [REPORTING].[dbo].[AggregateOptimizeCurrentRegimens];
 
@@ -15,6 +14,7 @@ SELECT
 	StartRegimen,
 	StartARTMonth,
 	StartARTYr,
+	CurrentVL,
 	SUM(ISTxCurr) As TXCurr,
 	Lastregimen,
 	RegimenLine,
@@ -50,6 +50,7 @@ from (
 		Agegrouping as Agegroup,
 		b.DATIMAgeGroup,
 		age,
+		vl.LastVL AS CurrentVL,
 		ISTxCurr,
 
 		CASE 
@@ -106,10 +107,12 @@ from (
 		INNER JOIN NDWH.dbo.DimFacility fac ON art.FacilityKey = fac.FacilityKey
 		INNER JOIN NDWH.dbo.DimPatient pat ON art.PatientKey = pat.PatientKey
 		LEFT JOIN NDWH.dbo.FactLatestObs obs ON obs.PatientKey = pat.PatientKey
+		LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = pat.PatientKey 
 
 	where IsTXCurr = 1
 ) H 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen
+
+Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
 order by SiteCode;
 

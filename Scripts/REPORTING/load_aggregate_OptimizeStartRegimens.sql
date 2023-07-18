@@ -14,6 +14,7 @@ SELECT
 	StartRegimen,
 	StartARTMonth,
 	StartARTYr,
+	CurrentVL,
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
 	ValidVLResultCategory,
@@ -42,7 +43,26 @@ FROM
 		Gender,
 		Agegrouping as Agegroup,
 		DATIMAgeGroup,
+
+		CASE
+			WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN
+				CASE
+					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) < 400.00 THEN
+						'VL' 
+					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) BETWEEN 400.00 AND 1000.00 THEN
+						'LVL' 
+					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) > 1000.00 THEN
+						'HVL' ELSE NULL 
+				END 
+			ELSE CASE	
+				WHEN vl.Last12MonthVLResults IN ( 'Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level' ) THEN
+					'VL' ELSE NULL 
+				END 
+		END AS Last12MVLResult,
+		vl.LastVL AS CurrentVL,
+
 		ValidVLResultCategory2 as ValidVLResultCategory,
+
 		ISTxCurr 
 	FROM NDWH.dbo.FACTART art
 	INNER JOIN NDWH.dbo.DimAgeGroup age ON art.AgeGroupKey = age.AgeGroupKey
@@ -53,6 +73,7 @@ FROM
 	LEFT JOIN NDWH.dbo.FACTViralLoads vl ON art.PatientKey = vl.PatientKey 
 	WHERE ISTxCurr = 1 
 	) H 
+
 	GROUP BY 
 		SiteCode, 
 		FacilityName, 
@@ -66,5 +87,7 @@ FROM
 		Gender, 
 		StartARTMonth, 
 		StartARTYr, 
-		Firstregimen, 
+		Firstregimen,
+    CurrentVL,
 		ValidVLResultCategory;
+
