@@ -1,8 +1,8 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTreatmentOutcomes]', N'U') IS NOT NULL 		
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateTreatmentOutcomes]
+	drop TABLE [REPORTING].[dbo].[AggregateTreatmentOutcomes]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateTreatmentOutcomes
+
 SELECT DISTINCT
 	MFLCode,
 	f.FacilityName,
@@ -10,13 +10,14 @@ SELECT DISTINCT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	art.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	Year(StartARTDateKey) StartYear,
 	Month(StartARTDateKey) StartMonth,
 	ARTOutcomeDescription,
-	Count(ARTOutcomeDescription) TotalOutcomes
-
+	Count(ARTOutcomeDescription) TotalOutcomes,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+INTO REPORTING.dbo.AggregateTreatmentOutcomes
 FROM NDWH.dbo.FACTART art
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey= art.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = art.FacilityKey
@@ -25,5 +26,5 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = art.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
 INNER JOIN NDWH.dbo.DimARTOutcome ot on ot.ARTOutcomeKey = art.ARTOutcomeKey
 
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, Year(StartARTDateKey) ,
+GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, art.Gender, age.DATIMAgeGroup, Year(StartARTDateKey) ,
 	Month(StartARTDateKey) ,ARTOutcomeDescription

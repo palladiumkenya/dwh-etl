@@ -11,14 +11,19 @@ SELECT DISTINCT
 	County,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	art.Gender,
 	g.DATIMAgeGroup as AgeGroup,
 	art.AgeLastVisit,
 	StartARTDateKey as StartARTDate,
 	ValidVLResult,
 	art.LastVisitDate,
 	art.NextAppointmentDate,
-	aro.ARTOutcome
+	aro.ARTOutcome,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+	case 
+		when aro.ARTOutcome is null then 'Others'
+		else aro.ARTOutcomeDescription
+	end as ARTOutcomeDescription
 INTO [REPORTING].[dbo].[LineListVLNonSuppressed]
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey

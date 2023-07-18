@@ -1,3 +1,4 @@
+
 BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a
@@ -70,20 +71,24 @@ BEGIN
 					and a.EncounterId = b.EncounterId
 
 					)		
-	  -- WHEN MATCHED THEN
-			--UPDATE SET 
+	   WHEN MATCHED THEN
+			UPDATE SET 
 					   
-			--		a.[EverTestedForHiv]	=b.[EverTestedForHiv],
-			--		a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
-			--		a.[ClientTestedAs]		=b.[ClientTestedAs],					
-			--		a.[PatientGivenResult]	=b.[PatientGivenResult],
-			--		a.[TbScreening]			=b.[TbScreening],
-			--		a.[ClientSelfTested]	=b.[ClientSelfTested],
-			--		a.[CoupleDiscordant]	=b.[CoupleDiscordant],
-			--		a.[Consent]				=b.[Consent]
+					a.[EverTestedForHiv]	=b.[EverTestedForHiv],
+					a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
+					a.[ClientTestedAs]		=b.[ClientTestedAs],					
+					a.[PatientGivenResult]	=b.[PatientGivenResult],
+					a.[TbScreening]			=b.[TbScreening],
+					a.[ClientSelfTested]	=b.[ClientSelfTested],
+					a.[CoupleDiscordant]	=b.[CoupleDiscordant],
+					a.[Consent]				=b.[Consent],
+					a.HtsRiskCategory		= b.HtsRiskCategory,
+					a.HtsRiskScore			= b.HtsRiskScore
+
 
 		WHEN NOT MATCHED THEN 
 			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
 			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
 
 END
+

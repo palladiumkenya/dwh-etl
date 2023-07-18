@@ -11,7 +11,7 @@ SELECT DISTINCT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	art.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
@@ -36,7 +36,8 @@ SELECT DISTINCT
 	COUNT(CASE
 	WHEN art.PatientKey is not null THEN 1
 	ELSE 0 END) as Eligible,
-	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled
+	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
 FROM NDWH.dbo.FACTART art
 INNER JOIN NDWH.dbo.DimAgeGroup age ON age.AgeGroupKey= art.AgeGroupKey
@@ -56,7 +57,7 @@ GROUP BY
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	art.Gender,
 	age.DATIMAgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,

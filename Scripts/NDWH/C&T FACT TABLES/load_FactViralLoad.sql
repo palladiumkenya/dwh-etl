@@ -227,7 +227,8 @@ BEGIN
 			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
 				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) < 200.00 then 1 ELSE 0 END
 			END as LowViremia,
-			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
+			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
+			 cast(getdate() as date) as LoadDate
 		from ODS.dbo.CT_Patient as patient
 		inner join ODS.dbo.CT_ARTPatients art on art.PatientPK = patient.Patientpk 
 			and art.SiteCode = patient.SiteCode

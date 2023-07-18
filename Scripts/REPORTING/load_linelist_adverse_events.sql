@@ -10,7 +10,7 @@ with AdverseEvents as (
             PatientPKHash,
             NUPI,
             g.DATIMAgeGroup,
-            Gender,
+            art.Gender,
             f.FacilityName,
             County,
             SubCounty,
@@ -20,7 +20,8 @@ with AdverseEvents as (
             AdverseEventCause,
             AdverseEventRegimen,
             AdverseEventActionTaken,
-            Severity
+            Severity,
+            CAST(GETDATE() AS DATE) AS LoadDate 
         FROM
             [NDWH].dbo.FactAdverseEvents it
             INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
@@ -34,22 +35,7 @@ with AdverseEvents as (
 )
 
 SELECT
-   MFLCode,
-            PatientIDHash,
-            PatientPKHash,
-            NUPI,
-            DATIMAgeGroup,
-            Gender,
-            FacilityName,
-            County,
-            SubCounty,
-            PartnerName,
-            AgencyName,
-            AdverseEvent,
-            AdverseEventCause,
-            AdverseEventRegimen,
-            AdverseEventActionTaken,
-            Severity
-Into  [REPORTING].[dbo].LineListAdverseEvents
+   *
+ INTO [REPORTING].[dbo].LineListAdverseEvents
 FROM AdverseEvents
 GO

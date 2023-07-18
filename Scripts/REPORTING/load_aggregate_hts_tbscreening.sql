@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSTBscreening]', N'U') IS NOT NULL 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSTBscreening]
+drop TABLE REPORTING.[dbo].[AggregateHTSTBscreening]
 GO
 
 WITH tested AS (
@@ -34,24 +34,8 @@ WITH tested AS (
     LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
     WHERE TestType in ('Initial Test', 'Initial')
 )
-INSERT INTO REPORTING.dbo.AggregateHTSTBscreening (
-	MFLCode, 
-	FacilityName, 
-	County, 
-	SubCounty, 
-	PartnerName, 
-	AgencyName, 
-	Gender, 
-	AgeGroup,
-	tbScreening, 
-	TBScreening_Grp,
-	year, 
-	month, 
-	MonthName, 
-	Tested, 
-	Positive, 
-	Linked
-)
+
+
 SELECT 
     MFLCode,
     FacilityName,
@@ -68,7 +52,9 @@ SELECT
     MonthName,
     Sum(Tested) Tested,
     Sum(Positive) Positive,
-    Sum(Linked) Linked
+    Sum(Linked) Linked,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+    INTO REPORTING.dbo.AggregateHTSTBscreening
 FROM tested
 GROUP BY 
     MFLCode, 

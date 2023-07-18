@@ -1,10 +1,7 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSUptake]', N'U') IS NOT NULL 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSUptake]
+drop TABLE REPORTING.[dbo].[AggregateHTSUptake]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateHTSUptake (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,
-	TestedBefore, year, month, MonthName, Tested, Positive, Linked
-)
 SELECT 
 	DISTINCT
 	MFLCode,
@@ -21,7 +18,9 @@ SELECT
 	FORMAT(cast(date as date), 'MMMM') as MonthName,
 	Sum(Tested) as Tested,
 	Sum(Positive) as Positive,
-	Sum(Linked) as Linked
+	Sum(Linked) as Linked,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+    INTO REPORTING.dbo.AggregateHTSUptake
 FROM NDWH.dbo.FactHTSClientTests hts
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey

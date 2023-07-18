@@ -16,7 +16,8 @@ select
     date.[Year] as Year,
     date.[Month] as Month,
     TracingOutcome,
-    count(tracing.PatientKey) as patients
+    count(tracing.PatientKey) as patients,
+    CAST(GETDATE() AS DATE) AS LoadDate  
 into REPORTING.dbo.AggregateDefaulterTracingOutcome
 from NDWH.dbo.FactDefaulterTracing tracing
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tracing.PatientKey

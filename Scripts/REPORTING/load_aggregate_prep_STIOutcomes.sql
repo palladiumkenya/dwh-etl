@@ -1,24 +1,7 @@
 IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepSTIOutcomes]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregatePrepSTIOutcomes]
+Drop TABLE REPORTING.[dbo].[AggregatePrepSTIOutcomes]
 GO
 
-INSERT INTO REPORTING.dbo.AggregatePrepSTIOutcomes
-		(MFLCode,
-		FacilityName, 
-		County,
-		SubCounty,
-		PartnerName, 
-		AgencyName, 
-		Gender,
-		Month,
-		Year,
-		AgeGroup,
-		NumberSTIScreened,
-		NumberSTIPositive,
-		NumberSTINegative,
-		NumberSTITreated,
-		NumberSTINotTreated
-		)
 SELECT DISTINCT 
 		MFLCode,		
 		f.FacilityName,
@@ -34,8 +17,9 @@ SELECT DISTINCT
 		sum(case  when STISymptoms is not null or STISymptoms <> '' then 1 else 0 END) as NumberSTIPositive,
 		sum(case  when STISymptoms is null or STISymptoms = '' then 1 else 0 END) as NumberSTINegative,
 		sum(case  when [STITreated] = 'Yes' then 1 else 0 END) as NumberSTITreated,
-		sum(case  when [STITreated] = 'No' then 1 else 0 END) as NumberSTINotTreated
-
+		sum(case  when [STITreated] = 'No' then 1 else 0 END) as NumberSTINotTreated,
+        CAST(GETDATE() AS DATE) AS LoadDate 
+ INTO REPORTING.dbo.AggregatePrepSTIOutcomes
 FROM NDWH.dbo.FactPrepVisits prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey

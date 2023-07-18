@@ -45,5 +45,5 @@ BEGIN
 			(isPkv = 1)
 		GROUP BY p.county, p.subCounty, SDP_Agency, SDP
 	) 
-	select * into REPORTING.DBO.AggregateExpectedUploads  from uploads
+	select * , cast(getdate() as date) as LoadDate into REPORTING.DBO.AggregateExpectedUploads  from uploads
 END

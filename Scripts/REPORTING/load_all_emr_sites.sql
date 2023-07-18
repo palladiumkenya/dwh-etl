@@ -12,7 +12,8 @@ SELECT
 	fac.EMR,
 	fac.isCT,
 	fac.isPkv,
-	fac.isHts
+	fac.isHts,
+    CAST(GETDATE() AS DATE) AS LoadDate  
 INTO REPORTING.dbo.all_EMRSites
 FROM NDWH.dbo.DimFacility fac
 JOIN ODS.dbo.All_EMRSites a on a.MFL_Code = fac.MFLCode
