@@ -17,7 +17,7 @@ SELECT DISTINCT
     cov.AdmissionUnit,
     cov.EverCOVID19Positive,
     cov.MissedAppointmentDueToCOVID19,
-    Count(*) adults_count,
+    Count(*) TXCurrAdult,
     cast(getdate() as date) as LoadDate
 INTO REPORTING.dbo.AggregateCovid 
 FROM NDWH.dbo.FactCovid cov
