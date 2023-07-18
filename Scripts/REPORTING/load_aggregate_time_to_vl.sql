@@ -1,36 +1,37 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTimeToVL]', N'U') IS NOT NULL 	
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateTimeToVL]
+	drop TABLE [REPORTING].[dbo].[AggregateTimeToVL]
 GO
 
-INSERT INTO [REPORTING].[dbo].[AggregateTimeToVL]
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-SubCounty,
-County,
-p.PartnerName,
-a.AgencyName,
-Gender,
-g.DATIMAgeGroup as AgeGroup,
-year(StartARTDateKey) StartYr,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey)) AS MedianTimeToFirstVL_year,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey),p.PartnerName) AS MedianTimeToFirstVL_yearPartner,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey),County) AS MedianTimeToFirstVL_yearCounty,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey),Subcounty) AS MedianTimeToFirstVL_yearSbCty,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey),f.FacilityName) AS MedianTimeToFirstVL_yearFacility,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey), County, p.PartnerName) AS MedianTimeToFirstVL_yearCountyPartner,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey), a.AgencyName) AS MedianTimeToFirstVL_yearCTAgency,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey), Gender) AS MedianTimeToFirstVL_Gender,
-PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
-        OVER (PARTITION BY Year(StartARTDateKey), g.DATIMAgeGroup) AS MedianTimeToFirstVL_DATIM_AgeGroup
+    MFLCode,
+    f.FacilityName,
+    SubCounty,
+    County,
+    p.PartnerName,
+    a.AgencyName,
+    Gender,
+    g.DATIMAgeGroup as AgeGroup,
+    year(StartARTDateKey) StartYr,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey)) AS MedianTimeToFirstVL_year,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey),p.PartnerName) AS MedianTimeToFirstVL_yearPartner,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey),County) AS MedianTimeToFirstVL_yearCounty,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey),Subcounty) AS MedianTimeToFirstVL_yearSbCty,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey),f.FacilityName) AS MedianTimeToFirstVL_yearFacility,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey), County, p.PartnerName) AS MedianTimeToFirstVL_yearCountyPartner,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey), a.AgencyName) AS MedianTimeToFirstVL_yearCTAgency,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey), Gender) AS MedianTimeToFirstVL_Gender,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Floor(it.TimetoFirstVL/30.25) DESC)
+            OVER (PARTITION BY Year(StartARTDateKey), g.DATIMAgeGroup) AS MedianTimeToFirstVL_DATIM_AgeGroup,
+    CAST(GETDATE() AS DATE) AS LoadDate   
+        INTO [REPORTING].[dbo].[AggregateTimeToVL]
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

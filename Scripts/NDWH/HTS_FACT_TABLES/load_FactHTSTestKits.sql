@@ -35,7 +35,8 @@ BEGIN
         TestResult1,
         kit_name2.TestKitNameKey as TestKitName2Key,
         TestKitLotNumber2,
-        TestResult2
+        TestResult2,
+         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactHTSTestKits
     from source_data
     left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(source_data.PatientPK as nvarchar(36))), 2)

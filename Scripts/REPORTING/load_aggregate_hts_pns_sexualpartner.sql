@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSSexualPartner]', N'U') IS NOT NULL 
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSSexualPartner]
+drop TABLE REPORTING.[dbo].[AggregateHTSPNSSexualPartner]
 GO
 
 with pns_and_tests as ( 
@@ -83,24 +83,7 @@ line_list_dataset as (
 	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
 	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
 )
-insert into REPORTING.dbo.AggregateHTSPNSSexualPartner (
-    MFLCode,
-    FacilityName, 
-    County,
-    SubCounty,
-    PartnerName,
-    AgencyName, 
-    Gender,
-    AgeGroup, 
-    year, 
-    month, 
-    MonthName,
-    PartnersElicited,
-    PartnerTested, 
-    Positive, 
-    Linked, 
-    KnownPositive
-)
+
 select 
 	Mflcode, 
 	FacilityName, 
@@ -117,7 +100,9 @@ select
 	sum(tested) as PartnerTested,
 	sum(positive) as Positive,
     sum(Linked) as Linked,
-	sum(KP) as KnownPositive    
+	sum(KP) as KnownPositive,
+     CAST(GETDATE() AS DATE) AS LoadDate  
+  into REPORTING.dbo.AggregateHTSPNSSexualPartner
 from line_list_dataset
 group by 
     Mflcode,
@@ -131,3 +116,4 @@ group by
     Gender,
     Agegroup,
     AgencyName
+

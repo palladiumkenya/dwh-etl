@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSPNSChildren]', N'U') IS NOT NULL 	
-TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSPNSChildren]
+drop TABLE REPORTING.[dbo].[AggregateHTSPNSChildren]
 GO
 
 with pns_and_tests as ( 
@@ -81,24 +81,7 @@ line_list_dataset as (
 	left join NDWH.dbo.DimDate as tested on tested.DateKey = dataset.DateTestedKey
 	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
 	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
-)
-insert into REPORTING.dbo.AggregateHTSPNSChildren (
-    MFLCode,
-    FacilityName, 
-    County,
-    SubCounty,
-    PartnerName,
-    AgencyName, 
-    Gender,
-    AgeGroup, 
-    year, 
-    month, 
-    MonthName,
-    ChildrenElicited, 
-    ChildrenTested,
-    ChildrenPositive, 
-    ChildrenLinked, 
-    ChildrenKnownPositive
+
 )
 select 
 	Mflcode, 
@@ -116,7 +99,9 @@ select
 	sum(tested) as ChildrenTested,
 	sum(positive) as ChildrenPositive,
     sum(Linked) as ChildrenLinked,
-	sum(KP) as ChildrenKnownPositive
+	sum(KP) as ChildrenKnownPositive,
+    CAST(GETDATE() AS DATE) AS LoadDate  
+    into REPORTING.dbo.AggregateHTSPNSChildren
 from line_list_dataset
 group by 
     Mflcode,

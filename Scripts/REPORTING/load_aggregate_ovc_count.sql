@@ -1,8 +1,9 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateOVCCount', N'U') IS NOT NULL 	
-	DROP TABLE [REPORTING].[dbo].AggregateOVCCount
+	drop TABLE [REPORTING].[dbo].AggregateOVCCount
 GO
 
 SELECT 
+
 MFLCode,
 f.FacilityName,
 County,
@@ -12,12 +13,11 @@ a.AgencyName,
 Gender, 
 g.DATIMAgeGroup,
 pat.IsTXCurr as TXCurr,
-case 
-	when ao.ARTOutcome is null then 'Others'
-	else ao.ARTOutcomeDescription
-end as ARTOutcomeDescription,
-count(*) as OVCElligiblePatientCount
-into [REPORTING].[dbo].AggregateOVCCount
+ao.ARTOutcome,
+SUM(CASE WHEN CPIMSUniqueIdentifier IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
+count(*) as OVCElligiblePatientCount,
+CAST(GETDATE() AS DATE) AS LoadDate 
+
 from [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

@@ -98,7 +98,8 @@ select
     Gender,
     IITPatients,
     DefaulterTracedClients,
-    IITPatients - DefaulterTracedClients as DefaulterNotTracedClients
+    IITPatients - DefaulterTracedClients as DefaulterNotTracedClients,
+     CAST(GETDATE() AS DATE) AS LoadDate 
 into AggregateIITTracingStatus
 from enriched_dataset
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = enriched_dataset.FacilityKey

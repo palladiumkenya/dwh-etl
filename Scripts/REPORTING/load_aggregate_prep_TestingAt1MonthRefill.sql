@@ -1,22 +1,7 @@
 IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepTestingAt1MonthRefill]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregatePrepTestingAt1MonthRefill]
+Drop TABLE REPORTING.[dbo].[AggregatePrepTestingAt1MonthRefill]
 GO
 
-INSERT INTO REPORTING.dbo.AggregatePrepTestingAt1MonthRefill
-	(MFLCode,
-	FacilityName, 
-	County,
-	SubCounty,
-	PartnerName, 
-	AgencyName, 
-	Gender,
-	Month,
-	Year,
-	AgeGroup,
-	refilled,
-	tested,
-	nottested
-	)
 
 SELECT DISTINCT 
 	MFLCode,		
@@ -31,8 +16,9 @@ SELECT DISTINCT
 	age.DATIMAgeGroup as AgeGroup,
 	sum(case when DateDispenseMonth1 is not null then 1 else 0 end) refilled,
 	sum(case when TestResultsMonth1 is not null then 1 else 0 end) tested,
-	sum(case when TestResultsMonth1 is null then 1 else 0 end) nottested
-
+	sum(case when TestResultsMonth1 is null then 1 else 0 end) nottested,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+INTO REPORTING.dbo.AggregatePrepTestingAt1MonthRefill
 FROM NDWH.dbo.FactPrepRefills prep
 
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey

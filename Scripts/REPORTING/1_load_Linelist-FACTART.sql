@@ -50,7 +50,8 @@ Select distinct
     vl.HighViremia,
     vl.LowViremia,
     pat.ISTxCurr,
-	dif.DifferentiatedCare
+	dif.DifferentiatedCare,
+    cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
 left join NDWH.dbo.DimPatient pat on pat.PatientKey = ART.PatientKey
