@@ -11,7 +11,8 @@ BEGIN
 			g.county AS county,
 			g.subcounty AS subcounty,
 			g.agency AS agency,
-			g.partner AS partner
+			g.partner AS partner,
+            CAST(GETDATE() AS DATE) AS LoadDate 
 		FROM
 			(SELECT 
 				fm.facilityId AS MFLCode,

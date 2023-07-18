@@ -1,21 +1,21 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDStable]', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDStable]
+	drop TABLE [REPORTING].[dbo].[AggregateDSDStable]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateDSDStable (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender, AgeGroup,DifferentiatedCare,  MMDModels, TXCurr)
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender,
-age.DATIMAgeGroup as AgeGroup,
-DifferentiatedCare, 
-COUNT(DifferentiatedCare) as MMDModels,
-Sum(pat.isTXCurr) As TXCurr
-
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    Gender,
+    age.DATIMAgeGroup as AgeGroup,
+    DifferentiatedCare, 
+    COUNT(DifferentiatedCare) as MMDModels,
+    Sum(pat.isTXCurr) As TXCurr,
+    cast(getdate() as date) as LoadDate
+INTO REPORTING.dbo.AggregateDSDStable 
 FROM NDWH.dbo.FactLatestObs lob
 INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey
 INNER JOIN NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey

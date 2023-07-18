@@ -41,7 +41,7 @@ BEGIN
             cast(DOB as date) as DOB,
             Gender,
             MaritalStatus,
-            NUPI
+            NupiHash
         from ODS.dbo.HTS_clients as clients
     ),
     prep_patient_source as (
@@ -62,7 +62,7 @@ BEGIN
             coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
             --coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
             coalesce(ct_patient_source.SiteCode, hts_patient_source.SiteCode) as SiteCode,
-            coalesce(ct_patient_source.NupiHash, hts_patient_source.NUPI) as NUPI,
+            coalesce(ct_patient_source.NupiHash, hts_patient_source.NupiHash) as NUPI,
             coalesce(ct_patient_source.DOB, hts_patient_source.DOB) as DOB,
             coalesce(ct_patient_source.MaritalStatus, hts_patient_source.MaritalStatus) as MaritalStatus,
             coalesce(ct_patient_source.Gender, hts_patient_source.Gender) as Gender,

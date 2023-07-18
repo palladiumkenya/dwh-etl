@@ -1,5 +1,5 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateOptimizeStartRegimens]', N'U') IS NOT NULL	
-	DROP  TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
+	DROP TABLE [REPORTING].[dbo].[AggregateOptimizeStartRegimens];
 
 SELECT
 	SiteCode,
@@ -17,7 +17,8 @@ SELECT
 	CurrentVL,
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
-	Last12MVLResult 
+	ValidVLResultCategory,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOptimizeStartRegimens]
 FROM
 	(
@@ -42,6 +43,7 @@ FROM
 		Gender,
 		Agegrouping as Agegroup,
 		DATIMAgeGroup,
+
 		CASE
 			WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN
 				CASE
@@ -58,6 +60,9 @@ FROM
 				END 
 		END AS Last12MVLResult,
 		vl.LastVL AS CurrentVL,
+
+		ValidVLResultCategory2 as ValidVLResultCategory,
+
 		ISTxCurr 
 	FROM NDWH.dbo.FACTART art
 	INNER JOIN NDWH.dbo.DimAgeGroup age ON art.AgeGroupKey = age.AgeGroupKey
@@ -68,4 +73,21 @@ FROM
 	LEFT JOIN NDWH.dbo.FACTViralLoads vl ON art.PatientKey = vl.PatientKey 
 	WHERE ISTxCurr = 1 
 	) H 
-	GROUP BY SiteCode, FacilityName, County, Subcounty,	PartnerName, AgencyName, StartRegimen, Agegroup, [DATIMAgeGroup], Gender, StartARTMonth, StartARTYr, Firstregimen, Last12MVLResult,CurrentVL;
+
+	GROUP BY 
+		SiteCode, 
+		FacilityName, 
+		County, 
+		Subcounty,
+		PartnerName, 
+		AgencyName, 
+		StartRegimen, 
+		Agegroup, 
+		[DATIMAgeGroup], 
+		Gender, 
+		StartARTMonth, 
+		StartARTYr, 
+		Firstregimen,
+    CurrentVL,
+		ValidVLResultCategory;
+

@@ -10,9 +10,33 @@ as
 BEGIN
 
 -- 2. Patients Extracts
-begin
+
 exec OpenSession;
-end
+
+IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Manifests]', N'U') IS NOT NULL 
+	BEGIN
+		DROP TABLE [UCSFDWAPICentral].[dbo].Manifests
+	END
+
+	BEGIN
+		SELECT  
+				t.[SiteCode]
+				,t.[Name] as FacilityName
+				,Null county
+				,t.[DateRecieved] as UploadDate
+				,t.[EmrId]  as EMR
+				,t.PatientCount	
+				INTO [UCSFDWAPICentral].[dbo].[Manifests]
+		FROM [DWAPICentral].[dbo].[FacilityManifest](NoLock) t
+		INNER JOIN (
+						SELECT [SiteCode], MAX([DateRecieved]) AS MaxDateRecieved
+						FROM [DWAPICentral].[dbo].[FacilityManifest](NoLock)
+						GROUP BY [SiteCode]
+					) tm 
+		ON t.[SiteCode] = tm.[SiteCode] and t.[DateRecieved] = tm.MaxDateRecieved
+	END
+
+----Patients
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Patients]', N'U') IS NOT NULL 
 	BEGIN
 		DROP TABLE [UCSFDWAPICentral].[dbo].[Patients]
@@ -61,9 +85,10 @@ BEGIN
 		from Dwapicentral.dbo.PatientExtract(NoLock) p
 		inner join Dwapicentral.dbo.facility(NoLock) f on p.FacilityId=f.Id and f.Voided=0
 		Where f.Code>0 and Gender is not null  and p.gender!='Unknown' and p.Voided = 0
-END
 
--- 3. ART Extracts
+
+END
+---- 3. ART Extracts
 
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[ART]', N'U') IS NOT NULL 
 
@@ -115,7 +140,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Labs]', N'U') IS NOT NULL
 			NULL AS FacilityCode,
 			NULL AS County,
 			a.VisitId,
-			--p.PatientPID AS PatientPK
+			--p.PatientPID  AS PatientPK,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientPID AS NVARCHAR(20))) AS PatientPK,
 			--p.PatientCCCNumber  as PatientID,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientCCCNumber AS NVARCHAR(20)))as PatientID,
@@ -130,6 +155,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Labs]', N'U') IS NOT NULL
 			inner join Dwapicentral.dbo.PatientLaboratoryExtract(NoLock) a on a.PatientId=p.Id
 			inner join Dwapicentral.dbo.facility(NoLock) f on p.FacilityId=f.Id and f.Voided=0
 			Where f.code>0 and p.Gender is not null  and p.gender!='Unknown' and p.Voided = 0
+			
 		END
 
 -- 5. BASELINES
@@ -222,7 +248,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Pharmacy]', N'U') IS NOT NULL
 			Select
 			NULL AS FacilityCode,
 			NULL AS County,
-			--p.PatientPID AS PatientPK
+			--CAST(p.PatientPID AS NVARCHAR(50)) AS PatientPK,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientPID AS NVARCHAR(20))) AS PatientPK,
 			--p.PatientCCCNumber  as PatientID,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientCCCNumber AS NVARCHAR(20)))as PatientID,
@@ -241,7 +267,8 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Pharmacy]', N'U') IS NOT NULL
 			from Dwapicentral.dbo.PatientExtract p
 			inner join Dwapicentral.dbo.PatientPharmacyExtract a on a.PatientId=p.Id
 			inner join Dwapicentral.dbo.facility f on p.FacilityId=f.Id and f.Voided=0
-			Where f.code>0 and p.Gender is not null  and p.gender!='Unknown' and p.Voided = 0
+			Where f.code>0 and p.Gender is not null  and p.gender!='Unknown' and p.Voided = 0;
+
 	END
 
 
@@ -256,7 +283,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 			Select
 			NULL AS FacilityCode,
 			NULL AS County,
-			--p.PatientPID AS PatientPK
+			--CAST(p.PatientPID AS NVARCHAR(50)) AS PatientPK,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientPID AS NVARCHAR(20))) AS PatientPK,
 			--p.PatientCCCNumber  as PatientID,
 			ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientCCCNumber AS NVARCHAR(20)))as PatientID,
@@ -296,6 +323,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 			inner join Dwapicentral.dbo.PatientVisitExtract(NoLock) a on a.PatientId=p.Id
 			inner join Dwapicentral.dbo.facility(NoLock) f on p.FacilityId=f.Id and f.Voided=0
 			Where f.code>0 and p.Gender is not null  and p.gender!='Unknown' and p.Voided = 0
+
 	END
 
 	---IPT
@@ -305,7 +333,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 		END
 		BEGIN
 				SELECT DISTINCT
-						--p.PatientPID AS PatientPK
+						--CAST(p.PatientPID AS NVARCHAR(50)) AS PatientPK,
 						ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientPID AS NVARCHAR(20))) AS PatientPK,
 						--p.PatientCCCNumber  as PatientID,
 						ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(p.PatientCCCNumber AS NVARCHAR(20)))as PatientID,
@@ -329,10 +357,11 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
-					WHERE P.gender != 'Unknown'
+					WHERE P.gender != 'Unknown';
 		END
 
 	---DefaulterTracing
+
 	IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[DefaulterTracing]', N'U') IS NOT NULL 
 		BEGIN
 			DROP TABLE [UCSFDWAPICentral].[dbo].[DefaulterTracing]
@@ -358,6 +387,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 						  ,[CauseOfDeath]
 						  ,[Comments]
 						  ,Cast([BookingDate] As Date)[BookingDate]
+						  INTO [UCSFDWAPICentral].[dbo].[DefaulterTracing]
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -377,6 +407,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Visits]', N'U') IS NOT NULL
 
 
 --14. EnhancedAdherenceCounselling
+
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[EnhancedAdherenceCounselling]', N'U') IS NOT NULL 
 
 	BEGIN
@@ -459,6 +490,7 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[EnhancedAdherenceCounselling]', N'U') I
 
 
 --19. DefaulterTracing
+
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[DefaulterTracing]', N'U') IS NOT NULL 
 
 	BEGIN
@@ -493,9 +525,10 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[DefaulterTracing]', N'U') IS NOT NULL
 		WHERE P.gender != 'Unknown'  AND F.Code > 0
 	END
 	
---------------------------------- END OF C&T
----------------------------------HTS
---20. HTS_ClientLinkages
+----------------------------------- END OF C&T
+-----------------------------------HTS
+----20. HTS_ClientLinkages
+
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]', N'U') IS NOT NULL 
 	BEGIN
 		DROP TABLE [UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]
@@ -506,17 +539,17 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]', N'U') IS NOT NULL
 		  DISTINCT 
 		  a.[FacilityName]
 		  ,a.[SiteCode]
-		 --,a.PatientPk as PatientPk	
+		 --,CAST(a.PatientPk AS NVARCHAR(50)) as PatientPk	
 		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 		--,a.[HtsNumber]
 		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber		  			  
 		  ,a.[Emr]
 		  ,a.[Project]
 		  ,[EnrolledFacilityName]
-		  ,CAST (MAX([ReferralDate]) AS DATE) AS [ReferralDate]
+		  ,CAST ([ReferralDate] AS DATE) AS [ReferralDate]
 		  ,CAST([DateEnrolled] AS DATE) AS [DateEnrolled]
  
-		  ,CAST(MAX([DatePrefferedToBeEnrolled]) AS DATE ) AS [DatePrefferedToBeEnrolled]
+		  ,CAST([DatePrefferedToBeEnrolled] AS DATE ) AS [DatePrefferedToBeEnrolled]
 		  ,CASE WHEN [FacilityReferredTo]='Other Facility' THEN NULL ELSE [FacilityReferredTo] END AS [FacilityReferredTo] 
 		  ,[HandedOverTo]
 		  ,[HandedOverToCadre]
@@ -525,18 +558,18 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]', N'U') IS NOT NULL
 		  ,CASE WHEN CAST([ReportedStartARTDate] AS DATE) = '0001-01-01' THEN NULL ELSE CAST([ReportedStartARTDate] AS DATE) END AS [ReportedStartARTDate]
 		INTO [UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]
 		 FROM [HTSCentral].[dbo].[ClientLinkages](NoLock) a
-		 --INNER JOIN (
-			--			SELECT distinct SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
-			--			FROM  [HTSCentral].[dbo].[ClientLinkages](NoLock)
-			--			GROUP BY SiteCode,PatientPK
-			--				) tm 
-			--	     ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.DateExtracted = tm.MaxDateExtracted
+		 INNER JOIN (
+						SELECT distinct SiteCode,PatientPK, MAX(DateExtracted) AS MaxDateExtracted
+						FROM  [HTSCentral].[dbo].[ClientLinkages](NoLock)
+						GROUP BY SiteCode,PatientPK
+							) tm 
+				     ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.DateExtracted = tm.MaxDateExtracted
   INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
   on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
   WHERE a.DateExtracted > '2019-09-08'
 		GROUP BY a.[FacilityName]
 		  ,a.[SiteCode]
-		  ,a.[PatientPk]
+		  ,a.[PatientPk]		  
 		  ,a.[HtsNumber]
 		  ,a.[Emr]
 		  ,a.[Project]
@@ -547,9 +580,13 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientLinkages]', N'U') IS NOT NULL
 		   ,[HandedOverTo]
 		  ,[HandedOverToCadre]
 		  ,[ReportedCCCNumber]
-		  ,CAST([ReportedStartARTDate] AS DATE)
+		  ,[ReferralDate]
+		  ,[DatePrefferedToBeEnrolled]
+		  ,CAST([ReportedStartARTDate] AS DATE);
+
 	END
 --21. Hts_ClientTracing
+
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Hts_ClientTracing]', N'U') IS NOT NULL 
 	BEGIN
 		DROP TABLE [UCSFDWAPICentral].[dbo].[Hts_ClientTracing]
@@ -557,10 +594,10 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Hts_ClientTracing]', N'U') IS NOT NULL
 	BEGIN
 			SELECT DISTINCT a.[FacilityName]
 			  ,a.[SiteCode]
-			 --,a.PatientPk as PatientPk	
-			 ,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
+			 --,CAST(a.PatientPk AS NVARCHAR(50)) as PatientPk	
+			  ,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 			--,a.[HtsNumber]
-			,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
+			 ,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
 			  ,a.[Emr]
 			  ,a.[Project]
 			  ,[TracingType]
@@ -568,13 +605,15 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Hts_ClientTracing]', N'U') IS NOT NULL
 			  ,[TracingOutcome]
 			  INTO [UCSFDWAPICentral].[dbo].[Hts_ClientTracing]
 		 FROM [HTSCentral].[dbo].[HtsClientTracing] (NoLock)a
-	INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
+			on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode;
+
 	END
 
 --22. HTS_Clients
 
 	--DROP TABLE [NDWH].[dbo].[FactARTHistory];
+	
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_Clients]', N'U') IS NOT NULL 
 	BEGIN
 		DROP TABLE [UCSFDWAPICentral].[dbo].[HTS_Clients]
@@ -583,8 +622,8 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_Clients]', N'U') IS NOT NULL
 		SELECT  distinct [HtsNumber],
 		  a.[Emr]
 		  ,a.[Project]
-		  --,a.PatientPk as PatientPk	
-		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
+		  --,CAST(a.PatientPk AS NVARCHAR(50)) as PatientPk	
+		  ,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 		  ,a.[SiteCode]
 		  ,[FacilityName]
 		  ,[Serial]
@@ -607,15 +646,16 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_Clients]', N'U') IS NOT NULL
 		  ,Pkv AS MPIPKV
 		  INTO [UCSFDWAPICentral].[dbo].[HTS_Clients]
 	  FROM [HTSCentral].[dbo].[Clients](NoLock) a
-	  --INNER JOIN (
-			--		SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
-			--		FROM  [HTSCentral].[dbo].[Clients](NoLock)
-			--		GROUP BY SiteCode,PatientPK
-			--	) tm 
-			--	ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.datecreated = tm.Maxdatecreated
-	where a.DateExtracted > '2019-09-08'
-	END
+	  INNER JOIN (
+					SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
+					FROM  [HTSCentral].[dbo].[Clients](NoLock)
+					GROUP BY SiteCode,PatientPK
+				) tm 
+				ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.datecreated = tm.Maxdatecreated
+	where a.DateExtracted > '2019-09-08';
 
+
+	END
 --23. HTS_ClientTests
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientTests]', N'U') IS NOT NULL 
 	BEGIN
@@ -624,8 +664,8 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientTests]', N'U') IS NOT NULL
 	BEGIN
 			SELECT distinct a.id, a.[FacilityName]
 			  ,a.[SiteCode]
-			  --,a.PatientPk as PatientPk	
-			,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
+			  --,cast(a.PatientPk as nvarchar(50)) as PatientPk	
+				,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 			  ,a.[Emr]
 			  ,a.[Project]
 			  ,a.[EncounterId]
@@ -646,20 +686,21 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_ClientTests]', N'U') IS NOT NULL
 			  ,[Consent]
 			  INTO [UCSFDWAPICentral].[dbo].[HTS_ClientTests]
 		  FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a
-		  --INNER JOIN ( select  ct.sitecode,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(ct.patientPK AS NVARCHAR(20))) AS patientPK,ct.FinalTestResult,ct.TestDate,ct.EncounterId
-				--						  ,max(DateExtracted)MaxDateExtracted  
-				--					from [HTSCentral].[dbo].[HtsClientTests] ct	
-				--					GROUP BY ct.sitecode,ct.patientPK,ct.FinalTestResult,ct.TestDate,ct.EncounterId
-				--					)tn
-			 --  ON  a.SiteCode = tn.SiteCode and a.PatientPk = tn.PatientPk and a.FinalTestResult = tn.FinalTestResult and a.TestDate = tn.TestDate
-				--	and a.DateExtracted = tn.MaxDateExtracted and a.EntryPoint = tn.EncounterId
+		  INNER JOIN ( select  ct.sitecode,ct.patientPK,ct.FinalTestResult,ct.TestDate,ct.EncounterId
+										  ,max(DateExtracted)MaxDateExtracted  
+									from [HTSCentral].[dbo].[HtsClientTests] ct	
+									GROUP BY ct.sitecode,ct.patientPK,ct.FinalTestResult,ct.TestDate,ct.EncounterId
+									)tn
+			   ON  a.SiteCode = tn.SiteCode and a.PatientPk = tn.PatientPk and a.FinalTestResult = tn.FinalTestResult and a.TestDate = tn.TestDate
+					and a.DateExtracted = tn.MaxDateExtracted --and a.EntryPoint = tn.EncounterId
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
-			   where a.FinalTestResult is not null 
+			   where a.FinalTestResult is not null ;
 	END
 
 
 --26. HTS_TestKits
+
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_TestKits]', N'U') IS NOT NULL 
 
 	BEGIN
@@ -668,10 +709,10 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_TestKits]', N'U') IS NOT NULL
 	BEGIN
 		SELECT DISTINCT a.[FacilityName]
       ,a.[SiteCode]
-	 --,a.PatientPk as PatientPk	
+	 --,CAST(a.PatientPk AS NVARCHAR(50)) as PatientPk	
 		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 		--,a.[HtsNumber]
-		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
+	,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
       ,a.[Emr]
       ,a.[Project]
       ,a.[EncounterId]
@@ -685,16 +726,18 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[HTS_TestKits]', N'U') IS NOT NULL
       ,a.[TestResult2]
 	  INTO [UCSFDWAPICentral].[dbo].[HTS_TestKits]
   FROM [HTSCentral].[dbo].[HtsTestKits](NoLock) a
-  --Inner join( select ct.sitecode,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(ct.patientPK AS NVARCHAR(20))) AS patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1],max(DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsTestKits] ct
-		--							group by ct.sitecode,ct.patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1])tn
-		--							on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK 
-		--							and a.DateExtracted = tn.MaxDateExtracted
-		--							and a.[EncounterId] = tn.[EncounterId]
-		--							and a.[TestKitName1] =tn.[TestKitName1]
-		--							and a.[TestResult2] =tn.[TestResult2]
-		--							and a.[TestKitLotNumber1] = tn.[TestKitLotNumber1]
+  Inner join( select ct.sitecode,ct.patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1],max(DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsTestKits] ct
+									group by ct.sitecode,ct.patientPK,ct.[EncounterId],ct.[TestKitName1],ct.[TestResult2],ct.[TestKitLotNumber1])tn
+									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK 
+									and a.DateExtracted = tn.MaxDateExtracted
+									and a.[EncounterId] = tn.[EncounterId]
+									and a.[TestKitName1] =tn.[TestKitName1]
+									and a.[TestResult2] =tn.[TestResult2]
+									and a.[TestKitLotNumber1] = tn.[TestKitLotNumber1]
   INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode;
+	
+
 	END
 
 IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Hts_EligibilityExtract]', N'U') IS NOT NULL 
@@ -703,12 +746,12 @@ IF OBJECT_ID(N'[UCSFDWAPICentral].[dbo].[Hts_EligibilityExtract]', N'U') IS NOT 
 		DROP TABLE [UCSFDWAPICentral].[dbo].[Hts_EligibilityExtract];
 	END
 BEGIN  
-SELECT DISTINCT  a.[FacilityName]
+SELECT DISTINCT a.[FacilityName]
       ,a.[SiteCode]
-     --,a.PatientPk as PatientPk	
-	,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
+      --,CAST(a.PatientPk AS NVARCHAR(50)) as PatientPk	
+		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.PatientPk AS NVARCHAR(20))) AS PatientPK
 		--,a.[HtsNumber]
-	,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
+		,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(a.[HtsNumber] AS NVARCHAR(20)))as HtsNumber	
 	  ,a.CccNumber
       ,a.[Emr]
       ,a.[Project]
@@ -782,45 +825,26 @@ SELECT DISTINCT  a.[FacilityName]
  
 	  INTO [UCSFDWAPICentral].[dbo].Hts_EligibilityExtract 
   FROM [HTSCentral].[dbo].[HtsEligibilityExtract] (NoLock)a
-  --Inner join ( select ct.sitecode,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(ct.patientPK AS NVARCHAR(20))) AS patientPK,ct.encounterID,ct.visitID,max(DateCreated)MaxDateCreated  from [HTSCentral].[dbo].[HtsEligibilityExtract] ct
-		--							group by ct.sitecode,ct.patientPK,ct.encounterID,ct.visitID)tn
-		--							on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK
-		--							and a.DateCreated = tn.MaxDateCreated
-		--							and a.encounterID = tn.encounterID
-		--							and a.visitID = tn.visitID
+  Inner join ( select  ct.sitecode,ct.patientPK,ct.encounterID,ct.visitID,max(DateCreated)MaxDateCreated  from [HTSCentral].[dbo].[HtsEligibilityExtract] ct
+									group by ct.sitecode,ct.patientPK,ct.encounterID,ct.visitID)tn
+									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK
+									and a.DateCreated = tn.MaxDateCreated
+									and a.encounterID = tn.encounterID
+									and a.visitID = tn.visitID
 									
-		--				Inner join ( select ct1.sitecode,ENCRYPTBYKEY(KEY_GUID('Key_NDW'), CAST(ct1.patientPK AS NVARCHAR(20))) AS patientPK,ct1.encounterID,ct1.visitID,max(ct1.DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsEligibilityExtract] ct1
-		--							group by ct1.sitecode,ct1.patientPK,ct1.encounterID,ct1.visitID)tn1
-		--							on a.sitecode = tn1.sitecode and a.patientPK = tn1.patientPK
-		--							and a.DateExtracted = tn1.MaxDateExtracted
-		--							and a.encounterID = tn1.encounterID
-		--							and a.visitID = tn1.visitID
+						Inner join ( select ct1.sitecode,ct1.patientPK,ct1.encounterID,ct1.visitID,max(ct1.DateExtracted)MaxDateExtracted  from [HTSCentral].[dbo].[HtsEligibilityExtract] ct1
+									group by ct1.sitecode,ct1.patientPK,ct1.encounterID,ct1.visitID)tn1
+									on a.sitecode = tn1.sitecode and a.patientPK = tn1.patientPK
+									and a.DateExtracted = tn1.MaxDateExtracted
+									and a.encounterID = tn1.encounterID
+									and a.visitID = tn1.visitID
   INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode;
+
   END
+  exec CloseSession
 ---------------------------------END OF HTS
-	--BEGIN
-	--	TRUNCATE TABLE [UCSFDWAPICentral].[dbo].[ALL_EMRSites];
-
-	--	INSERT [UCSFDWAPICentral].[dbo].[ALL_EMRSites](MFL_Code,[Facility Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[HTS Deployment],[HTS Status],[IL Status],[Registration IE],[Phamarmacy IE],mlab,Ushauri,Nishauri,[Appointment Management IE],OVC,OTZ,PrEP,[3PM],AIR,KP,MCH,TB,[Lab Manifest],Comments,Project)
-	--	SELECT MFL_Code,[Facility Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP Agency],Implementation,EMR,[EMR Status],[HTS Use],[HTS Deployment],[HTS Status],[IL Status],[Registration IE],[Phamarmacy IE],mlab,Ushauri,Nishauri,[Appointment Management IE],OVC,OTZ,PrEP,[3PM],AIR,KP,MCH,TB,[Lab Manifest],Comments,Project
-	--	FROM [HIS_Implementation].[dbo].[ALL_EMRSites];
-	--END
-
---BEGIN
---		TRUNCATE TABLE [UCSFDWAPICentral].[dbo].[lkp_usgPartnerMenchanism];
-
---	INSERT [UCSFDWAPICentral].[dbo].[lkp_usgPartnerMenchanism]([MFL_Code],[FacilityName],[County],[Agency],[MechanismID],[Implementing_Mechanism_Name]
---		  ,[Mechanism],[Code])
---	SELECT [MFL_Code],[FacilityName],[County],[Agency],[MechanismID],[Implementing_Mechanism_Name]
---		  ,[Mechanism],[Code]
---	  FROM [All_Staging_2016_2].[dbo].[lkp_usgPartnerMenchanism]
---	END
-
-
-
-exec CloseSession
 -- THE END
 END
---go
---exec [DataRequestUCSFDWAPICentral]
+go
+exec [DataRequestUCSFDWAPICentral]

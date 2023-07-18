@@ -1,24 +1,30 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[LineListVLNonSuppressed]', N'U') IS NOT NULL 			
-	TRUNCATE TABLE [REPORTING].[dbo].[LineListVLNonSuppressed]
+	DROP TABLE [REPORTING].[dbo].[LineListVLNonSuppressed]
 GO
 
-INSERT INTO [REPORTING].[dbo].[LineListVLNonSuppressed] (MFLCode,FacilityName,SubCounty,County,PartnerName,AgencyName,Gender, AgeGroup,AgeLastVisit, StartARTDate,Last12MonthVLResults,LastVisitDate,NextAppointmentDate, ARTOutcome
-)
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-SubCounty,
-County,
-p.PartnerName,
-a.AgencyName,
-Gender,
-g.DATIMAgeGroup as AgeGroup,
-art.AgeLastVisit,
-StartARTDateKey as StartARTDate,
-Last12MonthVLResults,
-art.LastVisitDate,
-art.NextAppointmentDate,
-aro.ARTOutcome
+	PatientIDHash,
+    PatientPKHash,
+    MFLCode,
+	f.FacilityName,
+	SubCounty,
+	County,
+	p.PartnerName,
+	a.AgencyName,
+	art.Gender,
+	g.DATIMAgeGroup as AgeGroup,
+	art.AgeLastVisit,
+	StartARTDateKey as StartARTDate,
+	ValidVLResult,
+	art.LastVisitDate,
+	art.NextAppointmentDate,
+	aro.ARTOutcome,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+	case 
+		when aro.ARTOutcome is null then 'Others'
+		else aro.ARTOutcomeDescription
+	end as ARTOutcomeDescription
+INTO [REPORTING].[dbo].[LineListVLNonSuppressed]
 FROM NDWH.dbo.FactViralLoads it
 INNER join NDWH.dbo.DimAgeGroup g on g.AgeGroupKey=it.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
@@ -27,4 +33,4 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 INNER JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimARTOutcome aro on aro.ARTOutcomeKey = art.ARTOutcomeKey
-WHERE Last12MVLResult = '>1000'
+WHERE ValidVLResultCategory1 in ('>1000', '200-999')

@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2023-04-26T14:44:04.5466749Z</LastWriteTime>
+    <LastWriteTime>2023-06-26T17:39:20.936951Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -18,7 +18,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2023-06-16T12:14:22.448967Z</LastWriteTime>
+      <LastWriteTime>2023-07-10T09:45:17.1322235Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -58,12 +58,12 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Fact_Tables.dtsx</Name>
-      <LastWriteTime>2023-04-17T09:08:13.1031499Z</LastWriteTime>
+      <LastWriteTime>2023-07-10T19:35:49.8374892Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>HashODSPIIColumns.dtsx</Name>
-      <LastWriteTime>2023-04-19T09:02:31.7832118Z</LastWriteTime>
+      <LastWriteTime>2023-07-10T09:44:27.6004227Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -113,7 +113,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>HTSMaster.dtsx</Name>
-      <LastWriteTime>2023-04-17T21:44:29.8464479Z</LastWriteTime>
+      <LastWriteTime>2023-06-26T16:55:43.3501552Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -128,12 +128,22 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>PrEPMaster.dtsx</Name>
-      <LastWriteTime>2023-04-06T09:09:19.2498645Z</LastWriteTime>
+      <LastWriteTime>2023-06-26T17:03:06.3943299Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>PrEP_DataCleanUP.dtsx</Name>
       <LastWriteTime>2023-04-06T09:09:19.2508677Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_Intermediate_HTS_Tables.dtsx</Name>
+      <LastWriteTime>2023-06-26T16:53:28.9632116Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>Load_Intermediate_PrEP_Tables.dtsx</Name>
+      <LastWriteTime>2023-06-26T17:01:57.6784422Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>

@@ -1,21 +1,21 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateOTZOutcome]', N'U') IS NOT NULL 	
-	TRUNCATE TABLE REPORTING.[dbo].[AggregateOTZOutcome]
+	drop  TABLE REPORTING.[dbo].[AggregateOTZOutcome]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateOTZOutcome (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, OTZEnrollmentYearMonth, Outcome, patients_totalOutcome)
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender,
-age.DATIMAgeGroup as AgeGroup,
-CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23) as OTZEnrollmentYearMonth,
-TransitionAttritionReason as Outcome,
-COUNT(TransitionAttritionReason) as patients_totalOutcome
-
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    Gender,
+    age.DATIMAgeGroup as AgeGroup,
+    CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23) as OTZEnrollmentYearMonth,
+    TransitionAttritionReason as Outcome,
+    COUNT(TransitionAttritionReason) as patients_totalOutcome,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+INTO REPORTING.dbo.AggregateOTZOutcome
 FROM NDWH.dbo.FactOTZ otz
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = otz.FacilityKey

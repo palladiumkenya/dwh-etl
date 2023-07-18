@@ -1,27 +1,25 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSMonthsLastTest]', N'U') IS NOT NULL 
-	TRUNCATE TABLE REPORTING.[dbo].[AggregateHTSMonthsLastTest]
+	drop TABLE REPORTING.[dbo].[AggregateHTSMonthsLastTest]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateHTSMonthsLastTest (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,
-	MonthLastTest, year, month, MonthName, Tested, Positive, Linked
-)
 SELECT DISTINCT
-MFLCode,
-f.FacilityName,
-County,
-SubCounty,
-p.PartnerName,
-a.AgencyName,
-Gender,
-age.DATIMAgeGroup as AgeGroup,
-MonthsLastTest MonthLastTest,
-year,
-month,
-FORMAT(cast(date as date), 'MMMM') MonthName,
-Sum(Tested) Tested,
-Sum(Positive) Positive,
-Sum(Linked) Linked
-
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    Gender,
+    age.DATIMAgeGroup as AgeGroup,
+    MonthsLastTest MonthLastTest,
+    year,
+    month,
+    FORMAT(cast(date as date), 'MMMM') MonthName,
+    Sum(Tested) Tested,
+    Sum(Positive) Positive,
+    Sum(Linked) Linked,
+    CAST(GETDATE() AS DATE) AS LoadDate
+ INTO REPORTING.dbo.AggregateHTSMonthsLastTest 
 FROM NDWH.dbo.FactHTSClientTests hts
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey

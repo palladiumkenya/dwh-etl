@@ -27,3 +27,5 @@ update ODS.dbo.Intermediate_PharmacyDispenseAsAtDate
 	set PatientIDHash = convert(nvarchar(100), hashbytes('SHA2_256', cast(PatientID  as nvarchar(100))), 2);
 update ODS.dbo.Intermediate_PregnancyAsATInitiation 
 	set PatientIDHash = convert(nvarchar(100), hashbytes('SHA2_256', cast(PatientID  as nvarchar(100))), 2);
+update ODS.dbo.Intermediate_ViralLoadsIntervals
+	set PatientIDHash = convert(nvarchar(100), hashbytes('SHA2_256', cast(PatientID  as nvarchar(100))), 2);

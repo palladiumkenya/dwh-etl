@@ -70,7 +70,8 @@ select
     ClientRisk,
     assessment_date.DateKey As AssessmentVisitDateKey,
     EligiblePrep,
-    ScreenedPrep
+    ScreenedPrep,
+    cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactPrepAssessments
 from source_data
 left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = source_data.PatientPKHash

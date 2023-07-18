@@ -1,4 +1,5 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[AggregateHTSUptake]', N'U') IS NOT NULL 
+
 DROP TABLE REPORTING.[dbo].[AggregateHTSUptake]
 GO
 WITH HTS_DATASET AS (
@@ -18,7 +19,8 @@ WITH HTS_DATASET AS (
         FORMAT(CAST(date AS date), 'MMMM') AS MonthName,
         SUM(Tested) AS Tested,
         SUM(Positive) AS Positive,
-        SUM(Linked) AS Linked
+        SUM(Linked) AS Linked,
+        CAST(GETDATE() AS DATE) AS LoadDate 
     FROM NDWH.dbo.FactHTSClientTests hts
     LEFT JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = hts.FacilityKey
     LEFT JOIN NDWH.dbo.DimAgency a ON a.AgencyKey = hts.AgencyKey
@@ -86,3 +88,4 @@ AND HTS_DATASET.Gender=TXNEW_DATASET.Gender
 AND HTS_DATASET.AgeGroup=TXNEW_DATASET.DATIMAgeGroup
 AND HTS_DATASET.Year=TXNEW_DATASET.Year 
 AND HTS_DATASET.Month=TXNEW_DATASET.Month;
+

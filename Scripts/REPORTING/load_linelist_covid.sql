@@ -1,8 +1,8 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[LineListCovid]', N'U') IS NOT NULL 		
-	TRUNCATE TABLE REPORTING.[dbo].[LineListCovid]
+
+	drop TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
-INSERT INTO REPORTING.dbo.LineListCovid (MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup,Covid19AssessmentDateKey, ReceivedCOVID19Vaccine, DateGivenFirstDoseKey,FirstDoseVaccineAdministered, DateGivenSecondDoseKey, SecondDoseVaccineAdministered, VaccinationStatus, VaccineVerification,BoosterGiven, BoosterDose, BoosterDoseDateKey, EverCOVID19Positive, COVID19TestDateKey, PatientStatus, AdmissionStatus, AdmissionUnit, MissedAppointmentDueToCOVID19, COVID19PositiveSinceLasVisit, COVID19TestDateSinceLastVisit, PatientStatusSinceLastVisit, AdmissionStatusSinceLastVisit, AdmissionStartDateKey, AdmissionEndDateKey, AdmissionUnitSinceLastVisit, SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome, CauseOfDeath) 
 SELECT DISTINCT
 MFLCode,
 f.FacilityName,
@@ -39,7 +39,9 @@ AdmissionUnitSinceLastVisit,
 SupplementalOxygenReceived,
 PatientVentilated,
 TracingFinalOutcome,
-CauseOfDeath
+CauseOfDeath,
+CAST(GETDATE() AS DATE) AS LoadDate 
+INTO REPORTING.dbo.LineListCovid 
 
 FROM NDWH.dbo.FactCovid cov
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = cov.FacilityKey
