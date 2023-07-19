@@ -41,7 +41,7 @@ from (
 		--END AS CurrentRegimen,
 		CurrentRegimen Lastregimen,
 		StartRegimen,
-		Gender,
+		pat.Gender,
 		CASE WHEN currentRegimenLine like 'First%' OR currentRegimenLine like '%PMTCT%' THEN 'First Regimen Line'
 			WHEN currentRegimenLine like 'Second%' THEN 'Second Regimen Line'
 			WHEN currentRegimenLine like 'Third%' THEN 'Third Regimen Line'
@@ -113,6 +113,6 @@ from (
 ) H 
 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
+Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,/*CurrentRegimen,*/ StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
 order by SiteCode;
 

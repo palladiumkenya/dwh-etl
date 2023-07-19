@@ -8,7 +8,8 @@ BEGIN
 			max(m.SiteCode) facilityId,
 			max(coalesce(h.emr,'Unkown')) emrId,
 			'CT' docketId,
-			1 upload
+			1 upload,
+			cast(getdate() as date) as LoadDate
 		from dwapicentral.dbo.facilitymanifest m 
 			inner join his_implementation.dbo.all_emrsites h
 		on m.SiteCode=h.MFL_Code
@@ -22,7 +23,8 @@ BEGIN
 				MAX(m.SiteCode) AS facilityId, 
 				MAX(COALESCE(h.emr, 'Unknown')) AS emrId, 
 				'HTS' AS docketId, 
-				1 AS upload
+				1 AS upload,
+				cast(getdate() as date) as LoadDate
 		FROM htscentral.DBO.manifests m 
 			INNER JOIN his_implementation.DBO.all_emrsites h ON m.SiteCode = h.MFL_Code 
 		GROUP BY	YEAR(DateArrived), 

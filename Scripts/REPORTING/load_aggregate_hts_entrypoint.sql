@@ -19,7 +19,7 @@ SELECT DISTINCT
     Sum(Positive) Positive,
     Sum(Linked) Linked,
     CAST(GETDATE() AS DATE) AS LoadDate
- INTO REPORTING.dbo.AggregateHTSEntr|\\\\\\\\\\\\\szypoint 
+ INTO REPORTING.dbo.AggregateHTSEntr
 FROM NDWH.dbo.FactHTSClientTests hts
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey

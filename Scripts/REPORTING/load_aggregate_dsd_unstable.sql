@@ -29,7 +29,7 @@ FROM (
     SubCounty,
     p.PartnerName,
     a.AgencyName,
-    Gender,
+    pat.Gender,
     age.DATIMAgeGroup as AgeGroup, 
     CASE WHEN DATEDIFF(MONTH,art.StartARTDateKey,GETDATE())>=12 THEN 0
         WHEN DATEDIFF(MONTH,art.StartARTDateKey,GETDATE())<12  THEN 1

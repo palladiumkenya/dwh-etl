@@ -4,7 +4,7 @@ GO
 
 SELECT DISTINCT
     MFLCode,
-    f.FacilityName,b
+    f.FacilityName,
     County,
     SubCounty,
     p.PartnerName,

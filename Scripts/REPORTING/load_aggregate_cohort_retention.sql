@@ -9,7 +9,7 @@ SELECT DISTINCT
     SubCounty,
     p.PartnerName,
     a.AgencyName,
-    Gender,
+    pat.Gender,
     age.DATIMAgeGroup as AgeGroup,
     CONVERT(char(7), cast(StartARTDateKey as datetime), 23) as StartARTYearMonth,
     COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as patients_startedART,

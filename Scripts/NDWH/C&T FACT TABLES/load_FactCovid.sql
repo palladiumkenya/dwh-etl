@@ -39,7 +39,7 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientPKHash, Covid.SiteCode ORDER B
         PatientVentilated,
         TracingFinalOutcome ,
         CauseOfDeath,
-        datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
+        datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
         
 from ODS.dbo.CT_Covid as Covid
 left join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = Covid.PatientPKHash and patient.SiteCode = Covid.SiteCode

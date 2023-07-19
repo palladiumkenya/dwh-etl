@@ -24,7 +24,7 @@ FROM (
         SubCounty,
         p.PartnerName,
         a.AgencyName,
-        Gender,
+        pat.Gender,
         age.DATIMAgeGroup AS AgeGroup, 
         CASE 
             WHEN ABS(DATEDIFF(DAY, LastVisitDate, NextAppointmentDate)) <= 89 THEN '<3 Months'

@@ -9,7 +9,7 @@ with AdverseEvents as (
             MFLCode,
             pat.PatientKey,
             g.DATIMAgeGroup,
-            Gender,
+            pat.Gender,
             f.FacilityName,
             County,
             SubCounty,
