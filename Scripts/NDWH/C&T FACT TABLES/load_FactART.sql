@@ -59,7 +59,6 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             StartARTDate.DateKey As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
             ARTOutcome.ARTOutcomeKey,
-            Gender,
             lastRegimen As CurrentRegimen,
             LastRegimenLine As CurrentRegimenline,
             StartRegimen,
