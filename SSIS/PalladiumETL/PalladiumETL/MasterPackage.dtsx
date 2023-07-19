@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="133"
-  DTS:VersionGUID="{C8D92885-441B-42FC-AABE-A775ABEBD22C}">
+  DTS:VersionBuild="135"
+  DTS:VersionGUID="{54B6F5D4-7D41-4767-99E4-B6248A0725C3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />

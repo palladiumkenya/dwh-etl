@@ -11,7 +11,7 @@ SELECT DISTINCT
 	County,
 	p.PartnerName,
 	a.AgencyName,
-	art.Gender,
+	pat.Gender,
 	g.DATIMAgeGroup as AgeGroup,
 	art.AgeLastVisit,
 	StartARTDateKey as StartARTDate,
@@ -19,7 +19,7 @@ SELECT DISTINCT
 	art.LastVisitDate,
 	art.NextAppointmentDate,
 	aro.ARTOutcome,
-    CAST(GETDATE() AS DATE) AS LoadDate 
+    CAST(GETDATE() AS DATE) AS LoadDate ,
 	case 
 		when aro.ARTOutcome is null then 'Others'
 		else aro.ARTOutcomeDescription
