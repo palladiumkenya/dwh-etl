@@ -18,7 +18,7 @@ SELECT
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
 	ValidVLResultCategory,
-    CAST(GETDATE() AS DATE) AS LoadDate 
+	CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOptimizeStartRegimens]
 FROM
 	(
@@ -45,17 +45,17 @@ FROM
 		DATIMAgeGroup,
 
 		CASE
-			WHEN ISNUMERIC( vl.Last12MonthVLResults ) = 1 THEN
+			WHEN ISNUMERIC( vl.ValidVLResult ) = 1 THEN
 				CASE
-					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) < 400.00 THEN
+					WHEN CAST ( Replace( vl.ValidVLResult, ',', '' ) AS FLOAT ) < 400.00 THEN
 						'VL' 
-					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) BETWEEN 400.00 AND 1000.00 THEN
+					WHEN CAST ( Replace( vl.ValidVLResult, ',', '' ) AS FLOAT ) BETWEEN 400.00 AND 1000.00 THEN
 						'LVL' 
-					WHEN CAST ( Replace( vl.Last12MonthVLResults, ',', '' ) AS FLOAT ) > 1000.00 THEN
+					WHEN CAST ( Replace( vl.ValidVLResult, ',', '' ) AS FLOAT ) > 1000.00 THEN
 						'HVL' ELSE NULL 
 				END 
 			ELSE CASE	
-				WHEN vl.Last12MonthVLResults IN ( 'Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level' ) THEN
+				WHEN vl.ValidVLResult IN ( 'Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level' ) THEN
 					'VL' ELSE NULL 
 				END 
 		END AS Last12MVLResult,
