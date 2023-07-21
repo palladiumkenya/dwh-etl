@@ -35,6 +35,9 @@ BEGIN
 						  ,Approach                                                           
 						  ,HtsRiskCategory
 						  ,HtsRiskScore
+						  ,[OtherReferredServices]
+						  ,[ReferredForServices]
+						  ,[ReferredServices]
 							  
 					 FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a					  
 					 LEFT JOIN ods.dbo.lkp_patient_source mm
@@ -70,7 +73,12 @@ BEGIN
 					and a.TestDate = b.TestDate
 					and a.EncounterId = b.EncounterId
 
-					)		
+					)	
+					
+		WHEN NOT MATCHED THEN 
+			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,[OtherReferredServices],[ReferredForServices],[ReferredServices]) 
+			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,[OtherReferredServices],[ReferredForServices],[ReferredServices])
+
 	   WHEN MATCHED THEN
 			UPDATE SET 
 					   
@@ -83,12 +91,11 @@ BEGIN
 					a.[CoupleDiscordant]	=b.[CoupleDiscordant],
 					a.[Consent]				=b.[Consent],
 					a.HtsRiskCategory		= b.HtsRiskCategory,
-					a.HtsRiskScore			= b.HtsRiskScore
+					a.HtsRiskScore			= b.HtsRiskScore,
+					a.[OtherReferredServices] =b.[OtherReferredServices],
+					a.[ReferredForServices]  =b.[ReferredForServices],
+					a.[ReferredServices]  = b.[ReferredServices];
 
-
-		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
-			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
 
 END
 

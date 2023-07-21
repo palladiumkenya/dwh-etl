@@ -17,7 +17,7 @@ ao.ARTOutcome,
 SUM(CASE WHEN CPIMSUniqueIdentifier IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
 count(*) as OVCElligiblePatientCount,
 CAST(GETDATE() AS DATE) AS LoadDate 
-
+into [REPORTING].[dbo].AggregateOVCCount
 from [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
@@ -38,6 +38,7 @@ GROUP BY
 	,Gender,
 	g.DATIMAgeGroup,
 	pat.IsTXCurr,
+	ao.ARTOutcome,
 	case 
 		when ao.ARTOutcome is null then 'Others'
 		else ao.ARTOutcomeDescription

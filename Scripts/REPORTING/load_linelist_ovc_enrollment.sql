@@ -9,7 +9,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	art.Gender, 
+	pat.Gender, 
 	g.DATIMAgeGroup,
 	enrld.Date as  OVCEnrollmentDate,
 	rp.RelationshipWithPatient,

@@ -10,7 +10,7 @@ SELECT DISTINCT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	art.Gender,
+	pat.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	Year(StartARTDateKey) StartYear,
 	Month(StartARTDateKey) StartMonth,
@@ -26,5 +26,5 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = art.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
 INNER JOIN NDWH.dbo.DimARTOutcome ot on ot.ARTOutcomeKey = art.ARTOutcomeKey
 
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, art.Gender, age.DATIMAgeGroup, Year(StartARTDateKey) ,
+GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, pat.Gender, age.DATIMAgeGroup, Year(StartARTDateKey) ,
 	Month(StartARTDateKey) ,ARTOutcomeDescription

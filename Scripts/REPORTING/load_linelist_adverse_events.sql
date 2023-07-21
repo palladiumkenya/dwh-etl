@@ -10,7 +10,7 @@ with AdverseEvents as (
             PatientPKHash,
             NUPI,
             g.DATIMAgeGroup,
-            art.Gender,
+            pat.Gender,
             f.FacilityName,
             County,
             SubCounty,

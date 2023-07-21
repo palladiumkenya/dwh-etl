@@ -12,7 +12,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	art.Gender,
+	pat.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,

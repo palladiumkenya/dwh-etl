@@ -9,7 +9,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	art.Gender,
+	pat.Gender,
 	YEAR ( art.StartARTDateKey ) AS StartARTYear,
 	g.DATIMAgeGroup AS AgeGroup,
 	COUNT (vl.ValidVLResultCategory2 ) AS TotalValidVLResultCategory,
@@ -47,7 +47,7 @@ GROUP BY
 	SubCounty, 
 	p.PartnerName, 
 	a.AgencyName,
-	art.Gender, 
+	pat.Gender, 
 	g.DATIMAgeGroup, 
 	art.StartARTDateKey,
 	case 
