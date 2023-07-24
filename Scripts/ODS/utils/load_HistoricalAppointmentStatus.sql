@@ -40,7 +40,7 @@ with clinical_visits_as_of_date as (
         VisitDate,
         NextAppointmentDate  
     from  ODS.dbo.CT_PatientVisits
-    where SiteCode > 0 and VisitDate <= @as_of_date
+    where SiteCode > 0 and NextAppointmentDate <= @as_of_date
 ),
     pharmacy_visits_as_of_date as (
      /* get pharmacy dispensations as of date */
@@ -53,7 +53,7 @@ with clinical_visits_as_of_date as (
         DispenseDate,
         ExpectedReturn
     from ODS.dbo.CT_PatientPharmacy
-    where SiteCode > 0 and DispenseDate <= @as_of_date  
+    where SiteCode > 0 and ExpectedReturn <= @as_of_date  
     ),
 
     patient_art_and_enrollment_info as (
@@ -76,7 +76,7 @@ with clinical_visits_as_of_date as (
     from ODS.dbo.CT_ARTPatients
     left join ODS.dbo.CT_Patient  on  CT_Patient.PatientPK = CT_ARTPatients.PatientPK
     and CT_Patient.SiteCode = CT_ARTPatients.SiteCode
-	where  ODS.dbo.CT_ARTPatients.SiteCode > 0 and ODS.dbo.CT_ARTPatients.LastVisit <= @as_of_date 
+	where  ODS.dbo.CT_ARTPatients.SiteCode > 0 and ODS.dbo.CT_ARTPatients.ExpectedReturn <= @as_of_date 
     ),
     visit_encounter_as_of_date_ordering as (
      /* order visits as of date by the VisitDate */
@@ -214,7 +214,7 @@ last_exit_as_of_date as (
 Select  [DateRecieved],ROW_NUMBER()OVER(Partition by Sitecode Order by [DateRecieved] Desc) as Num ,
 	SiteCode,
     cast( [DateRecieved]as date) As DateReceived
-from DWAPICentral.dbo.FacilityManifest 
+from ODS.dbo.CT_FacilityManifest 
     ),
 
  Uploads_as_of_date as (
@@ -222,7 +222,7 @@ from DWAPICentral.dbo.FacilityManifest
     select 
         SiteCode,
         DateRecieved
-    from DWAPICentral.dbo.FacilityManifest 
+    from ODS.dbo.CT_FacilityManifest 
     where DateRecieved <= @as_of_date 
     ),
   Uploads_as_of_date_ordering as (
@@ -270,12 +270,12 @@ from DWAPICentral.dbo.FacilityManifest
 
 
         second_last_encounter as (
-    /* preparing the latest encounter records as of date */
+    /* preparing the second latest encounter records as of date */
     select
          secondlast_visits_and_dispense_encounters_combined_tbl .PatientIDHash,
          secondlast_visits_and_dispense_encounters_combined_tbl .SiteCode,
-        secondlast_visits_and_dispense_encounters_combined_tbl .PatientPK,
-        secondlast_visits_and_dispense_encounters_combined_tbl .PatientID,
+         secondlast_visits_and_dispense_encounters_combined_tbl .PatientPK,
+         secondlast_visits_and_dispense_encounters_combined_tbl .PatientID,
          secondlast_visits_and_dispense_encounters_combined_tbl .PatientPKhash,
          secondlast_visits_and_dispense_encounters_combined_tbl .LastEncounterDate as Second_Last_EncounterDate,
         case 
@@ -368,11 +368,12 @@ ARTOutcomesCompuation as (
     ARTOutcomesCompuation.ARTDurationMonths,
     last_upload_as_of_date.DateRecieved 
 from ARTOutcomesCompuation  
-left join last_exit_as_of_date on last_exit_as_of_date.PatientIDHash=ARTOutcomesCompuation.PatientIDHash
-and last_exit_as_of_date.PatientPK= ARTOutcomesCompuation.PatientPK
+left join last_exit_as_of_date on  last_exit_as_of_date.PatientPK= ARTOutcomesCompuation.PatientPK
 and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
  left  join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode 
-    where  NextAppointmentDate > LastencounterDate 
+               WHERE ARTOutcomesCompuation.NextAppointmentDate > ARTOutcomesCompuation.LastEncounterDate
+   -- AND ARTOutcomesCompuation.NextAppointmentDate > DATEADD(month, -6, ARTOutcomesCompuation.AsOfDate)
+
 
     )
  
