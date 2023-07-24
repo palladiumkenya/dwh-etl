@@ -32,6 +32,7 @@ SELECT DISTINCT
 	vl.EligibleVL,
 	ValidVLResult,
 	ValidVLResultCategory1,
+	ValidVLResultCategory2,
 	HasValidVL,
 	COUNT(CASE
 	WHEN art.PatientKey is not null THEN 1
@@ -78,5 +79,6 @@ GROUP BY
 	EligibleVL,
 	ValidVLResult,
 	ValidVLResultCategory1,
+	ValidVLResultCategory2,
 	HasValidVL
 GO
