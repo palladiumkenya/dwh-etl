@@ -38,6 +38,7 @@ BEGIN
 			,[Positive_25_Plus_F]
 			,Sites.SDP PartnerName
 			,Sites.SDP_Agency AgencyName
+			,CAST(GETDATE() AS DATE) AS LoadDate
 		FROM NDWH.dbo.FACT_HTS_DHIS2 CT
 		LEFT JOIN ODS.dbo.ALL_EMRSites Sites on CT.SiteCode=Sites.MFL_Code
 	)Y 

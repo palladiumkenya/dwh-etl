@@ -87,7 +87,8 @@ select
     tb_start_treatment.DateKey as StartTBTreatmentDateKey,
     tb_diagnosis.DateKey as TBDiagnosisDateKey,
     combined_ipt_data.OnIPT,
-    combined_ipt_data.hasTB
+    combined_ipt_data.hasTB,
+    cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactTPT
 from combined_ipt_data
 left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = combined_ipt_data.PatientPKHash

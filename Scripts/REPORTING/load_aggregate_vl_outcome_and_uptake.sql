@@ -9,7 +9,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	pat.Gender,
 	YEAR ( art.StartARTDateKey ) AS StartARTYear,
 	g.DATIMAgeGroup AS AgeGroup,
 	COUNT (vl.ValidVLResultCategory2 ) AS TotalValidVLResultCategory,
@@ -28,7 +28,8 @@ SELECT
 	SUM (CASE WHEN _24MonthVL IS NOT NULL THEN 1 END ) AS VLAt24Months,
 	SUM ( [24MonthVLSup] ) AS VLAt24Months_Sup,
 	SUM (CASE WHEN _6MonthVL IS NOT NULL THEN 1 END ) AS VLAt6Months,
-	SUM ( [6MonthVLSup] ) AS VLAt6Months_Sup
+	SUM ( [6MonthVLSup] ) AS VLAt6Months_Sup,
+    CAST(GETDATE() AS DATE) AS LoadDate  
 INTO [REPORTING].[dbo].AggregateVLUptakeOutcome
 FROM NDWH.dbo.FactViralLoads vl
 LEFT JOIN NDWH.dbo.DimAgeGroup g ON g.AgeGroupKey= vl.AgeGroupKey
@@ -38,7 +39,7 @@ LEFT JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = vl.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = vl.PartnerKey
 LEFT JOIN NDWH.dbo.FactART art ON art.PatientKey = vl.PatientKey 
 LEFT join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
-WHERE IsTXCurr=1 and outcome.ARTOutcome = 'V'
+WHERE IsTXCurr = 1 and outcome.ARTOutcome = 'V'
 GROUP BY 
 	MFLCode, 
 	f.FacilityName, 
@@ -46,7 +47,7 @@ GROUP BY
 	SubCounty, 
 	p.PartnerName, 
 	a.AgencyName,
-	Gender, 
+	pat.Gender, 
 	g.DATIMAgeGroup, 
 	art.StartARTDateKey,
 	case 

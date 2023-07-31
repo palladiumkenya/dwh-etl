@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[NDWH].[Dbo].[FactCovid]', N'U') IS NOT NULL
 	DROP TABLE [NDWH].[Dbo].[FactCovid];
 BEGIN
 With Covid As  (
-SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
+SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientPKHash, Covid.SiteCode ORDER BY Covid19AssessmentDate Desc)AS RowNumber,
         Covid.PatientIDHash  ,
         Covid.PatientPKHash ,
         Covid.SiteCode ,
@@ -14,7 +14,10 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Cov
         FirstDoseVaccineAdministered,
         DateGivenSecondDose,
         SecondDoseVaccineAdministered ,
-        VaccinationStatus ,
+        case 
+           when VaccinationStatus is null or VaccinationStatus = '' then 'Not Accessed'
+           else VaccinationStatus
+        end as VaccinationStatus,
         VaccineVerification ,
         BoosterGiven ,
         BoosterDose ,
@@ -37,6 +40,7 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientIDHash,Covid.PatientPKHash,Cov
         TracingFinalOutcome ,
         CauseOfDeath,
         datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
+        
 from ODS.dbo.CT_Covid as Covid
 left join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = Covid.PatientPKHash and patient.SiteCode = Covid.SiteCode
 left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = Covid.PatientPKHash and last_encounter.SiteCode = Covid.SiteCode

@@ -1,5 +1,6 @@
+
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAdverseEvents', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].AggregateAdverseEvents
+	Drop TABLE [REPORTING].[dbo].AggregateAdverseEvents
 
 GO
 
@@ -8,7 +9,7 @@ with AdverseEvents as (
             MFLCode,
             pat.PatientKey,
             g.DATIMAgeGroup,
-            Gender,
+            pat.Gender,
             f.FacilityName,
             County,
             SubCounty,
@@ -31,7 +32,6 @@ with AdverseEvents as (
             pat.IsTXCurr = 1
 )
 
-INSERT INTO [REPORTING].[dbo].AggregateAdverseEvents (MFLCode,DATIMAgeGroup,Gender,FacilityName,County,Subcounty,PartnerName,AgencyName,AdverseEvent,AdverseEventCause,AdverseEventActionTaken,AdverseEventRegimen,Severity,AdverseEventCount, AdverseClientsCount)
 SELECT
     MFLCode,
     DATIMAgeGroup,
@@ -47,8 +47,9 @@ SELECT
     AdverseEventRegimen,
     Severity,
 	count(*) as AdverseEventsCount,
-	count(DISTINCT PatientKey) as AdverseClientsCount
-
+	count(DISTINCT PatientKey) as AdverseClientsCount,
+    cast(getdate() as date) as LoadDate
+INTO [REPORTING].[dbo].AggregateAdverseEvents 
 FROM AdverseEvents
 GROUP BY
     MFLCode,

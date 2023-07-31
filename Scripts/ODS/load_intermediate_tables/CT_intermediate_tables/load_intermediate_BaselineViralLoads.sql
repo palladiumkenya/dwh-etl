@@ -25,7 +25,7 @@ BEGIN
 	select 
  		source_BaseLineViralLoads.*,
 		cast(getdate() as date) as LoadDate
-	into [ODS].[dbo].[Intermediate_BaseLineViralLoads]
+	INTO [ODS].[dbo].[Intermediate_BaseLineViralLoads]
 	from source_BaseLineViralLoads
 	where rank = 1
 END

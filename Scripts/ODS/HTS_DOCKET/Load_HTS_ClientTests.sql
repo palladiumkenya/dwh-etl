@@ -1,3 +1,4 @@
+
 BEGIN
   --truncate table [ODS].[dbo].[HTS_ClientTests]
 		MERGE [ODS].[dbo].[HTS_ClientTests] AS a
@@ -34,6 +35,9 @@ BEGIN
 						  ,Approach                                                           
 						  ,HtsRiskCategory
 						  ,HtsRiskScore
+						  ,[OtherReferredServices]
+						  ,[ReferredForServices]
+						  ,[ReferredServices]
 							  
 					 FROM [HTSCentral].[dbo].[HtsClientTests](NoLock) a					  
 					 LEFT JOIN ods.dbo.lkp_patient_source mm
@@ -69,21 +73,29 @@ BEGIN
 					and a.TestDate = b.TestDate
 					and a.EncounterId = b.EncounterId
 
-					)		
-	  -- WHEN MATCHED THEN
-			--UPDATE SET 
-					   
-			--		a.[EverTestedForHiv]	=b.[EverTestedForHiv],
-			--		a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
-			--		a.[ClientTestedAs]		=b.[ClientTestedAs],					
-			--		a.[PatientGivenResult]	=b.[PatientGivenResult],
-			--		a.[TbScreening]			=b.[TbScreening],
-			--		a.[ClientSelfTested]	=b.[ClientSelfTested],
-			--		a.[CoupleDiscordant]	=b.[CoupleDiscordant],
-			--		a.[Consent]				=b.[Consent]
-
+					)	
+					
 		WHEN NOT MATCHED THEN 
-			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore) 
-			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore);
+			INSERT(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,[OtherReferredServices],[ReferredForServices],[ReferredServices]) 
+			VALUES(FacilityName,SiteCode,PatientPk,Emr,Project,EncounterId,TestDate,EverTestedForHiv,MonthsSinceLastTest,ClientTestedAs,EntryPoint,TestStrategy,TestResult1,TestResult2,FinalTestResult,PatientGivenResult,TbScreening,ClientSelfTested,CoupleDiscordant,TestType,Consent,Setting,Approach,HtsRiskCategory,HtsRiskScore,[OtherReferredServices],[ReferredForServices],[ReferredServices])
+
+	   WHEN MATCHED THEN
+			UPDATE SET 
+					   
+					a.[EverTestedForHiv]	=b.[EverTestedForHiv],
+					a.[MonthsSinceLastTest]	=b.[MonthsSinceLastTest],
+					a.[ClientTestedAs]		=b.[ClientTestedAs],					
+					a.[PatientGivenResult]	=b.[PatientGivenResult],
+					a.[TbScreening]			=b.[TbScreening],
+					a.[ClientSelfTested]	=b.[ClientSelfTested],
+					a.[CoupleDiscordant]	=b.[CoupleDiscordant],
+					a.[Consent]				=b.[Consent],
+					a.HtsRiskCategory		= b.HtsRiskCategory,
+					a.HtsRiskScore			= b.HtsRiskScore,
+					a.[OtherReferredServices] =b.[OtherReferredServices],
+					a.[ReferredForServices]  =b.[ReferredForServices],
+					a.[ReferredServices]  = b.[ReferredServices];
+
 
 END
+

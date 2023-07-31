@@ -37,7 +37,8 @@ BEGIN
             DateElicited,
             Dob,
             LinkDateLinkedToCare,
-			dateDiff(yy,Dob,DateElicited) as AgeAtElicitation
+			dateDiff(yy,Dob,DateElicited) as AgeAtElicitation,
+            cast(getdate() as date) as LoadDate
             
             
 

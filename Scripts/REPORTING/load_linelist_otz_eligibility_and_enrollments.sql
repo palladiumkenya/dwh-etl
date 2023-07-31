@@ -3,14 +3,15 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]', N'U') 
 GO
 --- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)
 SELECT DISTINCT
-	patientPKHash,
+	PatientPKHash,
+    PatientIDHash,
 	MFLCode,
 	f.FacilityName,
 	County,
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	pat.Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
@@ -30,12 +31,14 @@ SELECT DISTINCT
 	LastVL,
 	vl.EligibleVL,
 	ValidVLResult,
-	vl.ValidVLResultCategory2 as ValidVLResultCategory,
-	vl.HasValidVL as HasValidVL,
+	ValidVLResultCategory1,
+	ValidVLResultCategory2,
+	HasValidVL,
 	COUNT(CASE
 	WHEN art.PatientKey is not null THEN 1
 	ELSE 0 END) as Eligible,
-	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled
+	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
 FROM NDWH.dbo.FACTART art
 INNER JOIN NDWH.dbo.DimAgeGroup age ON age.AgeGroupKey= art.AgeGroupKey
@@ -47,13 +50,15 @@ LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = art.PatientKey AND vl.Pa
 FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 WHERE age.Age BETWEEN 10 AND 24  AND IsTXCurr = 1
 GROUP BY 
-	patientPKHash, MFLCode,
+	PatientPKHash, 
+    PatientIDHash,
+    MFLCode,
 	f.FacilityName,
 	County,
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender,
+	pat.Gender,
 	age.DATIMAgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
@@ -71,8 +76,9 @@ GROUP BY
 	ModulesCompletedToday_OTZ_Beyond,
 	FirstVL,
 	LastVL,
-	vl.EligibleVL,
+	EligibleVL,
 	ValidVLResult,
+	ValidVLResultCategory1,
 	ValidVLResultCategory2,
-	vl.HasValidVL
+	HasValidVL
 GO

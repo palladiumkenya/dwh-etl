@@ -1,19 +1,21 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateCohortRetention]', N'U') IS NOT NULL 	
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateCohortRetention]
+	Drop TABLE [REPORTING].[dbo].[AggregateCohortRetention]
 GO
 
-INSERT INTO REPORTING.dbo.AggregateCohortRetention (MFLCode,FacilityName,County,SubCounty, PartnerName, AgencyName,Gender,AgeGroup, StartARTYearMonth,patients_startedART)
 SELECT DISTINCT
-	MFLCode,
-	f.FacilityName,
-	County,
-	SubCounty,
-	p.PartnerName,
-	a.AgencyName,
-	Gender,
-	age.DATIMAgeGroup as AgeGroup,
-	CONVERT(char(7), cast(StartARTDateKey as datetime), 23) as StartARTYearMonth,
-COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as patients_startedART
+
+    MFLCode,
+    f.FacilityName,
+    County,
+    SubCounty,
+    p.PartnerName,
+    a.AgencyName,
+    pat.Gender,
+    age.DATIMAgeGroup as AgeGroup,
+    CONVERT(char(7), cast(StartARTDateKey as datetime), 23) as StartARTYearMonth,
+    COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as patients_startedART,
+    cast(getdate() as date) as LoadDate
+INTO REPORTING.dbo.AggregateCohortRetention 
 FROM NDWH.dbo.FactART it
 INNER join NDWH.dbo.DimAgeGroup age on age.Age=it.AgeAtARTStart
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey

@@ -1,5 +1,5 @@
 IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepCascade]') AND type in (N'U')) 
-TRUNCATE TABLE REPORTING.[dbo].[AggregatePrepCascade]
+drop TABLE REPORTING.[dbo].[AggregatePrepCascade]
 GO
 
 WITH prepCascade AS  (
@@ -17,6 +17,7 @@ WITH prepCascade AS  (
 			Sum(EligiblePrep) As EligiblePrep,
 			sum(ScreenedPrep) As Screened,
 			Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepCT
+
 	FROM NDWH.dbo.FactPrepAssessments prep
 
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
@@ -72,23 +73,8 @@ prepStart AS (
 			enrol.Month,
 			enrol.Year
 )
-INSERT INTO REPORTING.dbo.AggregatePrepCascade
-	(
-		MFLCode,		
-		FacilityName,
-		County,
-		SubCounty,
-		PartnerName,
-		AgencyName,
-		Gender,
-		AgeGroup,
-		Month,
-		Year,
-		EligiblePrep,
-		Screened,
-		PrepCT,
-		StartedPrep	
-	)
+
+	
 SELECT
 	COALESCE(p.MFLCode, s.MFLCode) AS MFLCode,		
 	COALESCE(p.FacilityName, s.FacilityName) AS FacilityName,
@@ -103,7 +89,9 @@ SELECT
 	COALESCE(p.EligiblePrep, 0) AS EligiblePrep,
 	COALESCE(p.Screened, 0) AS Screened,
 	COALESCE(p.PrepCT, 0) AS PrepCT,
-	COALESCE(s.StartedPrep, 0) AS StartedPrep
+	COALESCE(s.StartedPrep, 0) AS StartedPrep,
+    CAST(GETDATE() AS DATE) AS LoadDate 
+  INTO REPORTING.dbo.AggregatePrepCascade
 FROM prepCascade p
 
 FULL OUTER JOIN prepStart s on p.MFLCode = s.MFLCode and s.FacilityName = p.FacilityName and s.County = p.County and s.SubCounty = p.SubCounty and s.PartnerName = p.PartnerName and s.AgencyName = p.AgencyName and s.Gender = p.Gender and s.AgeGroup = s.AgeGroup and AssMonth = EnrollmentMonth and AssYear = EnrollmentYear

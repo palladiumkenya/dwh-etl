@@ -1,49 +1,51 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSDApptsByStability]', N'U') IS NOT NULL 
-	TRUNCATE TABLE [REPORTING].[dbo].[AggregateDSDApptsByStability]
-GO
+    DROP TABLE [REPORTING].[dbo].[AggregateDSDApptsByStability]
 
-INSERT INTO REPORTING.dbo.AggregateDSDApptsByStability (MFLCode,FacilityName,County,SubCounty,PartnerName,AgencyName,Gender,AgeGroup, AppointmentsCategory,StabilityAssessment,Stability, patients_number)
 SELECT 
-MFLCode,
-FacilityName,
-County,
-SubCounty,
-PartnerName,
-AgencyName,
-Gender,
-AgeGroup, 
-AppointmentsCategory,
-StabilityAssessment,
-Stability,
-count(isTXCurr) patients_number
+    MFLCode,
+    FacilityName,
+    County,
+    SubCounty,
+    PartnerName,
+    AgencyName,
+    Gender,
+    AgeGroup, 
+    AppointmentsCategory,
+    StabilityAssessment,
+    Stability,
+    COUNT(isTXCurr) AS patients_number,
+    CAST(GETDATE() AS DATE) AS LoadDate
+INTO REPORTING.dbo.AggregateDSDApptsByStability 
 FROM (
-	SELECT DISTINCT
-	MFLCode,
-	f.FacilityName,
-	County,
-	SubCounty,
-	p.PartnerName,
-	a.AgencyName,
-	Gender,
-	age.DATIMAgeGroup as AgeGroup, 
-	Case when ABS(DATEDIFF(DAY,LastVisitDate,NextAppointmentDate)) <=89 THEN '<3 Months'
-		when ABS(DATEDIFF(DAY,LastVisitDate,NextAppointmentDate)) >=90 and ABS(DATEDIFF(DAY,LastVisitDate,NextAppointmentDate)) <=150 THEN '<3-5 Months'
-		When ABS(DATEDIFF(DAY,LastVisitDate,NextAppointmentDate)) >151 THEN '>6+ Months'
-		Else 'Unclassified' END as AppointmentsCategory,
-	StabilityAssessment,
-	Case when StabilityAssessment= 'Unstable' Then 0
-		when StabilityAssessment= 'Stable' Then 1
-		else '999' END as Stability,
-	isTXCurr
-
-	FROM NDWH.dbo.FactLatestObs lob
-	INNER JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = lob.AgeGroupKey
-	INNER JOIN NDWH.dbo.DimFacility f on f.FacilityKey = lob.FacilityKey
-	INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = lob.AgencyKey
-	INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
-	INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey
-	INNER JOIN NDWH.dbo.FactART art on art.PatientKey = lob.PatientKey
-	WHERE pat.isTXCurr = 1
+    SELECT DISTINCT
+        MFLCode,
+        f.FacilityName,
+        County,
+        SubCounty,
+        p.PartnerName,
+        a.AgencyName,
+        pat.Gender,
+        age.DATIMAgeGroup AS AgeGroup, 
+        CASE 
+            WHEN ABS(DATEDIFF(DAY, LastVisitDate, NextAppointmentDate)) <= 89 THEN '<3 Months'
+            WHEN ABS(DATEDIFF(DAY, LastVisitDate, NextAppointmentDate)) >= 90 AND ABS(DATEDIFF(DAY, LastVisitDate, NextAppointmentDate)) <= 150 THEN '<3-5 Months'
+            WHEN ABS(DATEDIFF(DAY, LastVisitDate, NextAppointmentDate)) > 151 THEN '>6+ Months'
+            ELSE 'Unclassified' 
+        END AS AppointmentsCategory,
+        StabilityAssessment,
+        CASE 
+            WHEN StabilityAssessment = 'Unstable' THEN 0
+            WHEN StabilityAssessment = 'Stable' THEN 1
+            ELSE '999' 
+        END AS Stability,
+        isTXCurr
+    FROM NDWH.dbo.FactLatestObs lob
+    INNER JOIN NDWH.dbo.DimAgeGroup age ON age.AgeGroupKey = lob.AgeGroupKey
+    INNER JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = lob.FacilityKey
+    INNER JOIN NDWH.dbo.DimAgency a ON a.AgencyKey = lob.AgencyKey
+    INNER JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = lob.PatientKey
+    INNER JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = lob.PartnerKey
+    INNER JOIN NDWH.dbo.FactART art ON art.PatientKey = lob.PatientKey
+    WHERE pat.isTXCurr = 1
 ) A
-GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, StabilityAssessment, AppointmentsCategory, Stability
-GO
+GROUP BY MFLCode, FacilityName, County, SubCounty, PartnerName, AgencyName, Gender, AgeGroup, StabilityAssessment, AppointmentsCategory, Stability;

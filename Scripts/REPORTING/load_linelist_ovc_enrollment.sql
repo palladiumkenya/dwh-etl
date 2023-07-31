@@ -9,7 +9,7 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
-	Gender, 
+	pat.Gender, 
 	g.DATIMAgeGroup,
 	enrld.Date as  OVCEnrollmentDate,
 	rp.RelationshipWithPatient,
@@ -34,10 +34,14 @@ SELECT
 	else 'non DTG' 
 	end as LastRegimen,
 	onMMD,
-	ao.ARTOutcome,
+	case 
+		when ao.ARTOutcome is null then 'Others'
+		else ao.ARTOutcomeDescription
+	end as ARTOutcomeDescription,
 	EligibleVL,
 	HasValidVL as HasValidVL,
-	ValidVLSup as VirallySuppressed
+	ValidVLSup as VirallySuppressed,
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].LineListOVCEnrollments
 FROM [NDWH].[dbo].[FactOVC] it
 INNER JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
