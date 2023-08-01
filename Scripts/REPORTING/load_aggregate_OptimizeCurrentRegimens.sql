@@ -16,6 +16,7 @@ SELECT
 	StartARTYr,
 	CurrentVL,
 	SUM(ISTxCurr) As TXCurr,
+	CurrentRegimen,
 	Lastregimen,
 	RegimenLine,
 	LastRegimenClean,
@@ -113,6 +114,6 @@ from (
 ) H 
 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,/*CurrentRegimen,*/ StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
+Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
 order by SiteCode;
 
