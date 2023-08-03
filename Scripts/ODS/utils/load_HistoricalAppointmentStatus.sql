@@ -1,11 +1,14 @@
 declare 
-@start_date date = '2019-01-31',
-@end_date date = '2023-04-30';
+@start_date date = '2023-06-01',
+@end_date date = '2023-06-30';
 
 with dates as (
-      select datefromparts(year(@start_date), month(@start_date), 1) as dte
+
+    
+      
+ select datefromparts(year(@start_date), month(@start_date), 1) as dte
       union all
-      select dateadd(month, 1, dte)
+      select dateadd(month, 1, dte) --incrementing month by month until the date is less than or equal to @end_date
       from dates
       where dateadd(month, 1, dte) <= @end_date
       )
@@ -28,6 +31,7 @@ open cursor_AsOfDates
 fetch next from cursor_AsOfDates into @as_of_date
 while @@FETCH_STATUS = 0
 
+
 begin 
 with clinical_visits_as_of_date as (
     /* get visits as of date */
@@ -40,7 +44,8 @@ with clinical_visits_as_of_date as (
         VisitDate,
         NextAppointmentDate  
     from  ODS.dbo.CT_PatientVisits
-    where SiteCode > 0 and NextAppointmentDate <= @as_of_date
+    where SiteCode > 0 and NextAppointmentDate >= DATEADD(month, -6, @as_of_date) 
+
 ),
     pharmacy_visits_as_of_date as (
      /* get pharmacy dispensations as of date */
@@ -53,7 +58,7 @@ with clinical_visits_as_of_date as (
         DispenseDate,
         ExpectedReturn
     from ODS.dbo.CT_PatientPharmacy
-    where SiteCode > 0 and ExpectedReturn <= @as_of_date  
+    where SiteCode > 0 and ExpectedReturn >= DATEADD(month, -6, @as_of_date) 
     ),
 
     patient_art_and_enrollment_info as (
@@ -76,7 +81,7 @@ with clinical_visits_as_of_date as (
     from ODS.dbo.CT_ARTPatients
     left join ODS.dbo.CT_Patient  on  CT_Patient.PatientPK = CT_ARTPatients.PatientPK
     and CT_Patient.SiteCode = CT_ARTPatients.SiteCode
-	where  ODS.dbo.CT_ARTPatients.SiteCode > 0 and ODS.dbo.CT_ARTPatients.ExpectedReturn <= @as_of_date 
+	where  ODS.dbo.CT_ARTPatients.SiteCode > 0 and ODS.dbo.CT_ARTPatients.ExpectedReturn <=@as_of_date
     ),
     visit_encounter_as_of_date_ordering as (
      /* order visits as of date by the VisitDate */
@@ -160,7 +165,9 @@ exits_as_of_date as (
         ExitReason,
 		ReEnrollmentDate
     from ODS.dbo.CT_PatientStatus
-    where ExitDate <= @as_of_date 
+    where  ExitDate <= @as_of_date
+    --ExitDate>= DATEADD(month, -6, @as_of_date) 
+
 ),
     exits_as_of_date_ordering as (
     /* order the exits by the ExitDate*/
@@ -223,7 +230,7 @@ from ODS.dbo.CT_FacilityManifest
         SiteCode,
         DateRecieved
     from ODS.dbo.CT_FacilityManifest 
-    where DateRecieved <= @as_of_date 
+    where DateRecieved <=@as_of_date
     ),
   Uploads_as_of_date_ordering as (
     /* order the Uploads by the DateReceived*/
@@ -377,10 +384,10 @@ and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
 
     )
  
-  Insert into ODS.dbo.[HistoricalAppointmentStatus]
-     select * from Summary 
-	   --Select top 1* into ODS.dbo.[HistoricalAppointmentStatus]
-   --from Summary
+  --Insert into ODS.dbo.[HistoricalAppointmentStatus]
+    -- select * from Summary 
+	   Select * into ODS.dbo.[HistoricalAppointmentStatus]
+   from Summary
       where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') 
 
 fetch next from cursor_AsOfDates into @as_of_date
@@ -391,7 +398,7 @@ end
 --close cursor_AsOfDates 
 --deallocate cursor_AsOfDates 
 --truncate table ODS.dbo.[HistoricalAppointmentStatus]
---alter table ODS.dbo.[HistoricalAppointmentStatus] drop column NextappointmentDate
+--drop  table ODS.dbo.[HistoricalAppointmentStatus] drop column NextappointmentDate
 
 
 
