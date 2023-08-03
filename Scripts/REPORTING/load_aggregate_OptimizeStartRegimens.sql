@@ -14,6 +14,7 @@ SELECT
 	StartRegimen,
 	StartARTMonth,
 	StartARTYr,
+    AsOfDate,
 	CurrentVL,
 	SUM ( ISTxCurr ) TXCurr,
 	Firstregimen,
@@ -31,6 +32,7 @@ FROM
 		AgencyName,
 		DateName( m, StartARTDateKey ) AS StartARTMonth,
 		YEAR ( StartARTDateKey ) AS StartARTYr,
+        EOMONTH(date.Date ) AS AsOfDate,
 		CASE
 			WHEN StartRegimen LIKE '3TC+DTG+TDF' THEN
 			'TLD' 
@@ -71,6 +73,7 @@ FROM
 	INNER JOIN NDWH.dbo.DimFacility fac ON art.FacilityKey = fac.FacilityKey
 	INNER JOIN NDWH.dbo.DimPatient pat ON art.PatientKey = pat.PatientKey
 	LEFT JOIN NDWH.dbo.FACTViralLoads vl ON art.PatientKey = vl.PatientKey 
+    LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = art.StartARTDateKey 
 	WHERE ISTxCurr = 1 
 	) H 
 
@@ -87,7 +90,7 @@ FROM
 		Gender, 
 		StartARTMonth, 
 		StartARTYr, 
+        AsOfDate,
 		Firstregimen,
-    CurrentVL,
+        CurrentVL,
 		ValidVLResultCategory;
-
