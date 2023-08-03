@@ -4,6 +4,7 @@ GO
 
 
 SELECT DISTINCT
+
     MFLCode,
     f.FacilityName,
     County,

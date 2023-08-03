@@ -17,6 +17,7 @@ SELECT
     AsOfDate,
 	CurrentVL,
 	SUM(ISTxCurr) As TXCurr,
+	CurrentRegimen,
 	Lastregimen,
 	RegimenLine,
 	LastRegimenClean,
@@ -102,35 +103,33 @@ from (
 			WHEN CurrentRegimen in ('(FTC300mg)+(TDF300mg)','(FTC200mg)+(TDF300mg)')THEN 'TDF+FTC'
 			ELSE CurrentRegimen 
 		END As LastRegimenClean
-	FROM NDWH.dbo.FACTART ART
+	from NDWH.dbo.FACTART ART
     INNER JOIN NDWH.dbo.DimAgeGroup b on ART.AgeGroupKey=b.AgeGroupKey
     INNER JOIN NDWH.dbo.DimPartner part ON art.PartnerKey = part.PartnerKey
     INNER JOIN NDWH.dbo.DimAgency a ON art.AgencyKey = a.AgencyKey
     INNER JOIN NDWH.dbo.DimFacility fac ON art.FacilityKey = fac.FacilityKey
     INNER JOIN NDWH.dbo.DimPatient pat ON art.PatientKey = pat.PatientKey
     LEFT JOIN NDWH.dbo.FactLatestObs obs ON obs.PatientKey = pat.PatientKey
-    LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = pat.PatientKey
+    LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = pat.PatientKey 
     LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = art.StartARTDateKey 
-
 	where IsTXCurr = 1
 ) H 
 Group By 
     SiteCode, 
     FacilityName,
     County, 
-    Subcounty,
+    Subcounty, 
     PartnerName,
-    AgencyName,
-    /*CurrentRegimen,*/ 
+    AgencyName,CurrentRegimen, 
     StartRegimen, 
-    Gender, 
+    Gender,
     StartARTMonth,
     StartARTYr,
     AsOfDate,
-    Agegroup ,
+    Agegroup,
     DATIMAgeGroup,
     Gender,
-    RegimenLine,
+    RegimenLine, 
     WeightBands,
     AgeBands, 
     LastRegimenClean,
