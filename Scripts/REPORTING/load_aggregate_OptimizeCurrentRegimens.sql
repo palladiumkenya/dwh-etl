@@ -16,6 +16,7 @@ SELECT
 	StartARTYr,
 	CurrentVL,
 	SUM(ISTxCurr) As TXCurr,
+	CurrentRegimen,
 	Lastregimen,
 	RegimenLine,
 	LastRegimenClean,
@@ -33,12 +34,12 @@ from (
 		AgencyName,
 		DateName(m,StartARTDateKey) AS StartARTMonth,
 		Year(StartARTDateKey) AS StartARTYr,
-		--CASE 
-			--WHEN CurrentRegimen like '3TC+DTG+TDF' THEN 'TLD'
-			--WHEN CurrentRegimen like '3TC+EFV+TDF' THEN 'TLE'
-			--WHEN CurrentRegimen like '%NVP%' THEN 'NVP'
-			--ELSE  'Other Regimen' 
-		--END AS CurrentRegimen,
+		CASE 
+			WHEN CurrentRegimen like '3TC+DTG+TDF' THEN 'TLD'
+			WHEN CurrentRegimen like '3TC+EFV+TDF' THEN 'TLE'
+			WHEN CurrentRegimen like '%NVP%' THEN 'NVP'
+			ELSE  'Other Regimen' 
+		END AS CurrentRegimen,
 		CurrentRegimen Lastregimen,
 		StartRegimen,
 		pat.Gender,
@@ -113,6 +114,6 @@ from (
 ) H 
 
 
-Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,/*CurrentRegimen,*/ StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
+Group By SiteCode, FacilityName,County, Subcounty, PartnerName,AgencyName,CurrentRegimen, StartRegimen, Gender, StartARTMonth,StartARTYr,Agegroup ,DATIMAgeGroup,Gender,RegimenLine, WeightBands,AgeBands, LastRegimenClean, Lastregimen,CurrentVL
 order by SiteCode;
 

@@ -63,8 +63,8 @@ latest_mmd as (
 		PatientID,
 		SiteCode,
 		case 
-			when abs(datediff(day,LastEncounterDate, NextAppointmentDate)) <=84 then 0
-			when abs(datediff(day,LastEncounterDate, NextAppointmentDate))  >= 85 THEN  1 
+			when abs(datediff(day,LastEncounterDate, NextAppointmentDate)) <=89 then 0
+			when abs(datediff(day,LastEncounterDate, NextAppointmentDate))  >= 90 THEN  1 
 		end as onMMD
 	from ODS.dbo.Intermediate_LastPatientEncounter
 ),
