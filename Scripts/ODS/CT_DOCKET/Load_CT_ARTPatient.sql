@@ -16,6 +16,7 @@ BEGIN
 						,PA.[PreviousARTUse]
 						,PA.[PreviousARTPurpose]
 						,PA.[DateLastUsed]
+						,PA.[Date_Created],PA.[Date_Last_Modified]
 						,GETDATE () AS DateAsOf
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
@@ -38,11 +39,11 @@ BEGIN
 
 						INSERT(
 							  ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf
+							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified]
 							  ) 
 						VALUES(
 								ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf
+								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified]
 						      )
 				
 					WHEN MATCHED THEN
@@ -73,7 +74,9 @@ BEGIN
 								a.[PreviousARTUse]			=b.[PreviousARTUse]	,
 								a.[PreviousARTPurpose]		=b.[PreviousARTPurpose],
 								a.[DateLastUsed]			=b.[DateLastUsed],
-								a.lastvisit					=b.lastvisit;
+								a.lastvisit					=b.lastvisit,
+								a.[Date_Created]			=b.[Date_Created],
+								a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 
 								with cte AS (
 								Select

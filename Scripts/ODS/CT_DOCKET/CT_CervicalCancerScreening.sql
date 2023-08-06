@@ -29,6 +29,8 @@ BEGIN
 						a.ScreeningType								=b.ScreeningType,
 						a.ScreeningResult							=b.ScreeningResult,
 						a.PostTreatmentComplicationCause			=b.PostTreatmentComplicationCause,
-						a.ReferralReason							=b.ReferralReason;
+						a.ReferralReason							=b.ReferralReason,
+						a.[Date_Created]							=b.[Date_Created],
+						a.[Date_Last_Modified]						=b.[Date_Last_Modified];
 				
 	END

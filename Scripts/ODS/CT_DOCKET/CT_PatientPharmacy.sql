@@ -53,7 +53,7 @@ BEGIN
 					  ,PP.RegimenChangeSwitchReason RegimenChangeSwitchReason
 					  ,PP.StopRegimenReason StopRegimenReason
 					  ,PP.StopRegimenDate StopRegimenDate,					  
-					  PP.ID
+					  PP.ID, PP.[Date_Created],PP.[Date_Last_Modified]
 
 						FROM [DWAPICentral].[dbo].[PatientExtract] P 
 						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
@@ -69,8 +69,8 @@ BEGIN
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate) 
-					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate)
+					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified]) 
+					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified])
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
@@ -81,7 +81,9 @@ BEGIN
 						a.RegimenLine				=b.RegimenLine,
 						a.RegimenChangedSwitched	=b.RegimenChangedSwitched,
 						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
-						a.StopRegimenReason			=b.StopRegimenReason;
+						a.StopRegimenReason			=b.StopRegimenReason,
+						 a.[Date_Created]			=b.[Date_Created],
+						 a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 
 				
 			

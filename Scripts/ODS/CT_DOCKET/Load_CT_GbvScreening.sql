@@ -20,7 +20,7 @@ BEGIN
 								ELSE P.[Project]
 							END AS Project,
 							GSE.[IPV] AS IPV,GSE.[PhysicalIPV],GSE.[EmotionalIPV],GSE.[SexualIPV],GSE.[IPVRelationship]						
-							,GSE.ID 
+							,GSE.ID,GSE.[Date_Created],GSE.[Date_Last_Modified]
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID AND GSE.Voided = 0
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -33,8 +33,8 @@ BEGIN
 						AND  a.ID = b.ID)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified]) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified])
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -43,7 +43,9 @@ BEGIN
 						a.PhysicalIPV		=b.PhysicalIPV,
 						a.EmotionalIPV		=b.EmotionalIPV,
 						a.SexualIPV			=b.SexualIPV,
-						a.IPVRelationship	=b.IPVRelationship;
+						a.IPVRelationship	=b.IPVRelationship,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 					
 					
 					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]

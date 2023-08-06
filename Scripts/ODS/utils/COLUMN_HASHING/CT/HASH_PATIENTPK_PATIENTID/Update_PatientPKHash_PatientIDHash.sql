@@ -160,6 +160,12 @@
 		JOIN ODS.dbo.CT_Patient p
 		on ccs .SiteCode = p.SiteCode and ccs .PatientPK = p.PatientPK
 		WHERE ccs.PatientPKHash IS NULL OR ccs.PatientIDHash IS NULL;
+
+	update Ovc
+		set CPIMSUniqueIdentifierHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(Ovc.CPIMSUniqueIdentifier  as nvarchar(36))), 2)
+	from [ODS].[dbo].[CT_Ovc]  Ovc		
+	WHERE Ovc.CPIMSUniqueIdentifierHash IS NULL;
+
 	
 
 

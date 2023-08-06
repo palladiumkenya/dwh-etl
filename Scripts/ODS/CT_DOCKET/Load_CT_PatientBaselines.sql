@@ -30,7 +30,7 @@ BEGIN
 			   ELSE P.[Project] 
 			   END AS [Project] 
 			  ,PB.[Voided],PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
-			  ,PB.[lastWABDate]
+			  ,PB.[lastWABDate],PB.[Date_Created],PB.[Date_Last_Modified]
 
 
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
@@ -45,8 +45,8 @@ BEGIN
 
 
 		WHEN NOT MATCHED THEN 
-		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate])
-		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate])
+		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified])
+		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified])
 
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -72,7 +72,9 @@ BEGIN
 						a.eWAB			= b.eWAB,
 						a.eWABDate		= b.eWABDate,
 						a.lastWAB		= b.lastWAB	,
-						a.lastWABDate	= b.lastWABDate;
+						a.lastWABDate	= b.lastWABDate,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 
 
 					

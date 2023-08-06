@@ -49,7 +49,8 @@ BEGIN
 						   END AS [Project] 
 						,PL.DateSampleTaken,
 						PL.SampleType,
-						p.ID 
+						p.ID ,
+						reason,PL.[Date_Created],PL.[Date_Last_Modified]
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -66,8 +67,8 @@ BEGIN
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType) 
-						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType)
+						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified]) 
+						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified])
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -75,7 +76,10 @@ BEGIN
 							a.FacilityName		=b.FacilityName	,
 							a.EnrollmentTest	=b.EnrollmentTest,		
 							a.DateSampleTaken	=b.DateSampleTaken	,
-							a.SampleType		=b.SampleType;
+							a.SampleType		=b.SampleType,
+							a.reason			=b.reason,
+							a.[Date_Created]			=b.[Date_Created],
+							a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 
 					
 

@@ -47,7 +47,7 @@ BEGIN
 						OE.[OTZEnrollmentDate],OE.[TransferInStatus],OE.[ModulesPreviouslyCovered],OE.[ModulesCompletedToday],OE.[SupportGroupInvolvement],OE.[Remarks],
 						OE.[TransitionAttritionReason],
 						OE.[OutcomeDate]
-						,P.ID
+						,P.ID,OE.[Date_Created],OE.[Date_Last_Modified]
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
@@ -62,8 +62,8 @@ BEGIN
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified]) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified])
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -73,7 +73,9 @@ BEGIN
 						a.ModulesCompletedToday		=b.ModulesCompletedToday,
 						a.SupportGroupInvolvement	=b.SupportGroupInvolvement,
 						a.Remarks					=b.Remarks,
-						a.TransitionAttritionReason	=b.TransitionAttritionReason;
+						a.TransitionAttritionReason	=b.TransitionAttritionReason,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 						
 
 					UPDATE [ODS].[dbo].[CT_Otz_Log]

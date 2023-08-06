@@ -17,7 +17,7 @@ SELECT
 	CASE
 	When EnrolledinCPIMS ='Yes' Then 'Yes'Else 'No'
 	End as EnrolledinCPIMSCleaned,
-	CPIMSUniqueIdentifier,
+	CPIMSUniqueIdentifierHash,
 	PartnerOfferingOVCServices,
 	OVCExitReason,
 	exd.Date as ExitDate,
