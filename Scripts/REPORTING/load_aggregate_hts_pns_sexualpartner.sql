@@ -50,8 +50,8 @@ line_list_dataset as (
 		tested.Date as TestDate,
 		tested.year,
 		tested.month,
-		FORMAT(cast(tested.Date as date), 'MMMM') MonthName,
-        EOMONTH(tested.Date) as AsofDate,
+		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
+        EOMONTH(tested.date) as AsofDate,
 		Gender,
 		DATIMAgeGroup as Agegroup,
 		case 
@@ -84,6 +84,7 @@ line_list_dataset as (
 	left join NDWH.dbo.DimDate linked on linked.DateKey = dataset.DateLinkedToCareKey
 	left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = dataset.AgeGroupKey
 )
+
 select 
 	Mflcode, 
 	FacilityName, 
@@ -102,7 +103,7 @@ select
 	sum(positive) as Positive,
     sum(Linked) as Linked,
 	sum(KP) as KnownPositive,
-    CAST(GETDATE() AS DATE) AS LoadDate  
+     CAST(GETDATE() AS DATE) AS LoadDate  
 into REPORTING.dbo.AggregateHTSPNSSexualPartner
 from line_list_dataset
 group by 
@@ -117,4 +118,4 @@ group by
     AsofDate,
     Gender,
     Agegroup,
-    AgencyName
+    AgencyName;
