@@ -89,6 +89,7 @@ enriched_dataset as (
 select
     YearIIT,
     MonthIIT,
+    EOMONTH(CAST(CONCAT(YearIIT, '-', MonthIIT, '-01') AS DATE)) AS AsofDate,
     agency.AgencyName,
     partner.PartnerName,
     facility.FacilityName,
@@ -99,8 +100,8 @@ select
     IITPatients,
     DefaulterTracedClients,
     IITPatients - DefaulterTracedClients as DefaulterNotTracedClients,
-     CAST(GETDATE() AS DATE) AS LoadDate 
-into AggregateIITTracingStatus
+    CAST(GETDATE() AS DATE) AS LoadDate 
+into [REPORTING].[dbo].AggregateIITTracingStatus
 from enriched_dataset
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = enriched_dataset.FacilityKey
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = enriched_dataset.PartnerKey
@@ -108,5 +109,7 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = enriched_dataset.Ag
 left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = enriched_dataset.AgeGroupKey
 
 END
+
+
 
 

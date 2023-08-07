@@ -50,6 +50,7 @@ line_list_dataset as (
 		tested.year,
 		tested.month,
 		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
+        EOMONTH(tested.date) as AsOfDate,
 		Gender,
 		DATIMAgeGroup as Agegroup,
 		case 
@@ -94,7 +95,8 @@ select
 	Agegroup,
 	year,
 	month,
-	MonthName, 
+	MonthName,
+    AsOfDate, 
 	sum(elicited) as ChildrenElicited,
 	sum(tested) as ChildrenTested,
 	sum(positive) as ChildrenPositive,
@@ -112,8 +114,7 @@ group by
     year,
     month,
     monthName,
+    AsOfDate,
     Gender,
     Agegroup,
     AgencyName;
-
-

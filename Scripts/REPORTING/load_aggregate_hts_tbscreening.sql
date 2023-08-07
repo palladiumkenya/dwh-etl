@@ -18,9 +18,10 @@ WITH tested AS (
             when TBScreening is not null then 'Screened for TB'
             else 'Not Screened for TB' 
         end as TBScreening_Grp,
-        year,
-        month,
-        FORMAT(cast(date as date), 'MMMM') MonthName,      
+        d.year,
+        d.month,
+        FORMAT(cast(date as date), 'MMMM') MonthName,  
+        EOMONTH(d.[Date]) as AsOfDate,  
         Tested,        
         Positive,         
         Linked
@@ -34,8 +35,6 @@ WITH tested AS (
     LEFT JOIN NDWH.dbo.DimDate d on d.DateKey = hts.DateTestedKey
     WHERE TestType in ('Initial Test', 'Initial')
 )
-
-
 SELECT 
     MFLCode,
     FacilityName,
@@ -50,6 +49,7 @@ SELECT
     year,
     month,
     MonthName,
+    AsOfDate,
     Sum(Tested) Tested,
     Sum(Positive) Positive,
     Sum(Linked) Linked,
@@ -69,4 +69,5 @@ GROUP BY
     year, 
     month, 
     MonthName, 
+    AsOfDate,
     TBScreening_Grp
