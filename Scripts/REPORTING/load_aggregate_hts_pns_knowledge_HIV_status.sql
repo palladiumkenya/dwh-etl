@@ -47,6 +47,7 @@ line_list_dataset AS (
         tested.[year],
         tested.[month],
         FORMAT(CAST(tested.Date AS date), 'MMMM') AS MonthName, 
+        EOMONTH(tested.date) as AsOfDate,
         Gender,
         DATIMAgeGroup AS Agegroup,
         CASE 
@@ -98,7 +99,8 @@ SELECT
     Agegroup,
     [year], 
     [month], 
-    MonthName, 
+    MonthName,
+    AsOfDate, 
     SUM(elicited) AS ContactElicited, 
     SUM(tested) AS ContactTested,
     SUM(Linked) AS Linked,
@@ -118,6 +120,7 @@ GROUP BY
     [year],
     [month],
     MonthName,
+    AsOfDate,
     Gender,
     Agegroup, 
     AgencyName;
