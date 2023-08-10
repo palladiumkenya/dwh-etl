@@ -14,7 +14,7 @@ Gender,
 g.DATIMAgeGroup,
 pat.IsTXCurr as TXCurr,
 ao.ARTOutcome,
-SUM(CASE WHEN CPIMSUniqueIdentifier IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
+SUM(CASE WHEN CPIMSUniqueIdentifierHash IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
 count(*) as OVCElligiblePatientCount,
 CAST(GETDATE() AS DATE) AS LoadDate 
 into [REPORTING].[dbo].AggregateOVCCount
