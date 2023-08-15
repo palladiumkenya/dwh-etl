@@ -1,6 +1,12 @@
 
 BEGIN
     --truncate table [ODS].[dbo].[MNCH_MotherBabyPairs]
+	BEGIN
+		update MNCHCentral.[dbo].[MotherBabyPairs]
+			set MNCHCentral.[dbo].[MotherBabyPairs].FacilityId = [Facilities].id
+			FROM MNCHCentral.[dbo].[MotherBabyPairs], [MNCHCentral].[dbo].[Facilities]
+			where [MotherBabyPairs].SiteCode =Facilities.SiteCode;
+	END
 
 	MERGE [ODS].[dbo].[MNCH_MotherBabyPairs] AS a
 			USING(
