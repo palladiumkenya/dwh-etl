@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>PalladiumETL</Name>
-    <LastWriteTime>2023-08-08T14:52:28.8478393Z</LastWriteTime>
+    <LastWriteTime>2023-08-15T05:19:22.1725577Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -18,7 +18,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>MasterPackage.dtsx</Name>
-      <LastWriteTime>2023-08-14T07:06:17.3460951Z</LastWriteTime>
+      <LastWriteTime>2023-08-14T12:33:07.0442715Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -38,12 +38,12 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Load_Aggregate_Tables.dtsx</Name>
-      <LastWriteTime>2023-08-07T07:10:20.6750874Z</LastWriteTime>
+      <LastWriteTime>2023-08-15T05:03:18.7144261Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>C$TMaster.dtsx</Name>
-      <LastWriteTime>2023-05-05T07:49:48.9208814Z</LastWriteTime>
+      <LastWriteTime>2023-08-15T05:18:54.8167904Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
@@ -113,7 +113,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>HTSMaster.dtsx</Name>
-      <LastWriteTime>2023-06-26T16:55:43.3501552Z</LastWriteTime>
+      <LastWriteTime>2023-08-15T16:20:04.4595476Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>

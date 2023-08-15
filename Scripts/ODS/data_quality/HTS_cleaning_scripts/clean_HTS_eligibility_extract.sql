@@ -82,9 +82,9 @@ WHERE VisitDate < CAST('2019-01-01' AS DATE)
 GO
 
 --clean TracingOutcome
-UPDATE ODS.dbo.HTS_EligibilityExtract
-    SET TracingOutcome = 'Contacted and Not Linked'
-WHERE TracingOutcome IN ('Contacted but not linked')
+--UPDATE ODS.dbo.HTS_EligibilityExtract
+--    SET TracingOutcome = 'Contacted and Not Linked'  column doesn't exit
+--WHERE TracingOutcome IN ('Contacted but not linked')
 
 GO
 
