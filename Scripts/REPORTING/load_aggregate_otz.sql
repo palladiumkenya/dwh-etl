@@ -12,8 +12,8 @@ SELECT DISTINCT
 	Gender,
 	age.DATIMAgeGroup as AgeGroup,
 	CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23) as OTZEnrollmentYearMonth,
+    EOMONTH(date.Date) as AsofDate,
 	count(*) as Enrolled,
-	-- sum(case when otz.OTZEnrollmentDateKey is null then 1 else 0 end) as NotEnrolled,
 	sum(case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end) as CompletedTraining,
 	TransferInStatus,
 	ModulesPreviouslyCovered,
@@ -32,29 +32,31 @@ SELECT DISTINCT
 	vl.ValidVLResultCategory2 as ValidVLResultCategory,
 	SUM(vl.HasValidVL) as HasValidVL,
 	Count(*) TotalOTZ,
-     CAST(GETDATE() AS DATE) AS LoadDate 
+    CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateOTZ]
 FROM NDWH.dbo.FactOTZ otz
-	INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
-	INNER join NDWH.dbo.DimFacility f on f.FacilityKey = otz.FacilityKey
-	INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = otz.AgencyKey
-	INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
-	INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
-	LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
-	WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
-	GROUP BY 
-		MFLCode, 
-		f.FacilityName, 
-		County, 
-		SubCounty, 
-		p.PartnerName,
-		a.AgencyName, 
-		Gender, 
-		age.DATIMAgeGroup, 
-		CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23), 
-		TransferInStatus, 
-		ModulesPreviouslyCovered, 
-		vl.FirstVL, 
-		vl.LastVL, 
-		vl.ValidVLResult,
-		vl.ValidVLResultCategory2
+INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
+INNER join NDWH.dbo.DimFacility f on f.FacilityKey = otz.FacilityKey
+INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = otz.AgencyKey
+INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
+INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
+LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
+LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
+WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
+GROUP BY 
+	MFLCode, 
+	f.FacilityName, 
+	County, 
+	SubCounty, 
+	p.PartnerName,
+	a.AgencyName, 
+	Gender, 
+	age.DATIMAgeGroup, 
+	CONVERT(char(7), cast(cast(OTZEnrollmentDateKey as char) as datetime), 23), 
+	EOMONTH(date.Date),
+	TransferInStatus, 
+	ModulesPreviouslyCovered, 
+	vl.FirstVL, 
+	vl.LastVL, 
+	vl.ValidVLResult,
+	vl.ValidVLResultCategory2

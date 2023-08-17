@@ -15,6 +15,7 @@ select
     diffcare.DifferentiatedCare,
     date.[Year] as Year,
     date.[Month] as Month,
+    EOMONTH(date.Date) as AsOfDate,
     TracingOutcome,
     count(tracing.PatientKey) as patients,
     CAST(GETDATE() AS DATE) AS LoadDate  
@@ -39,10 +40,7 @@ group by
     diffcare.DifferentiatedCare,
     date.[Year],
     date.[Month],
+    EOMONTH(date.Date),
     TracingOutcome
 
 END
-
-
-
-

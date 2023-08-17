@@ -14,6 +14,7 @@ SELECT DISTINCT
     g.DATIMAgeGroup as AgeGroup,
     year(StartARTDateKey) as StartARTYear,
     convert(varchar(7),StartARTDateKey,126) as StartARTYearMonth,
+    EOMONTH(date.Date) as AsOfDate,
     PERCENTILE_CONT(0.5)
             WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
             OVER (PARTITION BY Year(StartARTDateKey)) AS MedianTimeToARTDiagnosis_year,
@@ -37,6 +38,8 @@ SELECT DISTINCT
             OVER (PARTITION BY Gender) AS MedianTimeToART_Gender,
     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
             OVER (PARTITION BY g.DATIMAgeGroup) AS MedianTimeToART_DATIM_AgeGroup,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY it.TimeToARTDiagnosis DESC)
+            OVER (PARTITION BY EOMONTH(date.Date)) AS MedianTimeToART_AsOfDate,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[AggregateTimeToART]
 FROM NDWH.dbo.FactART it
@@ -45,4 +48,5 @@ INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
 INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
-WHERE MFLCode >1 and Year(StartARTDateKey) between 2011 and Year(GetDate())
+INNER JOIN NDWH.dbo.DimDate as date on date.DateKey = it.StartARTDateKey
+WHERE MFLCode > 1 and Year(StartARTDateKey) between 2011 and Year(GetDate())

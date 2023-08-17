@@ -13,6 +13,7 @@ SELECT DISTINCT
     age.DATIMAgeGroup AS AgeGroup,
     d.Month AS ExitMonth,		
     d.Year AS ExitYear,
+    EOMONTH(d.[Date]) as AsOfDate,
     ExitReason,
     COUNT(DISTINCT CONCAT(PrepNumber, PatientPKHash, MFLCode)) AS PrepDiscontinuations,
     CAST(GETDATE() AS DATE) AS LoadDate 
@@ -35,4 +36,5 @@ GROUP BY
     age.DATIMAgeGroup,		
     d.Month,
     d.Year,
+    EOMONTH(d.[Date]),
     ExitReason;
