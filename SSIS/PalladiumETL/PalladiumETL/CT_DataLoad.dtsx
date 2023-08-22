@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\CT\Checkpoint"
-  DTS:CheckpointUsage="1"
   DTS:CreationDate="2/22/2023 8:17:00 PM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -13,9 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
-  DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="10"
-  DTS:VersionGUID="{2E8F0286-03D8-42C8-B0B4-14B41A37FBB4}">
+  DTS:VersionBuild="11"
+  DTS:VersionGUID="{FB7F89C7-9FE2-44D2-BBDB-FFFF45E26740}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -264,7 +261,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="CT_PatientPharmacy"
-          DTS:ThreadHint="18">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -282,7 +279,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_AllergiesChronicIllness"
-          DTS:ThreadHint="19">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -300,7 +297,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_ContactListing"
-          DTS:ThreadHint="20">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -318,7 +315,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DefaulterTracing"
-          DTS:ThreadHint="15">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -336,7 +333,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DepressionScreening"
-          DTS:ThreadHint="16">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -354,7 +351,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_FacilityManifest"
-          DTS:ThreadHint="17">
+          DTS:ThreadHint="5">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -385,7 +382,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_all_EMRSites"
-          DTS:ThreadHint="5">
+          DTS:ThreadHint="6">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -403,7 +400,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_AdverseEvents"
-          DTS:ThreadHint="3">
+          DTS:ThreadHint="7">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -421,7 +418,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_ARTPatient"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="8">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -439,7 +436,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Covid"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="9">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -457,7 +454,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_DrugAlcoholScreening"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="10">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -475,7 +472,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Patient"
-          DTS:ThreadHint="6">
+          DTS:ThreadHint="11">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -493,7 +490,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientLabs"
-          DTS:ThreadHint="7">
+          DTS:ThreadHint="12">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -511,7 +508,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientStatus"
-          DTS:ThreadHint="4">
+          DTS:ThreadHint="13">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -542,7 +539,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_EnhancedAdherenceCounselling"
-          DTS:ThreadHint="11">
+          DTS:ThreadHint="14">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -560,7 +557,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_GbvScreening"
-          DTS:ThreadHint="12">
+          DTS:ThreadHint="15">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -578,7 +575,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Ipt"
-          DTS:ThreadHint="13">
+          DTS:ThreadHint="16">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -596,7 +593,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Otz"
-          DTS:ThreadHint="14">
+          DTS:ThreadHint="17">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -614,7 +611,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_Ovz"
-          DTS:ThreadHint="10">
+          DTS:ThreadHint="18">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -632,7 +629,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientBaselines"
-          DTS:ThreadHint="8">
+          DTS:ThreadHint="19">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -650,7 +647,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_CT_PatientVisits"
-          DTS:ThreadHint="9">
+          DTS:ThreadHint="20">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -675,108 +672,108 @@
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="179.6,41.6"
+          Size="179.333333333334,41.3333333333334"
           Id="Package\CHUNK_2\CT_PatientPharmacy"
           TopLeft="14.415408443136,7.80000516573608" />
         <NodeLayout
-          Size="193.6,41.6"
+          Size="193.333333333334,41.3333333333334"
           Id="Package\CHUNK_2\Load_CT_AllergiesChronicIllness"
           TopLeft="283.646187549231,6.22424753305583" />
         <NodeLayout
-          Size="192,41.6"
+          Size="192,41.3333333333334"
           Id="Package\CHUNK_2\Load_CT_ContactListing"
           TopLeft="17.3846372231941,72.0121286974578" />
         <NodeLayout
-          Size="172,41.6"
+          Size="172,41.3333333333334"
           Id="Package\CHUNK_2\Load_CT_DefaulterTracing"
           TopLeft="293.646187916028,73.5878863301381" />
         <NodeLayout
-          Size="238.4,41.6"
+          Size="238.666666666667,41.3333333333334"
           Id="Package\CHUNK_2\Load_CT_DepressionScreening"
           TopLeft="22.876947215042,136.860613432097" />
         <NodeLayout
-          Size="198,41.6"
+          Size="198,41.3333333333334"
           Id="Package\CHUNK_2\Load_CT_FacilityManifest"
           TopLeft="295.184649510921,136.648493657275" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="550,311.2"
+          PanelSize="550,311.333333333334"
           Size="550,354"
           Id="Package\CHUNK_2"
           TopLeft="535.384635022407,22.3212113669862" />
         <NodeLayout
-          Size="172,41.6"
+          Size="172,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_all_EMRSites"
           TopLeft="250.307703029475,72.751520900709" />
         <NodeLayout
-          Size="194.4,41.6"
+          Size="194.666666666667,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_AdverseEvents"
           TopLeft="23.3230940497139,5.5" />
         <NodeLayout
-          Size="188.4,41.6"
+          Size="188.666666666667,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_ARTPatient"
           TopLeft="23.7692331816319,129.903037105294" />
         <NodeLayout
-          Size="151.2,41.6"
+          Size="151.333333333334,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_Covid"
           TopLeft="248.38462603586,127.08485439058" />
         <NodeLayout
-          Size="163.2,41.6"
+          Size="163.333333333334,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_DrugAlcoholScreening"
           TopLeft="263.461548858846,200.648493657274" />
         <NodeLayout
-          Size="184,41.6"
+          Size="184,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_Patient"
           TopLeft="23.7692331816319,70.3878844516885" />
         <NodeLayout
-          Size="187.2,41.6"
+          Size="187.333333333334,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_PatientLabs"
           TopLeft="28.4615402390971,203.490918739309" />
         <NodeLayout
-          Size="187.2,41.6"
+          Size="187.333333333334,41.3333333333334"
           Id="Package\CHUNK_ONE\Load_CT_PatientStatus"
           TopLeft="242.615395055015,6.56970032813693" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="497.2,309.6"
-          Size="497.2,352.4"
+          PanelSize="497.333333333334,309.333333333334"
+          Size="497.333333333334,352.666666666667"
           Id="Package\CHUNK_ONE"
           TopLeft="30.7692318978397,20.4848492248437" />
         <NodeLayout
-          Size="274.4,41.6"
+          Size="274.666666666667,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_EnhancedAdherenceCounselling"
           TopLeft="53.353863252268,225.115160167404" />
         <NodeLayout
-          Size="189.2,41.6"
+          Size="189.333333333334,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_GbvScreening"
           TopLeft="17.0307715867399,4.0181930461867" />
         <NodeLayout
-          Size="172,41.6"
+          Size="172,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_Ipt"
           TopLeft="270.323100835474,8.35152559683274" />
         <NodeLayout
-          Size="172,41.6"
+          Size="172,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_Otz"
           TopLeft="25.70770724765,146.733343821343" />
         <NodeLayout
-          Size="172,41.6"
+          Size="172,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_Ovz"
           TopLeft="261.861562063568,79.3333433517306" />
         <NodeLayout
-          Size="201.6,41.6"
+          Size="201.333333333334,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_PatientBaselines"
           TopLeft="18.4000146719131,80.1151634546902" />
         <NodeLayout
-          Size="198.4,41.6"
+          Size="198.666666666667,41.3333333333334"
           Id="Package\CHUNK_THREE\Load_CT_PatientVisits"
           TopLeft="270.707716234197,144.793947861193" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
-          PanelSize="500.8,412.8"
-          Size="500.8,456"
+          PanelSize="500.666666666667,413.333333333334"
+          Size="500.666666666667,456"
           Id="Package\CHUNK_THREE"
           TopLeft="39.2307706697454,405.060620476283" />
       </GraphLayout>

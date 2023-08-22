@@ -1,4 +1,4 @@
-MERGE [NDWH].[DBO].[DimPatient_test] AS a
+MERGE [NDWH].[DBO].[DimPatient] AS a
 USING(SELECT   DISTINCT
          patients.PatientIDHash,
          patients.PatientPKHash,
