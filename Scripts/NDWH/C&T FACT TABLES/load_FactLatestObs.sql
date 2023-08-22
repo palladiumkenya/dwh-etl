@@ -108,6 +108,23 @@ latest_fp_method as (
 	    and FamilyPlanningMethod is not null
 		and FamilyPlanningMethod <> ''
 ),
+
+latest_breastfeeding as (
+	select
+		distinct visits.PatientPK, 
+		visits.PatientID, 
+		visits.SiteCode,
+		visits.Breastfeeding,
+        visits.LMP,
+        visits.GestationAge
+	from ODS.dbo.CT_PatientVisits as visits
+	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
+		and visits.PatientPK = last_visit.PatientPK 
+		and visits.VisitDate = last_visit.LastVisitDate
+		and visits.VisitID = last_visit.visitID
+	    and Breastfeeding is not null
+		and Breastfeeding <> ''
+),
 combined_table as (
 	select 
 		patient.PatientPKHash,
@@ -120,7 +137,10 @@ combined_table as (
 		latest_differentiated_care.DifferentiatedCare,
 		latest_mmd.onMMD,
 		lastest_stability_assessment.StabilityAssessment,
-		latest_pregnancy.Pregnant
+		latest_pregnancy.Pregnant,
+        latest_breastfeeding.Breastfeeding,
+        latest_breastfeeding.LMP,
+        latest_breastfeeding.GestationAge
 	from ODS.dbo.CT_Patient as patient
 	left join latest_weight_height on latest_weight_height.PatientPKHash = patient.PatientPKHash
 		and latest_weight_height.SiteCode = patient.SiteCode
@@ -138,6 +158,8 @@ combined_table as (
 		and latest_pregnancy.SiteCode = patient.SiteCode
 	left join latest_fp_method on latest_fp_method.PatientPK = patient.PatientPK
 		and latest_fp_method.SiteCode = patient.SiteCode
+        left join latest_breastfeeding on latest_breastfeeding.PatientPK=patient.PatientPK
+        and latest_breastfeeding.Sitecode=patient.SiteCode
 )
 select 
 	Factkey = IDENTITY(INT, 1, 1),
@@ -155,6 +177,9 @@ select
 	combined_table.onMMD,
 	combined_table.StabilityAssessment,
 	combined_table.Pregnant,
+    combined_table.breastfeeding,
+    combined_table.LMP,
+    combined_table.GestationAge,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from combined_table 
