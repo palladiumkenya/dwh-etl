@@ -70,14 +70,14 @@ AS b    			ON(
 		  ,VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified)
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,LoadDate) 
 		  
 
 		  VALUES(RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
           VisitDate,VisitID,SexPartnerHIVStatus,IsHIVPositivePartnerCurrentonART,IsPartnerHighrisk,
 		  PartnerARTRisk,ClientAssessments,ClientRisk,ClientWillingToTakePrep,PrEPDeclineReason,
 		  RiskReductionEducationOffered,ReferralToOtherPrevServices,FirstEstablishPartnerStatus,PartnerEnrolledtoCCC,HIVPartnerCCCnumber,
-		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified) 
+		  HIVPartnerARTStartDate,MonthsknownHIVSerodiscordant,SexWithoutCondom,NumberofchildrenWithPartner,Date_Created,Date_Last_Modified,Getdate()) 
 
 	  WHEN MATCHED THEN
 						UPDATE SET 

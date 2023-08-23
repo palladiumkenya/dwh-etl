@@ -90,8 +90,8 @@ BEGIN
 
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified]) 
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified])
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],LoadDate)  
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],Getdate())
 			
 						WHEN MATCHED THEN
 							UPDATE SET 

@@ -45,8 +45,8 @@ BEGIN
 
 
 		WHEN NOT MATCHED THEN 
-		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified])
-		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified])
+		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],LoadDate)
+		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],Getdate())
 
 		WHEN MATCHED THEN
 			UPDATE SET 

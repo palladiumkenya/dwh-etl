@@ -26,8 +26,8 @@ BEGIN
 			and a.FacilityName  = b.FacilityName
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,LoadDate)  
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,Getdate())
 
 	WHEN MATCHED THEN
 		UPDATE SET 

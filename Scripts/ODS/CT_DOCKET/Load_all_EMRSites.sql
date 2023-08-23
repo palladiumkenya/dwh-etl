@@ -9,8 +9,8 @@ truncate table [ods].[dbo].[all_EMRSites];
     UPDATE SET 
     a.[Facility_Name] = B.[Facility_Name]
 	WHEN NOT MATCHED THEN 
-	INSERT(MFL_Code,[Facility_Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP_Agency],Implementation,EMR,[EMR_Status],[HTS_Use],[HTS_Deployment],[HTS_Status],[IL_Status],[Registration_IE],Phamarmacy_IE,mlab,Ushauri,Nishauri,[Appointment_Management_IE],OVC,OTZ,PrEP,[_3PM],AIR,KP,MCH,TB,Lab_Manifest,Comments,Project) 
-	VALUES(MFL_Code,[Facility_Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP_Agency],Implementation,EMR,[EMR_Status],[HTS_Use],[HTS_Deployment],[HTS_Status],[IL Status],[Registration IE],[Phamarmacy IE],mlab,Ushauri,Nishauri,[Appointment Management IE],OVC,OTZ,PrEP,[3PM],AIR,KP,MCH,TB,[Lab_Manifest],Comments,Project);
+	INSERT(MFL_Code,[Facility_Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP_Agency],Implementation,EMR,[EMR_Status],[HTS_Use],[HTS_Deployment],[HTS_Status],[IL_Status],[Registration_IE],Phamarmacy_IE,mlab,Ushauri,Nishauri,[Appointment_Management_IE],OVC,OTZ,PrEP,[_3PM],AIR,KP,MCH,TB,Lab_Manifest,Comments,Project,LoadDate)
+	VALUES(MFL_Code,[Facility_Name],County,SubCounty,[Owner],Latitude,Longitude,SDP,[SDP_Agency],Implementation,EMR,[EMR_Status],[HTS_Use],[HTS_Deployment],[HTS_Status],[IL Status],[Registration IE],[Phamarmacy IE],mlab,Ushauri,Nishauri,[Appointment Management IE],OVC,OTZ,PrEP,[3PM],AIR,KP,MCH,TB,[Lab_Manifest],Comments,Project,Getdate());
 
 
 	with cte AS (

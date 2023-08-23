@@ -39,13 +39,12 @@ BEGIN
 
 						INSERT(
 							  ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified]
-							  ) 
+							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],LoadDate)
+							   
 						VALUES(
 								ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified]
-						      )
-				
+								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],Getdate())
+
 					WHEN MATCHED THEN
 						UPDATE SET 
 								a.PatientID					=b.PatientID,

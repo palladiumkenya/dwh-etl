@@ -32,8 +32,8 @@ BEGIN
 						--and a.[MotherPatientPK] = b.[MotherPatientPK]
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash) 
-						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash)
+						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,LoadDate)  
+						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

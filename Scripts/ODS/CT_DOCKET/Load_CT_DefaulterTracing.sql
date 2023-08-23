@@ -40,8 +40,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	

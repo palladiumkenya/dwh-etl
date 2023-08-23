@@ -20,8 +20,8 @@ BEGIN
 						 --vand a.[DNAPCR1Date]  = b.[DNAPCR1Date]
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified) 
-						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified)
+						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified,LoadDate)  
+						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate/*,DateExtracted */,FacilityId,FacilityName,PatientMnchID,DNAPCR1Date,DNAPCR2Date,DNAPCR3Date,ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,DNAPCR1,DNAPCR2,DNAPCR3,ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCritearia,Date_Created,Date_Last_Modified,Getdate())
 
 				
 					WHEN MATCHED THEN
