@@ -58,7 +58,7 @@ BEGIN
 		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
 			and art_patient.SiteCode = viral_loads.SiteCode
             left join NDWH.dbo.DimPatient as pat on pat.PatientPKHash=art_patient.PatientPKHash and pat.SiteCode=art_patient.SiteCode
-            inner join NDWH.dbo.FactLatestObs as obs on obs.PatientKey=pat.PatientKey
+          inner join ODS.dbo.intermediate_LatestObs as obs on obs.PatientPKHash=pat.PatientPKHash and obs.SiteCode=pat.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
 		and Pregnant='Yes'OR breastfeeding='Yes'
          and  DATEDIFF(DAY, DATEADD(DAY, -(CAST(FLOOR(CONVERT(FLOAT, GestationAge)) * 7 AS INT)), CAST(LMP AS DATE)), GETDATE()) <= 450
