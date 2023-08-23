@@ -12,7 +12,7 @@ BEGIN
     ),
     source_data as (
         select 
-            PatientPK,
+            PatientPKHash,
             SiteCode,
             EncounterId,
             VisitID,
@@ -69,70 +69,17 @@ BEGIN
             ForcedSex,
             ReceivedServices,
             TypeGBV,
-            cast(getdate() as date) as LoadDate
-
-
+			HIVRiskCategory,
+			HtsRiskScore
         from ODS.dbo.HTS_EligibilityExtract
     )
     select 
         Factkey = IDENTITY(INT, 1, 1),
+		source_data.*,
         patient.PatientKey,
         facility.FacilityKey,
         partner.PartnerKey,
-        agency.AgencyKey,   
-        EncounterId,
-            VisitID,
-            Department,
-            IsHealthWorker,
-            RelationshipWithContact,
-            TestedHIVBefore,
-            WhoPErformedTest,
-            ResultOfHIV,
-            StartedOnART,
-            CCCNumber,
-            EverHadSex,
-            SexuallyActive,
-            NewPartner,
-            PartnerHIVStatus,
-            CoupleDiscordant,
-            MultiplePartners,
-            NumberOfPartners,
-            AlcoholSex,
-            MoneySex,
-            CondomBurst,
-            UnknownStatusPartner,
-            KnownStatusPartner,
-            Pregnant,
-            BreastfeedingMother,
-            ExperiencedGBV,
-            ContactWithTBCase,
-            Lethargy,
-            EverOnPrep,
-            CurrentlyOnPep,
-            EverHadSTI,
-            CurrentlyHasSTI,
-            EverHadTB,
-            SharedNeedle,
-            NeedleStickInjuries,
-            TraditionalProcedures,
-            ChildReasonsForIneligibility,
-            EligibleForTest,
-            ReasonsforIneligibility,
-            specificReasonForIneligibility,
-            Cough,
-            DateTestedProvider.DateKey As DateTestedProviderKey,
-            Fever,
-            MothersStatus,
-            NightSweats,
-            ReferredForTesting,
-            ResultOfHIVSelf,
-            ScreenedTB,
-            TBStatus,
-            WeightLoss,
-            AssessmentOutcome,
-            ForcedSex,
-            ReceivedServices,
-            TypeGBV,
+        agency.AgencyKey,
         VisitDate.DateKey As VisitDateKey,
         DateTestedSelf.DateKey as DateTestedSelfKey,
         cast(getdate() as date) as LoadDate
@@ -146,7 +93,10 @@ BEGIN
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimDate as VisitDate on VisitDate.Date = source_data.VisitDate
     left join NDWH.dbo.DimDate as DateTestedSelf on DateTestedSelf.Date = source_data.DateTestedSelf
-    left join NDWH.dbo.DimDate as DateTestedProvider on DateTestedProvider.Date = source_data.DateTestedProvider;
+    left join NDWH.dbo.DimDate as DateTestedProvider on DateTestedProvider.Date = source_data.DateTestedProvider
+    left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = source_data.PatientPKHash
+        and patient.SiteCode = source_data.SiteCode
+
 
 
     alter table NDWH.dbo.FactHTSEligibilityextract add primary key(FactKey);
