@@ -47,7 +47,12 @@ MERGE [NDWH].[dbo].[DimFacility] AS a
 						a.County  = b.County,
 						a.Longitude = b.Longitude,
 						a.Latitude  = b.Latitude,
-						a.Implementation = b.Implementation;
+						a.Implementation = b.Implementation
+						a.DateSiteAbstractionKey = b.DateSiteAbstractionKey
+						a.LatestDateUploadedKey = b.LatestDateUploadedKey
+						a.isCT = b.isCT
+						a.isPKV = b.isPKV
+						a.isHTS = b.isHTS;
 
 
 

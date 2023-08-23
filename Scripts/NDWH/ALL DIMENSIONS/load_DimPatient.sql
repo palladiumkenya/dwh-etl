@@ -84,6 +84,11 @@ WHEN NOT MATCHED THEN
 	VALUES(PatientIDHash,PatientPKHash,HtsNumberHash,PrepNumber,SiteCode,NUPIHash,DOB,MaritalStatus,Gender,ClientType,PatientSource,EnrollmentWHOKey,DateBaselineWHOKey,BaseLineWHOKey,/*PrepEnrollmentDateKey,*/IsTXCurr,LoadDate)
 WHEN MATCHED THEN
 	UPDATE SET 
-				a.MaritalStatus	= b.MaritalStatus,
-				a.ClientType	= b.ClientType,
-				a.PatientSource	= b.PatientSource;
+				a.MaritalStatus	        = b.MaritalStatus,
+                a.DOB                   = b.DOB,
+                a.Gender                = b.Gender,
+				a.ClientType	        = b.ClientType,
+				a.PatientSource	        = b.PatientSource
+                a.EnrollmentWHOKey      =   b.EnrollmentWHOKey,
+                a.DateBaselineWHOKey    =b.DateBaselineWHOKey,
+                a.BaseLineWHOKey        = b.BaseLineWHOKey;
