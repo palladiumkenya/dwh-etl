@@ -6,6 +6,7 @@ MERGE [NDWH].[dbo].[DimARTOutcome] AS a
 							CASE 
 								WHEN [ARTOutcome] ='V'	THEN 'ACTIVE'
 								WHEN [ARTOutcome] ='S'	THEN 'STOPPED'
+								
 								WHEN [ARTOutcome] ='D'	THEN 'DEAD'
 								WHEN [ARTOutcome] ='L'	THEN 'LOSS TO FOLLOW UP'
 								WHEN [ARTOutcome] ='NV'	THEN 'NO VISIT'

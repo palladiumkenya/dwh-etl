@@ -9,6 +9,7 @@ FROM ODS.dbo.HTS_TestKits
 						ON(
 						a.TestKitName = b.TestKitName
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(TestKitName,LoadDate) 
 						VALUES(TestKitName,GetDate())

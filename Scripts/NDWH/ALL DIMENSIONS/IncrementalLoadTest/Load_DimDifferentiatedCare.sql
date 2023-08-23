@@ -5,6 +5,7 @@ MERGE [NDWH].[dbo].[DimDifferentiatedCare] AS a
 				WHERE DifferentiatedCare <> 'NULL' AND DifferentiatedCare <>'') AS b 
 						ON(
 						a.DifferentiatedCare = b.DifferentiatedCare
+						
 						  )
 		WHEN NOT MATCHED THEN 
 						INSERT(DifferentiatedCare,LoadDate) 

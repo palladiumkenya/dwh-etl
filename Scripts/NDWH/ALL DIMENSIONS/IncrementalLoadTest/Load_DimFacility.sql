@@ -6,6 +6,7 @@ MERGE [NDWH].[dbo].[DimFacility] AS a
 				Facility_Name as [FacilityName],
 				SubCounty,
 				County,
+				
 				EMRSites.EMR,		
 				EMRSites.Project,
 				Longitude,

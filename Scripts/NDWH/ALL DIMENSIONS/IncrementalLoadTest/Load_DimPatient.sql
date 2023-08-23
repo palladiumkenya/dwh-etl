@@ -52,7 +52,9 @@ USING(SELECT   DISTINCT
          NULL IsTXCurr,
          NULL LoadDate
         FROM ODS.dbo.HTS_clients AS clients
+        
 		UNION
+
 		SELECT DISTINCT 
 		 NULL PatientIDHash,
          PrEP.PatientPKHash,

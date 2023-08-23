@@ -7,6 +7,7 @@ WHERE FamilyPlanningMethod <> 'NULL' and FamilyPlanningMethod <>''
 						ON(
 						a.[FamilyPlanning] = b.FamilyPlanning
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT([FamilyPlanning],LoadDate) 
 						VALUES(FamilyPlanning,GetDate())

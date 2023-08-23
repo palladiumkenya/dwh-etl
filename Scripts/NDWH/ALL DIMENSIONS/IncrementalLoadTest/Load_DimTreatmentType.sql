@@ -10,6 +10,7 @@ WHERE TreatmentType <> 'NULL' and TreatmentType <>'') AS b
 						ON(
 						a.TreatmentType = b.TreatmentType
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(TreatmentType,LoadDate) 
 						VALUES(TreatmentType,GetDate())

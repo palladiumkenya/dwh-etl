@@ -11,6 +11,7 @@ MERGE [NDWH].[dbo].[DimRegimenLine] AS a
 						ON(
 						a.RegimenLine = b.RegimenLine
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(RegimenLine,LoadDate) 
 						VALUES(RegimenLine,GetDate())

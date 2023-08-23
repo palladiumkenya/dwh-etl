@@ -5,6 +5,7 @@ MERGE [NDWH].[dbo].[DimAgency] AS a
 						ON(
 						a.AgencyName = b.AgencyName
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(AgencyName,LoadDate) 
 						VALUES(AgencyName,GetDate())

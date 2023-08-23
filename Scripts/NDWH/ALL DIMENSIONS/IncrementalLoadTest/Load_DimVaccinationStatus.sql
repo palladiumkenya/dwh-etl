@@ -5,6 +5,7 @@ MERGE [NDWH].[dbo].[DimVaccinationStatus] AS a
 						ON(
 						a.VaccinationStatus = b.VaccinationStatus
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(VaccinationStatus,LoadDate) 
 						VALUES(VaccinationStatus,GetDate())

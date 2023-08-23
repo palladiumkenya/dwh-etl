@@ -6,6 +6,7 @@ MERGE [NDWH].[dbo].[DimRelationshipWithPatient] AS a
 						ON(
 						a.RelationshipWithPatient = b.RelationshipWithPatient
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(RelationshipWithPatient,LoadDate) 
 						VALUES(RelationshipWithPatient,GetDate())

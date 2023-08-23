@@ -7,6 +7,7 @@ MERGE [NDWH].[dbo].[DimHTSTraceType] AS a
 						ON(
 						a.TraceType = b.TraceType
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT(TraceType,LoadDate) 
 						VALUES(TraceType,GetDate())

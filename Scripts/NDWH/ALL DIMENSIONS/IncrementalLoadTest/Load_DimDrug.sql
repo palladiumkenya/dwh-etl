@@ -4,6 +4,7 @@ MERGE [NDWH].[dbo].[DimDrug] AS a
 				WHERE Drug <> 'NULL' AND Drug <>'' AND TreatmentType='ARV') AS b 
 						ON(
 						a.Drug = b.Drug
+						
 						  )
 		WHEN NOT MATCHED THEN 
 						INSERT(Drug,LoadDate) 

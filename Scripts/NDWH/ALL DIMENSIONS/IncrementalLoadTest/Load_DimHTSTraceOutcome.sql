@@ -9,6 +9,7 @@ MERGE [NDWH].[dbo].[DimHTSTraceOutcome] AS a
 						ON(
 						a.[TraceOutcome] = b.[TraceOutcome]
 						  )
+						  
 		WHEN NOT MATCHED THEN 
 						INSERT([TraceOutcome],LoadDate) 
 						VALUES([TraceOutcome],GetDate())
