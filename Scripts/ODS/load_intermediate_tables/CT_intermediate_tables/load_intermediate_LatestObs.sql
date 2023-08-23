@@ -1,5 +1,6 @@
-IF OBJECT_ID(N'[NDWH].[dbo].[intermediate_LatestObs]', N'U') IS NOT NULL 
-	DROP TABLE [NDWH].[dbo].[intermediate_LatestObs];
+IF OBJECT_ID(N'[ODS].[dbo].[intermediate_LatestObs]', N'U') IS NOT NULL 
+	DROP TABLE [ODS].[dbo].[intermediate_LatestObs];
+
 
 BEGIN	
 with MFL_partner_agency_combination as (
@@ -126,6 +127,7 @@ latest_breastfeeding as (
 
 	select 
 		patient.PatientPKHash,
+        patient.PatientPK,
 		patient.SiteCode,
 		patient.PatientID,
 		latest_weight_height.LatestHeight,
