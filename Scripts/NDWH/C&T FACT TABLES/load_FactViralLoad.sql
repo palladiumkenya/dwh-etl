@@ -306,6 +306,7 @@ BEGIN
 		combined_viral_load_dataset.EligibleVL,
 		combined_viral_load_dataset.ValidVLResult,
 		combined_viral_load_dataset.HasValidVL,
+		combined_viral_load_dataset.PBFValidVL,
 		combined_viral_load_dataset.ValidVLResultCategory1,
 		combined_viral_load_dataset.ValidVLResultCategory2,		
 		combined_viral_load_dataset.ValidVLSup,
