@@ -201,6 +201,16 @@ BEGIN
 		from ODS.dbo.Intermediate_OrderedViralLoads
 		where rank = 3
 	),
+    PBF as (
+        Select 
+        PatientPKHash,
+		Patientpk,
+        SiteCode,
+        Breastfeeding,
+        Pregnant
+        from ODS.dbo.intermediate_LatestObs
+        where Breastfeeding='Yes' OR Pregnant='Yes'
+    ),
 	combined_viral_load_dataset as (
 		select
 			patient.PatientPK,
@@ -209,10 +219,11 @@ BEGIN
 			eligible_for_VL.EligibleVL,
 			valid_VL_indicators.ValidVLResult,
 			case when valid_VL_indicators.ValidVLResult is not null then 1 else 0 end as HasValidVL,
+            case when valid_VL_indicators.ValidVLResult is not null and Pregnant='Yes' OR Breastfeeding='Yes' then 1 else 0 end as PBFValidVL,
 			valid_VL_indicators.ValidVLResultCategory1,
 			valid_VL_indicators.ValidVLResultCategory2,
 			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
-			valid_VL_indicators.ValidVLDate,
+			valid_VL_indicators.ValidVLDate,     
 			patient_viral_load_intervals.[_6MonthVLDate],
 			patient_viral_load_intervals.[_6MonthVL],
 			patient_viral_load_intervals.[_12MonthVLDate],
@@ -270,6 +281,7 @@ BEGIN
 			and latest_VL_3.SiteCode = patient.SiteCode	
 		left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on patient.PatientPK = last_encounter.PatientPK
 			and last_encounter.SiteCode = patient.SiteCode
+        left join PBF on PBF.PatientPK=patient.PatientPK and PBF.SiteCode=patient.SiteCode
 	)
 	select
 		Factkey = IDENTITY(INT, 1, 1),
