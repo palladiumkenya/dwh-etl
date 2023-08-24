@@ -44,11 +44,11 @@ MERGE [ODS].[dbo].[PrEP_CareTermination] AS a
 
 	 WHEN NOT MATCHED THEN 
 		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
-		  ,ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified)
+		  ,ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,LoadDate)
 		  
 
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
-          ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified) 
+          ExitDate,ExitReason,DateOfLastPrepDose,Date_Created,Date_Last_Modified,Getdate())
 
 	  WHEN MATCHED THEN
 				UPDATE SET 														

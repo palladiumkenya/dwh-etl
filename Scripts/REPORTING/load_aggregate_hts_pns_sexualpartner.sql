@@ -51,6 +51,7 @@ line_list_dataset as (
 		tested.year,
 		tested.month,
 		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
+        EOMONTH(tested.date) as AsofDate,
 		Gender,
 		DATIMAgeGroup as Agegroup,
 		case 
@@ -96,13 +97,14 @@ select
 	year,
 	month,
 	MonthName, 
+    AsofDate,
 	sum(elicited) as PartnersElicited,
 	sum(tested) as PartnerTested,
 	sum(positive) as Positive,
     sum(Linked) as Linked,
 	sum(KP) as KnownPositive,
      CAST(GETDATE() AS DATE) AS LoadDate  
-  into REPORTING.dbo.AggregateHTSPNSSexualPartner
+into REPORTING.dbo.AggregateHTSPNSSexualPartner
 from line_list_dataset
 group by 
     Mflcode,
@@ -113,7 +115,7 @@ group by
     year,
     month,
     monthName,
+    AsofDate,
     Gender,
     Agegroup,
-    AgencyName
-
+    AgencyName;

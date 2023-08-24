@@ -47,7 +47,7 @@ BEGIN
 						END AS Project,
 						OE.[OVCEnrollmentDate],OE.[RelationshipToClient],OE.[EnrolledinCPIMS],OE.[CPIMSUniqueIdentifier],
 						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate]
-						,P.ID 
+						,P.ID ,OE.[Date_Created],OE.[Date_Last_Modified]
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID AND OE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -61,8 +61,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -72,7 +72,9 @@ BEGIN
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
 						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
-						a.OVCExitReason				=b.OVCExitReason;
+						a.OVCExitReason				=b.OVCExitReason,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
 					
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]

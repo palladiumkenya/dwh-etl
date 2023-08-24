@@ -39,8 +39,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv  ) 
-						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv)
+						INSERT(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,PopulationType,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv,LoadDate) 
+						VALUES(HtsNumber,Emr,Project,PatientPk,SiteCode,FacilityName/*,Serial*/,Dob,Gender,MaritalStatus,KeyPopulationType,NULL,DisabilityType,PatientDisabled,County,SubCounty,Ward,NUPI,HtsRecencyId,Occupation ,PriorityPopulationType,pkv,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET       

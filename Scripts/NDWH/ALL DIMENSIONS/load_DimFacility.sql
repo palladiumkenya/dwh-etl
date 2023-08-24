@@ -12,7 +12,8 @@ BEGIN
 			Project,
 			Longitude,
 			Latitude,
-			Implementation
+			Implementation,
+			SDP_Agency As Agency
 		from ODS.dbo.All_EMRSites
 	),
 	site_abstraction as (

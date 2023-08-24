@@ -19,8 +19,8 @@ BEGIN
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified) 
-					VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified)
+					INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified,LoadDate)  
+					VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified,Getdate())
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
@@ -29,6 +29,8 @@ BEGIN
 						a.ScreeningType								=b.ScreeningType,
 						a.ScreeningResult							=b.ScreeningResult,
 						a.PostTreatmentComplicationCause			=b.PostTreatmentComplicationCause,
-						a.ReferralReason							=b.ReferralReason;
+						a.ReferralReason							=b.ReferralReason,
+						a.[Date_Created]							=b.[Date_Created],
+						a.[Date_Last_Modified]						=b.[Date_Last_Modified];
 				
 	END

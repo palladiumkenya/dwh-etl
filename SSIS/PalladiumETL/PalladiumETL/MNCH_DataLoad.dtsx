@@ -14,8 +14,8 @@
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="10"
-  DTS:VersionGUID="{785FB17C-0A79-4B95-A89B-E6D40331CF6D}">
+  DTS:VersionBuild="11"
+  DTS:VersionGUID="{28145078-F63F-4FF9-A530-538BD04D40C3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -170,7 +170,7 @@
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{6C257101-59D1-46B1-9EDF-E9288291C64B}"
-          SQLTask:SqlStatementSource="&#xA;IF NOT EXISTS (  SELECT * FROM   MNCHCentral.sys.columns WHERE  object_id = OBJECT_ID(N'MNCHCentral.[dbo].[MotherBabyPairs]') AND name = 'FacilityId')&#xA;&#x9;&#x9;BEGIN&#xA;&#x9;&#x9;&#x9; alter TABLE MNCHCentral.[dbo].[MotherBabyPairs] add&#x9; &#xA;&#x9;&#x9;&#x9;[FacilityId] [uniqueidentifier] NOT NULL DEFAULT NEWID();&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;update [MNCHCentral].[dbo].[MotherBabyPairs]&#xA;&#x9;&#x9;set [MotherBabyPairs].FacilityId = [Facilities].id&#xA;&#x9;&#x9;FROM MNCHCentral.[dbo].[MotherBabyPairs], [MNCHCentral].[dbo].[Facilities]&#xA;&#x9;&#x9;where [MotherBabyPairs].SiteCode =Facilities.SiteCode;&#xA;&#xA;&#x9;&#x9;END&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="&#xA;IF NOT EXISTS (  SELECT * FROM   MNCHCentral.sys.columns WHERE  object_id = OBJECT_ID(N'MNCHCentral.[dbo].[MotherBabyPairs]') AND name = 'FacilityId')&#xA;&#x9;&#x9;BEGIN&#xA;&#x9;&#x9;&#x9; alter TABLE MNCHCentral.[dbo].[MotherBabyPairs] add&#x9; &#xA;&#x9;&#x9;&#x9;[FacilityId] [uniqueidentifier] NOT NULL DEFAULT NEWID();&#xA;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;--update [MNCHCentral].[dbo].[MotherBabyPairs]&#xA;&#x9;&#x9;--set [MotherBabyPairs].FacilityId = [Facilities].id&#xA;&#x9;&#x9;--FROM MNCHCentral.[dbo].[MotherBabyPairs], [MNCHCentral].[dbo].[Facilities]&#xA;&#x9;&#x9;--where [MotherBabyPairs].SiteCode =Facilities.SiteCode;&#xA;&#xA;&#x9;&#x9;END&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -194,7 +194,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_AncVisits"
-          DTS:ThreadHint="2">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -212,7 +212,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Arts"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="2">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -230,7 +230,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_CwcEnrolments"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -248,7 +248,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_CwcVisits"
-          DTS:ThreadHint="3">
+          DTS:ThreadHint="4">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -266,7 +266,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_Enrolments"
-          DTS:ThreadHint="4">
+          DTS:ThreadHint="5">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -284,7 +284,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Load_MNCH_MotherBabyPairs"
-          DTS:ThreadHint="5">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData

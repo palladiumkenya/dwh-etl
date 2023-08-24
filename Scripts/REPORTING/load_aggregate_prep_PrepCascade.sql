@@ -1,5 +1,6 @@
-IF EXISTS(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.[dbo].[AggregatePrepCascade]') AND type in (N'U')) 
-drop TABLE REPORTING.[dbo].[AggregatePrepCascade]
+
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.AggregatePrepCascade') AND type in (N'U')) 
+    DROP TABLE REPORTING.dbo.AggregatePrepCascade
 GO
 
 WITH prepCascade AS  (
@@ -93,5 +94,4 @@ SELECT
     CAST(GETDATE() AS DATE) AS LoadDate 
   INTO REPORTING.dbo.AggregatePrepCascade
 FROM prepCascade p
-
 FULL OUTER JOIN prepStart s on p.MFLCode = s.MFLCode and s.FacilityName = p.FacilityName and s.County = p.County and s.SubCounty = p.SubCounty and s.PartnerName = p.PartnerName and s.AgencyName = p.AgencyName and s.Gender = p.Gender and s.AgeGroup = s.AgeGroup and AssMonth = EnrollmentMonth and AssYear = EnrollmentYear

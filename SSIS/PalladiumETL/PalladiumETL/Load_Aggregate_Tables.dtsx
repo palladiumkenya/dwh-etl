@@ -12,8 +12,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="11"
-  DTS:VersionGUID="{5361FD1D-24B1-48AD-BDA4-786F7B1521A2}">
+  DTS:VersionBuild="15"
+  DTS:VersionGUID="{0EA9A49F-EA2C-4733-A876-412F6F9979ED}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -75,6 +75,22 @@
   </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
+      DTS:refId="Package\EndTime"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{8195C81A-3428-40C4-ACEE-FEA4902758F9}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="EndTime"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{C088AB91-7343-4215-A7C2-67E9785A8CFA}"
+          SQLTask:SqlStatementSource="update [REPORTING].[dbo].[AggregateLoadTime]&#xA;set [EndDateTime] =  Getdate()&#xA;from [REPORTING].[dbo].[AggregateLoadTime]&#xA;where StartDateTime is not null;&#xA;&#xA;update a&#xA;&#x9;set  hoursTaken = datediff(hour,[StartDateTime],[EndDateTime])&#xA;&#x9;from [REPORTING].[dbo].[AggregateLoadTime] a&#xA;&#x9;WHERE RowNum = (SELECT MAX(RowNum) FROM  [REPORTING].[dbo].[AggregateLoadTime])&#xA;&#x9;AND [EndDateTime] IS NOT NULL;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Load Reports tables Container Loop"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
@@ -130,7 +146,41 @@
           DTS:VariableName="User::FileName" />
       </DTS:ForEachVariableMappings>
     </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\StartTime"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A93D04EB-4C9F-4355-AD59-D75A72AB08A1}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="StartTime"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{C088AB91-7343-4215-A7C2-67E9785A8CFA}"
+          SQLTask:SqlStatementSource="insert into [REPORTING].[dbo].[AggregateLoadTime](StartDateTime)&#xA;values(Getdate())&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
   </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{EC2835EC-C982-4174-A074-F99835AC96B0}"
+      DTS:From="Package\StartTime"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Load Reports tables Container Loop" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{13F3BC3E-6D6B-4C6B-A435-AC2057186D58}"
+      DTS:From="Package\Load Reports tables Container Loop"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\EndTime" />
+  </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
 <!--If you manually edit this section and make a mistake, you can delete it. -->
@@ -142,7 +192,7 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="210.666666666667,42.6666666666667"
           Id="Package\Load Reports tables Container Loop\Load Aggregate tables Task"
@@ -153,7 +203,83 @@
           PanelSize="312,132"
           Size="312,174.666666666667"
           Id="Package\Load Reports tables Container Loop"
-          TopLeft="175.000006418962,19.0469704201265" />
+          TopLeft="260.62500514305,23.5969703387662" />
+        <NodeLayout
+          Size="121.333333333334,42.6666666666667"
+          Id="Package\EndTime"
+          TopLeft="653.749990258366,113.749997965992" />
+        <NodeLayout
+          Size="125.333333333334,42.6666666666667"
+          Id="Package\StartTime"
+          TopLeft="19.3749997112899,65.6499988260865" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="144.708333044623,86.9833321594198">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="115.916672098427,23.9469715126797"
+              Start="0,0"
+              End="108.416672098427,23.9469715126797">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="53.9583360492135,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="53.9583360492135,0"
+                    Point2="57.9583360492135,0"
+                    Point3="57.9583360492135,4" />
+                  <mssgle:LineSegment
+                    End="57.9583360492135,19.9469715126797" />
+                  <mssgle:CubicBezierSegment
+                    Point1="57.9583360492135,19.9469715126797"
+                    Point2="57.9583360492135,23.9469715126797"
+                    Point3="61.9583360492135,23.9469715126797" />
+                  <mssgle:LineSegment
+                    End="108.416672098427,23.9469715126797" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="572.62500514305,110.930303672099">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="81.1249851153158,24.1530276272254"
+              Start="0,0"
+              End="73.6249851153158,24.1530276272254">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="36.5624925576579,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="36.5624925576579,0"
+                    Point2="40.5624925576579,0"
+                    Point3="40.5624925576579,4" />
+                  <mssgle:LineSegment
+                    End="40.5624925576579,20.1530276272254" />
+                  <mssgle:CubicBezierSegment
+                    Point1="40.5624925576579,20.1530276272254"
+                    Point2="40.5624925576579,24.1530276272254"
+                    Point3="44.5624925576579,24.1530276272254" />
+                  <mssgle:LineSegment
+                    End="73.6249851153158,24.1530276272254" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </Package>

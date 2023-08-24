@@ -68,6 +68,7 @@ BEGIN
 						PS.TOVerified TOVerified,
 						PS.TOVerifiedDate TOVerifiedDate,
 						PS.ReEnrollmentDate ReEnrollmentDate
+						,PS.[Date_Created],PS.[Date_Last_Modified]
 
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID AND PS.Voided=0
@@ -89,8 +90,8 @@ BEGIN
 
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason) 
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason)
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],LoadDate)  
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],Getdate())
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
@@ -100,7 +101,9 @@ BEGIN
 								a.TOVerified					=b.TOVerified	,							
 								a.ReasonForDeath				=b.ReasonForDeath,
 								a.SpecificDeathReason			=b.SpecificDeathReason,
-								a.DeathDate						=b.DeathDate;
+								a.DeathDate						=b.DeathDate,
+								a.[Date_Created]				=b.[Date_Created],
+								a.[Date_Last_Modified]			=b.[Date_Last_Modified];
 						
 							
 

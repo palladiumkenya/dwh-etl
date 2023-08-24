@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="54"
-  DTS:VersionGUID="{3CACD1A2-FAF3-4636-AEF3-129B9986A0E0}">
+  DTS:VersionBuild="56"
+  DTS:VersionGUID="{62F91E36-4092-4B0E-B1DA-42E622646E7A}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -29,6 +29,18 @@
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\REPORTING RATES\" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[load_PrEP_FileConn.sql]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{667C0BDD-4147-4090-B71E-563DCE296FA5}"
+      DTS:ObjectName="load_PrEP_FileConn.sql">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::PrEPFilePath] +"\\"+  @[User::PrEPFileName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\PREP_FACT_TABLES\" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -90,6 +102,16 @@
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
+      DTS:DTSID="{4B115014-B1B6-4CEE-BBE4-E2125C90D6D4}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
       DTS:DTSID="{0A02CFA0-A72B-46A3-AE09-EB459492D489}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
@@ -106,6 +128,25 @@
       DTS:ObjectName="HTSFilePath">
       <DTS:VariableValue
         DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\HTS_FACT_TABLES</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{FCA839DA-A027-4129-A5E1-35CAE7857BD7}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="PrEPFileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{B82C935D-B932-468A-AED8-B90E7F233AE2}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="PrEPFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\PREP_FACT_TABLES</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -221,7 +262,7 @@
           DTS:FailPackageOnFailure="True"
           DTS:LocaleID="-1"
           DTS:ObjectName="Loop through HTS Fact tables Folder"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -238,6 +279,60 @@
           DTS:ObjectName="{8EEF0A73-6F3E-4063-ABF1-6B45E6FBDEFD}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::HTSFileName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Loop through PrEP Fact Tables"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{1844619E-67E8-445E-94E4-41B446E38D7A}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Loop through PrEP Fact Tables">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{C526045F-3984-4D24-9E05-FFC1AFE6BAEB}"
+        DTS:ObjectName="{C526045F-3984-4D24-9E05-FFC1AFE6BAEB}">
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\Scripts\NDWH\PREP_FACT_TABLES" />
+            <FEFEProperty
+              FileSpec="*.SQL" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Loop through PrEP Fact Tables\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{483D5AF5-F75B-4FD9-9347-6D4798AF9F2A}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:ThreadHint="2">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7E04522E-043D-49D2-81B3-D5ED35D29297}"
+              SQLTask:SqlStmtSourceType="FileConnection"
+              SQLTask:SqlStatementSource="load_PrEP_FileConn.sql" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{BB4B9A11-CFAB-49E2-A603-0732CE0700B6}"
+          DTS:ObjectName="{BB4B9A11-CFAB-49E2-A603-0732CE0700B6}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::PrEPFileName" />
       </DTS:ForEachVariableMappings>
     </DTS:Executable>
     <DTS:Executable
@@ -275,7 +370,7 @@
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
           DTS:ObjectName="Execute SQL Task"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="3">
           <DTS:Variables />
           <DTS:ObjectData>
             <SQLTask:SqlTaskData
@@ -331,19 +426,11 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint]"
       DTS:CreationName=""
-      DTS:DTSID="{7EE5CE10-7201-4D4E-971E-911DC2DDB13B}"
+      DTS:DTSID="{8E971A89-3A61-4FC9-B84A-B1255DD8E367}"
       DTS:From="Package\Load CT  Fact tables Container"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
       DTS:To="Package\Update_EndDateTime" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
-      DTS:CreationName=""
-      DTS:DTSID="{AA070C71-CB83-40DE-A295-869182767F7B}"
-      DTS:From="Package\Load HTS Fact tables Container"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 1"
-      DTS:To="Package\Loop through Reporting Rates Fact tables Folder" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
       DTS:CreationName=""
@@ -352,14 +439,6 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 2"
       DTS:To="Package\Load CT  Fact tables Container" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
-      DTS:CreationName=""
-      DTS:DTSID="{829D3D5D-68F6-4CBA-B062-6590C534604D}"
-      DTS:From="Package\Update_EndDateTime"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 3"
-      DTS:To="Package\Load HTS Fact tables Container" />
   </DTS:PrecedenceConstraints>
   <DTS:EventHandlers>
     <DTS:EventHandler
@@ -1138,35 +1217,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
   </resheader>
 </root>]]></ProjectItem>
               <ProjectItem
-                Name="Properties\AssemblyInfo.cs"
-                Encoding="UTF8"><![CDATA[using System.Reflection;
-using System.Runtime.CompilerServices;
-
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
-[assembly: AssemblyTitle("ST_22c62e28aa6044a996db065d072cbb57")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
-[assembly: AssemblyProduct("ST_22c62e28aa6044a996db065d072cbb57")]
-[assembly: AssemblyCopyright("Copyright @ HP Inc. 2022")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
-
-[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+                Name="Properties\Settings.settings"
+                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
               <ProjectItem
                 Name="ScriptMain.cs"
                 Encoding="UTF8"><![CDATA[#region Help:  Introduction to the script task
@@ -1385,14 +1443,35 @@ namespace ST_22c62e28aa6044a996db065d072cbb57.Properties {
     }
 }]]></ProjectItem>
               <ProjectItem
-                Name="Properties\Settings.settings"
-                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
-</SettingsFile>]]></ProjectItem>
+                Name="Properties\AssemblyInfo.cs"
+                Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_22c62e28aa6044a996db065d072cbb57")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyProduct("ST_22c62e28aa6044a996db065d072cbb57")]
+[assembly: AssemblyCopyright("Copyright @ HP Inc. 2022")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.Designer.cs"
                 Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
@@ -1625,7 +1704,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           PanelSize="279.333333333334,124"
           Size="279.333333333334,166.666666666667"
           Id="Package\Load CT  Fact tables Container"
-          TopLeft="222.163445927897,35.55302930562" />
+          TopLeft="222.788445918583,31.0030293869803" />
         <NodeLayout
           Size="251.333333333334,41.3333333333334"
           Id="Package\Load HTS Fact tables Container\Loop through HTS Fact tables Folder"
@@ -1636,7 +1715,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           PanelSize="347.333333333334,132"
           Size="347.333333333334,174.666666666667"
           Id="Package\Load HTS Fact tables Container"
-          TopLeft="775.762831083278,21.4106061670764" />
+          TopLeft="554.51283438016,24.6606061089619" />
+        <NodeLayout
+          Size="164,42.6666666666667"
+          Id="Package\Loop through PrEP Fact Tables\Execute SQL Task"
+          TopLeft="43.4999966099859,28.0333277775845" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="292.666666666667,126"
+          Size="292.666666666667,168.666666666667"
+          Id="Package\Loop through PrEP Fact Tables"
+          TopLeft="185.624997233972,239.849995711148" />
         <NodeLayout
           Size="163.333333333334,41.3333333333334"
           Id="Package\Loop through Reporting Rates Fact tables Folder\Execute SQL Task"
@@ -1647,109 +1737,41 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           PanelSize="320.666666666667,134.666666666667"
           Size="320.666666666667,178"
           Id="Package\Loop through Reporting Rates Fact tables Folder"
-          TopLeft="739.134622701725,276.013643490976" />
+          TopLeft="557.259625411873,211.013644653267" />
         <NodeLayout
           Size="182.666666666667,42.6666666666667"
           Id="Package\Update_EndDateTime"
-          TopLeft="316.874995278195,244.399995629788" />
+          TopLeft="5.96855898038484E-13,183.299996722341" />
         <NodeLayout
           Size="186.666666666667,42.6666666666667"
           Id="Package\Update_StartDateTime"
-          TopLeft="7.49999988824125,67.5999987912178" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="361.830112594563,202.219695972287">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="46.3782160169646,42.1802996575009"
-              Start="0,0"
-              End="46.3782160169646,34.6802996575009">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,17.0901498287505" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,17.0901498287505"
-                    Point2="0,21.0901498287505"
-                    Point3="4,21.0901498287505" />
-                  <mssgle:LineSegment
-                    End="42.3782160169646,21.0901498287505" />
-                  <mssgle:CubicBezierSegment
-                    Point1="42.3782160169646,21.0901498287505"
-                    Point2="46.3782160169646,21.0901498287505"
-                    Point3="46.3782160169646,25.0901498287505" />
-                  <mssgle:LineSegment
-                    End="46.3782160169646,34.6802996575009" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="1005.9850533055,196.077272833743">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-106.517097270441,79.9363706572325"
-              Start="0,0"
-              End="-106.517097270441,72.4363706572325">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,28.1944725535816" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,28.1944725535816"
-                    Point2="0,32.1944725535816"
-                    Point3="-4,32.1944725535816" />
-                  <mssgle:LineSegment
-                    End="-102.517097270441,32.1944725535816" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-102.517097270441,32.1944725535816"
-                    Point2="-106.517097270441,32.1944725535816"
-                    Point3="-106.517097270441,36.1944725535816" />
-                  <mssgle:LineSegment
-                    End="-106.517097270441,72.4363706572325" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
+          TopLeft="2.49999996274705,64.3499988493323" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="194.166666554908,88.9333321245512">
+          TopLeft="189.166666629413,85.6833321826657">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="27.9967793729888,29.9530305144021"
+              EndConnector="33.62177928917,28.653030537648"
               Start="0,0"
-              End="20.4967793729888,29.9530305144021">
+              End="26.12177928917,28.653030537648">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="9.99838968649441,0" />
+                    End="12.810889644585,0" />
                   <mssgle:CubicBezierSegment
-                    Point1="9.99838968649441,0"
-                    Point2="13.9983896864944,0"
-                    Point3="13.9983896864944,4" />
+                    Point1="12.810889644585,0"
+                    Point2="16.810889644585,0"
+                    Point3="16.810889644585,4" />
                   <mssgle:LineSegment
-                    End="13.9983896864944,25.9530305144021" />
+                    End="16.810889644585,24.653030537648" />
                   <mssgle:CubicBezierSegment
-                    Point1="13.9983896864944,25.9530305144021"
-                    Point2="13.9983896864944,29.9530305144021"
-                    Point3="17.9983896864944,29.9530305144021" />
+                    Point1="16.810889644585,24.653030537648"
+                    Point2="16.810889644585,28.653030537648"
+                    Point3="20.810889644585,28.653030537648" />
                   <mssgle:LineSegment
-                    End="20.4967793729888,29.9530305144021" />
+                    End="26.12177928917,28.653030537648" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1759,31 +1781,31 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</BinaryItem>
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="437.319439722639,244.399995629788">
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="222.788445918583,140.780807164758">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="455.55450247175,-48.3227227960445"
+              EndConnector="-40.1217792519161,63.8525228909163"
               Start="0,0"
-              End="455.55450247175,-40.8227227960445">
+              End="-32.6217792519161,63.8525228909163">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,-20.284716035962" />
+                    End="-12.2776156711419,0" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,-20.284716035962"
-                    Point2="0,-24.284716035962"
-                    Point3="4,-24.284716035962" />
+                    Point1="-12.2776156711419,0"
+                    Point2="-16.2776156711419,0"
+                    Point3="-16.2776156711419,4" />
                   <mssgle:LineSegment
-                    End="451.55450247175,-24.284716035962" />
+                    End="-16.2776156711419,59.8525228909163" />
                   <mssgle:CubicBezierSegment
-                    Point1="451.55450247175,-24.284716035962"
-                    Point2="455.55450247175,-24.284716035962"
-                    Point3="455.55450247175,-28.284716035962" />
+                    Point1="-16.2776156711419,59.8525228909163"
+                    Point2="-16.2776156711419,63.8525228909163"
+                    Point3="-20.2776156711419,63.8525228909163" />
                   <mssgle:LineSegment
-                    End="455.55450247175,-40.8227227960445" />
+                    End="-32.6217792519161,63.8525228909163" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>

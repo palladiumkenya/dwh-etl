@@ -12,14 +12,15 @@ SELECT
     Gender,
     age.DATIMAgeGroup as AgeGroup, 
     TestStrategy,
-    year,
-    month,
+    d.year,
+    d.month,
     FORMAT(cast(date as date), 'MMMM') MonthName,
+    EOMONTH(d.date) as AsOfDate,
     Sum(Tested) as TestedClients,
     Sum(Positive) as PositiveClients,
     Sum(Linked) as LinkedClients,
      CAST(GETDATE() AS DATE) AS LoadDate 
-    INTO REPORTING.dbo.AggregateHTSTeststrategy
+INTO REPORTING.dbo.AggregateHTSTeststrategy
 FROM NDWH.dbo.FactHTSClientTests hts
 LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = hts.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = hts.AgencyKey
@@ -40,4 +41,5 @@ GROUP BY
     TestStrategy, 
     year, 
     month, 
-    FORMAT(cast(date as date), 'MMMM')
+    FORMAT(cast(date as date), 'MMMM'),
+    EOMONTH(d.date)
