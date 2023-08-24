@@ -11,7 +11,6 @@ with MFL_partner_agency_combination as (
 		SDP,
 	    SDP_Agency as Agency 
 	from ODS.dbo.All_EMRSites 
-
 )
 select 
 	Factkey = IDENTITY(INT, 1, 1),
