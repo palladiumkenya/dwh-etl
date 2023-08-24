@@ -45,10 +45,11 @@ BEGIN
 		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
 			and art_patient.SiteCode = viral_loads.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 12
-		and art_patient.AgeLastVisit > 24
-        union 
-        /*Pregnant & Breastfeeding mothers  who  have a valid VL that is within the last 6 months from reporting period**/
-        select 
+		and art_patient.AgeLastVisit > 24 
+        
+	 ),
+     /*Pregnant & Breastfeeding mothers  who  have a valid VL that is within the last 6 months from reporting period**/
+        PBF AS (select 
 	 		distinct viral_loads.PatientID,
 			 viral_loads.SiteCode,
 			 viral_loads.PatientPK,
@@ -57,13 +58,12 @@ BEGIN
 		from ODS.dbo.Intermediate_LatestViralLoads as viral_loads
 		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
 			and art_patient.SiteCode = viral_loads.SiteCode
-            left join NDWH.dbo.DimPatient as pat on pat.PatientPKHash=art_patient.PatientPKHash and pat.SiteCode=art_patient.SiteCode
-          inner join ODS.dbo.intermediate_LatestObs as obs on obs.PatientPKHash=pat.PatientPKHash and obs.SiteCode=pat.SiteCode
+          inner join ODS.dbo.intermediate_LatestObs as obs on obs.PatientPK=viral_loads.PatientPK and obs.SiteCode=viral_loads.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
-		and Pregnant='Yes'OR breastfeeding='Yes'
+		and Pregnant='Yes'OR breastfeeding='Yes' and Gender='Female'
          and  DATEDIFF(DAY, DATEADD(DAY, -(CAST(FLOOR(CONVERT(FLOAT, GestationAge)) * 7 AS INT)), CAST(LMP AS DATE)), GETDATE()) <= 450
-	 ),
-	 valid_VL_indicators as (
+     ),
+     valid_VL_indicators as (
 		select 
 			PatientPK,
 			SiteCode,
@@ -201,16 +201,7 @@ BEGIN
 		from ODS.dbo.Intermediate_OrderedViralLoads
 		where rank = 3
 	),
-    PBF as (
-        Select 
-        PatientPKHash,
-		Patientpk,
-        SiteCode,
-        Breastfeeding,
-        Pregnant
-        from ODS.dbo.intermediate_LatestObs
-        where Breastfeeding='Yes' OR Pregnant='Yes'
-    ),
+  
 	combined_viral_load_dataset as (
 		select
 			patient.PatientPK,
@@ -219,8 +210,8 @@ BEGIN
 			eligible_for_VL.EligibleVL,
 			valid_VL_indicators.ValidVLResult,
 			case when valid_VL_indicators.ValidVLResult is not null then 1 else 0 end as HasValidVL,
-            case when valid_VL_indicators.ValidVLResult is not null and Pregnant='Yes' OR Breastfeeding='Yes' then 1 else 0 end as PBFValidVL,
-			valid_VL_indicators.ValidVLResultCategory1,
+            case when PBF.TestResult is not null then 1 else 0 end as PBFValidVL,
+            valid_VL_indicators.ValidVLResultCategory1,
 			valid_VL_indicators.ValidVLResultCategory2,
 			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
 			valid_VL_indicators.ValidVLDate,     
