@@ -147,7 +147,7 @@ BEGIN
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimDate as VisitDate on VisitDate.Date = source_data.VisitDate
     left join NDWH.dbo.DimDate as DateTestedSelf on DateTestedSelf.Date = source_data.DateTestedSelf
-    left join NDWH.dbo.DimDate as DateTestedProvider on DateTestedProvider.Date = source_data.DateTestedProvider
+    left join NDWH.dbo.DimDate as DateTestedProvider on DateTestedProvider.Date = source_data.DateTestedProvider;
 
 
     alter table NDWH.dbo.FactHTSEligibilityextract add primary key(FactKey);
