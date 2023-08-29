@@ -45,5 +45,6 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
 LEFT JOIN NDWH.dbo.FACTART art on art.PatientKey = otz.PatientKey
-WHERE age.Age BETWEEN 10 AND 24 AND IsTXCurr = 1
+WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1
+
 GO

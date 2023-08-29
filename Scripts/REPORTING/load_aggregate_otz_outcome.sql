@@ -24,7 +24,7 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = otz.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
 LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
-WHERE TransitionAttritionReason is not null AND IsTXCurr = 1
+WHERE TransitionAttritionReason is not null AND IsTXCurr = 1 AND age.Age BETWEEN 10 AND 19
 GROUP BY 
     MFLCode, 
     f.FacilityName, 
