@@ -10,6 +10,7 @@ drop
       EOMONTH(ExpectedNextAppointmentDate) AS EndOfMonth, 
       PartnerKey, 
       Gender, 
+      DATIMAgeGroup,
       AgencyKey, 
       COUNT(DISTINCT PatientKey) AS NumBooked 
     FROM 
@@ -20,6 +21,7 @@ drop
       EOMONTH(ExpectedNextAppointmentDate), 
       PartnerKey, 
       Gender, 
+      DATIMAgeGroup,
       AgencyKey
   ), 
   Summary as (
@@ -36,7 +38,6 @@ drop
       patient.Gender, 
       AppointmentStatus, 
       count(*) NumOfPatients, 
-      --NumBooked,
       age_group.DATIMAgeGroup, 
       apt.AsOfDateKey, 
       cast(
@@ -68,14 +69,11 @@ drop
   ) 
 Select 
   Summary.MFLCode, 
-  Summary.FacilityKey, 
   Summary.FacilityName, 
   Summary.SubCounty, 
   Summary.County, 
   Summary.PartnerName, 
-  Summary.PartnerKey, 
   Summary.AgencyName, 
-  Summary.AgencyKey, 
   Summary.Gender, 
   AppointmentStatus, 
   NumOfPatients, 
@@ -92,3 +90,4 @@ from
   and Bookings.PartnerKey = Summary.PartnerKey 
   and Bookings.Gender = Summary.Gender 
   and Bookings.AgencyKey = Summary.AgencyKey
+  and Bookings.DATIMAgeGroup=Summary.DATIMAgeGroup
