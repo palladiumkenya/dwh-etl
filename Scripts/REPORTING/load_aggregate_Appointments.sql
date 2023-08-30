@@ -1,7 +1,7 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAppointments', N'U') IS NOT NULL 
 	Drop TABLE [REPORTING].[dbo].AggregateAppointments
 Go
-  drop table [REPORTING].[dbo].AggregateAppointments GO WITH Bookings AS (
+   WITH Bookings AS (
     SELECT 
       Facilitykey, 
       AsofDateKey, 
