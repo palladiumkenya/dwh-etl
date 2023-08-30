@@ -32,6 +32,7 @@ Select
 		ExpectedNextAppointmentDate,
 		AppointmentStatus,
 		DiffExpectedTCADateLastEncounter,
+        age_group.DATIMAgeGroup,
         AsofDate,
         cast(getdate() as date) as LoadDate
         into NDWH.dbo.FACTAppointments
