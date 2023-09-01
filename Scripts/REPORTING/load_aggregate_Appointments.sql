@@ -38,6 +38,7 @@ Go
       count(*) NumOfPatients, 
       age_group.DATIMAgeGroup, 
       apt.AsOfDateKey, 
+	  apt.asofdate,
       cast(
         getdate() as date
       ) as LoadDate 
@@ -63,6 +64,7 @@ Go
       patient.Gender, 
       AppointmentStatus, 
       apt.AsOfDateKey, 
+	  apt.asofdate,
       age_group.DATIMAgeGroup
   ) 
 Select 
@@ -77,7 +79,7 @@ Select
   NumOfPatients, 
   Bookings.NumBooked, 
   Summary.DATIMAgeGroup, 
-  Summary.AsOfDateKey, 
+  Summary.AsofDate, 
   cast(
     getdate() as date
   ) as LoadDate into [REPORTING].[dbo].AggregateAppointments 
