@@ -1,3 +1,4 @@
+begin tran
 MERGE [NDWH].[DBO].[DimPatient] AS a
 USING(SELECT   DISTINCT
          patients.PatientIDHash,
@@ -80,8 +81,14 @@ USING(SELECT   DISTINCT
 WHEN NOT MATCHED THEN
 	INSERT(PatientIDHash,PatientPKHash,HtsNumberHash,PrepNumber,SiteCode,NUPI,DOB,MaritalStatus,Gender,ClientType,PatientSource,EnrollmentWHOKey,DateBaselineWHOKey,BaseLineWHOKey,/*PrepEnrollmentDateKey,*/IsTXCurr,LoadDate)
 	VALUES(PatientIDHash,PatientPKHash,HtsNumberHash,PrepNumber,SiteCode,NUPIHash,DOB,MaritalStatus,Gender,ClientType,PatientSource,EnrollmentWHOKey,DateBaselineWHOKey,BaseLineWHOKey,/*PrepEnrollmentDateKey,*/IsTXCurr,LoadDate)
-WHEN MATCHED THEN
-	UPDATE SET 
-				a.MaritalStatus	= b.MaritalStatus,
-				a.ClientType	= b.ClientType,
-				a.PatientSource	= b.PatientSource;
+--WHEN MATCHED THEN
+--	UPDATE SET 
+--				a.MaritalStatus	= b.MaritalStatus,
+--				a.ClientType	= b.ClientType,
+--				a.PatientSource	= b.PatientSource
+				;
+
+select count(1) from ndwh.dbo.DimPatient   --- 7,627,516
+
+
+rollback tran
