@@ -13,15 +13,16 @@ select
     patient.Gender,
     count(*) NumOfPatients,
 	ART.IsTXCurr,
-	 AsOfDateKey,
+	asofdate.Date as AsofDate,
     age_group.DATIMAgeGroup
-  
+ 
 from NDWH.dbo.FactARTHistory as ART
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = ART.FacilityKey
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = ART.PartnerKey
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = ART.AgencyKey
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = DATEDIFF(YY,patient.DOB,ART.AsOfDateKey)
+left join NDWH.dbo.DimDate as asofdate on asofdate.DateKey = ART.AsOfDateKey
 
 group by 
     facility.MFLCode,
@@ -32,8 +33,8 @@ group by
     agency.AgencyName,
     patient.Gender,
 	ART.IsTXCurr,
-	AsOfDateKey,
-    DATIMAgeGroup
+    DATIMAgeGroup,
+	asofdate.Date 
 
 
 
