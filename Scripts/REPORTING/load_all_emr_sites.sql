@@ -14,6 +14,7 @@ With EMRSites as (
     fac.isCT, 
     fac.isPkv, 
     fac.isHts, 
+	a.EMR_Status,
     CAST(
       GETDATE() AS DATE
     ) AS LoadDate 
@@ -49,7 +50,10 @@ Select
   COALESCE(
     CASE WHEN SiteCode IS NOT NULL THEN 1 ELSE NULL END, 
     0
-  ) AS isHTS_ML INTO REPORTING.dbo.all_EMRSites 
+  ) AS isHTS_ML ,
+  EMR_Status
+
+  INTO REPORTING.dbo.all_EMRSites 
 from 
   EMRSites 
   left join ML on ML.SiteCode = EMRSites.MFLCode
