@@ -12,6 +12,7 @@ SELECT DISTINCT
     Gender,
     age.DATIMAgeGroup as AgeGroup, 
     StabilityAssessment,
+	DifferentiatedCare,
     SUM(onMMD) as patients_onMMD,
     SUM(case when onMMD = 0 then 1 else 0 end) as patients_nonMMD,
     COUNT(StabilityAssessment) AS Stability,
@@ -25,6 +26,6 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = lob.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = lob.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = lob.PartnerKey
 WHERE pat.isTXCurr = 1
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, StabilityAssessment
+GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, Gender, age.DATIMAgeGroup, StabilityAssessment,DifferentiatedCare
 
 GO
