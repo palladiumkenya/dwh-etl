@@ -12,7 +12,8 @@ BEGIN
 					  ,CAST ([Dob] AS DATE) AS [Dob]
 					  ,LEFT([Gender],1) AS Gender
 					  ,[MaritalStatus]
-					  ,coalesce([KeyPopulationType],'',null) AS [KeyPopulationType]
+					  --,coalesce([KeyPopulationType],'',null) AS [KeyPopulationType]
+					  ,null [KeyPopulationType]
 					  ,coalesce([PatientDisabled],'',null) AS [DisabilityType]
 					 -- ,PatientDisabled
 					  ,coalesce([PatientDisabled],'',null) as PatientDisabled

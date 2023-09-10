@@ -24,7 +24,7 @@ select
 	LatestWeight,
 	AgeLastVisit,
 	Adherence,
-	DifferentiatedCare,
+	obs.DifferentiatedCare,
 	onMMD,
 	StabilityAssessment,
 	Pregnant,
