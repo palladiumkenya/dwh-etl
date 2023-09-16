@@ -12,7 +12,7 @@ BEGIN
 			USING(
 					SELECT distinct [PatientIDCCC],P.[PatientPk],[BabyPatientPK],[MotherPatientPK],[BabyPatientMncHeiID],[MotherPatientMncHeiID]
 						  ,P.[SiteCode],F.Name FacilityName,P.[EMR],P.[Project]
-						  ,P.[Date_Last_Modified]
+						  ,P.[Date_Last_Modified],p.DateExtracted
 						  ,convert(nvarchar(64), hashbytes('SHA2_256', cast(p.[PatientPk]  as nvarchar(36))), 2) PatientPKHash 
 						  ,convert(nvarchar(64), hashbytes('SHA2_256', cast(BabyPatientPK  as nvarchar(36))), 2)BabyPatientPKHash
 						  ,convert(nvarchar(64), hashbytes('SHA2_256', cast(MotherPatientPK  as nvarchar(36))), 2)MotherPatientPKHash
@@ -32,12 +32,13 @@ BEGIN
 						--and a.[MotherPatientPK] = b.[MotherPatientPK]
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,LoadDate)  
-						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified ,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,Getdate())
+						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified,DateExtracted,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,LoadDate)  
+						VALUES(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified,DateExtracted,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.FacilityName	 =b.FacilityName;
+							a.FacilityName	 =b.FacilityName,
+							a.DateExtracted  = b.DateExtracted;
 
 					;with cte AS ( Select         
 								p.[PatientPk],           
