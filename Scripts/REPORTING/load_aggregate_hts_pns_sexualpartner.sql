@@ -59,7 +59,7 @@ line_list_dataset as (
 		    else 0 
         end  elicited,
 		case 
-			when (FinalTestResult is not null ) then 1
+			when (FinalTestResult is not null ) and FinalTestResult <>'positive' then 1
 		    else 0 
         end as tested,
 		case 
