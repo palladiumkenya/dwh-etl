@@ -14,8 +14,8 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="174"
-  DTS:VersionGUID="{147DCF01-CAE9-434C-B7D5-E44B521FF44E}">
+  DTS:VersionBuild="175"
+  DTS:VersionGUID="{CAD28FF2-5638-42D0-BDAE-ADA323FC5D70}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -38,7 +38,6 @@
       DTS:refId="Package\Execute HTS Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{12EFA63A-FCC9-45DA-B4AC-C7291065E807}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -111,7 +110,6 @@
       DTS:refId="Package\Execute MNCH Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{CDC9D587-8FD9-48CA-B382-3018FBFD3BE0}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -130,7 +128,6 @@
       DTS:refId="Package\Execute ODS Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{108DCBBB-2095-472B-B22E-99E00BF8A8BB}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -149,7 +146,6 @@
       DTS:refId="Package\Execute post ODS Task(Hashing)"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{6B359831-5095-4F4F-A54A-293E459A1A13}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -168,7 +164,6 @@
       DTS:refId="Package\Execute PrEP Task"
       DTS:CreationName="Microsoft.ExecutePackageTask"
       DTS:Description="Execute Package Task"
-      DTS:Disabled="True"
       DTS:DTSID="{8A29AB20-0E3E-4EF5-AF3D-E7AC8819BB8E}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
       DTS:FailPackageOnFailure="True"
@@ -203,7 +198,6 @@
       DTS:refId="Package\LogETLStartDateTime"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{D38026EF-E8B2-45EC-A1FA-005D829D4A20}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -220,7 +214,6 @@
       DTS:refId="Package\Script_Task_To_Send_Emails_On_Start"
       DTS:CreationName="Microsoft.ScriptTask"
       DTS:Description="Script Task"
-      DTS:Disabled="True"
       DTS:DTSID="{2c2abcc8-23a9-4f98-9690-7ebe48eafefc}"
       DTS:ExecutableType="Microsoft.ScriptTask"
       DTS:FailPackageOnFailure="True"
