@@ -1,4 +1,4 @@
-begin tran
+
 	IF OBJECT_ID(N'[NDWH].[dbo].[DimPatient]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[DimPatient];
 BEGIN
@@ -134,7 +134,3 @@ BEGIN
 ALTER TABLE NDWH.dbo.DimPatient ADD PRIMARY KEY(PatientKey);
 
 END
-
-select count(1) from ndwh.dbo.DimPatient  ---7,627,516
-
-rollback tran
