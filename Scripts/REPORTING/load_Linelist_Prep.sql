@@ -30,7 +30,30 @@ WITH prepCascade AS  (
 	LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
 	LEFT JOIN NDWH.dbo.DimDate ass ON ass.DateKey = AssessmentVisitDateKey 
 	
+),
+
+Riskscores As (Select 
+* from REPORTING.dbo.LineListHTSRiskCategorizationAndTestResults hiv
+where HIVRiskCategory is not null
 )
-Select * 
-  INTO REPORTING.dbo.LinelistPrep
-  from prepCascade
+Select 
+        Prep.PatientPKHash,
+        Prep.MFLCode,		
+        Prep.FacilityName,
+        Prep.County,
+        Prep.SubCounty,
+        Prep.PartnerName,
+        Prep.AgencyName,
+        Prep.Gender,
+        AgeGroup,
+        AssessmentMonth,
+        AssessmentYear,
+        AsofDate,
+        EligiblePrep,
+        ScreenedPrep,
+        HIVRiskCategory,
+        case when hiv.PatientPKhash  is not null then 1 else 0
+        End as PreventionServices 
+  INTO REPORTING.dbo.LinelistPrep 
+  from prepCascade prep
+  left join Riskscores hiv on hiv.PatientPKHash=prep.PatientPKHash and hiv.MFLCode=prep.MFLCode
