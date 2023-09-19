@@ -13,7 +13,7 @@ with MFL_partner_agency_combination as (
 
 latest_weight_height as (
 select 
-	PatientID,
+	--PatientID,
 	PatientPKHash,
 	SiteCode,
 	Weight as LatestWeight,
@@ -34,7 +34,7 @@ latest_adherence as (
 		distinct  
 		visits.SiteCode,
 		visits.PatientPK,
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.Adherence
 	from ODS.dbo.CT_PatientVisits as visits
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
@@ -47,7 +47,7 @@ latest_differentiated_care as (
 	select
 		distinct visits.SiteCode,
 		visits.PatientPK,
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.DifferentiatedCare
 	from ODS.dbo.CT_PatientVisits as visits
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
@@ -59,7 +59,7 @@ latest_differentiated_care as (
 latest_mmd as (
 	select
 		distinct PatientPK,
-		PatientID,
+		--PatientID,
 		SiteCode,
 		case 
 			when abs(datediff(day,LastEncounterDate, NextAppointmentDate)) <=89 then 0
@@ -72,7 +72,7 @@ lastest_stability_assessment as (
 		distinct  
 		visits.SiteCode,
 		visits.PatientPK,
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.StabilityAssessment
 	from ODS.dbo.CT_PatientVisits as visits
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
@@ -83,7 +83,7 @@ lastest_stability_assessment as (
 latest_pregnancy as (
 	select
 		distinct visits.PatientPK, 
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.SiteCode,
 		visits.Pregnant
 	from ODS.dbo.CT_PatientVisits as visits
@@ -96,7 +96,7 @@ latest_pregnancy as (
 latest_fp_method as (
 	select
 		distinct visits.PatientPK, 
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.SiteCode,
 		visits.FamilyPlanningMethod
 	from ODS.dbo.CT_PatientVisits as visits
@@ -111,7 +111,7 @@ latest_fp_method as (
 latest_breastfeeding as (
 	select
 		distinct visits.PatientPK, 
-		visits.PatientID, 
+		--visits.PatientID, 
 		visits.SiteCode,
 		visits.Breastfeeding,
         visits.LMP,
@@ -129,7 +129,7 @@ latest_breastfeeding as (
 		patient.PatientPKHash,
         patient.PatientPK,
 		patient.SiteCode,
-		patient.PatientID,
+		--patient.PatientID,
 		latest_weight_height.LatestHeight,
 		latest_weight_height.LatestWeight,
 		age_of_last_visit.AgeLastVisit,

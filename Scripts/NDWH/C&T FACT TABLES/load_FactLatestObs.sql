@@ -1,4 +1,4 @@
- 
+
 IF OBJECT_ID(N'[NDWH].[dbo].[FactLatestObs]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FactLatestObs];
 
@@ -32,8 +32,8 @@ select
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from ODS.dbo.intermediate_LatestObs obs
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = obs.PatientPKHash 
-    and patient.SiteCode = obs.SiteCode
+left join NDWH.dbo.DimPatient as patient on obs.PatientPKHash = patient.PatientPKHash 
+    and obs.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = obs.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = obs.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
