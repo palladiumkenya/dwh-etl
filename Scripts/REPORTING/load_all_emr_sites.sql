@@ -24,11 +24,7 @@ With EMRSites as (
 ), 
 ML AS (
   select 
-    distinct SiteCode, 
-    COALESCE(
-      CASE WHEN SiteCode IS NOT NULL THEN 1 ELSE NULL END, 
-      0
-    ) AS isHTS_ML 
+    distinct SiteCode
   from 
     ODS.dbo.HTS_EligibilityExtract 
   where 
