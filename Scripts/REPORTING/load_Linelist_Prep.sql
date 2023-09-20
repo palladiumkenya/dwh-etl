@@ -18,8 +18,8 @@ WITH prepCascade AS  (
         ass.year AssessmentYear,
         EOMONTH(ass.Date) as AsofDate,
         EligiblePrep,
-        ScreenedPrep,
-    CAST(GETDATE() AS DATE) AS LoadDate 
+        ScreenedPrep
+   
  
     FROM NDWH.dbo.FactPrepAssessments prep
     
@@ -53,7 +53,8 @@ Select
         ScreenedPrep,
         HIVRiskCategory,
         case when hiv.PatientPKhash  is not null then 1 else 0
-        End as PreventionServices 
+        End as PreventionServices ,
+        CAST(GETDATE() AS DATE) AS LoadDate 
   INTO REPORTING.dbo.LinelistPrep 
   from prepCascade prep
   left join Riskscores hiv on hiv.PatientPKHash=prep.PatientPKHash and hiv.MFLCode=prep.MFLCode
