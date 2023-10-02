@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateCohortRetention]', N'U') IS NOT NULL 	
-	DROP TABLE [REPORTING].[dbo].[AggregateCohortRetention]
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTxNew]', N'U') IS NOT NULL 	
+	DROP TABLE [REPORTING].[dbo].[AggregateTxNew]
 GO
 
 
@@ -17,7 +17,7 @@ SELECT DISTINCT
     EOMONTH(date.date) as AsofDate,
     COUNT(CONCAT(it.PatientKey,'-',it.FacilityKey)) as patients_startedART,
     cast(getdate() as date) as LoadDate
-INTO REPORTING.dbo.AggregateCohortRetention 
+INTO REPORTING.dbo.AggregateTxNew 
 FROM NDWH.dbo.FactART it
 INNER join NDWH.dbo.DimAgeGroup age on age.Age=it.AgeAtARTStart
 INNER join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
