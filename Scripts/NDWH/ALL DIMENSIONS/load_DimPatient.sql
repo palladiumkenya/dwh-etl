@@ -1,3 +1,4 @@
+
 	IF OBJECT_ID(N'[NDWH].[dbo].[DimPatient]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[DimPatient];
 BEGIN

@@ -14,6 +14,7 @@ SELECT
     [year],
     [month],
     MonthName,
+    AsofDate,
     Tested,
     Linked,
     Positive,
@@ -33,6 +34,7 @@ FROM (
         d.[year],
         d.[month],
         DATENAME(month, d.Date) AS MonthName,
+        EOMONTH(d.date) AS AsofDate,
         SUM(Tested) AS Tested,
         SUM(Linked) AS Linked,
         SUM(Positive) AS Positive,
@@ -57,5 +59,7 @@ FROM (
         clientTestedAs,
         d.[year],
         d.[month],
-        d.Date
-) A;
+        DATENAME(month, d.Date),
+        EOMONTH(d.date)
+
+) as tbl;

@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
-  DTS:CheckpointFileName="C:\Palladium_New_EDW_Architecture\dwh-etl-dev\SSIS_Checkpoint\HTS\CheckPoint.xml"
-  DTS:CheckpointUsage="1"
   DTS:CreationDate="3/25/2023 5:45:30 AM"
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="WIN-LQ135V1RIG4"
@@ -13,9 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package2"
   DTS:PackageType="5"
-  DTS:SaveCheckpoints="True"
-  DTS:VersionBuild="6"
-  DTS:VersionGUID="{BF3EE7C1-04F9-4D47-94A4-5F36EE3AB920}">
+  DTS:VersionBuild="12"
+  DTS:VersionGUID="{CA19AEF4-3905-4DAE-9199-1D8F5685AA42}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -80,6 +77,7 @@
       DTS:Description="Execute Package Task"
       DTS:DTSID="{43E3A484-BC42-4664-9260-3CD2A737D632}"
       DTS:ExecutableType="Microsoft.ExecutePackageTask"
+      DTS:FailPackageOnFailure="True"
       DTS:LocaleID="-1"
       DTS:ObjectName="Loop Through Intermediate Tables"
       DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
@@ -142,6 +140,10 @@
           Size="246.666666666667,42.6666666666667"
           Id="Package\Execute Remove Duplicate Package"
           TopLeft="400,190" />
+        <NodeLayout
+          Size="242.666666666667,42.6666666666667"
+          Id="Package\Loop Through Intermediate Tables"
+          TopLeft="455.624993210659,275.599995071888" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="188.5,65">
@@ -210,10 +212,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="242.666666666667,42.6666666666667"
-          Id="Package\Loop Through Intermediate Tables"
-          TopLeft="455.624993210659,275.599995071888" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
           TopLeft="523.333333333333,232.666666666667">

@@ -13,10 +13,11 @@ WITH Source_TPT AS (
         AgencyName,
         Gender,
         DATIMAgeGroup,
-		StartTBTreatmentDate.Year AS StartTBTreatmentYear,
-		StartTBTreatmentDate.Month AS StartTBTreatmentMonth,
-		TBDiagnosisDate.Year AS TBDiagnosisYear,
-		TBDiagnosisDate.Month as TBDiagnosisMonth,            
+		StartTBTreatmentDate.Year as StartTBTreatmentYear,
+		StartTBTreatmentDate.Month as StartTBTreatmentMonth,
+		TBDiagnosisDate.Year as TBDiagnosisYear,
+		TBDiagnosisDate.Month as TBDiagnosisMonth,
+        EOMONTH(TBDiagnosisDate.Date) as AsOfDate,            
 		OnIPT,
 		hasTB     
     FROM NDWH.dbo.FactTPT tpt
@@ -26,8 +27,7 @@ WITH Source_TPT AS (
     LEFT join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=tpt.AgeGroupKey
     LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = tpt.PartnerKey   
     LEFT JOIN NDWH.dbo.DimDate StartTBTreatmentDate on StartTBTreatmentDate.DateKey = tpt.StartTBTreatmentDateKey
-	LEFT JOIN NDWH.dbo.DimDate TBDiagnosisDate on TBDiagnosisDate.DateKey = tpt.TBDiagnosisDateKey
-    
+	LEFT JOIN NDWH.dbo.DimDate TBDiagnosisDate on TBDiagnosisDate.DateKey = tpt.TBDiagnosisDateKey    
 )
 SELECT 
     MFLCode,
@@ -42,9 +42,10 @@ SELECT
     StartTBTreatmentMonth,
     TBDiagnosisYear,
 	TBDiagnosisMonth,
+    AsOfDate,
 	SUM(CASE WHEN OnIPT = 'Yes' THEN 1 ELSE 0 END) AS OnIPT,    
     Sum(hasTB) hasTB
-INTO REPORTING.dbo.AggregateTPT    
+INTO REPORTING.dbo.AggregateTPT   
 FROM Source_TPT
 GROUP BY 
     MFLCode, 
@@ -57,6 +58,6 @@ GROUP BY
     DATIMAgeGroup,   
     StartTBTreatmentYear,
     StartTBTreatmentMonth,
+    AsOfDate,
     TBDiagnosisYear,
 	TBDiagnosisMonth
-    

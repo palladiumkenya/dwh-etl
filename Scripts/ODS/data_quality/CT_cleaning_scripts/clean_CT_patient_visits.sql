@@ -87,3 +87,17 @@ UPDATE [ODS].[DBO].[CT_PatientVisits]
 WHERE NextAppointmentDate < CAST('1900-01-01' AS DATE) OR DATEDIFF(day, VisitDate, NextAppointmentDate) > 365
 
 GO
+---Clean BP values
+UPDATE ods.dbo.CT_PatientVisits
+SET BP = NULL
+WHERE 
+    BP = 'u78/,67' OR
+    BP = 'S115/78' OR
+    BP = 'q97/52' OR
+    BP = 'n112/58' OR
+    BP = 'i78/56' OR
+    BP = 'I67/89' OR
+    BP = '9o/80' OR
+    BP = '999/999'
+
+Go

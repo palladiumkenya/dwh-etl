@@ -25,8 +25,8 @@ BEGIN
 	
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,PatientMNCH_ID,FacilityName,SatelliteName,VisitID,OrderedbyDate,ReportedbyDate,TestName,TestResult,LabReason,Date_Last_Modified) 
-						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,PatientMNCH_ID,FacilityName,SatelliteName,VisitID,OrderedbyDate,ReportedbyDate,TestName,TestResult,LabReason,Date_Last_Modified)
+						INSERT(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,PatientMNCH_ID,FacilityName,SatelliteName,VisitID,OrderedbyDate,ReportedbyDate,TestName,TestResult,LabReason,Date_Last_Modified,LoadDate)  
+						VALUES(PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,PatientMNCH_ID,FacilityName,SatelliteName,VisitID,OrderedbyDate,ReportedbyDate,TestName,TestResult,LabReason,Date_Last_Modified,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

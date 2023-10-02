@@ -50,7 +50,8 @@ BEGIN
 						IE.[EvaluatedForIPT] AS EvaluatedForIPT,IE.[StartAntiTBs] AS StartAntiTBs,IE.[TBRxStartDate] AS TBRxStartDate,
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
 						IE.[IndicationForIPT] AS IndicationForIPT
-					   ,P.ID 
+					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified]
+					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -64,8 +65,8 @@ BEGIN
 						and a.ID =b.ID)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT)
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -88,7 +89,12 @@ BEGIN
 						a.TBScreening			=b.TBScreening,
 						a.IPTClientWorkUp		=b.IPTClientWorkUp,
 						a.StartIPT				=b.StartIPT,
-						a.IndicationForIPT		=b.IndicationForIPT;
+						a.IndicationForIPT		=b.IndicationForIPT,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						a.[TPTInitiationDate]	= b.[TPTInitiationDate],
+						a.IPTDiscontinuation    = b.IPTDiscontinuation,
+						a.DateOfDiscontinuation   = b.DateOfDiscontinuation;
 						
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]

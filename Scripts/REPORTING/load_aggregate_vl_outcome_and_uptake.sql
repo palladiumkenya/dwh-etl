@@ -10,7 +10,8 @@ SELECT
 	p.PartnerName,
 	a.AgencyName,
 	pat.Gender,
-	YEAR ( art.StartARTDateKey ) AS StartARTYear,
+	YEAR (art.StartARTDateKey ) AS StartARTYear,
+    EOMONTH(date.Date) as AsOfDate,
 	g.DATIMAgeGroup AS AgeGroup,
 	COUNT (vl.ValidVLResultCategory2 ) AS TotalValidVLResultCategory,
 	case 
@@ -39,6 +40,7 @@ LEFT JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = vl.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = vl.PartnerKey
 LEFT JOIN NDWH.dbo.FactART art ON art.PatientKey = vl.PatientKey 
 LEFT join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
+LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = art.StartARTDateKey
 WHERE IsTXCurr = 1 and outcome.ARTOutcome = 'V'
 GROUP BY 
 	MFLCode, 
@@ -49,7 +51,8 @@ GROUP BY
 	a.AgencyName,
 	pat.Gender, 
 	g.DATIMAgeGroup, 
-	art.StartARTDateKey,
+	YEAR(art.StartARTDateKey),
+    EOMONTH(date.Date),
 	case 
 		when vl.ValidVLResultCategory2 in  ('Low Risk LLV', 'LDL') then 'SUPPRESSED'
 		else vl.ValidVLResultCategory2

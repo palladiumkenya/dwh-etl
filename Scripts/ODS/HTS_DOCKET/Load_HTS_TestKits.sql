@@ -40,8 +40,8 @@ BEGIN
 	 
 	)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2) 
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2)
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2,LoadDate)  
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,EncounterId,TestKitName1,TestKitLotNumber1,TestKitExpiry1,TestResult1,TestKitName2,TestKitLotNumber2,TestKitExpiry2,TestResult2,Getdate())
 	WHEN MATCHED THEN
 		UPDATE SET 
 			

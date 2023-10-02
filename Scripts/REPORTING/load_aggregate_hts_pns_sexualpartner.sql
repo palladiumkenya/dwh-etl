@@ -14,6 +14,7 @@ with pns_and_tests as (
 		pns.CccNumber,
         pns.RelationsipToIndexClient,
         pns.KnowledgeOfHivStatus,
+        tests.TestedBefore,
 		tests.FinalTestResult,
 		pns.DateElicitedKey,
         pns.DateLinkedToCareKey,
@@ -51,14 +52,15 @@ line_list_dataset as (
 		tested.year,
 		tested.month,
 		FORMAT(cast(tested.Date as date), 'MMMM') MonthName, 
+        EOMONTH(tested.date) as AsofDate,
 		Gender,
 		DATIMAgeGroup as Agegroup,
 		case 
-			when (dataset.PatientKey is not null) then 1 
+			when (dataset.DateElicitedKey is not null) then 1 
 		    else 0 
         end  elicited,
 		case 
-			when (FinalTestResult is not null ) then 1
+			when (FinalTestResult is not null ) and (dataset.DateElicitedKey is not null) and (TestedBefore<> 'Retest') then 1
 		    else 0 
         end as tested,
 		case 
@@ -96,13 +98,14 @@ select
 	year,
 	month,
 	MonthName, 
+    AsofDate,
 	sum(elicited) as PartnersElicited,
 	sum(tested) as PartnerTested,
 	sum(positive) as Positive,
     sum(Linked) as Linked,
 	sum(KP) as KnownPositive,
      CAST(GETDATE() AS DATE) AS LoadDate  
-  into REPORTING.dbo.AggregateHTSPNSSexualPartner
+into REPORTING.dbo.AggregateHTSPNSSexualPartner
 from line_list_dataset
 group by 
     Mflcode,
@@ -113,7 +116,7 @@ group by
     year,
     month,
     monthName,
+    AsofDate,
     Gender,
     Agegroup,
-    AgencyName
-
+    AgencyName;

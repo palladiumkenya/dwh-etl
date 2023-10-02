@@ -56,9 +56,9 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 		) 
 	 WHEN NOT MATCHED THEN 
 		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
-			  ,Date_Last_Modified) 
+			  ,Date_Last_Modified,LoadDate)
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,PrepEnrollmentDate,Sex,DateofBirth,CountyofBirth,County,SubCounty,[Location],LandMark,Ward,ClientType,ReferralPoint,MaritalStatus,Inschool,PopulationType,KeyPopulationType,Refferedfrom,TransferIn,TransferInDate,TransferFromFacility,DatefirstinitiatedinPrepCare,DateStartedPrEPattransferringfacility,ClientPreviouslyonPrep,PrevPrepReg,DateLastUsedPrev,Date_Created
-				,Date_Last_Modified) 
+				,Date_Last_Modified,Getdate())
 
 	  WHEN MATCHED THEN
 				UPDATE SET 													

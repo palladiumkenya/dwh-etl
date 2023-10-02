@@ -76,28 +76,28 @@ patient_art_and_enrollment_info as (
         ARTPatients.StartARTDate,
         ARTPatients.StartRegimen,
         ARTPatients.StartRegimenLine,
+		ARTPatients.ExpectedReturn,
         Patients.RegistrationAtCCC as EnrollmentDate,
         Patients.DOB,
         Patients.Gender,
         Patients.DateConfirmedHIVPositive,
         datediff(yy, Patients.DOB, Patients.RegistrationAtCCC) as AgeEnrollment
     from ODS.dbo.CT_ARTPatients as ARTPatients
-    left join ODS.dbo.CT_Patient as Patients  on Patients.PatientID = ARTPatients.PatientID
-    and Patients.PatientPK = ARTPatients.PatientPK
-    and Patients.SiteCode = ARTPatients.SiteCode
+    left join ODS.dbo.CT_Patient as Patients on Patients.PatientPK = ARTPatients.PatientPK
+    	and Patients.SiteCode = ARTPatients.SiteCode
 ),
 visit_encounter_as_of_date_ordering as (
      /* order visits as of date by the VisitDate */
     select 
         clinical_visits_as_of_date.*,
-        row_number() over (partition by PatientPK, PatientID, SiteCode order by VisitDate desc) as rank
+        row_number() over (partition by PatientPK, SiteCode order by VisitDate desc) as rank
     from clinical_visits_as_of_date
 ),
 pharmacy_dispense_as_of_date_ordering as (
     /* order pharmacy dispensations as of date by the VisitDate */
     select 
         pharmacy_visits_as_of_date.*,
-        row_number() over (partition by PatientPK, PatientID, SiteCode order by DispenseDate desc) as rank
+        row_number() over (partition by PatientPK, SiteCode order by DispenseDate desc) as rank
     from pharmacy_visits_as_of_date
 ),
 last_visit_encounter_as_of_date as (
@@ -114,26 +114,6 @@ last_pharmacy_dispense_as_of_date as (
     from pharmacy_dispense_as_of_date_ordering
     where rank = 1
 ),
-effective_discontinuation_ordering as (
-    /*order the effective discontinuation by the EffectiveDiscontinuationDate*/
-    select 
-        PatientID,
-        PatientPK,
-        SiteCode,
-        EffectiveDiscontinuationDate,
-        ExitDate,
-        ExitReason,
-        row_number() over (partition by PatientPK, PatientID, SiteCode order by EffectiveDiscontinuationDate desc) as rank
-    from ODS.dbo.CT_PatientStatus
-    where ExitDate is not null and EffectiveDiscontinuationDate is not null
-),
-latest_effective_discontinuation as (
-    /*get the latest discontinuation record*/
-    select 
-        *
-    from effective_discontinuation_ordering
-    where rank = 1
-),
 exits_as_of_date as (
     /* get exits as of date */
     select 
@@ -141,7 +121,9 @@ exits_as_of_date as (
         PatientPK,
         SiteCode,
         ExitDate,
-        ExitReason
+        ExitReason,
+		ReEnrollmentDate,
+		EffectiveDiscontinuationDate
     from ODS.dbo.CT_PatientStatus
     where ExitDate <= @as_of_date 
 ),
@@ -153,7 +135,9 @@ exits_as_of_date_ordering as (
         SiteCode,
         ExitDate,
         ExitReason,
-        row_number() over (partition by PatientPK, PatientID, SiteCode order by ExitDate desc) as rank
+		ReEnrollmentDate,
+		EffectiveDiscontinuationDate,
+        row_number() over (partition by PatientPK, SiteCode order by ExitDate desc) as rank
     from exits_as_of_date
 ),
 last_exit_as_of_date as (
@@ -164,7 +148,7 @@ last_exit_as_of_date as (
     where rank = 1
 ),
 visits_and_dispense_encounters_combined_tbl as (
-    /* combine latest visits and latest pharmacy dispensation records as of date - 'borrowed logic from the view vw_PatientLastEnconter*/
+    /* combine latest visits and latest pharmacy dispensation records as of date */
     /* we don't include the CT_ARTPatients table logic because this table has only the latest records of the patients (no history) */
     select  distinct coalesce (last_visit.PatientID, last_dispense.PatientID) as PatientID,
             coalesce(last_visit.SiteCode, last_dispense.SiteCode) as SiteCode,
@@ -179,8 +163,7 @@ visits_and_dispense_encounters_combined_tbl as (
                 else isnull(last_dispense.ExpectedReturn, last_visit.NextAppointmentDate)  
             end as NextAppointmentDate
     from last_visit_encounter_as_of_date as last_visit
-    full join last_pharmacy_dispense_as_of_date as last_dispense on last_visit.PatientID = last_dispense.PatientID 
-        and last_visit.SiteCode = last_dispense.SiteCode 
+    full join last_pharmacy_dispense_as_of_date as last_dispense on last_visit.SiteCode = last_dispense.SiteCode 
         and last_visit.PatientPK = last_dispense.PatientPK
     where 
         case
@@ -188,8 +171,8 @@ visits_and_dispense_encounters_combined_tbl as (
         else isnull(last_dispense.DispenseDate, last_visit.VisitDate)
         end is not null
 ),
-last_encounter as (
-    /* preparing the latest encounter records as of date */
+last_encounter_cleaned as (
+    /* cleaning TCA dates far away */
     select
         visits_and_dispense_encounters_combined_tbl.PatientID,
         visits_and_dispense_encounters_combined_tbl.SiteCode,
@@ -197,10 +180,27 @@ last_encounter as (
         visits_and_dispense_encounters_combined_tbl.Emr,
         visits_and_dispense_encounters_combined_tbl.LastEncounterDate,
         case 
-            when datediff(dd, @as_of_date, visits_and_dispense_encounters_combined_tbl.NextAppointmentDate) >= 365 then dateadd(day, 30, LastEncounterDate)
+			when datediff(dd, @as_of_date, visits_and_dispense_encounters_combined_tbl.NextAppointmentDate) >= 365 then dateadd(day, 30, LastEncounterDate)
             else visits_and_dispense_encounters_combined_tbl.NextAppointmentDate 
         end As NextAppointmentDate    
     from visits_and_dispense_encounters_combined_tbl
+	where LastEncounterDate is not null
+),
+last_encounter as (
+    /* preparing the latest encounter records as of date */
+    select
+		last_encounter_cleaned.PatientID,
+		last_encounter_cleaned.SiteCode,
+		last_encounter_cleaned.PatientPK,
+		last_encounter_cleaned.Emr,
+		last_encounter_cleaned.LastEncounterDate,
+		case 
+			when visits_and_dispense_encounters_combined_tbl.NextAppointmentDate > last_encounter_cleaned.NextAppointmentDate then visits_and_dispense_encounters_combined_tbl.NextAppointmentDate
+			else last_encounter_cleaned.NextAppointmentDate
+		end as NextAppointmentDate
+    from last_encounter_cleaned
+	left join visits_and_dispense_encounters_combined_tbl on visits_and_dispense_encounters_combined_tbl.PatientPK = last_encounter_cleaned.PatientPK
+		and visits_and_dispense_encounters_combined_tbl.SiteCode = last_encounter_cleaned.SiteCode 
 ),
 ARTOutcomesCompuation as (
     /* computing the ART_Outcome as of date - 'borrowed logic from the view vw_ARTOutcomeX'*/
@@ -215,36 +215,37 @@ ARTOutcomesCompuation as (
         patient_art_and_enrollment_info.DateConfirmedHIVPositive,
         patient_art_and_enrollment_info.Gender,
         datediff(year, patient_art_and_enrollment_info.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
-        case 
-            when latest_effective_discontinuation.ExitDate is not null 
-                and latest_effective_discontinuation.ExitReason <> 'DIED' 
-                and latest_effective_discontinuation.EffectiveDiscontinuationDate > eomonth(@as_of_date) then 'V'
-            when patient_art_and_enrollment_info.startARTDate > dateadd(s,-1,dateadd(mm, datediff(m,0, @as_of_date) + 1 ,0)) then 'NP'
-            when last_exit_as_of_date.ExitDate is not null then substring(last_exit_as_of_date.ExitReason, 1, 1)
-            when eomonth(@as_of_date) < last_encounter.NextAppointmentDate
-			  or datediff(dd, last_encounter.NextAppointmentDate, eomonth(@as_of_date)) <= 30 then 'V'
-            when datediff(dd, last_encounter.NextAppointmentDate, eomonth(@as_of_date)) > 30 then 'uL'
-            when NextAppointmentDate is null then 'NV'
-        end as ARTOutcome,
-        @as_of_date as AsOfDate
+ 		CASE
+            WHEN  last_exit_as_of_date.ExitReason  in ('DIED','dead','Death','Died') THEN 'D'--1
+            WHEN DATEDIFF( dd, last_encounter.NextAppointmentDate, EOMONTH(@as_of_date)) > 30 and last_exit_as_of_date.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
+            WHEN  last_exit_as_of_date.ExitDate IS NOT NULL and last_exit_as_of_date.ExitReason not in ('DIED','dead','Death','Died') and  last_exit_as_of_date.ReEnrollmentDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, @as_of_date)-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, @as_of_date)-1, -1) THEN 'V'--3
+            WHEN  last_exit_as_of_date.ExitDate IS NOT NULL and last_exit_as_of_date.ExitReason not in ('DIED','dead','Death','Died') and  last_exit_as_of_date.EffectiveDiscontinuationDate >=  EOMONTH(@as_of_date) THEN 'V'--4
+ 	        WHEN  patient_art_and_enrollment_info.startARTDate > EOMONTH(@as_of_date) THEN 'NP'--5
+            WHEN  last_exit_as_of_date.EffectiveDiscontinuationDate is not null and last_exit_as_of_date.ReEnrollmentDate is Null Then SUBSTRING(last_exit_as_of_date.ExitReason,1,1) --6
+            WHEN  last_exit_as_of_date.ExitDate IS NOT NULL and last_exit_as_of_date.ExitReason not in ('DIED','dead','Death','Died') and last_exit_as_of_date.EffectiveDiscontinuationDate between DATEADD(MONTH, DATEDIFF(MONTH, 0, @as_of_date)-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, @as_of_date)-1, -1) THEN SUBSTRING(last_exit_as_of_date.ExitReason,1,1)--When a TO and LFTU has an discontinuationdate during the reporting Month --7
+            WHEN  last_exit_as_of_date.ExitDate IS NOT NULL and last_exit_as_of_date.ExitReason not in ('DIED','dead','Death','Died') and  last_encounter.NextAppointmentDate > EOMONTH(@as_of_date)  THEN 'V'--8
+            WHEN  DATEDIFF(dd, last_encounter.NextAppointmentDate, EOMONTH(@as_of_date)) <=30 THEN 'V'-- Date diff btw TCA  and LAst day of Previous month-- must not be late by 30 days -- 9
+			WHEN  last_encounter.NextAppointmentDate > EOMONTH(@as_of_date)   Then 'V' --10
+            WHEN last_encounter.NextAppointmentDate IS NULL THEN 'NV' --11
+			ELSE SUBSTRING(last_exit_as_of_date.ExitReason,1,1)
+		END
+	AS ARTOutcome,
+	@as_of_date as AsOfDate
     from last_encounter
-    left join latest_effective_discontinuation on latest_effective_discontinuation.PatientID = last_encounter.PatientID
-        and latest_effective_discontinuation.PatientPK = last_encounter.PatientPK
-        and latest_effective_discontinuation.SiteCode = last_encounter.SiteCode
-    left join last_exit_as_of_date on last_exit_as_of_date.PatientID = last_encounter.PatientID
+    left join last_exit_as_of_date on last_exit_as_of_date.SiteCode = last_encounter.SiteCode
         and last_exit_as_of_date.PatientPK = last_encounter.PatientPK
-        and last_exit_as_of_date.SiteCode = last_encounter.SiteCode
-    left join patient_art_and_enrollment_info on patient_art_and_enrollment_info.PatientID = last_encounter.PatientID
+    left join patient_art_and_enrollment_info on patient_art_and_enrollment_info.SiteCode = last_encounter.SiteCode
         and patient_art_and_enrollment_info.PatientPK = last_encounter.PatientPK
-        and patient_art_and_enrollment_info.SiteCode = last_encounter.SiteCode
     where patient_art_and_enrollment_info.startARTDate is not null
 )
-insert into dbo.HistoricalARTOutcomesBaseTable
+insert into tmp_and_adhoc.dbo.HistoricalARTOutcomesBaseTable
 select 
 	ARTOutcomesCompuation.PatientID as PatientID,
     ARTOutcomesCompuation.PatientPK,
     ARTOutcomesCompuation.SiteCode as MFLCode,
     ARTOutcomesCompuation.ARTOutcome,
+	ARTOutcomesCompuation.LastEncounterDate,
+	ARTOutcomesCompuation.NextAppointmentDate,
 	ARTOutcomesCompuation.AsOfDate
 from ARTOutcomesCompuation
 
