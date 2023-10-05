@@ -14,10 +14,7 @@ SELECT ROW_NUMBER()OVER(PARTITION BY Covid.PatientPKHash, Covid.SiteCode ORDER B
         FirstDoseVaccineAdministered,
         DateGivenSecondDose,
         SecondDoseVaccineAdministered ,
-        case 
-           when VaccinationStatus is null or VaccinationStatus = '' then 'Not Accessed'
-           else VaccinationStatus
-        end as VaccinationStatus,
+        VaccinationStatus,
         VaccineVerification ,
         BoosterGiven ,
         BoosterDose ,
