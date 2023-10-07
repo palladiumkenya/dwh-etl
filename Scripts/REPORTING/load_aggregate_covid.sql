@@ -11,7 +11,10 @@ SELECT
     a.AgencyName,
     Gender,
     age.DATIMAgeGroup as AgeGroup,
-    cov.VaccinationStatus,
+    case 
+        when cov.VaccinationStatus is null or cov.VaccinationStatus = '' then 'Not Accessed'
+        else cov.VaccinationStatus
+    end as VaccinationStatus,  
     cov.PatientStatus,
     cov.AdmissionStatus,
     cov.AdmissionUnit,
