@@ -26,7 +26,7 @@ select
 	otz.ModulesCompletedToday_OTZ_TreatmentLiteracy,
 	otz.ModulesCompletedToday_OTZ_SRH,
 	otz.ModulesCompletedToday_OTZ_Beyond,
-    COALESCE(DATEDIFF(yy, patient.DOB, last_encounter.LastEncounterDate), DATEDIFF(yy, patient.DOB, GETDATE())) AS AgeLastVisit,
+    datediff(yy, patient.DOB, coalesce(last_encounter.LastEncounterDate, getdate() )) As  AgeLastVisit,
 	 cast(getdate() as date) as LoadDate
 from ODS.dbo.Intermediate_LastOTZVisit as otz
 left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = otz.PatientPKHash 
