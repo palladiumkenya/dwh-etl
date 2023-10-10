@@ -6,7 +6,9 @@ GO
 WITH prepCascade AS  (
 	SELECT DISTINCT 
         PatientPKHash,
-        MFLCode,		
+        prep.PatientKey,
+        MFLCode,	
+        prep.FacilityKey,	
         f.FacilityName,
         County,
         SubCounty,
@@ -19,7 +21,6 @@ WITH prepCascade AS  (
         EOMONTH(ass.Date) as AsofDate,
         EligiblePrep,
         ScreenedPrep
-   
  
     FROM NDWH.dbo.FactPrepAssessments prep
     
@@ -33,7 +34,7 @@ WITH prepCascade AS  (
 ),
 
 Riskscores As (Select 
-* from REPORTING.dbo.LineListHTSRiskCategorizationAndTestResults hiv
+* from NDWH.dbo.FactHTSEligibilityextract hiv
 where HIVRiskCategory is not null
 )
 Select 
@@ -52,9 +53,9 @@ Select
         EligiblePrep,
         ScreenedPrep,
         HIVRiskCategory,
-        case when hiv.PatientPKhash  is not null then 1 else 0
+        case when hiv.PatientKey  is not null then 1 else 0
         End as PreventionServices ,
         CAST(GETDATE() AS DATE) AS LoadDate 
   INTO REPORTING.dbo.LinelistPrep 
   from prepCascade prep
-  left join Riskscores hiv on hiv.PatientPKHash=prep.PatientPKHash and hiv.MFLCode=prep.MFLCode
+  left join Riskscores hiv on hiv.PatientKey=prep.PatientKey and hiv.FacilityKey=prep.FacilityKey
