@@ -210,7 +210,7 @@ select
         when positive_heis.HEIHIVStatus is not null then 1 
         else 0
     end as InfectedAt24mnths,
-    positive_heis.HEIExitCritearia,
+    positive_heis.HEIExitCritearia as HEIExitCriteria,
     positive_heis.HEIHIVStatus,
     case 
         when prophylaxis_data.PatientPk is not null then 1 
