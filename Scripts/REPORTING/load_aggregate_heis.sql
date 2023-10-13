@@ -43,5 +43,4 @@ group by
     agency.AgencyName,
     age_group.DATIMAgeGroup,
     patient.Gender
-
 go

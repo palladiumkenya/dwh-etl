@@ -29,7 +29,7 @@ select
     InfectedAt24mnths,
     UnknownOutocomeAt24months,
     InfectedOnART,
-    HEIExitCritearia,
+    HEIExitCriteria,
     HEIHIVStatus
 into REPORTING.dbo.LinelistHEI
 from NDWH.dbo.FactHEI as hei
