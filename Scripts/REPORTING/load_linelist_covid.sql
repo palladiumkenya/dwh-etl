@@ -18,7 +18,10 @@ SELECT
 	FirstDoseVaccineAdministered,
 	cast(cast(DateGivenSecondDoseKey as char) as date) as DateGivenSecondDoseKey,
 	SecondDoseVaccineAdministered,
-	VaccinationStatus,
+	case 
+		when cov.VaccinationStatus is null or cov.VaccinationStatus = '' then 'Not Accessed'
+		else cov.VaccinationStatus
+	end as VaccinationStatus,
 	VaccineVerification,
 	BoosterGiven,
 	BoosterDose,

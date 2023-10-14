@@ -34,7 +34,7 @@ with source_data as (
 	left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tests.PatientKey
 	left join NDWH.dbo.DimDate as testDate on testDate.DateKey =tests.DateTestedKey
 	where 
-		HIVRiskCategory is not null
+		testDate.Date>='2023-04-01' and TestType='Initial Test'
 )
 select 
 		PatientPKHash,
