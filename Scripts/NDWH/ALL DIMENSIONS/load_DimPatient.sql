@@ -31,6 +31,7 @@ BEGIN
             and patients.SiteCode = baselines.SiteCode
         left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPKHash = patients.PatientPKHash 
             and outcomes.SiteCode = patients.SiteCode
+        where voided = 0
 	),
     hts_patient_source as (
         select    
