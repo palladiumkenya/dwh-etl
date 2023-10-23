@@ -27,12 +27,11 @@ Select
 		agency.AgencyKey,
 		patient.PatientKey,
 		as_of.DateKey as AsOfDateKey,
-        patient.Gender,
 		LastEncounterDate,
 		ExpectedNextAppointmentDate,
 		AppointmentStatus,
 		DiffExpectedTCADateLastEncounter,
-        age_group.DATIMAgeGroup,
+        age_group.AgeGroupKey,
         AsofDate,
         cast(getdate() as date) as LoadDate
         into NDWH.dbo.FACTAppointments
@@ -46,6 +45,4 @@ left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = DATEDIFF(
 left join NDWH.dbo.DimDate as as_of on as_of.Date = apt.AsOfDate
 
 
-	alter table NDWH.dbo.FACTAppointments add primary key(FactKey);
-
-
+alter table NDWH.dbo.FACTAppointments add primary key(FactKey);

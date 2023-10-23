@@ -1,93 +1,73 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAppointments', N'U') IS NOT NULL 
-	Drop TABLE [REPORTING].[dbo].AggregateAppointments
-Go
-   WITH Bookings AS (
-    SELECT 
-      Facilitykey, 
-      AsofDateKey, 
-      EOMONTH(ExpectedNextAppointmentDate) AS EndOfMonth, 
-      PartnerKey, 
-      Gender, 
-      DATIMAgeGroup,
-      AgencyKey, 
-      COUNT(DISTINCT PatientKey) AS NumBooked 
-    FROM 
-      NDWH.dbo.FACTAppointments apt 
-    GROUP BY 
-      Facilitykey, 
-      AsofDateKey, 
-      EOMONTH(ExpectedNextAppointmentDate), 
-      PartnerKey, 
-      Gender, 
-      DATIMAgeGroup,
-      AgencyKey
-  ), 
-  Summary as (
-    select 
-      facility.MFLCode, 
-      facility.FacilityKey, 
-      facility.FacilityName, 
-      facility.SubCounty, 
-      facility.County, 
-      partner.PartnerName, 
-      Partner.PartnerKey, 
-      agency.AgencyName, 
-      agency.AgencyKey, 
-      patient.Gender, 
-      AppointmentStatus, 
-      count(*) NumOfPatients, 
-      age_group.DATIMAgeGroup, 
-      apt.AsOfDateKey, 
-	  apt.asofdate,
-      cast(
-        getdate() as date
-      ) as LoadDate 
-    from 
-      NDWH.dbo.FACTAppointments as apt 
-      left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = apt.FacilityKey 
-      left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = apt.PartnerKey 
-      left join NDWH.dbo.DimPatient as patient on patient.PatientKey = apt.PatientKey 
-      left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = apt.AgencyKey 
-      left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = DATEDIFF(YY, patient.DOB, apt.AsOfDate) 
-      left join Bookings on Bookings.FacilityKey = apt.FacilityKey 
-      and bookings.AsOfDateKey = apt.AsOfDateKey 
-    group by 
-      facility.MFLCode, 
-      facility.FacilityKey, 
-      facility.FacilityName, 
-      facility.SubCounty, 
-      facility.County, 
-      partner.PartnerName, 
-      Partner.PartnerKey, 
-      agency.AgencyName, 
-      agency.AgencyKey, 
-      patient.Gender, 
-      AppointmentStatus, 
-      apt.AsOfDateKey, 
-	  apt.asofdate,
+DROP TABLE [REPORTING].[dbo].AggregateAppointments
+
+GO 
+
+with Bookings AS (
+  select
+    Facilitykey,
+    EOMONTH(ExpectedNextAppointmentDate) AS EndOfMonthBookings,
+    PartnerKey,
+    patient.Gender,
+    age_group.DATIMAgeGroup,
+    AgencyKey,
+    COUNT(distinct apt.PatientKey) as NumBooked
+  from
+  NDWH.dbo.FACTAppointments apt
+  left join NDWH.dbo.DimPatient as patient on patient.PatientKey = apt.PatientKey
+  left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = DATEDIFF(YY, patient.DOB, apt.LastEncounterDate)
+  group by
+    Facilitykey,
+    EOMONTH(ExpectedNextAppointmentDate),
+    PartnerKey,
+    patient.Gender,
+    age_group.DATIMAgeGroup,
+    AgencyKey
+),
+appointments_summary as (
+    select
+      apt.FacilityKey,
+      apt.PartnerKey,
+      apt.AgencyKey,
+      patient.Gender,
+      AppointmentStatus,
+      EOMONTH(LastEncounterDate) as EndOfMonthEncounter,
+      age_group.DATIMAgeGroup,
+      count(distinct apt.PatientKey) NumOfPatients
+    from NDWH.dbo.FACTAppointments as apt
+    left join NDWH.dbo.DimPatient as patient on patient.PatientKey = apt.PatientKey
+    left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = DATEDIFF(YY, patient.DOB, apt.LastEncounterDate)
+    group by
+      apt.FacilityKey,
+      apt.PartnerKey,
+      apt.AgencyKey,
+      patient.Gender,
+      apt.AppointmentStatus,
+      EOMONTH(LastEncounterDate),
       age_group.DATIMAgeGroup
-  ) 
-Select 
-  Summary.MFLCode, 
-  Summary.FacilityName, 
-  Summary.SubCounty, 
-  Summary.County, 
-  Summary.PartnerName, 
-  Summary.AgencyName, 
-  Summary.Gender, 
-  AppointmentStatus, 
-  NumOfPatients, 
-  Bookings.NumBooked, 
-  Summary.DATIMAgeGroup, 
-  Summary.AsofDate, 
-  cast(
-    getdate() as date
-  ) as LoadDate into [REPORTING].[dbo].AggregateAppointments 
-from 
-  Summary 
-  left join Bookings AS Bookings on Bookings.AsOfDateKey = Summary.AsofDatekey 
-  and bookings.FacilityKey = Summary.FacilityKey 
-  and Bookings.PartnerKey = Summary.PartnerKey 
-  and Bookings.Gender = Summary.Gender 
-  and Bookings.AgencyKey = Summary.AgencyKey
-  and Bookings.DATIMAgeGroup=Summary.DATIMAgeGroup
+)
+select
+  facility.MFLCode,
+  facility.FacilityName,
+  facility.SubCounty,
+  facility.County,
+  partner.PartnerName,
+  agency.AgencyName,
+  appointments_summary.Gender,
+  appointments_summary.DATIMAgeGroup,
+  appointments_summary.EndOfMonthEncounter,
+  appointments_summary.AppointmentStatus,
+  appointments_summary.NumOfPatients as NumPatients,
+  coalesce(Bookings.NumBooked, 0) as NumBooked,
+  cast(getdate() as date) as LoadDate
+into REPORTING.dbo.AggregateAppointments
+from appointments_summary
+left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = appointments_summary.FacilityKey
+left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = appointments_summary.PartnerKey
+left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = appointments_summary.AgencyKey
+left join Bookings AS Bookings on Bookings.EndOfMonthBookings = appointments_summary.EndOfMonthEncounter
+  and Bookings.FacilityKey = appointments_summary.FacilityKey
+  and Bookings.PartnerKey = appointments_summary.PartnerKey
+  and Bookings.Gender = appointments_summary.Gender
+  and Bookings.AgencyKey = appointments_summary.AgencyKey
+  and Bookings.DATIMAgeGroup = appointments_summary.DATIMAgeGroup
