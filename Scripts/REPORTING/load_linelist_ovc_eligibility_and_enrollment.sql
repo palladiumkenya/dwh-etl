@@ -38,7 +38,7 @@ SELECT
 	else 'non DTG' 
 	end as LastRegimen,
 	onMMD,
-	CASE 
+	case 
 		when ao.ARTOutcome is null then 'Others'
 		else ao.ARTOutcomeDescription
 	end as ARTOutcomeDescription,
@@ -54,12 +54,12 @@ INTO [REPORTING].[dbo].LineListOVCEligibilityAndEnrollments
 FROM [NDWH].[dbo].[FactART] art
 LEFT JOIN [NDWH].[dbo].[FactOVC] it on it.PatientKey = art.PatientKey
 LEFT JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
-LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = art.FacilityKey
+LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = art.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = art.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = art.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = art.PatientKey
-LEFT join NDWH.dbo.DimAgeGroup g on g.Age = AgeLastVisit
+LEFT JOIN NDWH.dbo.DimAgeGroup g on g.Age = AgeLastVisit
 LEFT JOIN NDWH.dbo.DimDate exd on exd.DateKey = it.OVCExitDateKey
 LEFT JOIN NDWH.dbo.DimDate lvd on lvd.DateKey = vl.LastVLDateKey
 LEFT JOIN NDWH.dbo.DimDate fvd on fvd.DateKey = vl.FirstVLDateKey

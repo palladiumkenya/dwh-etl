@@ -12,7 +12,10 @@ SELECT
     Gender, 
     g.DATIMAgeGroup,
     pat.IsTXCurr as TXCurr,
-    ao.ARTOutcome,
+    case 
+	    when ao.ARTOutcome is null then 'Others'
+		else ao.ARTOutcomeDescription 
+	end as ARTOutcomeDescription,
     EOMONTH(enrld.Date) as AsofDate,
     SUM(CASE WHEN CPIMSUniqueIdentifierHash IS NOT NULL THEN 1 ELSE 0 END) AS CPIMSUniqueIdentifierCount,
     count(*) as OVCElligiblePatientCount,

@@ -49,13 +49,13 @@ SELECT
 INTO [REPORTING].[dbo].LineListOVCEnrollments
 FROM [NDWH].[dbo].[FactOVC] it
 LEFT JOIN NDWH.dbo.DimDate enrld on enrld.DateKey = it.OVCEnrollmentDateKey
-LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
+LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = it.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = it.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = it.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = it.PartnerKey
 LEFT JOIN NDWH.dbo.FactART art on art.PatientKey = it.PatientKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = it.PatientKey
-LEFT join NDWH.dbo.DimAgeGroup g on g.Age = AgeLastVisit
+LEFT JOIN NDWH.dbo.DimAgeGroup g on g.Age = AgeLastVisit
 LEFT JOIN NDWH.dbo.DimDate exd on exd.DateKey = it.OVCExitDateKey
 LEFT JOIN NDWH.dbo.DimDate lvd on lvd.DateKey = vl.LastVLDateKey
 LEFT JOIN NDWH.dbo.DimDate fvd on fvd.DateKey = vl.FirstVLDateKey
