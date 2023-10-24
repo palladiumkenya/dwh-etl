@@ -2,7 +2,10 @@ IF OBJECT_ID(N'[REPORTING].[dbo].LineListOVCEnrollments', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].LineListOVCEnrollments
 GO
 
-SELECT 
+SELECT
+	pat.PatientPKHash,
+	pat.PatientIDHash,
+	pat.NUPI,
 	MFLCode,
 	f.FacilityName,
 	County,
@@ -11,7 +14,8 @@ SELECT
 	a.AgencyName,
 	pat.Gender, 
 	g.DATIMAgeGroup,
-	enrld.Date as  OVCEnrollmentDate,
+	g.Age,
+	enrld.Date as OVCEnrollmentDate,
 	rp.RelationshipWithPatient,
 	EnrolledinCPIMS,
 	CASE
@@ -59,4 +63,4 @@ LEFT JOIN NDWH.dbo.DimDate validvl on validvl.DateKey = vl.ValidVLDateKey
 LEFT JOIN NDWH.dbo.DimRelationshipWithPatient rp on rp.RelationshipWithPatientKey = it.RelationshipWithPatientKey
 LEFT JOIN NDWH.dbo.DimARTOutcome ao on ao.ARTOutcomeKey = art.ARTOutcomeKey
 LEFT JOIN NDWH.dbo.FactLatestObs lo on lo.PatientKey = it.PatientKey
-where art.AgeLastVisit between 0 and 17 and OVCExitReason is null and IsTXCurr =1
+where art.AgeLastVisit between 0 and 17 and OVCExitReason is null and IsTXCurr = 1

@@ -3,6 +3,9 @@ IF OBJECT_ID(N'[REPORTING].[dbo].LineListOVCEligibilityAndEnrollments', N'U') IS
 GO
 
 SELECT 
+	pat.PatientPKHash,
+	pat.PatientIDHash,
+	pat.NUPI,
 	MFLCode,
 	f.FacilityName,
 	County,
@@ -11,6 +14,7 @@ SELECT
 	a.AgencyName,
 	pat.Gender, 
 	g.DATIMAgeGroup,
+	g.Age,
 	enrld.Date as  OVCEnrollmentDate,
 	rp.RelationshipWithPatient,
 	EnrolledinCPIMS,
