@@ -122,11 +122,7 @@ BEGIN
              WHERE  entrypoint IN ( 'PMTCT ANC', 'MCH' )),
          testedatanc
          AS (SELECT pat.patientpkhash,
-                    pat.sitecode,
-                    CASE
-                      WHEN entrypoint IS NOT NULL THEN 1
-                      ELSE 0
-                    END AS TestedAtANC
+                    pat.sitecode
              FROM   testsatanc pat
              WHERE  num = 1),
          testsatlandd
@@ -136,11 +132,7 @@ BEGIN
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
                     tests.sitecode,
-                    entrypoint,
-                    CASE
-                      WHEN entrypoint IS NOT NULL THEN 1
-                      ELSE 0
-                    END                               AS TestedAtLandD
+                    entrypoint           
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'Maternity', 'PMTCT MAT' )),
          testedatlandd
@@ -162,8 +154,8 @@ BEGIN
                     ancdate2,
                     ancdate3,
                     ancdate4,
-                    COALESCE (testedatanc, 0)   AS TestedatANC,
-                    COALESCE (testedatlandd, 0) AS TestedAtLandD,
+                     case when testedatlandd.patientpkhash is not null then 1 else 0 end as Testedatlandd,
+                    case when testedatanc.patientpkhash is not null then 1 else 0 end as TestedatANC,
                     CASE
                       WHEN Datediff(year, dob, Getdate()) BETWEEN 10 AND 19 THEN
                       1
