@@ -1,4 +1,6 @@
-IF OBJECT_ID(N '[NDWH].[dbo].[FactPBFW]', N 'U') IS NOT NULL DROP  TABLE [NDWH].[dbo].[FactPBFW];
+
+IF OBJECT_ID(N'[NDWH].[dbo].[FactPBFW]', N'U') IS NOT NULL 
+DROP TABLE [NDWH].[dbo].[FactPBFW];
 BEGIN
 with MFL_partner_agency_combination as (
   select 
@@ -108,6 +110,12 @@ ANCDate4 as (
 ), 
 TestedatANC AS (
   Select 
+   row_number() OVER (
+      PARTITION BY Pat.SiteCode, 
+      Pat.Patientpkhash 
+      ORDER BY 
+        tests.testdate asc
+    ) AS NUM,
     pat.PatientPKHash, 
     pat.sitecode, 
     case when EntryPoint is not null Then 1 Else 0 end as TestedAtANC 
@@ -116,10 +124,16 @@ TestedatANC AS (
     inner join ODS.dbo.HTS_ClientTests tests on pat.PatientPKHash = tests.PatientPKHash 
     and pat.SiteCode = tests.SiteCode 
   where 
-    EntryPoint in ('PMTCT ANC', 'MCH')
+    EntryPoint in ('PMTCT ANC', 'MCH') and NUM=1
 ), 
 TestedAtLandD AS (
   Select 
+    row_number() OVER (
+      PARTITION BY Pat.SiteCode, 
+      Pat.Patientpkhash 
+      ORDER BY 
+        tests.testdate asc
+    ) AS NUM,
     pat.PatientPKHash, 
     pat.sitecode, 
     case when EntryPoint is not null Then 1 Else 0 end as TestedAtLandD 
@@ -128,7 +142,7 @@ TestedAtLandD AS (
     inner join ODS.dbo.HTS_ClientTests tests on pat.PatientPKHash = tests.PatientPKHash 
     and pat.SiteCode = tests.SiteCode 
   where 
-    EntryPoint in ('Maternity', 'PMTCT MAT')
+    EntryPoint in ('Maternity', 'PMTCT MAT') and NUM=1
 ), 
 Summary As (
   Select 
@@ -167,10 +181,8 @@ Summary As (
     and Patient.SiteCode = TestedatANC.SiteCode 
     left join TestedAtLandD on Patient.PatientPKHash = TestedAtLandD.PatientPKHash 
     and Patient.SiteCode = TestedAtLandD.SiteCode 
-  where 
-    NUM = 1 
-    and patient.PatientPK = 10881 
-    and patient.SiteCode = 15915
+  where Patient.Num = 1 
+    
 ) 
 Select 
   FactKey = IDENTITY(INT, 1, 1), 
