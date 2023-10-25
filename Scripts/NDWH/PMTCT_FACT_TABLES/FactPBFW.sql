@@ -116,8 +116,7 @@ BEGIN
                         partition BY tests.sitecode, tests.patientpkhash
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
-                    tests.sitecode,
-                    entrypoint
+                    tests.sitecode
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'PMTCT ANC', 'MCH' )),
          testedatanc
@@ -131,18 +130,12 @@ BEGIN
                         partition BY tests.sitecode, tests.patientpkhash
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
-                    tests.sitecode,
-                    entrypoint           
+                    tests.sitecode          
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'Maternity', 'PMTCT MAT' )),
          testedatlandd
          AS (SELECT pat.patientpkhash,
-                    pat.sitecode,
-                    entrypoint,
-                    CASE
-                      WHEN entrypoint IS NOT NULL THEN 1
-                      ELSE 0
-                    END AS TestedAtLandD
+                    pat.sitecode
              FROM   testsatlandd AS Pat
              WHERE  num = 1),
          summary
@@ -154,7 +147,7 @@ BEGIN
                     ancdate2,
                     ancdate3,
                     ancdate4,
-                     case when testedatlandd.patientpkhash is not null then 1 else 0 end as Testedatlandd,
+                     case when testedatlandd.patientpkhash is not null then 1 else 0 end as TestedatLandD,
                     case when testedatanc.patientpkhash is not null then 1 else 0 end as TestedatANC,
                     CASE
                       WHEN Datediff(year, dob, Getdate()) BETWEEN 10 AND 19 THEN
