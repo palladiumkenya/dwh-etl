@@ -197,6 +197,7 @@ BEGIN
            Facility.facilitykey,
            Partner.partnerkey,
            Agency.agencykey,
+           age_group.AgeGroupKey,
            Ancdate1,
            Ancdate2,
            Ancdate3,
@@ -236,6 +237,8 @@ BEGIN
                   ON ANCDate3.date = Cast(summary.ancdate3 AS DATE)
            LEFT JOIN ndwh.dbo.dimdate AS ANCDate4
                   ON ANCDate4.date = Cast(summary.ancdate4 AS DATE)
+            Left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age =  datediff(yy, summary.DOB,  getdate())
+
 
     ALTER TABLE ndwh.dbo.factpbfw
       ADD PRIMARY KEY(factkey);
