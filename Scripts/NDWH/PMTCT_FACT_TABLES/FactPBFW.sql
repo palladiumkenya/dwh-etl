@@ -1,227 +1,257 @@
+IF Object_id(N'[NDWH].[dbo].[FactPBFW]', N'U') IS NOT NULL
+  DROP TABLE [NDWH].[dbo].[factpbfw];
 
-IF OBJECT_ID(N'[NDWH].[dbo].[FactPBFW]', N'U') IS NOT NULL 
-DROP TABLE [NDWH].[dbo].[FactPBFW];
 BEGIN
-with MFL_partner_agency_combination as (
-  select 
-    distinct MFL_Code, 
-    SDP, 
-    SDP_Agency as Agency 
-  from 
-    ODS.dbo.All_EMRSites
-), 
-PBFW_Patient as (
-  select 
-    row_number() OVER (
-      PARTITION BY visits.SiteCode, 
-      visits.Patientpkhash 
-      ORDER BY 
-        visits.VisitDate asc
-    ) AS NUM, 
-    visits.PatientPKHash, 
-    visits.PatientPK, 
-    visits.SiteCode, 
-    patient.DOB, 
-    patient.Gender, 
-    Pregnant, 
-    Breastfeeding, 
-    visits.VisitDate, 
-    DateConfirmedHIVPositive, 
-    StartARTDate, 
-    TestResult, 
-    case when DATEDIFF(
-      month, 
-      StartARTDate, 
-      getdate()
-    ) >= 3 then 1 when DATEDIFF(
-      MONTH, 
-      StartARTDate, 
-      getdate()
-    ) < 3 then 0 end as EligibleVL, 
-    case when isnumeric([TestResult]) = 1 then case when cast(
-      replace([TestResult], ',', '') as float
-    ) < 200.00 then 1 else 0 end else case when [TestResult] in (
-      'undetectable', 'NOT DETECTED', '0 copies/ml', 
-      'LDL', 'Less than Low Detectable Level'
-    ) then 1 else 0 end end as Suppressed, 
-    OrderedbyDate as ValidVLDate, 
-    case when ISNUMERIC(TestResult) = 1 then case when cast(
-      replace(TestResult, ',', '') AS float
-    ) >= 200.00 then '>200' when cast(
-      replace(TestResult, ',', '') as float
-    ) between 200.00 
-    and 999.00 then '200-999' when cast(
-      replace(TestResult, ',', '') as float
-    ) between 51.00 
-    and 199.00 then '51-199' when cast(
-      replace(TestResult, ',', '') as float
-    ) < 50 then '<50' end else case when TestResult in (
-      'undetectable', 'NOT DETECTED', '0 copies/ml', 
-      'LDL', 'Less than Low Detectable Level'
-    ) then 'Undetectable' end end as ValidVLResultCategory 
-  from 
-    ODS.dbo.CT_Patient as patient 
-    inner join ODS.dbo.CT_PatientVisits as visits on visits.PatientPKHash = patient.PatientPKHash 
-    and visits.SiteCode = patient.SiteCode 
-    left join ODS.dbo.CT_ARTPatients art on patient.PatientPKHash = art.PatientPKHash 
-    and patient.SiteCode = art.SiteCode 
-    left join ODS.dbo.Intermediate_LatestViralLoads vl on patient.PatientPKHash = vl.PatientPKHash 
-    and patient.SiteCode = vl.SiteCode 
-  where 
-    visits.Pregnant = 'Yes' 
-    or Breastfeeding = 'Yes' 
-    and visits.LMP > '1900-01-01' 
-    and visits.SiteCode > 0 
-    and DATEDIFF(
-      YEAR, 
-      patient.DOB, 
-      GETDATE()
-    )> 10
-), 
-ANCDate2 as (
-  Select 
-    PBFW_Patient.PatientPKHash, 
-    PBFW_Patient.SiteCode, 
-    PBFW_Patient.VisitDate as ANCDate2 
-  from 
-    PBFW_Patient 
-  where 
-    NUM = 2
-), 
-ANCDate3 as (
-  Select 
-    PBFW_Patient.PatientPKHash, 
-    PBFW_Patient.SiteCode, 
-    PBFW_Patient.VisitDate as ANCDate3 
-  from 
-    PBFW_Patient 
-  where 
-    NUM = 3
-), 
-ANCDate4 as (
-  Select 
-    PBFW_Patient.PatientPKHash, 
-    PBFW_Patient.SiteCode, 
-    PBFW_Patient.VisitDate as ANCDate4 
-  from 
-    PBFW_Patient 
-  where 
-    NUM = 4
-), 
-TestedatANC AS (
-  Select 
-   row_number() OVER (
-      PARTITION BY Pat.SiteCode, 
-      Pat.Patientpkhash 
-      ORDER BY 
-        tests.testdate asc
-    ) AS NUM,
-    pat.PatientPKHash, 
-    pat.sitecode, 
-    case when EntryPoint is not null Then 1 Else 0 end as TestedAtANC 
-  from 
-    PBFW_Patient pat 
-    inner join ODS.dbo.HTS_ClientTests tests on pat.PatientPKHash = tests.PatientPKHash 
-    and pat.SiteCode = tests.SiteCode 
-  where 
-    EntryPoint in ('PMTCT ANC', 'MCH') and NUM=1
-), 
-TestedAtLandD AS (
-  Select 
-    row_number() OVER (
-      PARTITION BY Pat.SiteCode, 
-      Pat.Patientpkhash 
-      ORDER BY 
-        tests.testdate asc
-    ) AS NUM,
-    pat.PatientPKHash, 
-    pat.sitecode, 
-    case when EntryPoint is not null Then 1 Else 0 end as TestedAtLandD 
-  from 
-    PBFW_Patient pat 
-    inner join ODS.dbo.HTS_ClientTests tests on pat.PatientPKHash = tests.PatientPKHash 
-    and pat.SiteCode = tests.SiteCode 
-  where 
-    EntryPoint in ('Maternity', 'PMTCT MAT') and NUM=1
-), 
-Summary As (
-  Select 
-    patient.PatientPKHash, 
-    patient.SiteCode, 
-    DOB, 
-    Gender, 
-    VisitDate as ANCDate1, 
-    ANCDate2, 
-    ANCDate3, 
-    ANCDate4, 
-    TestedatANC, 
-    TestedAtLandD, 
-    case when DATEDIFF(
-      YEAR, 
-      DOB, 
-      GETDATE()
-    ) between 10 
-    and 19 Then 1 else 0 End as PositiveAdolescent, 
-    case when DateConfirmedHIVPositive = VisitDate Then 1 Else 0 End as NewPositives, 
-    Case when DateConfirmedHIVPositive < VisitDate Then 1 Else 0 End as KnownPositive, 
-    case when StartARTDate is not null Then 1 Else 0 End as RecieivedART, 
-    coalesce (EligibleVL, 0) As EligibleVL, 
-    Suppressed, 
-    case when ValidVLResultCategory >= 200.00 Then 1 Else 0 End as Unsuppressed, 
-    ValidVLResultCategory 
-  from 
-    PBFW_Patient as Patient 
-    left join ANCDate2 on Patient.PatientPKHash = ANCDate2.PatientPKHash 
-    and Patient.SiteCode = ANCDate2.SiteCode 
-    left join ANCDate3 on Patient.PatientPKHash = ANCDate3.PatientPKHash 
-    and Patient.SiteCode = ANCDate3.SiteCode 
-    left join ANCDate4 on Patient.PatientPKHash = ANCDate4.PatientPKHash 
-    and Patient.SiteCode = ANCDate4.SiteCode 
-    left join TestedatANC on Patient.PatientPKHash = TestedatANC.PatientPKHash 
-    and Patient.SiteCode = TestedatANC.SiteCode 
-    left join TestedAtLandD on Patient.PatientPKHash = TestedAtLandD.PatientPKHash 
-    and Patient.SiteCode = TestedAtLandD.SiteCode 
-  where Patient.Num = 1 
-    
-) 
-Select 
-  FactKey = IDENTITY(INT, 1, 1), 
-  Patient.PatientKey, 
-  Facility.FacilityKey, 
-  Partner.PartnerKey, 
-  Agency.AgencyKey, 
-  ANCDate1, 
-  ANCDate2, 
-  ANCDate3, 
-  ANCDate4, 
-  TestedatANC, 
-  TestedAtLandD, 
-  PositiveAdolescent, 
-  NewPositives, 
-  KnownPositive, 
-  RecieivedART, 
-  EligibleVL, 
-  Suppressed, 
-  Unsuppressed, 
-  ValidVLResultCategory, 
-  ANCDate1.DateKey as ANCDate1Key, 
-  ANCDate2.DateKey as ANCDate2Key, 
-  ANCDate3.DateKey as ANCDate3Key, 
-  ANCDate4.DateKey as ANCDate4Key Into NDWH.dbo.FactPBFW 
-from 
-  Summary 
-  left join NDWH.dbo.DimFacility as Facility on Facility.MFLCode = Summary.SiteCode 
-  left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Summary.SiteCode 
-  left join NDWH.dbo.DimPartner as Partner on Partner.PartnerName = MFL_partner_agency_combination.SDP 
-  left join NDWH.dbo.DimAgency as Agency on Agency.AgencyName = MFL_partner_agency_combination.Agency 
-  left join NDWH.dbo.DimPatient as Patient on Patient.PatientPKHash = Summary.PatientPKHash 
-  and Patient.SiteCode = Summary.SiteCode 
-  left join NDWH.dbo.DimDate as ANCDate1 on ANCDate1.Date = cast(Summary.ANCDate1 as date) 
-  left join NDWH.dbo.DimDate as ANCDate2 on ANCDate2.Date = cast(Summary.ANCDate2 as date) 
-  left join NDWH.dbo.DimDate as ANCDate3 on ANCDate3.Date = cast(Summary.ANCDate3 as date) 
-  left join NDWH.dbo.DimDate as ANCDate4 on ANCDate4.Date = cast(Summary.ANCDate4 as date) 
-alter table 
-  NDWH.dbo.FactPBFW 
-add 
-  primary key(FactKey);
-End
+    WITH mfl_partner_agency_combination
+         AS (SELECT DISTINCT mfl_code,
+                             sdp,
+                             sdp_agency AS Agency
+             FROM   ods.dbo.all_emrsites),
+         pbfw_patient
+         AS (SELECT Row_number()
+                      OVER (
+                        partition BY visits.sitecode, visits.patientpkhash
+                        ORDER BY visits.visitdate ASC ) AS NUM,
+                    visits.patientpkhash,
+                    visits.patientpk,
+                    visits.sitecode,
+                    patient.dob,
+                    patient.gender,
+                    pregnant,
+                    breastfeeding,
+                    visits.visitdate,
+                    dateconfirmedhivpositive,
+                    startartdate,
+                    testresult,
+                    CASE
+                      WHEN Datediff(month, startartdate, Getdate()) >= 3 THEN 1
+                      WHEN Datediff(month, startartdate, Getdate()) < 3 THEN 0
+                    END                                 AS EligibleVL,
+                    CASE
+                      WHEN Isnumeric([testresult]) = 1 THEN
+                        CASE
+                          WHEN Cast(Replace([testresult], ',', '') AS FLOAT) <
+                               200.00
+                        THEN 1
+                          ELSE 0
+                        END
+                      ELSE
+                        CASE
+                          WHEN [testresult] IN ( 'undetectable', 'NOT DETECTED',
+                                                 '0 copies/ml',
+                                                 'LDL',
+                               'Less than Low Detectable Level'
+                                               ) THEN 1
+                          ELSE 0
+                        END
+                    END                                 AS Suppressed,
+                    orderedbydate                       AS ValidVLDate,
+                    CASE
+                      WHEN Isnumeric(testresult) = 1 THEN
+                        CASE
+                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) >=
+                               200.00
+                        THEN
+                          '>200'
+                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
+                               BETWEEN
+                               200.00
+                               AND 999.00
+                        THEN '200-999'
+                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
+                               BETWEEN
+                               51.00 AND 199.00
+                        THEN
+                          '51-199'
+                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) < 50
+                        THEN
+                          '<50'
+                        END
+                      ELSE
+                        CASE
+                          WHEN testresult IN ( 'undetectable', 'NOT DETECTED',
+                                               '0 copies/ml'
+                                               , 'LDL',
+                                               'Less than Low Detectable Level'
+                                             )
+                        THEN 'Undetectable'
+                        END
+                    END                                 AS ValidVLResultCategory
+             FROM   ods.dbo.ct_patient AS patient
+                    INNER JOIN ods.dbo.ct_patientvisits AS visits
+                            ON visits.patientpkhash = patient.patientpkhash
+                               AND visits.sitecode = patient.sitecode
+                    LEFT JOIN ods.dbo.ct_artpatients art
+                           ON patient.patientpkhash = art.patientpkhash
+                              AND patient.sitecode = art.sitecode
+                    LEFT JOIN ods.dbo.intermediate_latestviralloads vl
+                           ON patient.patientpkhash = vl.patientpkhash
+                              AND patient.sitecode = vl.sitecode
+             WHERE  visits.pregnant = 'Yes'
+                     OR breastfeeding = 'Yes'
+                        AND visits.lmp > '1900-01-01'
+                        AND visits.sitecode > 0
+                        AND Datediff(year, patient.dob, Getdate()) > 10),
+         ancdate2
+         AS (SELECT pbfw_patient.patientpkhash,
+                    pbfw_patient.sitecode,
+                    pbfw_patient.visitdate AS ANCDate2
+             FROM   pbfw_patient
+             WHERE  num = 2),
+         ancdate3
+         AS (SELECT pbfw_patient.patientpkhash,
+                    pbfw_patient.sitecode,
+                    pbfw_patient.visitdate AS ANCDate3
+             FROM   pbfw_patient
+             WHERE  num = 3),
+         ancdate4
+         AS (SELECT pbfw_patient.patientpkhash,
+                    pbfw_patient.sitecode,
+                    pbfw_patient.visitdate AS ANCDate4
+             FROM   pbfw_patient
+             WHERE  num = 4),
+         testsatanc
+         AS (SELECT Row_number()
+                      OVER (
+                        partition BY tests.sitecode, tests.patientpkhash
+                        ORDER BY tests.testdate ASC ) AS NUM,
+                    tests.patientpkhash,
+                    tests.sitecode,
+                    entrypoint
+             FROM   ods.dbo.hts_clienttests tests
+             WHERE  entrypoint IN ( 'PMTCT ANC', 'MCH' )),
+         testedatanc
+         AS (SELECT pat.patientpkhash,
+                    pat.sitecode,
+                    CASE
+                      WHEN entrypoint IS NOT NULL THEN 1
+                      ELSE 0
+                    END AS TestedAtANC
+             FROM   testsatanc pat
+             WHERE  num = 1),
+         testsatlandd
+         AS (SELECT Row_number()
+                      OVER (
+                        partition BY tests.sitecode, tests.patientpkhash
+                        ORDER BY tests.testdate ASC ) AS NUM,
+                    tests.patientpkhash,
+                    tests.sitecode,
+                    entrypoint,
+                    CASE
+                      WHEN entrypoint IS NOT NULL THEN 1
+                      ELSE 0
+                    END                               AS TestedAtLandD
+             FROM   ods.dbo.hts_clienttests tests
+             WHERE  entrypoint IN ( 'Maternity', 'PMTCT MAT' )),
+         testedatlandd
+         AS (SELECT pat.patientpkhash,
+                    pat.sitecode,
+                    entrypoint,
+                    CASE
+                      WHEN entrypoint IS NOT NULL THEN 1
+                      ELSE 0
+                    END AS TestedAtLandD
+             FROM   testsatlandd AS Pat
+             WHERE  num = 1),
+         summary
+         AS (SELECT patient.patientpkhash,
+                    patient.sitecode,
+                    dob,
+                    gender,
+                    visitdate                   AS ANCDate1,
+                    ancdate2,
+                    ancdate3,
+                    ancdate4,
+                    COALESCE (testedatanc, 0)   AS TestedatANC,
+                    COALESCE (testedatlandd, 0) AS TestedAtLandD,
+                    CASE
+                      WHEN Datediff(year, dob, Getdate()) BETWEEN 10 AND 19 THEN
+                      1
+                      ELSE 0
+                    END                         AS PositiveAdolescent,
+                    CASE
+                      WHEN dateconfirmedhivpositive = visitdate THEN 1
+                      ELSE 0
+                    END                         AS NewPositives,
+                    CASE
+                      WHEN dateconfirmedhivpositive < visitdate THEN 1
+                      ELSE 0
+                    END                         AS KnownPositive,
+                    CASE
+                      WHEN startartdate IS NOT NULL THEN 1
+                      ELSE 0
+                    END                         AS RecieivedART,
+                    COALESCE (eligiblevl, 0)    AS EligibleVL,
+                    suppressed,
+                    CASE
+                    When 
+                     Try_Cast(Replace(validvlresultcategory, ',', '') AS FLOAT)  >= 200.00 THEN 1
+                      ELSE 0
+                    END                         AS Unsuppressed,
+                    validvlresultcategory
+             FROM   pbfw_patient AS Patient
+                    LEFT JOIN ancdate2
+                           ON Patient.patientpkhash = ancdate2.patientpkhash
+                              AND Patient.sitecode = ancdate2.sitecode
+                    LEFT JOIN ancdate3
+                           ON Patient.patientpkhash = ancdate3.patientpkhash
+                              AND Patient.sitecode = ancdate3.sitecode
+                    LEFT JOIN ancdate4
+                           ON Patient.patientpkhash = ancdate4.patientpkhash
+                              AND Patient.sitecode = ancdate4.sitecode
+                    LEFT JOIN testedatanc
+                           ON Patient.patientpkhash = testedatanc.patientpkhash
+                              AND Patient.sitecode = testedatanc.sitecode
+                    LEFT JOIN testedatlandd
+                           ON Patient.patientpkhash =
+                              testedatlandd.patientpkhash
+                              AND Patient.sitecode = testedatlandd.sitecode
+             WHERE  Patient.num = 1)
+    SELECT FactKey = IDENTITY(int, 1, 1),
+           Patient.patientkey,
+           Facility.facilitykey,
+           Partner.partnerkey,
+           Agency.agencykey,
+           Ancdate1,
+           Ancdate2,
+           Ancdate3,
+           Ancdate4,
+           coalesce (Testedatanc,0) as Testedatanc,
+           coalesce (Testedatlandd,0) as Testedatlandd,
+           Positiveadolescent,
+           Newpositives,
+           Knownpositive,
+           Recieivedart,
+           Eligiblevl,
+           Suppressed,
+           Unsuppressed,
+           Validvlresultcategory,
+           ANCDate1.datekey AS ANCDate1Key,
+           ANCDate2.datekey AS ANCDate2Key,
+           ANCDate3.datekey AS ANCDate3Key,
+           ANCDate4.datekey AS ANCDate4Key
+    INTO   ndwh.dbo.factpbfw
+    FROM   summary
+           LEFT JOIN ndwh.dbo.dimfacility AS Facility
+                  ON Facility.mflcode = summary.sitecode
+           LEFT JOIN mfl_partner_agency_combination
+                  ON mfl_partner_agency_combination.mfl_code = summary.sitecode
+           LEFT JOIN ndwh.dbo.dimpartner AS Partner
+                  ON Partner.partnername = mfl_partner_agency_combination.sdp
+           LEFT JOIN ndwh.dbo.dimagency AS Agency
+                  ON Agency.agencyname = mfl_partner_agency_combination.agency
+           LEFT JOIN ndwh.dbo.dimpatient AS Patient
+                  ON Patient.patientpkhash = summary.patientpkhash
+                     AND Patient.sitecode = summary.sitecode
+           LEFT JOIN ndwh.dbo.dimdate AS ANCDate1
+                  ON ANCDate1.date = Cast(summary.ancdate1 AS DATE)
+           LEFT JOIN ndwh.dbo.dimdate AS ANCDate2
+                  ON ANCDate2.date = Cast(summary.ancdate2 AS DATE)
+           LEFT JOIN ndwh.dbo.dimdate AS ANCDate3
+                  ON ANCDate3.date = Cast(summary.ancdate3 AS DATE)
+           LEFT JOIN ndwh.dbo.dimdate AS ANCDate4
+                  ON ANCDate4.date = Cast(summary.ancdate4 AS DATE)
+
+    ALTER TABLE ndwh.dbo.factpbfw
+      ADD PRIMARY KEY(factkey);
+END 
