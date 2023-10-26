@@ -267,6 +267,7 @@ UnsuppressedReceivedEAC1 AS (
                            ON Patient.patientpkhash =
                               testedatpnc.patientpkhash
                               AND Patient.sitecode = testedatpnc.sitecode
+
                     Left join UnsuppressedReceivedEAC1 on Patient.PatientPkHash=UnsuppressedReceivedEAC1.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC1.sitecode
                      Left join UnsuppressedReceivedEAC2 on Patient.PatientPkHash=UnsuppressedReceivedEAC2.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC2.sitecode
                     Left join UnsuppressedReceivedEAC3 on Patient.PatientPkHash=UnsuppressedReceivedEAC3.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC3.sitecode
@@ -282,9 +283,9 @@ UnsuppressedReceivedEAC1 AS (
            Ancdate2,
            Ancdate3,
            Ancdate4,
-           coalesce (Testedatanc,0) as Testedatanc,
-           coalesce (Testedatlandd,0) as Testedatlandd,
-           coalesce (Testedatpnc,0) as Testedatpnc,
+            Testedatanc,
+            Testedatlandd,
+            Testedatpnc,
            Positiveadolescent,
            Newpositives,
            Knownpositive,
