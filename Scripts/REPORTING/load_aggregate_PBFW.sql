@@ -13,11 +13,11 @@ SELECT
     Patient.Gender,
     Sum(Knownpositive) AS KnownPositives,
     Sum(Newpositives) AS NewPositives,
-    SUM(CASE WHEN RecieivedART = 1 AND KnownPositive = 1 THEN 1 ELSE 0 END) AS KnownPositivesOnART,
-    SUM(CASE WHEN Eligiblevl = 1 AND KnownPositive = 1 THEN 1 ELSE 0 END) AS KnownPositivesEligiblevl,
-    SUM(CASE WHEN try_cast (Validvlresultcategory as float ) = 1 AND KnownPositive = 1 THEN 1 ELSE 0 END) AS KnownPositivesValidVl,
-    SUM(CASE WHEN suppressed = 1 AND KnownPositive = 1 THEN 1 ELSE 0 END) AS KnownPositivesSuppressed,
-    SUM(CASE WHEN Unsuppressed = 1 AND KnownPositive = 1 THEN 1 ELSE 0 END) AS KnownPositivesUnsuppressed
+    SUM (RecieivedART ) As  PBFWOnART,
+    SUM (Eligiblevl) AS PBFWEligiblevl,
+    SUM (CASE WHEN try_cast (Validvlresultcategory as float ) is not null Then 1   ELSE 0 END) AS PBFWValidVl,
+    SUM (suppressed) AS PBFWSuppressed,
+    SUM ( Unsuppressed) AS PBFWUnsuppressed
 INTO REPORTING.dbo.AggregatePBFW
 FROM NDWH.dbo.FactPBFW AS PBFW
 LEFT JOIN NDWH.dbo.DimFacility AS Facility ON Facility.FacilityKey = PBFW.FacilityKey
