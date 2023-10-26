@@ -154,7 +154,58 @@ BEGIN
              FROM   testsatpnc pat
              WHERE  num = 1),
 
+Unsuppressed As (Select 
+    PatientPKHash,
+    Sitecode,
+    ValidVLDate
+from pbfw_patient
+where ValidVLResultCategory='>200'
+),
+EAC As (Select
+ Row_number()
+                      OVER (
+                        partition BY EAC.sitecode, EAC.patientpkhash
+                        ORDER BY EAC.Visitdate ASC ) AS NUM,
+    PatientPKHash,
+    Sitecode,
+    VisitDate
+    from ODS.dbo.CT_EnhancedAdherenceCounselling EAC
+   
+),
+EAC1 AS (Select * from EAC
+where Num=1),
 
+EAC2 AS (Select * from EAC
+where Num=2),
+
+EAC3 AS (Select * from EAC
+where Num=3),
+
+UnsuppressedReceivedEAC1 AS (
+    Select 
+    Unsuppressed.PatientPKHash,
+    Unsuppressed.Sitecode,
+    Unsuppressed.ValidVLDate
+    from Unsuppressed
+    inner join EAC1 on Unsuppressed.Patientpkhash=EAC1.PatientPkhash and Unsuppressed.Sitecode=EAC1.Sitecode 
+    ),
+    UnsuppressedReceivedEAC2 AS (
+    Select 
+    Unsuppressed.PatientPKHash,
+    Unsuppressed.Sitecode,
+    Unsuppressed.ValidVLDate
+    from Unsuppressed
+    inner join EAC2 on Unsuppressed.Patientpkhash=EAC2.PatientPkhash and Unsuppressed.Sitecode=EAC2.Sitecode 
+    ),
+
+    UnsuppressedReceivedEAC3 AS (
+    Select 
+    Unsuppressed.PatientPKHash,
+    Unsuppressed.Sitecode,
+    Unsuppressed.ValidVLDate
+    from Unsuppressed
+    inner join EAC3 on Unsuppressed.Patientpkhash=EAC3.PatientPkhash and Unsuppressed.Sitecode=EAC3.Sitecode
+    ),
          summary
          AS (SELECT patient.patientpkhash,
                     patient.sitecode,
@@ -191,7 +242,10 @@ BEGIN
                      Try_Cast(Replace(validvlresultcategory, ',', '') AS FLOAT)  >= 200.00 THEN 1
                       ELSE 0
                     END                         AS Unsuppressed,
-                    validvlresultcategory
+                    validvlresultcategory,
+                    Case When UnsuppressedReceivedEAC1.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC1,
+                    Case When UnsuppressedReceivedEAC2.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC2,
+                    Case When UnsuppressedReceivedEAC3.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC3
              FROM   pbfw_patient AS Patient
                     LEFT JOIN ancdate2
                            ON Patient.patientpkhash = ancdate2.patientpkhash
@@ -213,6 +267,10 @@ BEGIN
                            ON Patient.patientpkhash =
                               testedatpnc.patientpkhash
                               AND Patient.sitecode = testedatpnc.sitecode
+                    Left join UnsuppressedReceivedEAC1 on Patient.PatientPkHash=UnsuppressedReceivedEAC1.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC1.sitecode
+                     Left join UnsuppressedReceivedEAC2 on Patient.PatientPkHash=UnsuppressedReceivedEAC2.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC2.sitecode
+                    Left join UnsuppressedReceivedEAC3 on Patient.PatientPkHash=UnsuppressedReceivedEAC3.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC3.sitecode
+
              WHERE  Patient.num = 1)
     SELECT FactKey = IDENTITY(int, 1, 1),
            Patient.patientkey,
@@ -224,9 +282,9 @@ BEGIN
            Ancdate2,
            Ancdate3,
            Ancdate4,
-           Testedatanc,
-           Testedatlandd,
-           Testedatpnc,
+           coalesce (Testedatanc,0) as Testedatanc,
+           coalesce (Testedatlandd,0) as Testedatlandd,
+           coalesce (Testedatpnc,0) as Testedatpnc,
            Positiveadolescent,
            Newpositives,
            Knownpositive,
@@ -238,7 +296,10 @@ BEGIN
            ANCDate1.datekey AS ANCDate1Key,
            ANCDate2.datekey AS ANCDate2Key,
            ANCDate3.datekey AS ANCDate3Key,
-           ANCDate4.datekey AS ANCDate4Key
+           ANCDate4.datekey AS ANCDate4Key,
+           UnsuppressedReceivedEAC1,
+           UnsuppressedReceivedEAC2,
+           UnsuppressedReceivedEAC3
     INTO   ndwh.dbo.factpbfw
     FROM   summary
            LEFT JOIN ndwh.dbo.dimfacility AS Facility
@@ -266,3 +327,4 @@ BEGIN
     ALTER TABLE ndwh.dbo.factpbfw
       ADD PRIMARY KEY(factkey);
 END     
+
