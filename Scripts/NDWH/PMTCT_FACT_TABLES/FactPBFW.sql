@@ -1,5 +1,5 @@
 IF Object_id(N'[NDWH].[dbo].[FactPBFW]', N'U') IS NOT NULL
-  DROP TABLE [NDWH].[dbo].[factpbfw];
+  DROP TABLE [NDWH].[dbo].[FACTPBFW];
 
 BEGIN
     WITH mfl_partner_agency_combination
@@ -138,6 +138,23 @@ BEGIN
                     pat.sitecode
              FROM   testsatlandd AS Pat
              WHERE  num = 1),
+ testsatpnc
+         AS (SELECT Row_number()
+                      OVER (
+                        partition BY tests.sitecode, tests.patientpkhash
+                        ORDER BY tests.testdate ASC ) AS NUM,
+                    tests.patientpkhash,
+                    tests.sitecode
+             FROM   ods.dbo.hts_clienttests tests
+             WHERE  entrypoint IN ( 'PMTCT PNC', 'PNC' ,'POSTNATAL CARE CLINIC')
+         ),
+         testedatpnc
+         AS (SELECT pat.patientpkhash,
+                    pat.sitecode
+             FROM   testsatpnc pat
+             WHERE  num = 1),
+
+
          summary
          AS (SELECT patient.patientpkhash,
                     patient.sitecode,
@@ -149,6 +166,7 @@ BEGIN
                     ancdate4,
                      case when testedatlandd.patientpkhash is not null then 1 else 0 end as TestedatLandD,
                     case when testedatanc.patientpkhash is not null then 1 else 0 end as TestedatANC,
+                     case when testedatpnc.patientpkhash is not null then 1 else 0 end as TestedatPNC,
                     CASE
                       WHEN Datediff(year, dob, Getdate()) BETWEEN 10 AND 19 THEN
                       1
@@ -191,6 +209,10 @@ BEGIN
                            ON Patient.patientpkhash =
                               testedatlandd.patientpkhash
                               AND Patient.sitecode = testedatlandd.sitecode
+                    LEFT JOIN testedatpnc
+                           ON Patient.patientpkhash =
+                              testedatpnc.patientpkhash
+                              AND Patient.sitecode = testedatpnc.sitecode
              WHERE  Patient.num = 1)
     SELECT FactKey = IDENTITY(int, 1, 1),
            Patient.patientkey,
@@ -204,6 +226,7 @@ BEGIN
            Ancdate4,
            coalesce (Testedatanc,0) as Testedatanc,
            coalesce (Testedatlandd,0) as Testedatlandd,
+           coalesce (Testedatpnc,0) as Testedatpnc,
            Positiveadolescent,
            Newpositives,
            Knownpositive,
@@ -242,4 +265,4 @@ BEGIN
 
     ALTER TABLE ndwh.dbo.factpbfw
       ADD PRIMARY KEY(factkey);
-END 
+END     
