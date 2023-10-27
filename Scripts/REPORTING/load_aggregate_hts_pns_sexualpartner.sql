@@ -14,6 +14,7 @@ with pns_and_tests as (
 		pns.CccNumber,
         pns.RelationsipToIndexClient,
         pns.KnowledgeOfHivStatus,
+        tests.TestedBefore,
 		tests.FinalTestResult,
 		pns.DateElicitedKey,
         pns.DateLinkedToCareKey,
@@ -55,11 +56,11 @@ line_list_dataset as (
 		Gender,
 		DATIMAgeGroup as Agegroup,
 		case 
-			when (dataset.PatientKey is not null) then 1 
+			when (dataset.DateElicitedKey is not null) then 1 
 		    else 0 
         end  elicited,
 		case 
-			when (FinalTestResult is not null ) then 1
+			when (FinalTestResult is not null ) and (dataset.DateElicitedKey is not null) and (TestedBefore<> 'Retest') then 1
 		    else 0 
         end as tested,
 		case 

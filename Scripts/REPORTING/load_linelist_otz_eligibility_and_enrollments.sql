@@ -13,8 +13,12 @@ SELECT DISTINCT
 	a.AgencyName,
 	pat.Gender,
 	age.DATIMAgeGroup as AgeGroup,
-	otz.OTZEnrollmentDateKey,
+	date.Date as OTZEnrollmentDate,
 	LastVisitDateKey,
+    case 
+	    when outcome.ARTOutcome is null then 'Others'
+		else outcome.ARTOutcomeDescription 
+	end as ARTOutcomeDescription,
 	TransitionAttritionReason,
 	TransferInStatus,
 	case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end as CompletedTraining,
@@ -34,9 +38,7 @@ SELECT DISTINCT
 	ValidVLResultCategory1,
 	ValidVLResultCategory2,
 	HasValidVL,
-	COUNT(CASE
-	WHEN art.PatientKey is not null THEN 1
-	ELSE 0 END) as Eligible,
+	COUNT(CASE WHEN art.PatientKey is not null THEN 1 ELSE 0 END) as Eligible,
 	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
@@ -48,7 +50,9 @@ INNER JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = art.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = art.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = art.PatientKey AND vl.PatientKey IS NOT NULL 
 FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
-WHERE age.Age BETWEEN 10 AND 24  AND IsTXCurr = 1
+LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
+LEFT JOIN NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
+WHERE age.Age BETWEEN 10 AND 19  AND IsTXCurr = 1
 GROUP BY 
 	PatientPKHash, 
     PatientIDHash,
@@ -60,8 +64,12 @@ GROUP BY
 	a.AgencyName,
 	pat.Gender,
 	age.DATIMAgeGroup,
-	otz.OTZEnrollmentDateKey,
+	date.Date,
 	LastVisitDateKey,
+    case 
+	    when outcome.ARTOutcome is null then 'Others'
+		else outcome.ARTOutcomeDescription 
+	end,
 	TransitionAttritionReason,
 	TransferInStatus,
 	case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end,
@@ -80,5 +88,6 @@ GROUP BY
 	ValidVLResult,
 	ValidVLResultCategory1,
 	ValidVLResultCategory2,
-	HasValidVL
+	
+	
 GO

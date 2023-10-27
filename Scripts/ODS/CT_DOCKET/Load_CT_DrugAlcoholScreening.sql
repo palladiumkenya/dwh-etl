@@ -35,8 +35,8 @@ BEGIN
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

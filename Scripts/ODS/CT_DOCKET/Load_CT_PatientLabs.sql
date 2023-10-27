@@ -67,8 +67,8 @@ BEGIN
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
