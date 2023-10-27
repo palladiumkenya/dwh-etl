@@ -29,6 +29,7 @@ MERGE [NDWH].[DBO].[DimPatient] AS a
                     LEFT JOIN ODS.dbo.Intermediate_ARTOutcomes AS outcomes 
 			            ON  outcomes.PatientPKHash = patients.PatientPKHash AND 
                             outcomes.SiteCode = patients.SiteCode
+                WHERE patients.VOIDED = 0
 
             UNION
 
@@ -54,6 +55,7 @@ MERGE [NDWH].[DBO].[DimPatient] AS a
                         NULL AS IsTXCurr,
                         NULL AS LoadDate
             FROM ODS.dbo.HTS_clients AS clients
+            WHERE clients.VOIDED = 0
 
 		    UNION
 
@@ -79,6 +81,7 @@ MERGE [NDWH].[DBO].[DimPatient] AS a
                         NULL AS IsTXCurr,
                         NULL AS LoadDate
             FROM ODS.dbo.PrEP_Patient PrEP 
+            WHERE PrEP.VOIDED = 0
         ) AS b
 		    ON (    
                 a.siteCode = b.siteCode AND
