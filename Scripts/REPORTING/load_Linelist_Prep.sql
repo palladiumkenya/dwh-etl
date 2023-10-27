@@ -53,7 +53,7 @@ Select
         EligiblePrep,
         ScreenedPrep,
         HIVRiskCategory,
-        case when hiv.PatientKey  is not null then 1 else 0
+        case when Hiv.PatientKey  is not null then 1 else 0
         End as PreventionServices ,
         CAST(GETDATE() AS DATE) AS LoadDate 
   INTO REPORTING.dbo.LinelistPrep 
