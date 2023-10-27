@@ -3,11 +3,11 @@ MERGE [NDWH].[dbo].[DimAgency] AS a
 				FROM ODS.dbo.All_EMRSites
 				WHERE [SDP_Agency] <> 'NULL' AND [SDP_Agency] <> '') AS b 
 						ON(
-						a.AgencyName = b.AgencyName
+							a.AgencyName = b.AgencyName
 						  )
 		WHEN NOT MATCHED THEN 
 						INSERT(AgencyName,LoadDate) 
 						VALUES(AgencyName,GetDate())
 		WHEN MATCHED THEN
-						UPDATE SET 						
-						a.AgencyName =b.AgencyName;
+						UPDATE  						
+							SET	a.AgencyName =b.AgencyName;

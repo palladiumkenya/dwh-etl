@@ -1,13 +1,13 @@
 MERGE [NDWH].[dbo].[DimPartner] AS a
-		USING(	SELECT 
-				DISTINCT SDP as PartnerName
-				FROM [ODS].[dbo].[All_EMRSites](NoLock)) AS b 
+		USING	(	SELECT DISTINCT SDP as PartnerName
+					FROM [ODS].[dbo].[All_EMRSites](NoLock)
+				) AS b 
 						ON(
-						a.PartnerName = b.PartnerName
+							a.PartnerName = b.PartnerName
 						  )
 		WHEN NOT MATCHED THEN 
 						INSERT(PartnerName,LoadDate) 
 						VALUES(PartnerName,GetDate())
 		WHEN MATCHED THEN
-						UPDATE SET 						
-						a.PartnerName =b.PartnerName;
+						UPDATE  						
+							SET a.PartnerName =b.PartnerName;
