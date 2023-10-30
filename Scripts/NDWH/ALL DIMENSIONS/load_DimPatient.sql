@@ -1,176 +1,97 @@
-IF OBJECT_ID(N'[NDWH].[dbo].[DimPatient]', N'U') IS NOT NULL 
-DROP TABLE [NDWH].[dbo].[DimPatient];
+MERGE [NDWH].[DBO].[DimPatient] AS a
+    USING   (   SELECT DISTINCT   patients.PatientIDHash,
+                        patients.PatientPKHash,
+                        NULL AS HTSNumberHash,
+                        NULL AS PrepNumber,
+                        patients.PatientID,
+                        patients.PatientPK,
+                        patients.SiteCode,
+		                NULL AS PrepEnrollmentDate,
+                        Gender,
+                        CAST(DOB AS DATE) AS DOB,
+                        MaritalStatus,
+                        NupiHash,
+                        PatientType AS ClientType,
+                        PatientSource,
+                        baselines.eWHO AS EnrollmentWHOKey,
+                        CAST(FORMAT(COALESCE(eWHODate, '1900-01-01'),'yyyyMMdd') AS INT) AS DateEnrollmentWHOKey,
+                        bWHO AS BaseLineWHOKey,
+                        CAST(FORMAT(COALESCE(bWHODate, '1900-01-01'),'yyyyMMdd') AS INT) AS DateBaselineWHOKey,
+                        CASE 
+                            WHEN outcomes.ARTOutcome =  'V' THEN 1
+                            ELSE 0
+                        END AS IsTXCurr,
+                        CAST(GETDATE() AS DATE) AS LoadDate
+                FROM ODS.dbo.CT_Patient AS patients
+                    LEFT JOIN ODS.dbo.CT_PatientBaselines AS baselines 
+			            ON  patients.PatientPKHash = baselines.PatientPKHash AND 
+                            patients.SiteCode = baselines.SiteCode
+                    LEFT JOIN ODS.dbo.Intermediate_ARTOutcomes AS outcomes 
+			            ON  outcomes.PatientPKHash = patients.PatientPKHash AND 
+                            outcomes.SiteCode = patients.SiteCode
+                WHERE patients.VOIDED = 0
 
-BEGIN
-  
-    with ct_patient_source as (
-        select
-            distinct
-            patients.PatientIDHash,
-            patients.PatientPKHash,
-            patients.PatientID,
-            patients.PatientPK,
-            patients.SiteCode,
-            Gender,
-            cast(DOB as date) as DOB,
-            MaritalStatus,
-            NupiHash,
-            PatientType,
-            PatientSource,
-            baselines.eWHO as EnrollmentWHOKey,
-            cast(format(coalesce(eWHODate, '1900-01-01'),'yyyyMMdd') as int) as DateEnrollmentWHOKey,
-            bWHO as BaseLineWHOKey,
-            cast(format(coalesce(bWHODate, '1900-01-01'),'yyyyMMdd') as int) as DateBaselineWHOKey,
-            case 
-                when outcomes.ARTOutcome =  'V' then 1
-                else 0
-            end as IsTXCurr,
-            cast(getdate() as date) as LoadDate
-        from 
-        ODS.dbo.CT_Patient as patients
-        left join ODS.dbo.CT_PatientBaselines as baselines on patients.PatientPKHash = baselines.PatientPKHash 
-            and patients.SiteCode = baselines.SiteCode
-        left join ODS.dbo.Intermediate_ARTOutcomes as outcomes on outcomes.PatientPKHash = patients.PatientPKHash 
-            and outcomes.SiteCode = patients.SiteCode
-        where voided = 0
-	),
-    hts_patient_source as (
-        select    
-            distinct HTSNumberHash,
-            PatientPKHash,
-            PatientPK,
-            SiteCode,
-            cast(DOB as date) as DOB,
-            Gender,
-            MaritalStatus,
-            NupiHash
-        from ODS.dbo.HTS_clients as clients
-    ),
-    prep_patient_source as (
-    select 
-        distinct PatientPkHash,
-        PatientPk,
-        PrepNumber,
-        SiteCode,
-        PrepEnrollmentDate,
-        Sex,
-        DateofBirth,
-        ClientType,
-        MaritalStatus
-    from ODS.dbo.PrEP_Patient
-    ),
-    pmtct_patient_source as (
-        select 
-            distinct PatientPKHash,
-            PatientPK,
-            SiteCode,
-            DOB,
-            Gender,
-            NUPIHash,
-            PatientMnchIDHash,
-            MaritalStatus,
-            cast(format(FirstEnrollmentAtMnch,'yyyyMMdd') as int) as FirstEnrollmentAtMnchDateKey
-        from ODS.dbo.MNCH_Patient
-    ),
-    combined_data_ct_hts as (
-        select
-            coalesce(ct_patient_source.PatientPKHash, hts_patient_source.PatientPKHash) as PatientPKHash,
-            coalesce(ct_patient_source.SiteCode, hts_patient_source.SiteCode) as SiteCode,
-            coalesce(ct_patient_source.NupiHash, hts_patient_source.NupiHash) as NUPI,
-            coalesce(ct_patient_source.DOB, hts_patient_source.DOB) as DOB,
-            coalesce(ct_patient_source.MaritalStatus, hts_patient_source.MaritalStatus) as MaritalStatus,
-            coalesce(ct_patient_source.Gender, hts_patient_source.Gender) as Gender,
-            ct_patient_source.PatientIDHash,
-            ct_patient_source.PatientType as ClientType,
-			ct_patient_source.PatientSource,
-			ct_patient_source.EnrollmentWHOKey,
-			ct_patient_source.DateEnrollmentWHOKey,
-			ct_patient_source.BaseLineWHOKey,
-			ct_patient_source.DateBaselineWHOKey,
-			ct_patient_source.IsTXCurr,
-            hts_patient_source.HTSNumberHash,
-			cast(getdate() as date) as LoadDate
-        from ct_patient_source 
-        full join hts_patient_source on  hts_patient_source.PatientPKHash = ct_patient_source.PatientPKHash
-            and ct_patient_source.SiteCode = hts_patient_source.SiteCode
-    ),
-    combined_data_ct_hts_prep as (
-        select
-            coalesce(combined_data_ct_hts.PatientPKHash, prep_patient_source.PatientPKHash) as PatientPKHash,
-            coalesce(combined_data_ct_hts.SiteCode, prep_patient_source.SiteCode) as SiteCode,
-            combined_data_ct_hts.NUPI as NUPI,
-            coalesce(combined_data_ct_hts.DOB, prep_patient_source.DateofBirth) as DOB,
-            coalesce(combined_data_ct_hts.MaritalStatus, prep_patient_source.MaritalStatus) as MaritalStatus,
-            coalesce(combined_data_ct_hts.Gender, prep_patient_source.Sex) as Gender,
-            combined_data_ct_hts.PatientIDHash,
-            coalesce(combined_data_ct_hts.ClientType, prep_patient_source.ClientType) as ClientType,
-			combined_data_ct_hts.PatientSource,
-			combined_data_ct_hts.EnrollmentWHOKey,
-			combined_data_ct_hts.DateEnrollmentWHOKey,
-			combined_data_ct_hts.BaseLineWHOKey,
-			combined_data_ct_hts.DateBaselineWHOKey,
-			combined_data_ct_hts.IsTXCurr,
-            combined_data_ct_hts.HTSNumberHash,
-            prep_patient_source.PrepNumber,
-            cast(format(prep_patient_source.PrepEnrollmentDate,'yyyyMMdd') as int) as PrepEnrollmentDateKey
-        from combined_data_ct_hts 
-        full join prep_patient_source on combined_data_ct_hts.PatientPKHash = prep_patient_source.PatientPKHash
-            and prep_patient_source.SiteCode = combined_data_ct_hts.SiteCode            
-    ),
-    combined_data_ct_hts_prep_pmtct as (
-        select 
-             coalesce(combined_data_ct_hts_prep.PatientPKHash, pmtct_patient_source.PatientPKHash) as PatientPKHash,
-             coalesce(combined_data_ct_hts_prep.SiteCode, pmtct_patient_source.SiteCode) as SiteCode,
-             coalesce(combined_data_ct_hts_prep.NUPI, pmtct_patient_source.NUPIHash) as Nupi,
-             coalesce(combined_data_ct_hts_prep.DOB, pmtct_patient_source.DOB) as DOB,
-             coalesce(combined_data_ct_hts_prep.MaritalStatus, pmtct_patient_source.MaritalStatus) as MaritalStatus,
-             coalesce(combined_data_ct_hts_prep.Gender, pmtct_patient_source.Gender) as Gender,
-             combined_data_ct_hts_prep.PatientIDHash,
-             combined_data_ct_hts_prep.ClientType,
-             combined_data_ct_hts_prep.PatientSource,
-             combined_data_ct_hts_prep.EnrollmentWHOKey,
-			 combined_data_ct_hts_prep.DateEnrollmentWHOKey,
-			 combined_data_ct_hts_prep.BaseLineWHOKey,
-			 combined_data_ct_hts_prep.DateBaselineWHOKey,
-			 combined_data_ct_hts_prep.IsTXCurr,
-             combined_data_ct_hts_prep.HTSNumberHash,
-             combined_data_ct_hts_prep.PrepEnrollmentDateKey,
-             combined_data_ct_hts_prep.PrepNumber,
-             pmtct_patient_source.PatientMnchIDHash,
-             pmtct_patient_source.FirstEnrollmentAtMnchDateKey,
-             cast(getdate() as date) as LoadDate
-        from combined_data_ct_hts_prep 
-        full join pmtct_patient_source on combined_data_ct_hts_prep.PatientPKHash = pmtct_patient_source.PatientPKHash
-            and combined_data_ct_hts_prep.SiteCode = pmtct_patient_source.SiteCode
-    )
-	select
-        PatientKey = IDENTITY(INT, 1, 1),
-        combined_data_ct_hts_prep_pmtct.PatientIDHash,
-		combined_data_ct_hts_prep_pmtct.PatientPKHash,
-        combined_data_ct_hts_prep_pmtct.HtsNumberHash,
-        combined_data_ct_hts_prep_pmtct.PrepNumber,
-        combined_data_ct_hts_prep_pmtct.SiteCode,
-        combined_data_ct_hts_prep_pmtct.NUPI,
-        combined_data_ct_hts_prep_pmtct.DOB,
-        combined_data_ct_hts_prep_pmtct.MaritalStatus,
-        CASE 
-            WHEN combined_data_ct_hts_prep_pmtct.Gender = 'M' THEN 'Male'
-            WHEN combined_data_ct_hts_prep_pmtct.Gender = 'F' THEN 'Female'
-            ELSE combined_data_ct_hts_prep_pmtct.Gender 
-        END AS Gender,
-        combined_data_ct_hts_prep_pmtct.ClientType,
-        combined_data_ct_hts_prep_pmtct.PatientSource,
-        combined_data_ct_hts_prep_pmtct.EnrollmentWHOKey,
-        combined_data_ct_hts_prep_pmtct.DateBaselineWHOKey,
-        combined_data_ct_hts_prep_pmtct.BaseLineWHOKey,
-        combined_data_ct_hts_prep_pmtct.PrepEnrollmentDateKey,
-        combined_data_ct_hts_prep_pmtct.IsTXCurr,
-        combined_data_ct_hts_prep_pmtct.PatientMnchIDHash,
-        combined_data_ct_hts_prep_pmtct.FirstEnrollmentAtMnchDateKey,
-        combined_data_ct_hts_prep_pmtct.LoadDate
-	into NDWH.dbo.DimPatient
-	from combined_data_ct_hts_prep_pmtct
-    
-ALTER TABLE NDWH.dbo.DimPatient ADD PRIMARY KEY(PatientKey);
+            UNION
 
-END
+		    SELECT  DISTINCT 
+		                NULL AS PatientIDHash,
+                        clients.PatientPKHash,
+		                HTSNumberHash,
+		                NULL AS PrepNumber,
+                        NULL AS PatientID,
+                        clients.PatientPK,
+                        clients.SiteCode,
+		                NULL AS PrepEnrollmentDate,
+                        Gender,
+                        CAST(DOB AS DATE) AS DOB,
+                        MaritalStatus,
+                        NupiHash,
+                        NULL AS ClientType,
+                        NULL AS PatientSource,
+                        NULL AS EnrollmentWHOKey,
+                        NULL AS DateEnrollmentWHOKey,
+                        NULL AS BaseLineWHOKey,
+                        NULL AS DateBaselineWHOKey,
+                        NULL AS IsTXCurr,
+                        NULL AS LoadDate
+            FROM ODS.dbo.HTS_clients AS clients
+            WHERE clients.VOIDED = 0
+
+		    UNION
+
+		    SELECT DISTINCT 
+		                NULL AS PatientIDHash,
+                        PrEP.PatientPKHash,
+		                NULL AS HTSNumberHash,
+		                PrEP.PrepNumber,
+                        NULL AS PatientID,
+                        PrEP.PatientPK,
+                        PrEP.SiteCode,
+		                PrEP.PrepEnrollmentDate,
+                        PrEP.Sex,
+                        CAST(DateofBirth AS DATE) AS DOB,
+                        PrEP.MaritalStatus,
+                        NULL AS NupiHash,
+                        PrEP.ClientType AS ClientType,
+                        NULL AS PatientSource,
+                        NULL AS EnrollmentWHOKey,
+                        NULL AS DateEnrollmentWHOKey,
+                        NULL AS BaseLineWHOKey,
+                        NULL AS DateBaselineWHOKey,
+                        NULL AS IsTXCurr,
+                        NULL AS LoadDate
+            FROM ODS.dbo.PrEP_Patient PrEP 
+            WHERE PrEP.VOIDED = 0
+        ) AS b
+		    ON (    
+                a.siteCode = b.siteCode AND
+			    a.PatientPKHash= b.PatientPKHash
+                )
+    WHEN NOT MATCHED THEN
+                    INSERT(PatientIDHash,PatientPKHash,HtsNumberHash,PrepNumber,SiteCode,NUPI,DOB,MaritalStatus,Gender,ClientType,PatientSource,EnrollmentWHOKey,DateBaselineWHOKey,BaseLineWHOKey,/*PrepEnrollmentDateKey,*/IsTXCurr,LoadDate)
+                    VALUES(PatientIDHash,PatientPKHash,HtsNumberHash,PrepNumber,SiteCode,NUPIHash,DOB,MaritalStatus,Gender,ClientType,PatientSource,EnrollmentWHOKey,DateBaselineWHOKey,BaseLineWHOKey,/*PrepEnrollmentDateKey,*/IsTXCurr,LoadDate)
+    WHEN MATCHED THEN
+	    UPDATE 
+            SET a.MaritalStatus	= b.MaritalStatus,
+				a.ClientType	= b.ClientType,
+				a.PatientSource	= b.PatientSource;
