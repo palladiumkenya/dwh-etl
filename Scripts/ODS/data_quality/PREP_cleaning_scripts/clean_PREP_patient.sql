@@ -166,3 +166,9 @@ WHERE Sex = ''
 
 GO
 
+UPDATE a
+    SET Voided = 0             
+    from ODS.dbo.PrEP_Patient a
+WHERE Voided is null
+GO
+
