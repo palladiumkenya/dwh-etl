@@ -16,6 +16,10 @@ SELECT
 	age.DATIMAgeGroup as AgeGroup,
 	otz.OTZEnrollmentDateKey,
 	LastVisitDateKey,
+    case 
+	    when outcome.ARTOutcome is null then 'Others'
+		else outcome.ARTOutcomeDescription 
+	end as ARTOutcomeDescription,
 	TransitionAttritionReason,
 	TransferInStatus,
 	case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end as CompletedTraining,
@@ -45,6 +49,7 @@ INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = otz.PartnerKey
 LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.PatientKey = otz.PatientKey and vl.PatientKey IS NOT NULL
 LEFT JOIN NDWH.dbo.FACTART art on art.PatientKey = otz.PatientKey
+LEFT JOIN NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
 WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1
 
 GO

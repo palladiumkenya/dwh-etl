@@ -24,8 +24,9 @@ UPDATE [ODS].[DBO].[CT_PatientVisits]
     SET StabilityAssessment = CASE 
                                 WHEN StabilityAssessment = 'Stable1' THEN 'Stable'
                                 WHEN StabilityAssessment = 'Not Stable' THEN 'Unstable'
+                                WHEN StabilityAssessment COLLATE SQL_Latin1_General_CP1_CS_AS = 'stable' THEN 'Stable'
                             END
-WHERE StabilityAssessment IN ('Stable1', 'Not Stable')
+WHERE StabilityAssessment COLLATE SQL_Latin1_General_CP1_CS_AS IN ('Stable1', 'Not Stable', 'stable')
 
 GO
 

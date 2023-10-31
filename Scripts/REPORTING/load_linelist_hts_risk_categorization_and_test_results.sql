@@ -8,6 +8,7 @@ with source_data as (
 	select 
 		row_number() over (partition by tests.FacilityKey, tests.PatientKey, tests.DateTestedKey, tests.TestType order by tests.DateTestedKey desc) as num,
 		patient.PatientPKHash,
+		patient.PatientKey,
 		patient.DOB,
 		patient.Gender,
 		facility.FacilityName,
@@ -35,6 +36,19 @@ with source_data as (
 	left join NDWH.dbo.DimDate as testDate on testDate.DateKey =tests.DateTestedKey
 	where 
 		testDate.Date>='2023-04-01' and TestType='Initial Test'
+),
+prep_assessments_odering as (
+	select 
+		row_number() OVER (PARTITION BY PatientKey ORDER BY AssessmentVisitDateKey DESC) as num,
+        PatientKey,
+		AssessmentVisitDateKey
+	from NDWH.dbo.FactPrepAssessments
+),
+latest_prep_assessment as (
+	select 
+		*
+	from prep_assessments_odering
+	where num = 1
 )
 select 
 		PatientPKHash,
@@ -53,9 +67,14 @@ select
 		HIVRiskCategory,
 		HtsRiskScore,
 		HTSResult,
-		ReasonRefferredForTesting
+		ReasonRefferredForTesting,
+		case
+			when latest_prep_assessment.PatientKey is not null then 1
+			else 0
+		end as ReferredForPreventativeServices
 into REPORTING.dbo.LineListHTSRiskCategorizationAndTestResults
 from source_data
-where num = 1
+left join latest_prep_assessment on latest_prep_assessment.PatientKey = source_data.PatientKey
+where source_data.num = 1
 
 END
