@@ -60,6 +60,7 @@ select
         EligiblePrep,
         ScreenedPrep,
         HIVRiskCategory as LatestHIVRiskCategory,
+
         CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LinelistPrep 
 from prepCascade prep
