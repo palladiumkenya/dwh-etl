@@ -21,62 +21,7 @@ BEGIN
                     breastfeeding,
                     visits.visitdate,
                     dateconfirmedhivpositive,
-                    startartdate,
-                    testresult,
-                    CASE
-                      WHEN Datediff(month, startartdate, Getdate()) >= 3 THEN 1
-                      WHEN Datediff(month, startartdate, Getdate()) < 3 THEN 0
-                    END                                 AS EligibleVL,
-                    CASE
-                      WHEN Isnumeric([testresult]) = 1 THEN
-                        CASE
-                          WHEN Cast(Replace([testresult], ',', '') AS FLOAT) <
-                               200.00
-                        THEN 1
-                          ELSE 0
-                        END
-                      ELSE
-                        CASE
-                          WHEN [testresult] IN ( 'undetectable', 'NOT DETECTED',
-                                                 '0 copies/ml',
-                                                 'LDL',
-                               'Less than Low Detectable Level'
-                                               ) THEN 1
-                          ELSE 0
-                        END
-                    END                                 AS Suppressed,
-                    orderedbydate                       AS ValidVLDate,
-                    CASE
-                      WHEN Isnumeric(testresult) = 1 THEN
-                        CASE
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) >=
-                               200.00
-                        THEN
-                          '>200'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
-                               BETWEEN
-                               200.00
-                               AND 999.00
-                        THEN '200-999'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
-                               BETWEEN
-                               51.00 AND 199.00
-                        THEN
-                          '51-199'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) < 50
-                        THEN
-                          '<50'
-                        END
-                      ELSE
-                        CASE
-                          WHEN testresult IN ( 'undetectable', 'NOT DETECTED',
-                                               '0 copies/ml'
-                                               , 'LDL',
-                                               'Less than Low Detectable Level'
-                                             )
-                        THEN 'Undetectable'
-                        END
-                    END                                 AS ValidVLResultCategory
+                    startartdate                  
 
              FROM   ods.dbo.ct_patient AS patient
                     INNER JOIN ods.dbo.ct_patientvisits AS visits
@@ -167,10 +112,10 @@ BEGIN
 Unsuppressed As (Select distinct 
     PatientPKHash,
 	PatientPK,
-    Sitecode,
-    ValidVLDate
+    Sitecode
+ 
 from pbfw_patient
-where ValidVLResultCategory='>200'
+
 ),
 EAC As (Select
  Row_number()
@@ -193,63 +138,28 @@ where Num=2),
 EAC3 AS (Select * from EAC
 where Num=3),
 
-UnsuppressedReceivedEAC1 AS (
+ReceivedEAC1 AS (
     Select 
-    Unsuppressed.PatientPKHash,
-    Unsuppressed.Sitecode,
-	Unsuppressed.patientpk,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    Left join EAC1 on Unsuppressed.Patientpk=EAC1.PatientPk and Unsuppressed.Sitecode=EAC1.Sitecode 
+    EAC1.PatientPKHash,
+    EAC1.Sitecode,
+	EAC1.patientpk
+    from EAC1 as EAC1
     ),
-    UnsuppressedReceivedEAC2 AS (
+    ReceivedEAC2 AS (
     Select 
-    Unsuppressed.PatientPKHash,
-	Unsuppressed.patientpk,
-    Unsuppressed.Sitecode,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    inner join EAC2 on Unsuppressed.patientpk=EAC2.patientpk and Unsuppressed.Sitecode=EAC2.Sitecode 
-    ),
-
-    UnsuppressedReceivedEAC3 AS (
+    EAC2.PatientPKHash,
+	EAC2.patientpk,
+    EAC2.Sitecode
+    from EAC2 as EAC2
+	),
+ ReceivedEAC3 AS (
     Select 
-    Unsuppressed.PatientPKHash,
-	Unsuppressed.PatientPK,
-    Unsuppressed.Sitecode,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    inner join EAC3 on Unsuppressed.patientpk=EAC3.patientpk and Unsuppressed.Sitecode=EAC3.Sitecode
+    EAC3.PatientPKHash,
+	EAC3.PatientPK,
+    EAC3.Sitecode
+    from  EAC3 as EAC3
     ),
-	 PBFWRepeatVls as (Select 
-    Vls.patientpk,
-    Vls.Sitecode,
-    case when vls.TestResult is not null then 1 Else 0 End as PBFWRepeatVls
-   from  ODS.dbo.Intermediate_OrderedViralLoads Vls 
-    where rank=2 and vls.TestResult is not null 
-    ),
-	 PBFWRepeatVlSupp as (Select 
-    Vls.patientpk,
-    Vls.Sitecode,
-    case when vls.TestResult is not null then 1 Else 0 End as PBFWRepeatSuppressed
-    from  ODS.dbo.Intermediate_OrderedViralLoads Vls 
- WHERE rank=1 
-AND (
-   (TRY_CAST(REPLACE(vls.TestResult, ',', '') AS FLOAT) < 200.00)
-   OR
-   (vls.TestResult IN ('Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level'))
-)
-
-         
- ),
-PBFWRepeatVlUnSupp as (Select 
-    Vls.patientpk,
-    Vls.Sitecode,
-    case when vls.TestResult is not null then 1 Else 0 End as PBFWRepeatUnSuppressed
-    from  ODS.dbo.Intermediate_OrderedViralLoads Vls 
-    where rank=1 and try_Cast(Replace(vls.TestResult,',','') AS FLOAT) >= 200.00 
- ),
-
+	 
 Switches  as (Select 
 
  Row_number()
@@ -295,21 +205,11 @@ Switches  as (Select
                       WHEN startartdate IS NOT NULL THEN 1
                       ELSE 0
                     END                         AS RecieivedART,
-                    COALESCE (eligiblevl, 0)    AS EligibleVL,
-                    suppressed,
-                    CASE
-                    When 
-                     Try_Cast(Replace(validvlresultcategory, ',', '') AS FLOAT)  >= 200.00 THEN 1
-                      ELSE 0
-                    END                         AS Unsuppressed,
-                    validvlresultcategory,
-                    Case When UnsuppressedReceivedEAC1.PatientPK is not null Then 1 Else 0 End as UnsuppressedReceivedEAC1,
-                    Case When UnsuppressedReceivedEAC2.patientpk is not null Then 1 Else 0 End as UnsuppressedReceivedEAC2,
-                    Case When UnsuppressedReceivedEAC3.patientpk is not null Then 1 Else 0 End as UnsuppressedReceivedEAC3,
-					PBFWRepeatVls,
-					PBFWRepeatSuppressed,
-                    PBFWRepeatUnSuppressed
-                    --PBFWRegLineSwitch
+                  
+                    Case When ReceivedEAC1.PatientPK is not null Then 1 Else 0 End as ReceivedEAC1,
+                    Case When ReceivedEAC2.patientpk is not null Then 1 Else 0 End as ReceivedEAC2,
+                    Case When ReceivedEAC3.patientpk is not null Then 1 Else 0 End as ReceivedEAC3,
+                    PBFWRegLineSwitch
              FROM   pbfw_patient AS Patient
                     LEFT JOIN ancdate2
                            ON Patient.patientpk = ancdate2.patientpk
@@ -331,15 +231,10 @@ Switches  as (Select
                            ON Patient.patientpk =
                               testedatpnc.patientpk
                               AND Patient.sitecode = testedatpnc.sitecode
-                    Left join UnsuppressedReceivedEAC1 on Patient.patientpk=UnsuppressedReceivedEAC1.patientpk and Patient.sitecode=UnsuppressedReceivedEAC1.sitecode
-                    Left join UnsuppressedReceivedEAC2 on Patient.patientpk=UnsuppressedReceivedEAC2.patientpk and Patient.sitecode=UnsuppressedReceivedEAC2.sitecode
-                    Left join UnsuppressedReceivedEAC3 on Patient.patientpk=UnsuppressedReceivedEAC3.patientpk and Patient.sitecode=UnsuppressedReceivedEAC3.sitecode
-				    Left join PBFWRepeatVls on Patient.patientpk=PBFWRepeatVls.patientpk and Patient.Sitecode=PBFWRepeatVls.Sitecode 
-				    Left join PBFWRepeatVlSupp on Patient.patientpk=PBFWRepeatVlSupp.patientpk and Patient.Sitecode=PBFWRepeatVlSupp.Sitecode
-                    Left join PBFWRepeatVlUnSupp on Patient.patientpk=PBFWRepeatVlUnSupp.patientpk and Patient.Sitecode=PBFWRepeatVlUnSupp.Sitecode
-                   -- Left join PBFWRegLineSwitch on Patient.patientpk=PBFWRegLineSwitch.patientpk and Patient.Sitecode=PBFWRegLineSwitch.sitecode
-
-
+                    Left join ReceivedEAC1 on Patient.patientpk=ReceivedEAC1.patientpk and Patient.sitecode=ReceivedEAC1.sitecode
+                    Left join ReceivedEAC2 on Patient.patientpk=ReceivedEAC2.patientpk and Patient.sitecode=ReceivedEAC2.sitecode
+                    Left join ReceivedEAC3 on Patient.patientpk=ReceivedEAC3.patientpk and Patient.sitecode=ReceivedEAC3.sitecode
+                   Left join PBFWRegLineSwitch on Patient.patientpk=PBFWRegLineSwitch.patientpk and Patient.Sitecode=PBFWRegLineSwitch.sitecode
              WHERE  Patient.num = 1)
     SELECT FactKey = IDENTITY(int, 1, 1),
            Patient.patientkey,
@@ -352,27 +247,20 @@ Switches  as (Select
            Ancdate3,
            Ancdate4,
            Testedatanc,
-          Testedatlandd,
+           Testedatlandd,
            Testedatpnc,
            Positiveadolescent,
            Newpositives,
            Knownpositive,
            Recieivedart,
-           Eligiblevl,
-           Suppressed,
-           Unsuppressed,
-           Validvlresultcategory,
            ANCDate1.datekey AS ANCDate1Key,
            ANCDate2.datekey AS ANCDate2Key,
            ANCDate3.datekey AS ANCDate3Key,
            ANCDate4.datekey AS ANCDate4Key,
-           UnsuppressedReceivedEAC1,
-           UnsuppressedReceivedEAC2,
-           UnsuppressedReceivedEAC3,
-		   PBFWRepeatVls,
-		   PBFWRepeatSuppressed,
-           PBFWRepeatUnSuppressed
-           --PBFWRegLineSwitch
+           ReceivedEAC1,
+           ReceivedEAC2,
+           ReceivedEAC3,
+           PBFWRegLineSwitch
     INTO   ndwh.dbo.factpbfw
     FROM   summary
            LEFT JOIN ndwh.dbo.dimfacility AS Facility
