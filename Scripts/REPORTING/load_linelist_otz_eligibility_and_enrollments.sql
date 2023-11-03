@@ -38,8 +38,8 @@ SELECT DISTINCT
 	ValidVLResultCategory1,
 	ValidVLResultCategory2,
 	HasValidVL,
-	COUNT(CASE WHEN art.PatientKey is not null THEN 1 ELSE 0 END) as Eligible,
-	COUNT(CASE WHEN otz.PatientKey is not null THEN 1 ELSE NULL END) as Enrolled,
+	CASE WHEN art.PatientKey is not null THEN 1 ELSE 0 END as Eligible,
+	CASE WHEN otz.PatientKey is not null THEN 1 ELSE 0 END as Enrolled,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]
 FROM NDWH.dbo.FACTART art
@@ -53,41 +53,5 @@ FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
 LEFT JOIN NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
 WHERE age.Age BETWEEN 10 AND 19  AND IsTXCurr = 1
-GROUP BY 
-	PatientPKHash, 
-    PatientIDHash,
-    MFLCode,
-	f.FacilityName,
-	County,
-	SubCounty,
-	p.PartnerName,
-	a.AgencyName,
-	pat.Gender,
-	age.DATIMAgeGroup,
-	date.Date,
-	LastVisitDateKey,
-    case 
-	    when outcome.ARTOutcome is null then 'Others'
-		else outcome.ARTOutcomeDescription 
-	end,
-	TransitionAttritionReason,
-	TransferInStatus,
-	case when otz.ModulesPreviouslyCovered is not null then 1 else 0 end,
-	ModulesPreviouslyCovered,
-	ModulesCompletedToday_OTZ_Orientation,
-	ModulesCompletedToday_OTZ_Participation,
-	ModulesCompletedToday_OTZ_Leadership,
-	ModulesCompletedToday_OTZ_MakingDecisions,
-	ModulesCompletedToday_OTZ_Transition,
-	ModulesCompletedToday_OTZ_TreatmentLiteracy,
-	ModulesCompletedToday_OTZ_SRH,
-	ModulesCompletedToday_OTZ_Beyond,
-	FirstVL,
-	LastVL,
-	EligibleVL,
-	ValidVLResult,
-	ValidVLResultCategory1,
-	ValidVLResultCategory2,
-	
-	
+
 GO
