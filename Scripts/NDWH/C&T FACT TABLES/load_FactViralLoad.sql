@@ -250,7 +250,7 @@ RepeatVlUnSupp as (Select
 			eligible_for_VL.EligibleVL,
 			valid_VL_indicators.ValidVLResult,
 			case when valid_VL_indicators.ValidVLResult is not null then 1 else 0 end as HasValidVL,
-            case when PBF.TestResult is not null then 1 else 0 end as PBFValidVL,
+            case when PBF.PatientPK is not null then 1 else 0 end as PBFValidVL,
             valid_VL_indicators.ValidVLResultCategory1,
 			valid_VL_indicators.ValidVLResultCategory2,
 			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
