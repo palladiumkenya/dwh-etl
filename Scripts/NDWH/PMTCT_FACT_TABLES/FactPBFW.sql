@@ -109,7 +109,7 @@ BEGIN
              FROM   testsatpnc pat
              WHERE  num = 1),
 
-Unsuppressed As (Select distinct 
+Unsuppressed As (Select 
     PatientPKHash,
 	PatientPK,
     Sitecode
