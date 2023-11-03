@@ -201,7 +201,56 @@ BEGIN
 		from ODS.dbo.Intermediate_OrderedViralLoads
 		where rank = 3
 	),
-  
+
+HighVL As (SELECT 
+    PatientPk,
+    SiteCode,
+    TestResult,
+    orderedbydate as SecondLatestVLDate
+FROM ODS.dbo.Intermediate_OrderedViralLoads 
+WHERE rank = 2
+AND (
+   TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) >= 200.00
+)
+),
+HighVLRepeat As (Select 
+    vls.PatientPk,
+    vls.SiteCode,
+    vls.TestResult,
+    SecondLatestVLDate
+ from HighVL
+ inner join ODS.dbo.Intermediate_OrderedViralLoads vls  on HighVL.patientpk=vls.PatientPK and HighVL.Sitecode=Vls.SiteCode
+ where rank=1  AND DATEDIFF(MONTH, orderedbydate, SecondLatestVLDate) <= 6 
+),
+
+	RepeatVls as (Select 
+    Patientpk,
+    Sitecode,
+    TestResult,
+    case when Patientpk is not null then 1 Else 0 End as RepeatVls
+   from  HighVLRepeat Vls 
+   
+    ),
+	 RepeatVlSupp as (Select 
+    Patientpk,
+    Sitecode,
+    case when TestResult is not null then 1 Else 0 End as RepeatSuppressed
+    from  HighVLRepeat 
+ WHERE 
+
+   (TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) < 200.00)
+   OR
+   (TestResult IN ('Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level'))
+),
+
+RepeatVlUnSupp as (Select 
+    Patientpk,
+    Sitecode,
+    case when TestResult is not null then 1 Else 0 End as RepeatUnSuppressed
+    from  HighVLRepeat 
+    where  try_Cast(Replace(TestResult,',','') AS FLOAT) >= 200.00 
+ ),
+
 	combined_viral_load_dataset as (
 		select
 			patient.PatientPK,
@@ -245,6 +294,9 @@ BEGIN
 			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
 				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) < 200.00 then 1 ELSE 0 END
 			END as LowViremia,
+			RepeatVls,
+			RepeatSuppressed,
+            RepeatUnSuppressed,
 			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
 			 cast(getdate() as date) as LoadDate
 		from ODS.dbo.CT_Patient as patient
@@ -273,6 +325,9 @@ BEGIN
 		left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on patient.PatientPK = last_encounter.PatientPK
 			and last_encounter.SiteCode = patient.SiteCode
         left join PBF on PBF.PatientPK=patient.PatientPK and PBF.SiteCode=patient.SiteCode
+		Left join RepeatVls on Patient.patientpk=RepeatVls.patientpk and Patient.Sitecode=RepeatVls.Sitecode 
+		Left join RepeatVlSupp on Patient.patientpk=RepeatVlSupp.patientpk and Patient.Sitecode=RepeatVlSupp.Sitecode
+        Left join RepeatVlUnSupp on Patient.patientpk=RepeatVlUnSupp.patientpk and Patient.Sitecode=RepeatVlUnSupp.Sitecode
 	)
 	select
 		Factkey = IDENTITY(INT, 1, 1),
@@ -314,7 +369,10 @@ BEGIN
 		combined_viral_load_dataset.TimetoFirstVL,
 		combined_viral_load_dataset.TimeToFirstVLGrp,
 		combined_viral_load_dataset.HighViremia,
-		combined_viral_load_dataset.LowViremia
+		combined_viral_load_dataset.LowViremia,
+		combined_viral_load_dataset.RepeatVls,
+		combined_viral_load_dataset.RepeatSuppressed,
+        combined_viral_load_dataset.RepeatUnSuppressed
 	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = combined_viral_load_dataset.PatientPKHash
