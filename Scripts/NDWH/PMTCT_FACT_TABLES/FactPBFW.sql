@@ -10,7 +10,7 @@ BEGIN
          pbfw_patient
          AS (SELECT Row_number()
                       OVER (
-                        partition BY visits.sitecode, visits.patientpkhash
+                        partition BY visits.sitecode, visits.patientpk
                         ORDER BY visits.visitdate ASC ) AS NUM,
                     visits.patientpkhash,
                     visits.patientpk,
@@ -21,71 +21,17 @@ BEGIN
                     breastfeeding,
                     visits.visitdate,
                     dateconfirmedhivpositive,
-                    startartdate,
-                    testresult,
-                    CASE
-                      WHEN Datediff(month, startartdate, Getdate()) >= 3 THEN 1
-                      WHEN Datediff(month, startartdate, Getdate()) < 3 THEN 0
-                    END                                 AS EligibleVL,
-                    CASE
-                      WHEN Isnumeric([testresult]) = 1 THEN
-                        CASE
-                          WHEN Cast(Replace([testresult], ',', '') AS FLOAT) <
-                               200.00
-                        THEN 1
-                          ELSE 0
-                        END
-                      ELSE
-                        CASE
-                          WHEN [testresult] IN ( 'undetectable', 'NOT DETECTED',
-                                                 '0 copies/ml',
-                                                 'LDL',
-                               'Less than Low Detectable Level'
-                                               ) THEN 1
-                          ELSE 0
-                        END
-                    END                                 AS Suppressed,
-                    orderedbydate                       AS ValidVLDate,
-                    CASE
-                      WHEN Isnumeric(testresult) = 1 THEN
-                        CASE
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) >=
-                               200.00
-                        THEN
-                          '>200'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
-                               BETWEEN
-                               200.00
-                               AND 999.00
-                        THEN '200-999'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT)
-                               BETWEEN
-                               51.00 AND 199.00
-                        THEN
-                          '51-199'
-                          WHEN Cast(Replace(testresult, ',', '') AS FLOAT) < 50
-                        THEN
-                          '<50'
-                        END
-                      ELSE
-                        CASE
-                          WHEN testresult IN ( 'undetectable', 'NOT DETECTED',
-                                               '0 copies/ml'
-                                               , 'LDL',
-                                               'Less than Low Detectable Level'
-                                             )
-                        THEN 'Undetectable'
-                        END
-                    END                                 AS ValidVLResultCategory
+                    startartdate                  
+
              FROM   ods.dbo.ct_patient AS patient
                     INNER JOIN ods.dbo.ct_patientvisits AS visits
-                            ON visits.patientpkhash = patient.patientpkhash
+                            ON visits.patientpk = patient.patientpk
                                AND visits.sitecode = patient.sitecode
                     LEFT JOIN ods.dbo.ct_artpatients art
-                           ON patient.patientpkhash = art.patientpkhash
+                           ON patient.patientpk = art.patientpk
                               AND patient.sitecode = art.sitecode
                     LEFT JOIN ods.dbo.intermediate_latestviralloads vl
-                           ON patient.patientpkhash = vl.patientpkhash
+                           ON patient.patientpk = vl.patientpk
                               AND patient.sitecode = vl.sitecode
              WHERE  visits.pregnant = 'Yes'
                      OR breastfeeding = 'Yes'
@@ -95,79 +41,81 @@ BEGIN
          ancdate2
          AS (SELECT pbfw_patient.patientpkhash,
                     pbfw_patient.sitecode,
+					pbfw_patient.PatientPK,
                     pbfw_patient.visitdate AS ANCDate2
              FROM   pbfw_patient
              WHERE  num = 2),
          ancdate3
          AS (SELECT pbfw_patient.patientpkhash,
                     pbfw_patient.sitecode,
+					pbfw_patient.PatientPK,
                     pbfw_patient.visitdate AS ANCDate3
              FROM   pbfw_patient
              WHERE  num = 3),
          ancdate4
          AS (SELECT pbfw_patient.patientpkhash,
                     pbfw_patient.sitecode,
+					pbfw_patient.PatientPK,
                     pbfw_patient.visitdate AS ANCDate4
              FROM   pbfw_patient
              WHERE  num = 4),
          testsatanc
          AS (SELECT Row_number()
                       OVER (
-                        partition BY tests.sitecode, tests.patientpkhash
+                        partition BY tests.sitecode, tests.patientpk
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
-                    tests.sitecode
+                    tests.sitecode,
+					tests.PatientPk
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'PMTCT ANC', 'MCH' )),
          testedatanc
          AS (SELECT pat.patientpkhash,
-                    pat.sitecode
+                    pat.sitecode,
+					pat.patientpk
              FROM   testsatanc pat
              WHERE  num = 1),
          testsatlandd
          AS (SELECT Row_number()
                       OVER (
-                        partition BY tests.sitecode, tests.patientpkhash
+                        partition BY tests.sitecode, tests.patientpk
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
+					tests.PatientPk,
                     tests.sitecode          
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'Maternity', 'PMTCT MAT' )),
          testedatlandd
          AS (SELECT pat.patientpkhash,
-                    pat.sitecode
+                    pat.sitecode,
+					pat.PatientPk
              FROM   testsatlandd AS Pat
              WHERE  num = 1),
  testsatpnc
          AS (SELECT Row_number()
                       OVER (
-                        partition BY tests.sitecode, tests.patientpkhash
+                        partition BY tests.sitecode, tests.patientpk
                         ORDER BY tests.testdate ASC ) AS NUM,
                     tests.patientpkhash,
+					tests.PatientPk,
                     tests.sitecode
              FROM   ods.dbo.hts_clienttests tests
              WHERE  entrypoint IN ( 'PMTCT PNC', 'PNC' ,'POSTNATAL CARE CLINIC')
          ),
          testedatpnc
          AS (SELECT pat.patientpkhash,
-                    pat.sitecode
+                    pat.sitecode,
+					pat.patientpk
              FROM   testsatpnc pat
              WHERE  num = 1),
-
-Unsuppressed As (Select 
-    PatientPKHash,
-    Sitecode,
-    ValidVLDate
-from pbfw_patient
-where ValidVLResultCategory='>200'
-),
 EAC As (Select
  Row_number()
                       OVER (
-                        partition BY EAC.sitecode, EAC.patientpkhash
+                        partition BY EAC.sitecode, EAC.patientpk
                         ORDER BY EAC.Visitdate ASC ) AS NUM,
     PatientPKHash,
     Sitecode,
+	PatientPK,
     VisitDate
     from ODS.dbo.CT_EnhancedAdherenceCounselling EAC
    
@@ -181,31 +129,44 @@ where Num=2),
 EAC3 AS (Select * from EAC
 where Num=3),
 
-UnsuppressedReceivedEAC1 AS (
+ReceivedEAC1 AS (
     Select 
-    Unsuppressed.PatientPKHash,
-    Unsuppressed.Sitecode,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    inner join EAC1 on Unsuppressed.Patientpkhash=EAC1.PatientPkhash and Unsuppressed.Sitecode=EAC1.Sitecode 
+    EAC1.PatientPKHash,
+    EAC1.Sitecode,
+	EAC1.patientpk
+    from EAC1 as EAC1
     ),
-    UnsuppressedReceivedEAC2 AS (
+    ReceivedEAC2 AS (
     Select 
-    Unsuppressed.PatientPKHash,
-    Unsuppressed.Sitecode,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    inner join EAC2 on Unsuppressed.Patientpkhash=EAC2.PatientPkhash and Unsuppressed.Sitecode=EAC2.Sitecode 
+    EAC2.PatientPKHash,
+	EAC2.patientpk,
+    EAC2.Sitecode
+    from EAC2 as EAC2
+	),
+ ReceivedEAC3 AS (
+    Select 
+    EAC3.PatientPKHash,
+	EAC3.PatientPK,
+    EAC3.Sitecode
+    from  EAC3 as EAC3
     ),
+	 
+Switches  as (Select 
 
-    UnsuppressedReceivedEAC3 AS (
-    Select 
-    Unsuppressed.PatientPKHash,
-    Unsuppressed.Sitecode,
-    Unsuppressed.ValidVLDate
-    from Unsuppressed
-    inner join EAC3 on Unsuppressed.Patientpkhash=EAC3.PatientPkhash and Unsuppressed.Sitecode=EAC3.Sitecode
-    ),
+ Row_number()
+                      OVER (
+                        partition BY pharm.sitecode, pharm.patientpk
+                        ORDER BY pharm.Dispensedate Desc ) AS NUM,
+    pharm.patientpk,
+    pharm.Sitecode,
+    case when RegimenChangedSwitched is not null then 1 Else 0 End as PBFWRegLineSwitch
+    from  ODS.dbo.CT_PatientPharmacy pharm 
+    where RegimenChangedSwitched is not null
+ ),
+  PBFWRegLineSwitch as (select * from Switches
+  where NUM=1
+  ),
+
          summary
          AS (SELECT patient.patientpkhash,
                     patient.sitecode,
@@ -235,42 +196,36 @@ UnsuppressedReceivedEAC1 AS (
                       WHEN startartdate IS NOT NULL THEN 1
                       ELSE 0
                     END                         AS RecieivedART,
-                    COALESCE (eligiblevl, 0)    AS EligibleVL,
-                    suppressed,
-                    CASE
-                    When 
-                     Try_Cast(Replace(validvlresultcategory, ',', '') AS FLOAT)  >= 200.00 THEN 1
-                      ELSE 0
-                    END                         AS Unsuppressed,
-                    validvlresultcategory,
-                    Case When UnsuppressedReceivedEAC1.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC1,
-                    Case When UnsuppressedReceivedEAC2.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC2,
-                    Case When UnsuppressedReceivedEAC3.PatientPKHash is not null Then 1 Else 0 End as UnsuppressedReceivedEAC3
+                  
+                    Case When ReceivedEAC1.PatientPK is not null Then 1 Else 0 End as ReceivedEAC1,
+                    Case When ReceivedEAC2.patientpk is not null Then 1 Else 0 End as ReceivedEAC2,
+                    Case When ReceivedEAC3.patientpk is not null Then 1 Else 0 End as ReceivedEAC3,
+                    PBFWRegLineSwitch
              FROM   pbfw_patient AS Patient
                     LEFT JOIN ancdate2
-                           ON Patient.patientpkhash = ancdate2.patientpkhash
+                           ON Patient.patientpk = ancdate2.patientpk
                               AND Patient.sitecode = ancdate2.sitecode
                     LEFT JOIN ancdate3
-                           ON Patient.patientpkhash = ancdate3.patientpkhash
+                           ON Patient.patientpk = ancdate3.patientpk
                               AND Patient.sitecode = ancdate3.sitecode
                     LEFT JOIN ancdate4
-                           ON Patient.patientpkhash = ancdate4.patientpkhash
+                           ON Patient.patientpk = ancdate4.patientpk
                               AND Patient.sitecode = ancdate4.sitecode
                     LEFT JOIN testedatanc
-                           ON Patient.patientpkhash = testedatanc.patientpkhash
+                           ON Patient.patientpk = testedatanc.patientpk
                               AND Patient.sitecode = testedatanc.sitecode
                     LEFT JOIN testedatlandd
-                           ON Patient.patientpkhash =
-                              testedatlandd.patientpkhash
+                           ON Patient.patientpk =
+                              testedatlandd.patientpk
                               AND Patient.sitecode = testedatlandd.sitecode
                     LEFT JOIN testedatpnc
-                           ON Patient.patientpkhash =
-                              testedatpnc.patientpkhash
+                           ON Patient.patientpk =
+                              testedatpnc.patientpk
                               AND Patient.sitecode = testedatpnc.sitecode
-                    Left join UnsuppressedReceivedEAC1 on Patient.PatientPkHash=UnsuppressedReceivedEAC1.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC1.sitecode
-                     Left join UnsuppressedReceivedEAC2 on Patient.PatientPkHash=UnsuppressedReceivedEAC2.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC2.sitecode
-                    Left join UnsuppressedReceivedEAC3 on Patient.PatientPkHash=UnsuppressedReceivedEAC3.PatientPkHash and Patient.sitecode=UnsuppressedReceivedEAC3.sitecode
-
+                    Left join ReceivedEAC1 on Patient.patientpk=ReceivedEAC1.patientpk and Patient.sitecode=ReceivedEAC1.sitecode
+                    Left join ReceivedEAC2 on Patient.patientpk=ReceivedEAC2.patientpk and Patient.sitecode=ReceivedEAC2.sitecode
+                    Left join ReceivedEAC3 on Patient.patientpk=ReceivedEAC3.patientpk and Patient.sitecode=ReceivedEAC3.sitecode
+                   Left join PBFWRegLineSwitch on Patient.patientpk=PBFWRegLineSwitch.patientpk and Patient.Sitecode=PBFWRegLineSwitch.sitecode
              WHERE  Patient.num = 1)
     SELECT FactKey = IDENTITY(int, 1, 1),
            Patient.patientkey,
@@ -282,24 +237,21 @@ UnsuppressedReceivedEAC1 AS (
            Ancdate2,
            Ancdate3,
            Ancdate4,
-           coalesce (Testedatanc,0) as Testedatanc,
-           coalesce (Testedatlandd,0) as Testedatlandd,
-           coalesce (Testedatpnc,0) as Testedatpnc,
+           Testedatanc,
+           Testedatlandd,
+           Testedatpnc,
            Positiveadolescent,
            Newpositives,
            Knownpositive,
            Recieivedart,
-           Eligiblevl,
-           Suppressed,
-           Unsuppressed,
-           Validvlresultcategory,
            ANCDate1.datekey AS ANCDate1Key,
            ANCDate2.datekey AS ANCDate2Key,
            ANCDate3.datekey AS ANCDate3Key,
            ANCDate4.datekey AS ANCDate4Key,
-           UnsuppressedReceivedEAC1,
-           UnsuppressedReceivedEAC2,
-           UnsuppressedReceivedEAC3
+           ReceivedEAC1,
+           ReceivedEAC2,
+           ReceivedEAC3,
+           PBFWRegLineSwitch
     INTO   ndwh.dbo.factpbfw
     FROM   summary
            LEFT JOIN ndwh.dbo.dimfacility AS Facility
