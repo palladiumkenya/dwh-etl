@@ -61,6 +61,7 @@ BEGIN
           inner join ODS.dbo.intermediate_LatestObs as obs on obs.PatientPK=viral_loads.PatientPK and obs.SiteCode=viral_loads.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
 		and Pregnant='Yes'OR breastfeeding='Yes' and Gender='Female'
+         /*Check if period of gestation is within  9 months +6 for BF =15 */
          and  DATEDIFF(DAY, DATEADD(DAY, -(CAST(FLOOR(CONVERT(FLOAT, GestationAge)) * 7 AS INT)), CAST(LMP AS DATE)), GETDATE()) <= 450
      ),
      valid_VL_indicators as (
@@ -202,7 +203,7 @@ BEGIN
 		where rank = 3
 	),
 
-HighVL As (SELECT 
+SecondHighestVL As (SELECT 
     PatientPk,
     SiteCode,
     TestResult,
@@ -213,29 +214,20 @@ AND (
    TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) >= 200.00
 )
 ),
-HighVLRepeat As (Select 
+RepeatVL As (Select 
     vls.PatientPk,
     vls.SiteCode,
     vls.TestResult,
     SecondLatestVLDate
- from HighVL
- inner join ODS.dbo.Intermediate_OrderedViralLoads vls  on HighVL.patientpk=vls.PatientPK and HighVL.Sitecode=Vls.SiteCode
+ from SecondHighestVL
+ inner join ODS.dbo.Intermediate_OrderedViralLoads vls  on SecondHighestVL.patientpk=vls.PatientPK and SecondHighestVL.Sitecode=Vls.SiteCode
  where rank=1  AND DATEDIFF(MONTH, orderedbydate, SecondLatestVLDate) <= 6 
 ),
 
-	RepeatVls as (Select 
-    Patientpk,
-    Sitecode,
-    TestResult,
-    case when Patientpk is not null then 1 Else 0 End as RepeatVls
-   from  HighVLRepeat Vls 
-   
-    ),
 	 RepeatVlSupp as (Select 
     Patientpk,
-    Sitecode,
-    case when TestResult is not null then 1 Else 0 End as RepeatSuppressed
-    from  HighVLRepeat 
+    Sitecode
+    from  RepeatVL 
  WHERE 
 
    (TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) < 200.00)
@@ -245,9 +237,8 @@ HighVLRepeat As (Select
 
 RepeatVlUnSupp as (Select 
     Patientpk,
-    Sitecode,
-    case when TestResult is not null then 1 Else 0 End as RepeatUnSuppressed
-    from  HighVLRepeat 
+    Sitecode
+    from  RepeatVL 
     where  try_Cast(Replace(TestResult,',','') AS FLOAT) >= 200.00 
  ),
 
@@ -294,9 +285,9 @@ RepeatVlUnSupp as (Select
 			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
 				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) < 200.00 then 1 ELSE 0 END
 			END as LowViremia,
-			RepeatVls,
-			RepeatSuppressed,
-            RepeatUnSuppressed,
+             case when Vls.PatientPk is not null then 1 Else 0 End as RepeatVls,
+                case when RepeatVlSupp.PatientPk is not null then 1 Else 0 End as RepeatSuppressed,
+               case when RepeatVlUnSupp.PatientPk is not null then 1 Else 0 End as RepeatUnSuppressed,
 			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
 			 cast(getdate() as date) as LoadDate
 		from ODS.dbo.CT_Patient as patient
@@ -325,7 +316,7 @@ RepeatVlUnSupp as (Select
 		left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on patient.PatientPK = last_encounter.PatientPK
 			and last_encounter.SiteCode = patient.SiteCode
         left join PBF on PBF.PatientPK=patient.PatientPK and PBF.SiteCode=patient.SiteCode
-		Left join RepeatVls on Patient.patientpk=RepeatVls.patientpk and Patient.Sitecode=RepeatVls.Sitecode 
+		Left join RepeatVL Vls on Patient.patientpk=Vls.patientpk and Patient.Sitecode=Vls.Sitecode 
 		Left join RepeatVlSupp on Patient.patientpk=RepeatVlSupp.patientpk and Patient.Sitecode=RepeatVlSupp.Sitecode
         Left join RepeatVlUnSupp on Patient.patientpk=RepeatVlUnSupp.patientpk and Patient.Sitecode=RepeatVlUnSupp.Sitecode
 	)
@@ -395,3 +386,4 @@ RepeatVlUnSupp as (Select
 
 	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END
+
