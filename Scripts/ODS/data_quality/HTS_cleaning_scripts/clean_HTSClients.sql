@@ -38,3 +38,11 @@ Go
                 END
 WHERE PatientDisabled is not NULL
 Go
+
+----Added by Mugo,Bett,Nobert to cation null voided column. NUll voided are active patients
+
+UPDATE a
+    SET Voided = 0             
+    from ODS.[dbo].[HTS_clients] a
+WHERE Voided is null
+GO
