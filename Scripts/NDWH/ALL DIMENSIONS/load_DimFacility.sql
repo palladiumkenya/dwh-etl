@@ -85,7 +85,10 @@ BEGIN
                  a.latitude = b.latitude,
                  a.implementation = b.implementation,
 				 a.EMR =	b.EMR,
-				 a.Agency =b.agency;
+				 a.Agency =b.agency,
+				 a.datesiteabstractionkey = b.datesiteabstractionkey,
+				 a.latestdateuploadedkey = b.latestdateuploadedkey
+				 ;
 
 		UPDATE a
 		SET isCT =CASE
