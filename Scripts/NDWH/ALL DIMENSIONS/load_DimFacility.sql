@@ -22,6 +22,7 @@ BEGIN
                     Max(Cast([daterecieved] AS DATE)) AS LatestDateUploaded
              FROM   [ODS].[dbo].[ct_facilitymanifest](nolock)
              GROUP  BY sitecode)
+
     MERGE [NDWH].[dbo].[dimfacility] AS a
     using (SELECT source_facility.*,
                   Cast(Format(site_abstraction.datesiteabstraction, 'yyyyMMdd')
@@ -32,24 +33,9 @@ BEGIN
                        INT)
                   AS
                   LatestDateUploadedKey,
-                  CASE
-                    WHEN [implementation] LIKE '%CT%' THEN 1
-                    ELSE 0
-                  END
-                  AS
-                        isCT,
-                  CASE
-                    WHEN [implementation] LIKE '%CT%' THEN 1
-                    ELSE 0
-                  END
-                  AS
-                        isPKV,
-                  CASE
-                    WHEN [implementation] LIKE '%HTS%' THEN 1
-                    ELSE 0
-                  END
-                  AS
-                        isHTS,
+				  Null As isCT,               
+				  NULL As isPKV,                
+				  Null as isHTS,
                   Cast(Getdate() AS DATE)
                   AS
                         LoadDate
@@ -97,15 +83,32 @@ BEGIN
                  a.county = b.county,
                  a.longitude = b.longitude,
                  a.latitude = b.latitude,
-                 a.implementation = b.implementation;
+                 a.implementation = b.implementation,
+				 a.EMR =	b.EMR,
+				 a.Agency =b.agency;
 
-    WITH cte
-         AS (SELECT mflcode,
-                    Row_number()
-                      OVER (
-                        partition BY mflcode
-                        ORDER BY mflcode ) Row_Num
-             FROM   ndwh.dbo.dimfacility)
-    DELETE FROM cte
-    WHERE  row_num > 1;
+		UPDATE a
+		SET isCT =CASE
+                    WHEN [implementation] LIKE '%CT%' THEN 1
+                    ELSE 0
+                  END
+                 
+		FROM [NDWH].[dbo].[dimfacility] a;
+
+		UPDATE a
+		SET isPKV =CASE
+                    WHEN [implementation] LIKE '%CT%' THEN 1
+                    ELSE 0
+                  END
+
+		FROM [NDWH].[dbo].[dimfacility] a;
+
+		UPDATE a
+		SET isHTS = CASE
+                    WHEN [implementation] LIKE '%HTS%' THEN 1
+                    ELSE 0
+                  END
+
+		FROM [NDWH].[dbo].[dimfacility] a;
+
 END 

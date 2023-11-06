@@ -1,19 +1,9 @@
 MERGE [NDWH].[dbo].[DimARTOutcome] AS a
 		USING(
 				SELECT DISTINCT
-					  [ARTOutcome]
-					  ,[ARTOutcomeDescription]=
-												CASE 
-													WHEN [ARTOutcome] ='V'	THEN 'ACTIVE'
-													WHEN [ARTOutcome] ='S'	THEN 'STOPPED'
-													WHEN [ARTOutcome] ='D'	THEN 'DEAD'
-													WHEN [ARTOutcome] ='L'	THEN 'LOSS TO FOLLOW UP'
-													WHEN [ARTOutcome] ='NV'	THEN 'NO VISIT'
-													WHEN [ARTOutcome] ='T'	THEN 'TRANSFERRED OUT'
-													WHEN [ARTOutcome] ='NP' THEN 'NEW PATIENT'
-													WHEN [ARTOutcome] ='UL' THEN 'UNDOCUMENTED LOSS'
-
-												END
+					  [ARTOutcome],
+					  Null As [ARTOutcomeDescription]
+					  
 				FROM [ODS].[dbo].[Intermediate_ARTOutcomes]
 				  	WHERE [ARTOutcome] IS NOT NULL AND [ARTOutcome] <>''
 			) AS b 
@@ -26,3 +16,18 @@ MERGE [NDWH].[dbo].[DimARTOutcome] AS a
 		WHEN MATCHED THEN
 						UPDATE  						
 							SET a.ARTOutcomeDescription =b.ARTOutcomeDescription;
+
+	UPDATE a
+	SET [ARTOutcomeDescription]=
+								CASE 
+									WHEN [ARTOutcome] ='V'	THEN 'ACTIVE'
+									WHEN [ARTOutcome] ='S'	THEN 'STOPPED'
+									WHEN [ARTOutcome] ='D'	THEN 'DEAD'
+									WHEN [ARTOutcome] ='L'	THEN 'LOSS TO FOLLOW UP'
+									WHEN [ARTOutcome] ='NV'	THEN 'NO VISIT'
+									WHEN [ARTOutcome] ='T'	THEN 'TRANSFERRED OUT'
+									WHEN [ARTOutcome] ='NP' THEN 'NEW PATIENT'
+									WHEN [ARTOutcome] ='UL' THEN 'UNDOCUMENTED LOSS'
+
+								END
+	FROM [NDWH].[dbo].[DimARTOutcome] a
