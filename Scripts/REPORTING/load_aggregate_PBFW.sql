@@ -1,36 +1,94 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL 
-    DROP TABLE [REPORTING].[dbo].[AggregatePBFW];
-GO
-
-SELECT 
-    Facility.FacilityName,
-    Facility.MFLCode,
-    Facility.County,
-    Facility.SubCounty,
-    Partner.PartnerName,
-    Agency.AgencyName,
-    Age_group.DATIMAgeGroup as AgeGroup,
-    Patient.Gender,
-    Sum(Knownpositive) AS KnownPositives,
-    Sum(Newpositives) AS NewPositives,
-    SUM (RecieivedART ) As  PBFWOnART,
-    SUM (Eligiblevl) AS PBFWEligiblevl,
-    SUM (CASE WHEN try_cast (Validvlresultcategory as float ) is not null Then 1   ELSE 0 END) AS PBFWValidVl,
-    SUM (suppressed) AS PBFWSuppressed,
-    SUM ( Unsuppressed) AS PBFWUnsuppressed
-INTO REPORTING.dbo.AggregatePBFW
-FROM NDWH.dbo.FactPBFW AS PBFW
-LEFT JOIN NDWH.dbo.DimFacility AS Facility ON Facility.FacilityKey = PBFW.FacilityKey
-LEFT JOIN NDWH.dbo.DimPartner AS Partner ON Partner.PartnerKey = PBFW.PartnerKey
-LEFT JOIN NDWH.dbo.DimAgency AS Agency ON Agency.AgencyKey = PBFW.AgencyKey
-LEFT JOIN NDWH.dbo.DimAgeGroup AS Age_group ON Age_group.AgeGroupKey = PBFW.AgeGroupKey
-LEFT JOIN NDWH.dbo.DimPatient AS Patient ON Patient.PatientKey = PBFW.PatientKey
-GROUP BY 
-    Facility.FacilityName,
-    Facility.MFLCode,
-    Facility.County,
-    Facility.SubCounty,
-    Partner.PartnerName,
-    Agency.AgencyName,
-    Age_group.DATIMAgeGroup,
-    Patient.Gender;
+IF Object_id(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL
+DROP TABLE [Reporting].[Dbo].[aggregatepbfw];GoSELECT    Facility.Facilityname,
+          Facility.Mflcode,
+          Facility.County,
+          Facility.Subcounty,
+          Partner.Partnername,
+          Agency.Agencyname,
+          Age_group.Datimagegroup AS Agegroup,
+          Patient.Gender,
+          Sum(Knownpositive) AS Knownpositives,
+          Sum(Newpositives)  AS Newpositives,
+          Sum (
+          CASE
+                    WHEN Recieivedart=1 THEN 1
+                    ELSE 0
+          END ) AS Pbfwonart,
+          Sum (
+          CASE
+                    WHEN Recieivedart=1
+                    AND       Eligiblevl=1 THEN 1
+                    ELSE 0
+          END) AS Pbfweligiblevl,
+          Sum (
+          CASE
+                    WHEN Try_cast (Pbfw_validvlresultcategory As Float ) IS NOT NULL THEN 1
+                    ELSE 0
+          END) AS Pbfwvalidvl,
+          Sum (
+          CASE
+                    WHEN Pbfw_validvlsup=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwsuppressed,
+          Sum (
+          CASE
+                    WHEN Pbfw_validvlsup=0 THEN 1
+                    ELSE 0
+          END ) AS Pbfwunsuppressed,
+          Sum (
+          CASE
+                    WHEN Repeatvls=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwrepeatvl,
+          Sum (
+          CASE
+                    WHEN Repeatsuppressed=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwrepeatvlsuppressed,
+          Sum (
+          CASE
+                    WHEN Repeatunsuppressed=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwrepeatvlunsuppressed,
+          Sum (
+          CASE
+                    WHEN Receivedeac1=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwreceivedeac1,
+          Sum (
+          CASE
+                    WHEN Receivedeac2=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwreceivedeac2,
+          Sum(
+          CASE
+                    WHEN Receivedeac3=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwreceivedeac3,
+          Sum (
+          CASE
+                    WHEN Pbfwreglineswitch=1 THEN 1
+                    ELSE 0
+          END) AS Pbfwreglineswitch
+INTO      Reporting.Dbo.Aggregatepbfw
+FROM      Ndwh.Dbo.Factpbfw    AS Pbfw
+LEFT JOIN Ndwh.Dbo.Dimfacility AS Facility
+ON        Facility.Facilitykey = Pbfw.Facilitykey
+LEFT JOIN Ndwh.Dbo.Dimpartner AS Partner
+ON        Partner.Partnerkey = Pbfw.Partnerkey
+LEFT JOIN Ndwh.Dbo.Dimagency AS Agency
+ON        Agency.Agencykey = Pbfw.Agencykey
+LEFT JOIN Ndwh.Dbo.Dimagegroup AS Age_group
+ON        Age_group.Agegroupkey = Pbfw.Agegroupkey
+LEFT JOIN Ndwh.Dbo.Dimpatient AS Patient
+ON        Patient.Patientkey = Pbfw.Patientkey
+LEFT JOIN Ndwh.Dbo.Factviralloads AS Vls
+ON        Vls.Patientkey=Pbfw.Patientkey
+GROUP BY  Facility.Facilityname,
+          Facility.Mflcode,
+          Facility.County,
+          Facility.Subcounty,
+          Partner.Partnername,
+          Agency.Agencyname,
+          Age_group.Datimagegroup,
+          Patient.Gender;
