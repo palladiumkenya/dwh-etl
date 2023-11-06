@@ -38,7 +38,7 @@ BEGIN
                     LEFT JOIN ods.dbo.intermediate_artoutcomes AS outcomes
                            ON outcomes.patientpkhash = patients.patientpkhash
                               AND outcomes.sitecode = patients.sitecode
-            -- where patients.voided = 0
+            where patients.voided = 0
             ),
          hts_patient_source
          AS (SELECT DISTINCT htsnumberhash,
@@ -50,7 +50,7 @@ BEGIN
                              maritalstatus,
                              nupihash
              FROM   ods.dbo.hts_clients AS clients
-            --where voided =0
+            where voided =0
             ),
          prep_patient_source
          AS (SELECT DISTINCT patientpkhash,
@@ -226,7 +226,6 @@ BEGIN
            FROM   combined_data_ct_hts_prep_pmtct) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
-        --and a.PatientMnchIDHash  = b.PatientMnchIDHash
         )
     WHEN NOT matched THEN
       INSERT(patientidhash,
@@ -242,7 +241,7 @@ BEGIN
              patientsource,
              enrollmentwhokey,
              datebaselinewhokey,
-             baselinewhokey,/*PrepEnrollmentDateKey,*/
+             baselinewhokey,PrepEnrollmentDateKey,
              istxcurr,
              loaddate)
       VALUES(patientidhash,
@@ -258,15 +257,20 @@ BEGIN
              patientsource,
              enrollmentwhokey,
              datebaselinewhokey,
-             baselinewhokey,/*PrepEnrollmentDateKey,*/
+             baselinewhokey,PrepEnrollmentDateKey,
              istxcurr,
              loaddate)
     WHEN matched THEN
       UPDATE SET a.maritalstatus = b.maritalstatus,
                  a.clienttype		= b.clienttype,
                  a.patientsource	= b.patientsource,
+				 a.patientidhash   = b.patientidhash,
                  a.nupi				= b.nupi,
                  a.dob				= b.dob,
                  a.gender			= b.gender,
-                 a.prepnumber		= b.prepnumber;
+                 a.prepnumber		= b.prepnumber,
+				 a.IsTxcur          = b.IsTxcur,
+				 a.enrollmentwhokey  =b.enrollmentwhokey,
+				 a.baselinewhokey  =b.baselinewhokey,
+				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey;
 END 
