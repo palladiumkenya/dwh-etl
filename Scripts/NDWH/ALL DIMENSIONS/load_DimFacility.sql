@@ -1,59 +1,111 @@
 
+BEGIN
+    WITH source_facility
+         AS (SELECT DISTINCT Cast(mfl_code AS NVARCHAR) AS MFLCode,
+                             facility_name              AS [FacilityName],
+                             subcounty,
+                             county,
+                             emr,
+                             project,
+                             longitude,
+                             latitude,
+                             implementation,
+                             sdp_agency                 AS Agency
+             FROM   ods.dbo.all_emrsites),
+         site_abstraction
+         AS (SELECT sitecode,
+                    Max(visitdate) AS DateSiteAbstraction
+             FROM   ods.dbo.ct_patientvisits
+             GROUP  BY sitecode),
+         latest_upload
+         AS (SELECT sitecode,
+                    Max(Cast([daterecieved] AS DATE)) AS LatestDateUploaded
+             FROM   [ODS].[dbo].[ct_facilitymanifest](nolock)
+             GROUP  BY sitecode)
+    MERGE [NDWH].[dbo].[dimfacility] AS a
+    using (SELECT source_facility.*,
+                  Cast(Format(site_abstraction.datesiteabstraction, 'yyyyMMdd')
+                       AS
+                       INT) AS
+                  DateSiteAbstractionKey,
+                  Cast(Format(latest_upload.latestdateuploaded, 'yyyyMMdd') AS
+                       INT)
+                  AS
+                  LatestDateUploadedKey,
+                  CASE
+                    WHEN [implementation] LIKE '%CT%' THEN 1
+                    ELSE 0
+                  END
+                  AS
+                        isCT,
+                  CASE
+                    WHEN [implementation] LIKE '%CT%' THEN 1
+                    ELSE 0
+                  END
+                  AS
+                        isPKV,
+                  CASE
+                    WHEN [implementation] LIKE '%HTS%' THEN 1
+                    ELSE 0
+                  END
+                  AS
+                        isHTS,
+                  Cast(Getdate() AS DATE)
+                  AS
+                        LoadDate
+           FROM   source_facility
+                  LEFT JOIN site_abstraction
+                         ON site_abstraction.sitecode = source_facility.mflcode
+                  LEFT JOIN latest_upload
+                         ON latest_upload.sitecode = source_facility.mflcode) AS
+          b
+    ON ( a.mflcode = b.mflcode )
+    WHEN NOT matched THEN
+      INSERT( mflcode,
+              facilityname,
+              subcounty,
+              county,
+              emr,
+              project,
+              longitude,
+              latitude,
+              implementation,
+              datesiteabstractionkey,
+              latestdateuploadedkey,
+              isct,
+              ispkv,
+              ishts,
+              loaddate )
+      VALUES ( mflcode,
+               facilityname,
+               subcounty,
+               county,
+               emr,
+               project,
+               longitude,
+               latitude,
+               implementation,
+               datesiteabstractionkey,
+               latestdateuploadedkey,
+               isct,
+               ispkv,
+               ishts,
+               loaddate )
+    WHEN matched THEN
+      UPDATE SET a.facilityname = b.facilityname,
+                 a.subcounty = b.subcounty,
+                 a.county = b.county,
+                 a.longitude = b.longitude,
+                 a.latitude = b.latitude,
+                 a.implementation = b.implementation;
 
-MERGE [NDWH].[dbo].[DimFacility] AS a
-		USING	(	SELECT
-							DISTINCT cast(MFL_Code as nvarchar) as MFLCode,
-							Facility_Name as [FacilityName],
-							SubCounty,
-							County,
-							EMRSites.EMR,		
-							EMRSites.Project,
-							Longitude,
-							Latitude,
-							Implementation,
-							CAST(FORMAT(MAX(VisitDate),'yyyyMMdd') AS INT) AS DateSiteAbstractionKey,
-							CAST(FORMAT(MAX([DateRecieved]),'yyyyMMdd') AS INT) AS LatestDateUploadedKey,
-							CASE 
-								WHEN [Implementation] LIKE '%CT%' THEN 1 
-								ELSE 0 
-							END AS isCT,
-							CASE 
-								WHEN [Implementation] LIKE '%CT%' THEN 1 
-								ELSE 0 
-							END AS isPKV,
-							CASE 
-								WHEN [Implementation] LIKE '%HTS%' THEN 1 
-								ELSE 0 
-							END AS isHTS,
-							GETDATE() AS LoadDate
-					FROM ODS.dbo.All_EMRSites EMRSites
-						LEFT JOIN ODS.dbo.CT_PatientVisits Visits
-							ON EMRSites.MFL_Code = Visits.SiteCode
-						LEFT JOIN [ODS].[dbo].[CT_FacilityManifest] FacilityManifest
-							ON EMRSites.MFL_Code = FacilityManifest.SiteCode 
-					GROUP BY 	EMRSites.MFL_Code,Facility_Name,
-								SubCounty,
-								County,
-								EMRSites.EMR,
-								EMRSites.Project,
-								Longitude,
-								Latitude,
-								Implementation
-				) AS b 
-						ON(
-							a.MFLCode = b.MFLCode
-						  )
-		WHEN NOT MATCHED THEN 
-						INSERT(MFLCode,FacilityName,SubCounty,County,EMR,Project,Longitude,Latitude,Implementation,DateSiteAbstractionKey,LatestDateUploadedKey,isCT,isPKV,isHTS,LoadDate) 
-						VALUES(MFLCode,FacilityName,SubCounty,County,EMR,Project,Longitude,Latitude,Implementation,DateSiteAbstractionKey,LatestDateUploadedKey,isCT,isPKV,isHTS,LoadDate)
-		WHEN MATCHED THEN
-						UPDATE SET 						
-						a.FacilityName =b.FacilityName,
-						a.SubCounty  = b.SubCounty,
-						a.County  = b.County,
-						a.Longitude = b.Longitude,
-						a.Latitude  = b.Latitude,
-						a.Implementation = b.Implementation;
-
-
-
+    WITH cte
+         AS (SELECT mflcode,
+                    Row_number()
+                      OVER (
+                        partition BY mflcode
+                        ORDER BY mflcode ) Row_Num
+             FROM   ndwh.dbo.dimfacility)
+    DELETE FROM cte
+    WHERE  row_num > 1;
+END 
