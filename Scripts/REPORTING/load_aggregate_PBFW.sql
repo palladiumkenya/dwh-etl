@@ -1,94 +1,46 @@
-IF Object_id(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL
-DROP TABLE [Reporting].[Dbo].[aggregatepbfw];GoSELECT    Facility.Facilityname,
-          Facility.Mflcode,
-          Facility.County,
-          Facility.Subcounty,
-          Partner.Partnername,
-          Agency.Agencyname,
-          Age_group.Datimagegroup AS Agegroup,
-          Patient.Gender,
-          Sum(Knownpositive) AS Knownpositives,
-          Sum(Newpositives)  AS Newpositives,
-          Sum (
-          CASE
-                    WHEN Recieivedart=1 THEN 1
-                    ELSE 0
-          END ) AS Pbfwonart,
-          Sum (
-          CASE
-                    WHEN Recieivedart=1
-                    AND       Eligiblevl=1 THEN 1
-                    ELSE 0
-          END) AS Pbfweligiblevl,
-          Sum (
-          CASE
-                    WHEN Try_cast (Pbfw_validvlresultcategory As Float ) IS NOT NULL THEN 1
-                    ELSE 0
-          END) AS Pbfwvalidvl,
-          Sum (
-          CASE
-                    WHEN Pbfw_validvlsup=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwsuppressed,
-          Sum (
-          CASE
-                    WHEN Pbfw_validvlsup=0 THEN 1
-                    ELSE 0
-          END ) AS Pbfwunsuppressed,
-          Sum (
-          CASE
-                    WHEN Repeatvls=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwrepeatvl,
-          Sum (
-          CASE
-                    WHEN Repeatsuppressed=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwrepeatvlsuppressed,
-          Sum (
-          CASE
-                    WHEN Repeatunsuppressed=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwrepeatvlunsuppressed,
-          Sum (
-          CASE
-                    WHEN Receivedeac1=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwreceivedeac1,
-          Sum (
-          CASE
-                    WHEN Receivedeac2=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwreceivedeac2,
-          Sum(
-          CASE
-                    WHEN Receivedeac3=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwreceivedeac3,
-          Sum (
-          CASE
-                    WHEN Pbfwreglineswitch=1 THEN 1
-                    ELSE 0
-          END) AS Pbfwreglineswitch
-INTO      Reporting.Dbo.Aggregatepbfw
-FROM      Ndwh.Dbo.Factpbfw    AS Pbfw
-LEFT JOIN Ndwh.Dbo.Dimfacility AS Facility
-ON        Facility.Facilitykey = Pbfw.Facilitykey
-LEFT JOIN Ndwh.Dbo.Dimpartner AS Partner
-ON        Partner.Partnerkey = Pbfw.Partnerkey
-LEFT JOIN Ndwh.Dbo.Dimagency AS Agency
-ON        Agency.Agencykey = Pbfw.Agencykey
-LEFT JOIN Ndwh.Dbo.Dimagegroup AS Age_group
-ON        Age_group.Agegroupkey = Pbfw.Agegroupkey
-LEFT JOIN Ndwh.Dbo.Dimpatient AS Patient
-ON        Patient.Patientkey = Pbfw.Patientkey
-LEFT JOIN Ndwh.Dbo.Factviralloads AS Vls
-ON        Vls.Patientkey=Pbfw.Patientkey
-GROUP BY  Facility.Facilityname,
-          Facility.Mflcode,
-          Facility.County,
-          Facility.Subcounty,
-          Partner.Partnername,
-          Agency.Agencyname,
-          Age_group.Datimagegroup,
-          Patient.Gender;
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL 
+    DROP TABLE [REPORTING].[dbo].[AggregatePBFW];
+GO
+
+SELECT 
+    Facility.FacilityName,
+    Facility.MFLCode,
+    Facility.County,
+    Facility.SubCounty,
+    Partner.PartnerName,
+    Agency.AgencyName,
+    Age_group.DATIMAgeGroup as AgeGroup,
+    Patient.Gender,
+    Sum(Knownpositive) AS KnownPositives,
+    Sum(Newpositives) AS NewPositives,
+    SUM (case when Recieivedart=1 Then 1 Else 0 End ) As  PBFWOnART,
+    SUM (Case When  Recieivedart=1  and EligibleVL=1 Then  1 Else 0 end) AS PBFWEligiblevl,
+    SUM (CASE WHEN try_cast (PBFW_ValidVLResultCategory as float ) is not null Then 1   ELSE 0 END) AS PBFWValidVl,
+    SUM (Case When PBFW_ValidVLSup=1 Then 1 else 0 End) AS PBFWSuppressed,
+    SUM (Case When  PBFW_ValidVLSup=0 Then 1 Else 0 End ) AS PBFWUnsuppressed,
+    Sum (Case When RepeatVls=1 Then 1 Else 0 End) As PBFWRepeatVl,
+     Sum (Case When RepeatSuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlSuppressed,
+    Sum (Case When RepeatUnsuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlUnSuppressed,
+    Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC1=1 Then 1 else 0 End) As PBFWReceivedEAC1,
+    Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC2=1 Then 1 Else 0 End) As PBFWReceivedEAC2,
+    Sum(Case when RepeatUnsuppressed=1 and ReceivedEAC3=1 Then 1 Else 0 End) As PBFWReceivedEAC3,
+    Sum (Case when PBFWRegLineSwitch=1 Then 1 Else 0 End) As PBFWRegLineSwitch
+ 
+INTO REPORTING.dbo.AggregatePBFW
+FROM NDWH.dbo.FactPBFW AS PBFW
+LEFT JOIN NDWH.dbo.DimFacility AS Facility ON Facility.FacilityKey = PBFW.FacilityKey
+LEFT JOIN NDWH.dbo.DimPartner AS Partner ON Partner.PartnerKey = PBFW.PartnerKey
+LEFT JOIN NDWH.dbo.DimAgency AS Agency ON Agency.AgencyKey = PBFW.AgencyKey
+LEFT JOIN NDWH.dbo.DimAgeGroup AS Age_group ON Age_group.AgeGroupKey = PBFW.AgeGroupKey
+LEFT JOIN NDWH.dbo.DimPatient AS Patient ON Patient.PatientKey = PBFW.PatientKey
+LEFT JOIN NDWH.dbo.FactViralLoads as Vls on Vls.patientkey=PBFW.patientkey
+GROUP BY 
+    Facility.FacilityName,
+    Facility.MFLCode,
+    Facility.County,
+    Facility.SubCounty,
+    Partner.PartnerName,
+    Agency.AgencyName,
+    Age_group.DATIMAgeGroup,
+    Patient.Gender;
+
