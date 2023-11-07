@@ -4,7 +4,22 @@ IF OBJECT_ID(N'[REPORTING].[dbo].LineListPBFW', N'U') IS NOT NULL
 GO
 
 
-select  
+with viral_load_metrics as (
+    select
+        PatientKey,
+        EligibleVL,
+        PBFW_ValidVL,
+        PBFW_ValidVLSup,
+        PBFW_ValidVLResultCategory,
+        RepeatVls,
+        RepeatSuppressed,
+        RepeatUnSuppressed      
+    from NDWH.dbo.FactViralLoads
+)
+select 
+    patient.PatientPKHash,
+    patient.NUPI,
+    patient.PatientIDHash,
     facility.MFLCode,
     facility.FacilityName,
     facility.County,
@@ -25,22 +40,38 @@ select
         else 0 
     end as KnownPositiveOnART,
     case 
-        when EligibleVL = 1 and KnownPositive = 1 then 1
+        when viral_load_metrics.EligibleVL = 1 and KnownPositive = 1 then 1
         else 0
     end as KnowPositivesEligibleVL,
     case 
-        when ValidVLResultCategory is not null and KnownPositive = 1 then 1
+        when viral_load_metrics.PBFW_ValidVL = 1 and KnownPositive = 1 then 1
         else 0
     end as KnowPositivesValidVL,
-    ValidVLResultCategory,
+    viral_load_metrics.PBFW_ValidVLResultCategory,
     case 
-        when Suppressed = 1 and KnownPositive = 1 then 1 
+        when viral_load_metrics.PBFW_ValidVLSup = 1 and KnownPositive = 1 then 1 
         else 0
     end as KnowPositivesSupVL,
     case 
-        when Unsuppressed = 1 and KnownPositive = 1 then 1
+        when viral_load_metrics.PBFW_ValidVLSup = 0 and KnownPositive = 1 then 1
         else 0
-    end as  KnowPositivesUnSupVL
+    end as  KnowPositivesUnSupVL,
+    case 
+        when viral_load_metrics.PBFW_ValidVLSup = 0 and ReceivedEAC1 = 1 then 1
+        else 0 
+    end as UnSupReceivedEAC1,
+    case 
+        when viral_load_metrics.PBFW_ValidVLSup = 0 and ReceivedEAC2 = 1 then 1
+        else 0 
+    end as UnSupReceivedEAC2,
+    case 
+        when viral_load_metrics.PBFW_ValidVLSup = 0 and ReceivedEAC3 = 1 then 1
+        else 0 
+    end as UnSupReceivedEAC3,        
+    case when viral_load_metrics.RepeatVls = 1 then 1 else 0 end as HasRepeatVL,
+    case when viral_load_metrics.RepeatSuppressed = 1 then 1 else 0 end as HasRepeatVLSupressed,
+    case when viral_load_metrics.RepeatUnSuppressed = 1 then 1 else 0 end as HasRepeatVLUnSuppressed,
+    pbfw.PBFWRegLineSwitch as HasRegLineSwitch
 into [REPORTING].[dbo].LineListPBFW
 from NDWH.dbo.FactPBFW as pbfw
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = pbfw.PatientKey
@@ -51,4 +82,5 @@ left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = pbfw.AgeGro
 left join NDWH.dbo.DimDate as anc1 on anc1.DateKey = ANCDate1Key
 left join NDWH.dbo.DimDate as anc2 on anc2.DateKey = ANCDate2Key
 left join NDWH.dbo.DimDate as anc3 on anc3.DateKey = ANCDate3Key
-left join NDWH.dbo.DimDate as anc4 on anc4.DateKey = ANCDate4Key;
+left join NDWH.dbo.DimDate as anc4 on anc4.DateKey = ANCDate4Key
+left join viral_load_metrics on viral_load_metrics.PatientKey = pbfw.patientkey;
