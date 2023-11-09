@@ -138,7 +138,7 @@ INTO NDWH.dbo.FactCovid
  left join NDWH.dbo.DimDate as COVID19TestDate  on COVID19TestDate.Date = Covid.COVID19TestDate
  left join NDWH.dbo.DimDate as AdmissionStartDate  on AdmissionStartDate.Date = Covid.AdmissionStartDate
  left join NDWH.dbo.DimDate as AdmissionEndDate  on AdmissionEndDate.Date = Covid.AdmissionEndDate
- where RowNumber=1;
+ where RowNumber=1 and patient.voided =0;
  
 alter table NDWH.dbo.FactCOVID add primary key(FactKey);
 END

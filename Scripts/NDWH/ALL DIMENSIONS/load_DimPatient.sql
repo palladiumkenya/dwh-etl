@@ -30,7 +30,8 @@ BEGIN
                              END
                                 AS IsTXCurr,
                              Cast(Getdate() AS DATE)
-                                AS LoadDate
+                                AS LoadDate,
+								patients.voided
              FROM   ods.dbo.ct_patient AS patients
                     LEFT JOIN ods.dbo.ct_patientbaselines AS baselines
                            ON patients.patientpkhash = baselines.patientpkhash
@@ -48,7 +49,8 @@ BEGIN
                              Cast(dob AS DATE) AS DOB,
                              gender,
                              maritalstatus,
-                             nupihash
+                             nupihash,
+							 clients.voided
              FROM   ods.dbo.hts_clients AS clients
             where voided =0
             ),
@@ -62,6 +64,7 @@ BEGIN
                              dateofbirth,
                              clienttype,
                              maritalstatus
+							 ,voided
              FROM   ods.dbo.prep_patient),
          pmtct_patient_source
          AS (SELECT DISTINCT patientpkhash,
@@ -76,6 +79,7 @@ BEGIN
                                   INT)
                              AS
                              FirstEnrollmentAtMnchDateKey
+							 ,voided
              FROM   ods.dbo.mnch_patient),
          combined_data_ct_hts
          AS (SELECT COALESCE(ct_patient_source.patientpkhash,
@@ -107,6 +111,7 @@ BEGIN
                     hts_patient_source.htsnumberhash,
                     Cast(Getdate() AS DATE)
                        AS LoadDate
+					   ,COALESCE(ct_patient_source.voided,hts_patient_source.voided) As voided
              FROM   ct_patient_source
                     FULL JOIN hts_patient_source
                            ON hts_patient_source.patientpkhash =
@@ -149,7 +154,8 @@ BEGIN
                          AS
                          INT)
                        AS
-                    PrepEnrollmentDateKey
+                    PrepEnrollmentDateKey,
+					COALESCE(combined_data_ct_hts.voided,prep_patient_source.voided) As Voided
              FROM   combined_data_ct_hts
                     FULL JOIN prep_patient_source
                            ON combined_data_ct_hts.patientpkhash =
@@ -190,7 +196,8 @@ BEGIN
                     pmtct_patient_source.patientmnchidhash,
                     pmtct_patient_source.firstenrollmentatmnchdatekey,
                     Cast(Getdate() AS DATE)
-                       AS LoadDate
+                       AS LoadDate,
+					   COALESCE(combined_data_ct_hts_prep.voided,pmtct_patient_source.voided) As Voided
              FROM   combined_data_ct_hts_prep
                     FULL JOIN pmtct_patient_source
                            ON combined_data_ct_hts_prep.patientpkhash =
@@ -222,7 +229,8 @@ BEGIN
                   combined_data_ct_hts_prep_pmtct.istxcurr,
                   combined_data_ct_hts_prep_pmtct.patientmnchidhash,
                   combined_data_ct_hts_prep_pmtct.firstenrollmentatmnchdatekey,
-                  combined_data_ct_hts_prep_pmtct.loaddate
+                  combined_data_ct_hts_prep_pmtct.loaddate,
+				  combined_data_ct_hts_prep_pmtct.voided
            FROM   combined_data_ct_hts_prep_pmtct) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
@@ -243,7 +251,8 @@ BEGIN
              datebaselinewhokey,
              baselinewhokey,PrepEnrollmentDateKey,
              istxcurr,
-             loaddate)
+             loaddate,
+			 voided)
       VALUES(patientidhash,
              patientpkhash,
              htsnumberhash,
@@ -259,7 +268,8 @@ BEGIN
              datebaselinewhokey,
              baselinewhokey,PrepEnrollmentDateKey,
              istxcurr,
-             loaddate)
+             loaddate,
+			 voided)
     WHEN matched THEN
       UPDATE SET a.maritalstatus = b.maritalstatus,
                  a.clienttype		= b.clienttype,
@@ -269,8 +279,9 @@ BEGIN
                  a.dob				= b.dob,
                  a.gender			= b.gender,
                  a.prepnumber		= b.prepnumber,
-				 a.IsTxcur          = b.IsTxcur,
+				 a.IsTXCurr          = b.IsTXCurr,
 				 a.enrollmentwhokey  =b.enrollmentwhokey,
 				 a.baselinewhokey  =b.baselinewhokey,
-				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey;
+				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
+				 a.voided				= b.voided;
 END 
