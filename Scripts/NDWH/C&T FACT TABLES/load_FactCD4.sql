@@ -59,6 +59,7 @@ select
 	source_CD4.BaselineCD4Date,
 	source_CD4.LastCD4,
 	source_CD4.LastCD4Date,
+    source_CD4.LastCD4Percentage,
 	 cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactCD4
 from source_CD4 as source_CD4
