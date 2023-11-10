@@ -1,11 +1,3 @@
--- clean ChronicIllness
-UPDATE [ODS].[DBO].[CT_AllergiesChronicIllness] 
-    SET ChronicIllness = lkp_chronic_illness.target_name
-FROM [ODS].[DBO].[CT_AllergiesChronicIllness] AS allergies_chronic_illness
-INNER JOIN ods.dbo.lkp_chronic_illness ON lkp_chronic_illness.source_name = allergies_chronic_illness.ChronicIllness
-
-GO
-
 -- clean ChronicOnsetDate
 UPDATE [ODS].[DBO].[CT_AllergiesChronicIllness] 
     SET ChronicOnsetDate = NULL
