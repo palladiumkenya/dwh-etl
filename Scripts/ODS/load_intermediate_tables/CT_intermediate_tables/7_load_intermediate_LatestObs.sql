@@ -126,13 +126,22 @@ latest_Who as (
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate
 		and visits.VisitID = last_visit.visitID
+ ),
+ latest_TBScreening as (
+	select
+		distinct visits.PatientPK, 
+		visits.TBScreening,
+        visits.SiteCode
+	from ODS.dbo.CT_IPT as visits
+	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on visits.SiteCode = last_visit.SiteCode 
+		and visits.PatientPK = last_visit.PatientPK 
+		and visits.VisitDate = last_visit.LastVisitDate
+		and visits.VisitID = last_visit.visitID
  )
-
 	select 
 		patient.PatientPKHash,
         patient.PatientPK,
 		patient.SiteCode,
-		--patient.PatientID,
 		latest_weight_height.LatestHeight,
 		latest_weight_height.LatestWeight,
 		age_of_last_visit.AgeLastVisit,
@@ -145,6 +154,7 @@ latest_Who as (
         latest_breastfeeding.LMP,
         latest_breastfeeding.GestationAge,
         latest_Who.WhoStage,
+        latest_TBScreening.TBScreening,
         cast(getdate() as date) as LoadDate
         into ODS.dbo.intermediate_LatestObs
 	from ODS.dbo.CT_Patient as patient
@@ -164,8 +174,9 @@ latest_Who as (
 		and latest_pregnancy.SiteCode = patient.SiteCode
 	left join latest_fp_method on latest_fp_method.PatientPK = patient.PatientPK
 		and latest_fp_method.SiteCode = patient.SiteCode
-        left join latest_breastfeeding on latest_breastfeeding.PatientPK=patient.PatientPK
+    left join latest_breastfeeding on latest_breastfeeding.PatientPK=patient.PatientPK
         and latest_breastfeeding.Sitecode=patient.SiteCode
-        left join latest_Who on latest_Who.PatientPK=patient.PatientPK and latest_Who.Sitecode=patient.Sitecode
+    left join latest_Who on latest_Who.PatientPK=patient.PatientPK and latest_Who.Sitecode=patient.Sitecode
+    left join latest_TBScreening on latest_TBScreening.PatientPK=patient.PatientPK and latest_TBScreening.SiteCode=patient.SiteCode
 
 END
