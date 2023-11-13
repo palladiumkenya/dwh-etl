@@ -51,6 +51,14 @@ Select distinct
     vl.LowViremia,
     pat.ISTxCurr,
 	dif.DifferentiatedCare,
+    CD4.LastCD4,
+    CD4.LastCD4Percentage,
+    WhoStage,
+    Case When WhoStage in (3,4) OR Age<5 
+    OR (Age >= 15 AND CONVERT(FLOAT, CD4.LastCD4) < 200)
+    Then 1 Else 0 End as AHD,
+    CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
+    obs.TBScreening,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
@@ -65,5 +73,9 @@ left join NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey
 left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
 left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
+left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 WHERE ART.ARTOutcomeKey IS NOT NULL;
 END
+
+
+
