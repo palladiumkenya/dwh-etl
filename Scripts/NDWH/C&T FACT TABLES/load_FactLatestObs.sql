@@ -29,6 +29,7 @@ select
 	StabilityAssessment,
 	Pregnant,
     breastfeeding,
+    TBScreening,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from ODS.dbo.intermediate_LatestObs obs
