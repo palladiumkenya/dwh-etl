@@ -43,6 +43,7 @@ left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = apt.PatientP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = DATEDIFF(YY,patient.DOB,apt.AsOfDate)
 left join NDWH.dbo.DimDate as as_of on as_of.Date = apt.AsOfDate
+WHERE patient.voided =0;
 
 
 alter table NDWH.dbo.FACTAppointments add primary key(FactKey);

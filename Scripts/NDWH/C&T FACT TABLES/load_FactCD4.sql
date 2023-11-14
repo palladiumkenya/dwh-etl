@@ -71,7 +71,8 @@ left join NDWH.dbo.DimDate as last_cd4 on last_cd4.Date = source_CD4.LastCD4Date
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = source_CD4.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_CD4.AgeLastVisit;
+left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_CD4.AgeLastVisit
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactCD4 add primary key(FactKey);
 END

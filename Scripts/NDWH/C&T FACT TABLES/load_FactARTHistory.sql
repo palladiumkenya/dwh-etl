@@ -31,7 +31,8 @@ BEGIN
 	left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code  = txcurr_report.MFLCode 
 	left join NDWH.dbo.DimPartner as partner on partner.PartnerName  = MFL_partner_agency_combination.SDP
 	left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-	left join NDWH.dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome;
+	left join NDWH.dbo.DimARTOutcome as art_outcome on art_outcome.ARTOutcome = txcurr_report.ARTOutcome
+	WHERE patient.voided =0;
 
 	alter table NDWH.dbo.FactARTHistory add primary key(FactKey);
 END

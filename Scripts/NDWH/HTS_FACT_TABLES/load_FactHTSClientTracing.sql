@@ -40,6 +40,7 @@ BEGIN
     left join NDWH.dbo.DimDate as tracing on tracing.Date = source_data.TracingDate
     left join NDWH.dbo.DimHTSTraceOutcome as outcome on outcome.TraceOutcome = source_data.TracingOutcome
     left join NDWH.dbo.DimHTSTraceType as trace_type on trace_type.TraceType = source_data.TracingType
+	WHERE patient.voided =0;
 
     alter table NDWH.dbo.FactHTSClientTracing add primary key(FactKey);
 
