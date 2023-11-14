@@ -108,15 +108,6 @@ BEGIN
 					pat.patientpk
              FROM   testsatpnc pat
              WHERE  num = 1),
-
-Unsuppressed As (Select distinct 
-    PatientPKHash,
-	PatientPK,
-    Sitecode
- 
-from pbfw_patient
-
-),
 EAC As (Select
  Row_number()
                       OVER (

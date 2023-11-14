@@ -428,5 +428,6 @@ RepeatVlUnSupp as (Select
 	left join NDWH.dbo.DimDate as pbfw_validVL_date on pbfw_validVL_date.Date = combined_viral_load_dataset.PBFW_ValidVLDate
 	WHERE patient.voided =0;
 
+
 	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END
