@@ -20,21 +20,21 @@ Select distinct
     age.age,
     age.DATIMAgeGroup as AgeGroup,
     startdate.Date as StartARTDate,
-    CurrentRegimen,
-    CurrentRegimenline,
-    StartRegimen,
-    StartRegimenLine,
-    AgeAtEnrol,
-    AgeAtARTStart,
-    TimetoARTDiagnosis,
-    TimetoARTEnrollment,
-    PregnantARTStart,
-    PregnantAtEnrol,
-    LastVisitDate,
-    NextAppointmentDate,
-    StartARTAtThisfacility,
-    PreviousARTStartDate,
-    PreviousARTRegimen,
+    ART.CurrentRegimen,
+    ART.CurrentRegimenline,
+    ART.StartRegimen,
+    ART.StartRegimenLine,
+    ART.AgeAtEnrol,
+    ART.AgeAtARTStart,
+    ART.TimetoARTDiagnosis,
+    ART.TimetoARTEnrollment,
+    ART.PregnantARTStart,
+    ART.PregnantAtEnrol,
+    ART.LastVisitDate,
+    ART.NextAppointmentDate,
+    ART.StartARTAtThisfacility,
+    ART.PreviousARTStartDate,
+    ART.PreviousARTRegimen,
     case 
         when outcome.ARTOutcome is null then 'Others'
         else outcome.ARTOutcomeDescription
@@ -51,6 +51,16 @@ Select distinct
     vl.LowViremia,
     pat.ISTxCurr,
 	dif.DifferentiatedCare,
+    CD4.LastCD4,
+    CD4.LastCD4Percentage,
+    ART.WhoStage,
+Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
+    OR age.Age<5 
+        OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
+    Else 0 
+End as AHD,
+    CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
+    obs.TBScreening,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
@@ -65,5 +75,9 @@ left join NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey
 left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
 left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
+left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 WHERE ART.ARTOutcomeKey IS NOT NULL;
 END
+
+
+
