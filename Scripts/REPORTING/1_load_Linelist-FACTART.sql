@@ -54,9 +54,11 @@ Select distinct
     CD4.LastCD4,
     CD4.LastCD4Percentage,
     WhoStage,
-    Case When WhoStage in (3,4) OR Age<5 
-    OR (Age >= 15 AND CONVERT(FLOAT, CD4.LastCD4) < 200)
-    Then 1 Else 0 End as AHD,
+Case When (Age >= 5 AND WhoStage in (3,4))
+    OR Age<5 
+        OR (Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
+    Else 0 
+End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
     cast(getdate() as date) as LoadDate
