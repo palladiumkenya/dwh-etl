@@ -75,7 +75,8 @@ BEGIN
 		left join NDWH.dbo.DimDate as dtARTStop on dtARTStop.Date=Stopped.dtARTStop
 		left join NDWH.dbo.DimDate as dtLTFU on dtLTFU.Date= LTFU.dtLTFU
 		left join NDWH.dbo.DimDate as dtTO on dtTO.Date= TransferOut.dtTO
-		left join NDWH.dbo.DimDate as dtDead on dtDead.Date= Died.dtDead;
+		left join NDWH.dbo.DimDate as dtDead on dtDead.Date= Died.dtDead
+		WHERE patient.voided =0;
 
 		alter table [NDWH].[DBO].[FACTPatientExits] add primary key (FACTKey);
 END

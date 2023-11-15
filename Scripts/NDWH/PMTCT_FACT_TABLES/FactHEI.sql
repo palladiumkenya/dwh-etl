@@ -256,6 +256,7 @@ left join NDWH.dbo.DimDate as DNAPCR1 on DNAPCR1.Date = cast(heis.DNAPCR1Date as
 left join NDWH.dbo.DimDate as DNAPCR2 on DNAPCR2.Date = cast(heis.DNAPCR2Date as date)
 left join NDWH.dbo.DimDate as antiboday_date on antiboday_date.Date = cast(final_antibody_data.FinalyAntibodyDate as date)
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age =  datediff(yy, patient.DOB, coalesce(latest_cwc_visit.VisitDate, getdate()))
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactHEI add primary key(FactKey);
 

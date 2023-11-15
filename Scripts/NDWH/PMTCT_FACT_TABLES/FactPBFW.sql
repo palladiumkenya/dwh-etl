@@ -274,6 +274,7 @@ Switches  as (Select
            LEFT JOIN ndwh.dbo.dimdate AS ANCDate4
                   ON ANCDate4.date = Cast(summary.ancdate4 AS DATE)
             Left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age =  datediff(yy, summary.DOB,  getdate())
+			WHERE patient.voided =0;
 
 
     ALTER TABLE ndwh.dbo.factpbfw

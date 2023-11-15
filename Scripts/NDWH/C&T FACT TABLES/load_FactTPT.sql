@@ -99,7 +99,8 @@ left join NDWH.dbo.DimDate as tb_diagnosis on tb_diagnosis.Date = combined_ipt_d
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = combined_ipt_data.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_ipt_data.AgeLastVisit;
+left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = combined_ipt_data.AgeLastVisit
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactTPT add primary key(FactKey);
 END

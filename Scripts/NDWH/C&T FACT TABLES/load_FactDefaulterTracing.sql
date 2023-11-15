@@ -69,7 +69,8 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimDate as visit on visit.Date = visits_data.VisitDate
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = visits_data.AgeAtVisit
-left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = visits_data.DifferentiatedCare;
+left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = visits_data.DifferentiatedCare
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactDefaulterTracing add primary key(FactKey)
 
