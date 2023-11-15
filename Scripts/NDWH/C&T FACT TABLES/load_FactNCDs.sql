@@ -141,8 +141,8 @@ select
     ncd_source_data."Thyroid disease",
     case when latest_diabetes_test.PatientPKHash is not null then 1 else 0 end as ScreenedDiabetes,
     case when latest_diabetes_test_controlled.PatientPKHash is not null then 1 else 0 end as IsDiabetesControlledAtLastTest,
-    case when visit.ScreenedBPLastVisit is not null then 1 else 0 end as ScreenedBPLastVisit,
-    case when visit.IsBPControlledAtLastVisit is not null then 1 else 0 end as IsBPControlledAtLastVisit
+    coalesce(visit.ScreenedBPLastVisit,0) as ScreenedBPLastVisit,
+    coalesce(visit.IsBPControlledAtLastVisit, 0) as IsBPControlledAtLastVisit
 into NDWH.dbo.FactNCD
 from ncd_source_data
 left join latest_diabetes_test on latest_diabetes_test.PatientPKHash = ncd_source_data.PatientPKHash
