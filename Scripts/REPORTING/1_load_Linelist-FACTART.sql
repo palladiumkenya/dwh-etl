@@ -2,6 +2,17 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[Linelist_FACTART];
 BEGIN
 
+with ncd_indicators as (
+    select 
+        PatientKey,
+        Hypertension as HasHypertension,
+        ScreenedBPLastVisit,
+        IsBPControlledAtLastVisit,
+        Diabetes as HasDiabetes,
+        ScreenedDiabetes,
+        IsDiabetesControlledAtLastTest
+    from NDWH.dbo.FactNCD
+)
 Select distinct 
     pat.PatientIDHash,
     pat.PatientPKHash,
@@ -51,6 +62,12 @@ Select distinct
     vl.LowViremia,
     pat.ISTxCurr,
 	dif.DifferentiatedCare,
+    coalesce(ncd.HasHypertension, 0) as HasHypertension, 
+    coalesce(ncd.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
+    coalesce(ncd.IsBPControlledAtLastVisit, 0) as IsBPControlledAtLastVisit,
+    coalesce(ncd.HasDiabetes, 0) as HasDiabetes,
+    coalesce(ncd.ScreenedDiabetes, 0) as ScreenedDiabetes,
+    coalesce(ncd.IsDiabetesControlledAtLastTest, 0) as IsDiabetesControlledAtLastTest,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
@@ -65,5 +82,6 @@ left join NDWH.dbo.FactViralLoads as vl on vl.PatientKey = ART.PatientKey
 left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
 left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
+left join ncd_indicators as ncd on ncd.PatientKey = ART.PatientKey
 WHERE ART.ARTOutcomeKey IS NOT NULL;
 END
