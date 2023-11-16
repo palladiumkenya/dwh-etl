@@ -143,7 +143,8 @@ PrepVisits as (
     left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, coalesce(PrepVisits.VisitDate, getdate()))
     left join NDWH.dbo.DimDate as visit on visit.Date = PrepVisits.VisitDate
     left join NDWH.dbo.DimDate as pregnancy on pregnancy.Date = PrepVisits.PregnancyEndDate
-    left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment;
+    left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment
+	WHERE patient.voided =0;
     
     alter table NDWH.dbo.FactPrepVisits add primary key(FactKey);
 

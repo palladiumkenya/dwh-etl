@@ -53,6 +53,7 @@ Select distinct
 	dif.DifferentiatedCare,
     CD4.LastCD4,
     CD4.LastCD4Percentage,
+
     ART.WhoStage,
 Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
     OR age.Age<5 
@@ -61,6 +62,7 @@ Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
 End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
+ Then 1 ELSE 0 END AS EligibleCD4,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
