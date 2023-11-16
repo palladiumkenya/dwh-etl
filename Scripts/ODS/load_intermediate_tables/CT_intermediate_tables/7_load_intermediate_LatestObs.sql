@@ -1,7 +1,6 @@
 IF OBJECT_ID(N'[ODS].[dbo].[intermediate_LatestObs]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[intermediate_LatestObs];
 
-
 BEGIN	
 with MFL_partner_agency_combination as (
 	select 
@@ -126,13 +125,33 @@ latest_Who as (
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate
 		and visits.VisitID = last_visit.visitID
- )
+ ),
+ last_TBScreening as (
 
+	SELECT  row_number() OVER (PARTITION BY visits.SiteCode,visits.PatientPK ORDER BY VisitDate DESC) AS NUM,
+		visits.PatientPK, 
+		visits.TBScreening,
+        visits.SiteCode,
+		visits.VisitDate,
+		visits.VisitID
+	from ODS.dbo.CT_IPT as visits
+	),
+ latest_TBScreening as (
+	select
+		distinct Screening.PatientPK, 
+		Screening.TBScreening,
+        Screening.SiteCode
+	from last_TBScreening as Screening
+	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on Screening.SiteCode = last_visit.SiteCode 
+		and Screening.PatientPK = last_visit.PatientPK 
+		and Screening.VisitDate = last_visit.LastVisitDate
+		and Screening.VisitID = last_visit.visitID
+	where 	Screening.NUM=1
+ )
 	select 
 		patient.PatientPKHash,
         patient.PatientPK,
 		patient.SiteCode,
-		--patient.PatientID,
 		latest_weight_height.LatestHeight,
 		latest_weight_height.LatestWeight,
 		age_of_last_visit.AgeLastVisit,
@@ -145,6 +164,7 @@ latest_Who as (
         latest_breastfeeding.LMP,
         latest_breastfeeding.GestationAge,
         latest_Who.WhoStage,
+        latest_TBScreening.TBScreening,
         cast(getdate() as date) as LoadDate
         into ODS.dbo.intermediate_LatestObs
 	from ODS.dbo.CT_Patient as patient
@@ -164,8 +184,10 @@ latest_Who as (
 		and latest_pregnancy.SiteCode = patient.SiteCode
 	left join latest_fp_method on latest_fp_method.PatientPK = patient.PatientPK
 		and latest_fp_method.SiteCode = patient.SiteCode
-        left join latest_breastfeeding on latest_breastfeeding.PatientPK=patient.PatientPK
+    left join latest_breastfeeding on latest_breastfeeding.PatientPK=patient.PatientPK
         and latest_breastfeeding.Sitecode=patient.SiteCode
-        left join latest_Who on latest_Who.PatientPK=patient.PatientPK and latest_Who.Sitecode=patient.Sitecode
+    left join latest_Who on latest_Who.PatientPK=patient.PatientPK and latest_Who.Sitecode=patient.Sitecode
+    left join latest_TBScreening on latest_TBScreening.PatientPK=patient.PatientPK and latest_TBScreening.SiteCode=patient.SiteCode
 
 END
+
