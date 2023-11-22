@@ -1,33 +1,42 @@
-MERGE [NDWH].[dbo].[DimARTOutcome] AS a
-		USING(
-				SELECT DISTINCT
-					  [ARTOutcome],
-					  Null As [ARTOutcomeDescription]
-					  
-				FROM [ODS].[dbo].[Intermediate_ARTOutcomes]
-				  	WHERE [ARTOutcome] IS NOT NULL AND [ARTOutcome] <>''
-			) AS b 
-						ON(
-							a.[ARTOutcome] = b.[ARTOutcome]
-						  )
-		WHEN NOT MATCHED THEN 
-							INSERT(ARTOutcome,ARTOutcomeDescription,LoadDate) 
-							VALUES(ARTOutcome,ARTOutcomeDescription,GetDate())
-		WHEN MATCHED THEN
-						UPDATE  						
-							SET a.ARTOutcomeDescription =b.ARTOutcomeDescription;
-
-	UPDATE a
-	SET [ARTOutcomeDescription]=
-								CASE 
-									WHEN [ARTOutcome] ='V'	THEN 'ACTIVE'
-									WHEN [ARTOutcome] ='S'	THEN 'STOPPED'
-									WHEN [ARTOutcome] ='D'	THEN 'DEAD'
-									WHEN [ARTOutcome] ='L'	THEN 'LOSS TO FOLLOW UP'
-									WHEN [ARTOutcome] ='NV'	THEN 'NO VISIT'
-									WHEN [ARTOutcome] ='T'	THEN 'TRANSFERRED OUT'
-									WHEN [ARTOutcome] ='NP' THEN 'NEW PATIENT'
-									WHEN [ARTOutcome] ='UL' THEN 'UNDOCUMENTED LOSS'
-
-								END
-	FROM [NDWH].[dbo].[DimARTOutcome] a
+IF OBJECT_ID(N'[NDWH].[dbo].[DimARTOutcome]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].[DimARTOutcome];
+BEGIN
+	---DimARTOutcome
+	with distinct_ARTOutcomes as (
+		select 'S' as ARTOutcome
+			union all
+		select 'D' as ARTOutcome
+			union all
+		select 'L' as ARTOutcome
+			union all
+		select 'NV' as ARTOutcome
+			union all
+		select 'T' as ARTOutcome
+			union all
+		select 'V' as ARTOutcome
+			union all
+		select 'NP' as ARTOutcome
+			union all
+		select'uL' as ARTOutcome
+			union all
+		select'FV' as ARTOutcome
+	)
+	select 
+		ARTOutcomeKey = IDENTITY(INT, 1, 1),
+		ARTOutcome,
+		case
+			when ARTOutcome = 'S' then 'Stopped'
+			when ARTOutcome = 'D' then 'Dead'
+			when ARTOutcome = 'L' then 'Loss To Follow Up'
+			when ARTOutcome = 'NV' then 'No Visit'
+			when ARTOutcome = 'T' then 'Transferred Out'
+			when ARTOutcome = 'V' then 'Active'
+			when ARTOutcome = 'NP' then 'New Patient'
+			when ARTOutcome = 'uL' then 'Undocumented Loss'
+			when ARTOutcome = 'FV' then 'Future Visit'
+		end as ARTOutcomeDescription,
+		cast(getdate() as date) as LoadDate
+	INTO [NDWH].[dbo].[DimARTOutcome]
+	from distinct_ARTOutcomes;
+	ALTER TABLE NDWH.dbo.DimARTOutcome ADD PRIMARY KEY(ARTOutcomeKey);
+END
