@@ -25,15 +25,17 @@ BEGIN
 		ARTOutcomeKey = IDENTITY(INT, 1, 1),
 		ARTOutcome,
 		case
-			when ARTOutcome = 'S' then 'Stopped'
-			when ARTOutcome = 'D' then 'Dead'
-			when ARTOutcome = 'L' then 'Loss To Follow Up'
-			when ARTOutcome = 'NV' then 'No Visit'
-			when ARTOutcome = 'T' then 'Transferred Out'
-			when ARTOutcome = 'V' then 'Active'
-			when ARTOutcome = 'NP' then 'New Patient'
-			when ARTOutcome = 'uL' then 'Undocumented Loss'
-			when ARTOutcome = 'FV' then 'Future Visit'
+			WHEN [ARTOutcome] ='V'	THEN 'ACTIVE'
+			WHEN [ARTOutcome] ='S'	THEN 'STOPPED'
+			WHEN [ARTOutcome] ='D'	THEN 'DEAD'
+			WHEN [ARTOutcome] ='L'	THEN 'LOSS TO FOLLOW UP'
+			WHEN [ARTOutcome] ='NV'	THEN 'NO VISIT'
+			WHEN [ARTOutcome] ='T'	THEN 'TRANSFERRED OUT'
+			WHEN [ARTOutcome] ='NP' THEN 'NEW PATIENT'
+			WHEN [ARTOutcome] ='UL' THEN 'UNDOCUMENTED LOSS'
+			WHEN [ARTOutcome] = 'FV'  THEN 'FUTURE VISIT'
+
+
 		end as ARTOutcomeDescription,
 		cast(getdate() as date) as LoadDate
 	INTO [NDWH].[dbo].[DimARTOutcome]
