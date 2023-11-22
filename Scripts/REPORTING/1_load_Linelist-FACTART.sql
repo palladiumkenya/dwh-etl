@@ -93,8 +93,8 @@ left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
 left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
 left join ncd_indicators as ncd on ncd.PatientKey = ART.PatientKey
-left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
-WHERE ART.ARTOutcomeKey IS NOT NULL;
+left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey;
+
 END
 
 
