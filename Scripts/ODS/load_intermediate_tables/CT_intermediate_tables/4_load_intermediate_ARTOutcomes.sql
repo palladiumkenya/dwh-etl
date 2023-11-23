@@ -58,8 +58,9 @@ BEGIN
 	AS ARTOutcome, 
 	     cast (Patients.SiteCode as nvarchar) As SiteCode,
 		 Patients.Emr,
-		 Patients.Project
-    
+		 Patients.Project,
+         Latestexits.ReEnrollmentDate,
+         Latestexits.EffectiveDiscontinuationDate
 	FROM ODS.dbo.CT_Patient Patients
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
 	Left JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
@@ -99,6 +100,8 @@ BEGIN
 			ARTOutcomes.Project,
 			LatestUpload.DateUploaded,
 			LatestVisits.SiteAbstractionDate,
+            ReEnrollmentDate,
+           EffectiveDiscontinuationDate,
 			cast(getdate() as date) as LoadDate
 	  INTO  [ODS].[dbo].[Intermediate_ARTOutcomes]
 	 from ARTOutcomes
@@ -107,3 +110,7 @@ BEGIN
 
 	 	
 END
+
+
+ 
+
