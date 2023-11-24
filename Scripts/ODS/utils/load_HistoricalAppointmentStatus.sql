@@ -1,14 +1,11 @@
 declare 
-@start_date date = '2023-06-01',
-@end_date date = '2023-06-30';
+@start_date date = '2019-01-31',
+@end_date date = '2023-04-30';
 
 with dates as (
-
-    
-      
- select datefromparts(year(@start_date), month(@start_date), 1) as dte
+      select datefromparts(year(@start_date), month(@start_date), 1) as dte
       union all
-      select dateadd(month, 1, dte) --incrementing month by month until the date is less than or equal to @end_date
+      select dateadd(month, 1, dte)
       from dates
       where dateadd(month, 1, dte) <= @end_date
       )
@@ -31,7 +28,6 @@ open cursor_AsOfDates
 fetch next from cursor_AsOfDates into @as_of_date
 while @@FETCH_STATUS = 0
 
-
 begin 
 with clinical_visits_as_of_date as (
     /* get visits as of date */
@@ -44,8 +40,7 @@ with clinical_visits_as_of_date as (
         VisitDate,
         NextAppointmentDate  
     from  ODS.dbo.CT_PatientVisits
-    where SiteCode > 0 and NextAppointmentDate >= DATEADD(month, -6, @as_of_date) 
-
+    where SiteCode > 0 and NextAppointmentDate <= @as_of_date
 ),
     pharmacy_visits_as_of_date as (
      /* get pharmacy dispensations as of date */
@@ -58,7 +53,7 @@ with clinical_visits_as_of_date as (
         DispenseDate,
         ExpectedReturn
     from ODS.dbo.CT_PatientPharmacy
-    where SiteCode > 0 and ExpectedReturn >= DATEADD(month, -6, @as_of_date) 
+    where SiteCode > 0 and ExpectedReturn <= @as_of_date  
     ),
 
     patient_art_and_enrollment_info as (
@@ -81,7 +76,6 @@ with clinical_visits_as_of_date as (
     from ODS.dbo.CT_ARTPatients
     left join ODS.dbo.CT_Patient  on  CT_Patient.PatientPK = CT_ARTPatients.PatientPK
     and CT_Patient.SiteCode = CT_ARTPatients.SiteCode
-	where  ODS.dbo.CT_ARTPatients.SiteCode > 0 and ODS.dbo.CT_ARTPatients.ExpectedReturn <=@as_of_date
     ),
     visit_encounter_as_of_date_ordering as (
      /* order visits as of date by the VisitDate */
@@ -165,9 +159,7 @@ exits_as_of_date as (
         ExitReason,
 		ReEnrollmentDate
     from ODS.dbo.CT_PatientStatus
-    where  ExitDate <= @as_of_date
-    --ExitDate>= DATEADD(month, -6, @as_of_date) 
-
+    where ExitDate <= @as_of_date 
 ),
     exits_as_of_date_ordering as (
     /* order the exits by the ExitDate*/
@@ -193,7 +185,7 @@ last_exit_as_of_date as (
     ),
     visits_and_dispense_encounters_combined_tbl as (
     /* combine latest visits and latest pharmacy dispensation records as of date - 'borrowed logic from the view vw_PatientLastEnconter*/
-    /* we don't include the stg_ARTPatients table logic because this table has only the latest records of the patients (no history) */
+    /* we don't include the CT_ARTPatients table logic because this table has only the latest records of the patients (no history) */
     select  distinct coalesce (last_visit.PatientIDHash, last_dispense.PatientIDHash) as PatientIDHash,
             coalesce(last_visit.SiteCode, last_dispense.SiteCode) as SiteCode,
             coalesce(last_visit.PatientPKHash, last_dispense.PatientPKHash) as PatientPKhash ,
@@ -230,7 +222,7 @@ from ODS.dbo.CT_FacilityManifest
         SiteCode,
         DateRecieved
     from ODS.dbo.CT_FacilityManifest 
-    where DateRecieved <=@as_of_date
+    where DateRecieved <= @as_of_date 
     ),
   Uploads_as_of_date_ordering as (
     /* order the Uploads by the DateReceived*/
@@ -251,7 +243,7 @@ from ODS.dbo.CT_FacilityManifest
     ),
  secondlast_visits_and_dispense_encounters_combined_tbl as (
     /* combine latest visits and latest pharmacy dispensation records as of date - 'borrowed logic from the view vw_PatientLastEnconter*/
-    /* we don't include the stg_ARTPatients table logic because this table has only the latest records of the patients (no history) */
+    /* we don't include the CT_ARTPatients table logic because this table has only the latest records of the patients (no history) */
     select  distinct coalesce (second_last_visit.PatientIDHash, second_last_dispense.PatientIDHash) as PatientIDHash,
             coalesce(second_last_visit.SiteCode, second_last_dispense.SiteCode) as SiteCode,
             coalesce(second_last_visit.PatientPKhash, second_last_dispense.PatientPKhash) as PatientPKhash ,
@@ -338,7 +330,6 @@ ARTOutcomesCompuation as (
 
         ),
 
-
     Summary AS (select 
     ARTOutcomesCompuation.PatientIDHash as PatientIDHash,
     ARTOutcomesCompuation.PatientPKhash,
@@ -358,8 +349,6 @@ ARTOutcomesCompuation as (
     when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) between 31 and 60 Then 'IIT and RTT within 30 days'
     when   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate)  > 60 Then 'IIT and RTT beyond 30 days'
     When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'Still IIT'
-   -- When   DATEDIFF(day, ARTOutcomesCompuation.ExpectedNextAppointmentDate, ARTOutcomesCompuation.LastEncounterDate) >= 91 and ARTOutcomesCompuation.ExpectedNextAppointmentDate <>'1900-01-01'  Then 'IIT and RTT beyond 30 days'
-
     else 	
      Case when last_exit_as_of_date.exitReason	in ('dead','Death','Died') Then 'Dead'
         when last_exit_as_of_date.exitReason in ('Lost','Lost to followup','LTFU','ltfu') Then 'Still IIT'
@@ -379,15 +368,10 @@ left join last_exit_as_of_date on  last_exit_as_of_date.PatientPK= ARTOutcomesCo
 and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
  left  join  last_upload_as_of_date on  last_upload_as_of_date.SiteCode=ARTOutcomesCompuation.SiteCode 
                WHERE ARTOutcomesCompuation.NextAppointmentDate > ARTOutcomesCompuation.LastEncounterDate
-   -- AND ARTOutcomesCompuation.NextAppointmentDate > DATEADD(month, -6, ARTOutcomesCompuation.AsOfDate)
-
-
     )
  
-  --Insert into ODS.dbo.[HistoricalAppointmentStatus]
-    -- select * from Summary 
-	   Select * into ODS.dbo.[HistoricalAppointmentStatus]
-   from Summary
+  Insert into ODS.dbo.[HistoricalAppointmentStatus]
+     select * from Summary 
       where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') 
 
 fetch next from cursor_AsOfDates into @as_of_date
@@ -398,8 +382,4 @@ end
 --close cursor_AsOfDates 
 --deallocate cursor_AsOfDates 
 --truncate table ODS.dbo.[HistoricalAppointmentStatus]
---drop  table ODS.dbo.[HistoricalAppointmentStatus] drop column NextappointmentDate
-
-
-
-
+--alter table ODS.dbo.[HistoricalAppointmentStatus] drop column NextappointmentDate
