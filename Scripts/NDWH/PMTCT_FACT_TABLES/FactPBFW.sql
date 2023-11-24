@@ -72,7 +72,7 @@ BEGIN
                      OR Babyfeeding IN ( 'Breastfed exclusively',
                                          'Exclusive breastfeeding',
                                          'mixed feeding' )),
-         Latestpnc
+         Earliestpnc
          AS (SELECT *
              FROM   Pnc
              WHERE  Num = 1),
@@ -89,7 +89,7 @@ BEGIN
              WHERE  Hivtestfinalresult = 'Positive'
                      OR Onartanc = 'Yes'
                      OR Initiatedbf = 'Yes'),
-         Latestmat
+         earliestmat
          AS (SELECT *
              FROM   Matvisits
              WHERE  Num = 1),
@@ -110,16 +110,16 @@ BEGIN
                               Earliestanc.Patientpk
                               AND Pbfw_earliestpatient .Sitecode =
                                   Earliestanc.Sitecode
-                    FULL JOIN Latestpnc
-                           ON Latestpnc.Patientpk =
+                    FULL JOIN Earliestpnc
+                           ON Earliestpnc.Patientpk =
                               Pbfw_earliestpatient.Patientpk
-                              AND Latestpnc.Sitecode =
+                              AND Earliestpnc.Sitecode =
                                   Pbfw_earliestpatient.Sitecode
-                    FULL JOIN Latestmat
-                           ON Latestmat.Patientpk =
+                    FULL JOIN Earliestmat
+                           ON earliestmat.Patientpk =
                               Pbfw_earliestpatient.Patientpk
                               AND Pbfw_earliestpatient.Sitecode =
-                                  Latestmat.Sitecode
+                                  earliestmat.Sitecode
             ),
          Ancdate2
          AS (SELECT Anc.Patientpkhash,
@@ -145,8 +145,8 @@ BEGIN
          Testsatanc
          AS (SELECT Row_number()
                       OVER (
-                        Partition BY Tests.Sitecode, Tests.Patientpk
-                        ORDER BY Tests.Testdate ASC ) AS NUM,
+                        Partition BY Tests.Sitecode, Tests.Patientpk,tests.TestDate,tests.TestType 
+                        ORDER BY EncounterId ASC ) AS NUM,
                     Tests.Patientpkhash,
                     Tests.Sitecode,
                     Tests.Patientpk
@@ -161,8 +161,8 @@ BEGIN
          Testsatlandd
          AS (SELECT Row_number()
                       OVER (
-                        Partition BY Tests.Sitecode, Tests.Patientpk
-                        ORDER BY Tests.Testdate ASC ) AS NUM,
+                         Partition BY Tests.Sitecode, Tests.Patientpk,tests.TestDate,tests.TestType 
+                        ORDER BY EncounterId ASC ) AS NUM,
                     Tests.Patientpkhash,
                     Tests.Patientpk,
                     Tests.Sitecode
@@ -177,8 +177,8 @@ BEGIN
          Testsatpnc
          AS (SELECT Row_number()
                       OVER (
-                        Partition BY Tests.Sitecode, Tests.Patientpk
-                        ORDER BY Tests.Testdate ASC ) AS NUM,
+                       Partition BY Tests.Sitecode, Tests.Patientpk,tests.TestDate,tests.TestType 
+                        ORDER BY EncounterId ASC ) AS NUM,
                     Tests.Patientpkhash,
                     Tests.Patientpk,
                     Tests.Sitecode
@@ -201,33 +201,24 @@ BEGIN
                     Patientpk,
                     Visitdate
              FROM   Ods.Dbo.Ct_enhancedadherencecounselling Eac),
-         Eac1
-         AS (SELECT *
-             FROM   Eac
-             WHERE  Num = 1),
-         Eac2
-         AS (SELECT *
-             FROM   Eac
-             WHERE  Num = 2),
-         Eac3
-         AS (SELECT *
-             FROM   Eac
-             WHERE  Num = 3),
          Receivedeac1
          AS (SELECT Eac1.Patientpkhash,
                     Eac1.Sitecode,
                     Eac1.Patientpk
-             FROM   Eac1 AS Eac1),
+             FROM   Eac AS Eac1
+             where Num=1),
          Receivedeac2
          AS (SELECT Eac2.Patientpkhash,
                     Eac2.Patientpk,
                     Eac2.Sitecode
-             FROM   Eac2 AS Eac2),
+             FROM   Eac AS Eac2
+             where Num=2),
          Receivedeac3
          AS (SELECT Eac3.Patientpkhash,
                     Eac3.Patientpk,
                     Eac3.Sitecode
-             FROM   Eac3 AS Eac3),
+             FROM   Eac AS Eac3
+             where Num=3),
          Switches
          AS (SELECT Row_number()
                       OVER (
