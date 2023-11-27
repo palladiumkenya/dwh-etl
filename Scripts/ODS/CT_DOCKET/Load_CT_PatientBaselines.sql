@@ -33,11 +33,10 @@ BEGIN
 			  ,PB.[lastWABDate],PB.[Date_Created],PB.[Date_Last_Modified]
 
 
-		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-		--INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID ---- This table is not been used in this contest analysis done by Mugo and Mumo. It is causing duplicates
-		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID AND PB.Voided=0
+		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 	
+		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID 
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-		WHERE p.gender!='Unknown') b
+		WHERE p.gender!='Unknown' AND F.code >0) b
 
 		ON a.patientPK = b.PatientPK  
 		and a.sitecode = b.sitecode 
