@@ -29,11 +29,18 @@ iit_risk_scores_ordering as (
 ),
 appointments_from_last_visit as (
     select 
-        PatientPK,
-        SiteCode,
-        LastVisitDate,
-        NextAppointment
-    from ODS.dbo.Intermediate_LastVisitDate
+        lastencounter.PatientPK,
+        lastencounter.SiteCode,
+        lastencounter.LastEncounterDate as lastencounterDate,
+        lastencounter.NextAppointmentDate as NextAppointment
+    from ODS.dbo.Intermediate_LastPatientEncounter as lastencounter
+),
+active_clients as (
+    select 
+        PatientPk,
+        SiteCode
+    from ODS.dbo.Intermediate_ARTOutcomes
+    where ARTOutcome = 'V'
 )
 select 
     Factkey = IDENTITY(INT, 1, 1),
@@ -48,6 +55,8 @@ select
     RiskCategory as LastestRiskCategory
 into NDWH.dbo.FactIITRiskScores
 from iit_risk_scores_ordering as risk_scores
+inner join active_clients on active_clients.PatientPK = risk_scores.PatientPK
+    and active_clients.SiteCode = risk_scores.SiteCode
 left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = risk_scores.PatientPKHash
     and patient.SiteCode = risk_scores.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = risk_scores.SiteCode
