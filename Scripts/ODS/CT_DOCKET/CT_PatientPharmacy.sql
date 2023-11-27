@@ -56,7 +56,7 @@ BEGIN
 					  PP.ID, PP.[Date_Created],PP.[Date_Last_Modified]
 
 						FROM [DWAPICentral].[dbo].[PatientExtract] P 
-						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
 					WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(

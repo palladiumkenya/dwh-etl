@@ -67,7 +67,7 @@ BEGIN
 						,COVID19TestResult
 						,P.ID,C.[Date_Created],C.[Date_Last_Modified]
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID AND C.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
 					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(

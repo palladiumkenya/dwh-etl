@@ -53,11 +53,10 @@ BEGIN
 					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified]
 					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
 					WHERE P.gender != 'Unknown'  AND F.code >0) AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID

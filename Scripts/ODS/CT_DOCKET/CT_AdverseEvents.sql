@@ -58,7 +58,7 @@ BEGIN
 						  ,PA.[Date_Last_Modified]
 
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
+					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 AND F.code >0 ) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode

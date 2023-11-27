@@ -29,11 +29,11 @@ BEGIN
 					  CL.Created as DateCreated
 					  ,CL.ID,CL.[Date_Created],CL.[Date_Last_Modified]
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 					INNER JOIN (SELECT p.[PatientPID],F.code,CL.Contactage,max(cl.created)Maxcreated 
 								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
+								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 								INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 								GROUP BY p.[PatientPID],F.code,CL.Contactage)tn
 								on p.[PatientPID] = tn.[PatientPID] and F.code = tn.code and cl.created = tn.Maxcreated and cl.Contactage = tn.Contactage
