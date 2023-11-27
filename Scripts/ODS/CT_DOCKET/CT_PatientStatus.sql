@@ -81,7 +81,7 @@ BEGIN
 								)tn
 				on P.PatientPID = tn.PatientPID and f.code = tn.Code and PS.ExitDate = tn.ExitDate and PS.Created = tn.MaxCreated
 						---INNER JOIN FacilityManifest_MaxDateRecieved(NoLock) a ON F.Code = a.SiteCode and a.[End] is not null and a.[Session] is not null
-						WHERE p.gender!='Unknown') AS b 
+						WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode

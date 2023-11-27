@@ -9,7 +9,7 @@ BEGIN
 					  INNER JOIN [DWAPICentral].[dbo].[PatientExtract] P 
 						ON ccs.[PatientId]= P.ID AND ccs.Voided=0
 					  INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
-					  WHERE p.gender!='Unknown' ) AS b 
+					  WHERE p.gender!='Unknown'AND F.code >0 ) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 

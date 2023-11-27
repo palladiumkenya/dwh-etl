@@ -26,7 +26,7 @@ BEGIN
 											INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0 
 											GROUP BY  a.PatientPID,c.code)tn
 									on P.PatientPID = tn.PatientPID and F.code = tn.code and PA.Created = tn.MaxCreated
-						WHERE p.gender!='Unknown') AS b	
+						WHERE p.gender!='Unknown' AND F.code >0) AS b	
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
