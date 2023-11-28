@@ -23,7 +23,7 @@ BEGIN
 									ON P.[FacilityId]  = F.Id  AND F.Voided=0 
 									GROUP BY  P.PatientPID,F.code)tn
 							on P.PatientPID = tn.PatientPID and F.code = tn.code and P.Created = tn.MaxCreated
-						WHERE  P.[Gender] is NOT NULL and p.gender!='Unknown' AND F.code >0 ) AS b 
+						WHERE P.Voided=0 and P.[Gender] is NOT NULL and p.gender!='Unknown'/* and P.Processed =1*/ ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode

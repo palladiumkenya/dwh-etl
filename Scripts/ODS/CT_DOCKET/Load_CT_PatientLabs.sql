@@ -9,7 +9,7 @@ BEGIN
 			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 			INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
 			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-			WHERE p.gender!='Unknown' AND F.code >0 ) 
+			WHERE p.gender!='Unknown' ) 
 			
 			--select * from  cte  where Row_Num >1
 		
@@ -52,7 +52,7 @@ BEGIN
 						p.ID ,
 						reason,PL.[Date_Created],PL.[Date_Last_Modified]
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID 
+					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
 					WHERE p.gender!='Unknown') AS b 
 						ON(

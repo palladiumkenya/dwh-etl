@@ -5,9 +5,9 @@ BEGIN
 						  ,IIT.[Date_Last_Modified]
 					  FROM [DWAPICentral].[dbo].[IITRiskScoresExtract] IIT
 					  INNER JOIN [DWAPICentral].[dbo].[PatientExtract] P 
-						ON IIT.[PatientId]= P.ID 
+						ON IIT.[PatientId]= P.ID AND IIT.Voided=0
 					  INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
-					  WHERE p.gender!='Unknown' AND F.code >0 ) AS b 
+					  WHERE p.gender!='Unknown' ) AS b 
 						ON(
 						 a.ID = b.ID
 						--and  a.PatientPK  = b.PatientPK 									
