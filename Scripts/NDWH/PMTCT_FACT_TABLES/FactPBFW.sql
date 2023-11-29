@@ -33,8 +33,8 @@ BEGIN
                            ON Patient.Patientpk = Vl.Patientpk
                               AND Patient.Sitecode = Vl.Sitecode
              WHERE  Visits.Pregnant = 'Yes'
+                 AND Visits.Lmp > '1900-01-01'
                      OR Breastfeeding = 'Yes'
-                        AND Visits.Lmp > '1900-01-01'
                         AND Datediff(Year, Patient.Dob, Getdate()) > 10
                         AND Patient.Voided = 0),
          Pbfw_earliestpatient
@@ -51,7 +51,7 @@ BEGIN
                     Sitecode,
                     Visitdate
              FROM   Ods.Dbo.Mnch_ancvisits
-             WHERE  Hivstatusbeforeanc = 'Positive'
+             WHERE  Hivstatusbeforeanc = 'KP'
                      OR Hivtestfinalresult = 'Positive'),
          Earliestanc
          AS (SELECT *
@@ -69,7 +69,7 @@ BEGIN
              FROM   Ods.Dbo.Mnch_pncvisits
              WHERE  Priorhivstatus = 'Positive'
                      OR Hivtestfinalresult = 'Positive'
-                     OR Babyfeeding IN ( 'Breastfed exclusively',
+                     AND Babyfeeding IN ( 'Breastfed exclusively',
                                          'Exclusive breastfeeding',
                                          'mixed feeding' )),
          Earliestpnc
@@ -88,7 +88,7 @@ BEGIN
              FROM   Ods.Dbo.Mnch_matvisits
              WHERE  Hivtestfinalresult = 'Positive'
                      OR Onartanc = 'Yes'
-                     OR Initiatedbf = 'Yes'),
+                     AND Initiatedbf = 'Yes'),
          earliestmat
          AS (SELECT *
              FROM   Matvisits
