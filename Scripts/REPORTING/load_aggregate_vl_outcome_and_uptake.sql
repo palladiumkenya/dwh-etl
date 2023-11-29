@@ -32,13 +32,13 @@ SELECT
 	SUM ( [6MonthVLSup] ) AS VLAt6Months_Sup,
     CAST(GETDATE() AS DATE) AS LoadDate  
 INTO [REPORTING].[dbo].AggregateVLUptakeOutcome
-FROM NDWH.dbo.FactViralLoads vl
+FROM NDW.dbo.FactART as ART on ART.patientkey=vl.PatientKey
+LEFT JOIN NDWH.dbo.FactViralLoads vl on vl.patientkey=ART.Patientkey
 LEFT JOIN NDWH.dbo.DimAgeGroup g ON g.AgeGroupKey= vl.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimFacility f ON f.FacilityKey = vl.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a ON a.AgencyKey = vl.AgencyKey
 LEFT JOIN NDWH.dbo.DimPatient pat ON pat.PatientKey = vl.PatientKey
 LEFT JOIN NDWH.dbo.DimPartner p ON p.PartnerKey = vl.PartnerKey
-LEFT JOIN NDWH.dbo.FactART art ON art.PatientKey = vl.PatientKey 
 LEFT join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
 LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = art.StartARTDateKey
 WHERE IsTXCurr = 1 and outcome.ARTOutcome = 'V'
