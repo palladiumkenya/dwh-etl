@@ -1,13 +1,12 @@
-TRUNCATE table [ODS].[dbo].[CT_FacilityManifest];
 MERGE [ODS].[dbo].[CT_FacilityManifest] AS a
 	USING( SELECT DISTINCT 
-			Emr,Project,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag
+			ID,Emr,Project,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag
 		   FROM [DWAPICentral].[dbo].[FacilityManifest](NoLock)
 		) AS b 
-	ON(a.SiteCode =b.SiteCode)
+	ON(a.ID =b.ID)
 		WHEN NOT MATCHED THEN 
-	INSERT(Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,CreatedOn)
-	VALUES(Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,Getdate())
+	INSERT(ID,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,CreatedOn)
+	VALUES(ID,Voided,Processed,SiteCode,PatientCount,DateRecieved,[Name],EmrName,EmrSetup,UploadMode,[Start],[End],Tag,Getdate())
 	
 	WHEN MATCHED THEN
     UPDATE SET 		

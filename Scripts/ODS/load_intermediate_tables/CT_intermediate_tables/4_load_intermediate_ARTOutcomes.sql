@@ -1,4 +1,3 @@
-
 IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_ARTOutcomes]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[Intermediate_ARTOutcomes];
 BEGIN
@@ -14,6 +13,7 @@ BEGIN
         ReasonForDeath,
         ReEnrollmentDate
         from ODS.dbo.CT_PatientStatus
+		WHERE VOIDED=0
     ),
     Latestexits As (
         select 
@@ -62,11 +62,12 @@ BEGIN
          Latestexits.ReEnrollmentDate,
          Latestexits.EffectiveDiscontinuationDate
 	FROM ODS.dbo.CT_Patient Patients
+
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
 	Left JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
 	LEFT JOIN  LatestExits   ON  Patients.PatientPK=Latestexits.PatientPK  and Patients.Sitecode=Latestexits.Sitecode
 
-	  WHERE  ART.startARTDate IS NOT NULL 
+	  WHERE  ART.startARTDate IS NOT NULL AND  ART.VOIDED=0
 	),
 	LatestUpload AS (
 	select 
@@ -81,6 +82,7 @@ BEGIN
 		distinct sitecode,
 		 Max(Visitdate) As SiteAbstractionDate
 		 from ODS.dbo.CT_PatientVisits
+		 WHERE VOIDED=0
 		 group by SiteCode
     )
 	Select 
@@ -110,7 +112,3 @@ BEGIN
 
 	 	
 END
-
-
- 
-

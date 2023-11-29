@@ -26,6 +26,7 @@ age_of_last_visit as (
 	from ODS.dbo.CT_Patient as patient
 	left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPK = patient.PatientPK
 		and last_encounter.SiteCode = patient.SiteCode
+	WHERE patient.VOIDED=0
 ),
 latest_adherence as (
 	select
@@ -39,6 +40,7 @@ latest_adherence as (
 		and visits.VisitDate = last_visit.LastVisitDate  
 		and visits.VisitID = last_visit.visitID
 		and AdherenceCategory in ('ARVAdherence', 'ART','ART|CTX','ARV','ARV Adherence')
+	WHERE  VISITS.VOIDED=0
 ),
 latest_differentiated_care as (
 	select
@@ -50,7 +52,7 @@ latest_differentiated_care as (
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate 
 		and visits.VisitID = last_visit.visitID
-		where DifferentiatedCare is not null
+		where DifferentiatedCare is not null AND  VISITS.VOIDED=0
 ),
 latest_mmd as (
 	select
@@ -73,6 +75,7 @@ lastest_stability_assessment as (
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate  
 		and visits.VisitID = last_visit.visitID
+	WHERE  VISITS.VOIDED=0
 ),
 latest_pregnancy as (
 	select
@@ -85,6 +88,7 @@ latest_pregnancy as (
 		and visits.VisitDate = last_visit.LastVisitDate
 		and visits.VisitID = last_visit.visitID
 	    and Pregnant is not null
+		WHERE  VISITS.VOIDED=0
 ),
 latest_fp_method as (
 	select
@@ -98,6 +102,7 @@ latest_fp_method as (
 		and visits.VisitID = last_visit.visitID
 	    and FamilyPlanningMethod is not null
 		and FamilyPlanningMethod <> ''
+	WHERE  VISITS.VOIDED=0
 ),
 
 latest_breastfeeding as (
@@ -114,6 +119,7 @@ latest_breastfeeding as (
 		and visits.VisitID = last_visit.visitID
 	    and Breastfeeding is not null
 		and Breastfeeding <> ''
+	WHERE  VISITS.VOIDED=0
 ),
 latest_Who as (
 	select
@@ -125,6 +131,7 @@ latest_Who as (
 		and visits.PatientPK = last_visit.PatientPK 
 		and visits.VisitDate = last_visit.LastVisitDate
 		and visits.VisitID = last_visit.visitID
+	WHERE  VISITS.VOIDED=0
  ),
  last_TBScreening as (
 
@@ -135,6 +142,7 @@ latest_Who as (
 		visits.VisitDate,
 		visits.VisitID
 	from ODS.dbo.CT_IPT as visits
+	WHERE  VISITS.VOIDED=0
 	),
  latest_TBScreening as (
 	select
