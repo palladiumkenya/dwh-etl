@@ -8,7 +8,7 @@ BEGIN
          SiteCode,
          PatientPK ,
          DispenseDate As LastEncounterDate,
-        Case When DATEDIFF(dd,GETDATE(),ExpectedReturn) >= 365 or ExpectedReturn ='1900-01-01' or  ExpectedReturn is null  THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End as NextAppointmentDate
+        Case When DATEDIFF(dd,DispenseDate,ExpectedReturn) >= 365 or ExpectedReturn ='1900-01-01' or  ExpectedReturn is null  THEN DATEADD(dd,30,DispenseDate) ELSE ExpectedReturn End as NextAppointmentDate
      FROM ODS.dbo.CT_PatientPharmacy  As LastEncounter
      where DispenseDate <= EOMONTH(DATEADD(mm,-1,GETDATE())) and LastEncounter.VOIDED=0
 ),
@@ -21,7 +21,7 @@ ART_expected_dates_logic AS (
         LastVisit,
         ExpectedReturn,
         CASE 
-            WHEN DATEDIFF(dd,GETDATE(),ExpectedReturn) <= 365 THEN ExpectedReturn Else DATEADD(day, 30, LastVisit)
+            WHEN DATEDIFF(dd,DispenseDate,ExpectedReturn) <= 365 THEN ExpectedReturn Else DATEADD(day, 30, LastVisit)
         END AS expected_return_on_365,
         case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
