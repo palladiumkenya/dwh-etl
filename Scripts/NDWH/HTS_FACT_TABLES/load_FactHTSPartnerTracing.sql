@@ -40,7 +40,8 @@ BEGIN
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimDate as booking on booking.Date = source_data.BookingDate
     left join NDWH.dbo.DimHTSTraceOutcome as outcome on outcome.TraceOutcome = source_data.TraceOutcome
-    left join NDWH.dbo.DimHTSTraceType as trace_type on trace_type.TraceType = source_data.TraceType;
+    left join NDWH.dbo.DimHTSTraceType as trace_type on trace_type.TraceType = source_data.TraceType
+	WHERE patient.voided =0;
 
 
     alter table NDWH.dbo.FactHTSPartnerTracing add primary key(FactKey);

@@ -3,7 +3,7 @@ DROP TABLE REPORTING.[dbo].[LineListCovid]
 GO
 
 SELECT 
-	DISTINCT pat.PatientPKHash
+	DISTINCT pat.PatientPKHash,
 	MFLCode,
 	f.FacilityName,
 	County,

@@ -29,6 +29,7 @@ select
 	StabilityAssessment,
 	Pregnant,
     breastfeeding,
+    TBScreening,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from ODS.dbo.intermediate_LatestObs obs
@@ -39,7 +40,8 @@ left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_C
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = obs.AgeLastVisit
-left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = obs.DifferentiatedCare;
+left join NDWH.dbo.DimDifferentiatedCare as diff_care on diff_care.DifferentiatedCare = obs.DifferentiatedCare
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactLatestObs add primary key(FactKey);
 END

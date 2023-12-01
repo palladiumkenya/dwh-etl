@@ -78,7 +78,8 @@ BEGIN
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimDate as DateElicited on DateElicited.Date = source_data.DateElicited
     left join NDWH.dbo.DimDate as LinkDateLinkedToCare on LinkDateLinkedToCare.Date = source_data.LinkDateLinkedToCare
-    left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeAtElicitation;
+    left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeAtElicitation
+	WHERE patient.voided =0;
 
 
     alter table NDWH.dbo.FactHTSPartnerNotificationServices add primary key(FactKey);

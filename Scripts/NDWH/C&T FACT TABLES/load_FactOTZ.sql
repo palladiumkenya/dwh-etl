@@ -65,7 +65,8 @@ left join NDWH.dbo.DimDate as last_visit on last_visit.Date = otz_and_last_encou
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = otz_and_last_encounter_combined.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = otz_and_last_encounter_combined.AgeLastVisit;
+left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = otz_and_last_encounter_combined.AgeLastVisit
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactOTZ add primary key(FactKey);
 END

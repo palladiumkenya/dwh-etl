@@ -23,6 +23,7 @@ BEGIN
 	 INNER JOIN [ODS].[DBO].[CT_Patient] Patients ON  Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
 	 INNER JOIN [ODS].[DBO].[CT_ARTPatients] ART ON ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
 	  WHERE Visits.Pregnant = 'Yes' OR Visits.Pregnant = 'Y'
+	  		AND  Visits.VOIDED=0 AND Patients.VOIDED=0 AND ART.VOIDED=0
   
 	) X 
 	GROUP BY PatientID ,PatientPK ,SiteCode,VisitDate,SiteCode,StartARTDate

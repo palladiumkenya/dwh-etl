@@ -425,7 +425,9 @@ RepeatVlUnSupp as (Select
 	left join NDWH.dbo.DimDate as lastest_VL_date1 on lastest_VL_date1.Date = combined_viral_load_dataset.LatestVLDate1
 	left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combined_viral_load_dataset.LatestVLDate2
 	left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3
-	left join NDWH.dbo.DimDate as pbfw_validVL_date on pbfw_validVL_date.Date = combined_viral_load_dataset.PBFW_ValidVLDate;
+	left join NDWH.dbo.DimDate as pbfw_validVL_date on pbfw_validVL_date.Date = combined_viral_load_dataset.PBFW_ValidVLDate
+	WHERE patient.voided =0;
+
 
 	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END
