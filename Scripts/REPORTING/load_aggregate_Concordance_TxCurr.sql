@@ -1,3 +1,6 @@
+IF OBJECT_ID(N'[REPORTING].[dbo].aggregate_concordance_txcurr', N'U') IS NOT NULL 		
+	truncate table [REPORTING].[dbo].aggregate_concordance_txcurr
+GO
 WITH NDW_CurTx AS (
                 SELECT
                     SiteCode MFLCode,
@@ -157,6 +160,7 @@ WITH NDW_CurTx AS (
                 cast (Upload.DateUploaded as date) As DateUploaded,
                 case when CompletenessStatus is null then 'Complete' else 'Incomplete' End As Completeness,
                 DWAPI.DwapiVersion
+                into Reporting.dbo.aggregate_concordance_txcurr
             from NDW_CurTx
             left join LatestEMR on NDW_CurTx.MFLCode=LatestEMR.facilityCode
             LEFT JOIN DWAPI ON DWAPI.SiteCode= LatestEMR.facilityCode
