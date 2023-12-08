@@ -20,7 +20,6 @@ WITH NDW_CurTx AS (
             Upload As (
                 SELECT distinct
                     SiteCode,
-                    -- SiteAbstractionDate,
                     DateUploaded
                 from AllUpload
                 WHERE Num = 1
