@@ -138,4 +138,4 @@ group by
 	pat.Gender,
 	g.DATIMAgeGroup,
 	PBFWCategory,
-	ValidVLResultCategory;
+	ValidVLResultCategory
