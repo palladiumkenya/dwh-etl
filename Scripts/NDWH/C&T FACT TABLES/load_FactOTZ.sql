@@ -27,6 +27,7 @@ select
 	otz.ModulesCompletedToday_OTZ_SRH,
 	otz.ModulesCompletedToday_OTZ_Beyond,
     datediff(yy, patient.DOB, coalesce(last_encounter.LastEncounterDate, getdate() )) As  AgeLastVisit,
+    otz.outcomeDate,
 	 cast(getdate() as date) as LoadDate
 from ODS.dbo.Intermediate_LastOTZVisit as otz
 left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPKHash = otz.PatientPKHash 
@@ -43,6 +44,7 @@ select
     age_group.AgeGroupKey,
     otz_enrollment.DateKey as OTZEnrollmentDateKey,
     last_visit.DateKey as LastVisitDateKey,
+    OutcomeDate.DateKey as OutcomeDateKey,
 	otz_and_last_encounter_combined.TransitionAttritionReason,
     otz_and_last_encounter_combined.TransferInStatus,
 	otz_and_last_encounter_combined.ModulesPreviouslyCovered,
@@ -62,6 +64,7 @@ left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = otz_and_last
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = otz_and_last_encounter_combined.SiteCode
 left join NDWH.dbo.DimDate as otz_enrollment on otz_enrollment.Date = otz_and_last_encounter_combined.OTZEnrollmentDate
 left join NDWH.dbo.DimDate as last_visit on last_visit.Date = otz_and_last_encounter_combined.LastVisitDate
+left join NDWH.dbo.DimDate as OutcomeDate on OutcomeDate.Date = otz_and_last_encounter_combined.OutcomeDate
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = otz_and_last_encounter_combined.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
