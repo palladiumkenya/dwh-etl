@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[NDWH].[dbo].FACTTxCurrConcordance', N'U') IS NOT NULL 		
-	drop table [NDWH].[dbo].FACTTxCurrConcordance
+IF OBJECT_ID(N'[NDWH].[dbo].FactTxCurrConcordance', N'U') IS NOT NULL 		
+	drop table [NDWH].[dbo].FactTxCurrConcordance
 GO
 
 WITH NDW_CurTx AS (
@@ -184,15 +184,14 @@ WITH NDW_CurTx AS (
             Diff_EMR_DWH,
             DiffKHISDWH,
             DiffKHISEMR,
-            Percent_variance_EMR_DWH,
-            Percent_variance_KHIS_DWH,
-            Percent_variance_KHIS_EMR
-            into [NDWH].[dbo].FACTTxCurrConcordance
+            Percent_variance_EMR_DWH as Proportion_variance_EMR_DWH,
+            Percent_variance_KHIS_DWH as Proportion_variance_KHIS_DWH ,
+            Percent_variance_KHIS_EMR as Proportion_variance_KHIS_EMR
+            into [NDWH].[dbo].FactTxCurrConcordance
             from Summary
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Summary.MFLCode
 left join Facilityinfo on Facilityinfo.MFL_Code=Summary.MFLCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = Facilityinfo.PartnerName
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = Facilityinfo.Agency
-alter table NDWH.dbo.FACTTxCurrConcordance add primary key(FactKey);
-
+alter table NDWH.dbo.FactTxCurrConcordance add primary key(FactKey);
 
