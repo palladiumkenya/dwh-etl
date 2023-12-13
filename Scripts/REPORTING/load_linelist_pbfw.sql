@@ -71,7 +71,7 @@ select
     case when viral_load_metrics.RepeatVls = 1 then 1 else 0 end as HasRepeatVL,
     case when viral_load_metrics.RepeatSuppressed = 1 then 1 else 0 end as HasRepeatVLSupressed,
     case when viral_load_metrics.RepeatUnSuppressed = 1 then 1 else 0 end as HasRepeatVLUnSuppressed,
-    pbfw.PBFWRegLineSwitch as HasRegLineSwitch
+    case when viral_load_metrics.RepeatUnSuppressed = 1 and pbfw.PBFWRegLineSwitch =1 Then 1 else 0 end as HasRegLineSwitch
 into [REPORTING].[dbo].LineListPBFW
 from NDWH.dbo.FactPBFW as pbfw
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = pbfw.PatientKey
