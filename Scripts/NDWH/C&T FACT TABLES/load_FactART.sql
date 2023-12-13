@@ -40,6 +40,7 @@ with MFL_partner_agency_combination as (
         lastRegimenline,
         StartRegimenline,
         obs.WHOStage,
+        Patient.DateConfirmedHIVPositive,
         outcome.ARTOutcome
 
 from 
@@ -60,6 +61,7 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
             age_group.AgeGroupKey,
             StartARTDate.DateKey As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
+            DateConfirmedPos.DateKey as DateConfirmedPosKey,
             ARTOutcome.ARTOutcomeKey,
             lastRegimen As CurrentRegimen,
             LastRegimenLine As CurrentRegimenline,
@@ -94,6 +96,7 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVisit
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date = Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
+left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient.DateConfirmedHIVPositive
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
