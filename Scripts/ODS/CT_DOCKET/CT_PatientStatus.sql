@@ -94,15 +94,24 @@ BEGIN
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
-								a.PatientID						=b.PatientID,
-								a.FacilityName					=b.FacilityName,
-								a.ExitDescription				=b.ExitDescription,
-								a.TOVerified					=b.TOVerified	,							
-								a.ReasonForDeath				=b.ReasonForDeath,
-								a.SpecificDeathReason			=b.SpecificDeathReason,
-								a.DeathDate						=b.DeathDate,
-								a.[Date_Created]				=b.[Date_Created],
-								a.[Date_Last_Modified]			=b.[Date_Last_Modified];
+								a.[PatientID]						=	b.[PatientID],
+								a.[FacilityName]					=	b.[FacilityName],
+								a.[ExitDescription]					=	b.[ExitDescription],
+								a.[ExitDate]						=	b.[ExitDate],
+								a.[ExitReason]						=	b.[ExitReason],
+								a.[Emr]								=	b.[Emr],
+								a.[Project]							=	b.[Project],
+								a.[TOVerified]						=	b.[TOVerified],
+								a.[TOVerifiedDate]					=	b.[TOVerifiedDate],
+								a.[ReEnrollmentDate]				=	b.[ReEnrollmentDate],
+								a.[ReasonForDeath]					=	b.[ReasonForDeath],
+								a.[SpecificDeathReason]				=	b.[SpecificDeathReason],
+								a.[DeathDate]						=	b.[DeathDate],
+								a.[EffectiveDiscontinuationDate]	=	b.[EffectiveDiscontinuationDate],
+								a.[Date_Last_Modified]				=	b.[Date_Last_Modified],
+								a.[Date_Created]					=	b.[Date_Created],
+								a.[RecordUUID]						=	b.[RecordUUID],
+								a.[voided]							=	b.[voided];
 						
 							
 
