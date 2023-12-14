@@ -84,6 +84,42 @@ age_as_of_last_visit as (
     and patient.voided = 0
     where rank = 1 
 ),
+hypertensives_ordering as (
+    select 
+        PatientPKHash,
+        PatientPK,               
+        SiteCode,
+        VisitDate,
+        ChronicIllness,
+        row_number() over (partition by PatientPK, Sitecode order by VisitDate desc) as rank
+    from ODS.dbo.CT_AllergiesChronicIllness as chronic
+    where chronic.voided = 0 
+        and ChronicIllness like '%Hypertension%' 
+),
+diabetes_ordering as (
+    select 
+        PatientPKHash,
+        PatientPK,               
+        SiteCode,
+        VisitDate,
+        ChronicIllness,
+        row_number() over (partition by PatientPK, Sitecode order by VisitDate asc) as rank
+    from ODS.dbo.CT_AllergiesChronicIllness as chronic
+    where chronic.voided = 0 
+        and ChronicIllness like '%Diabetes%' 
+),
+earliest_hpertension_recorded as (
+    select 
+        *
+    from hypertensives_ordering
+    where rank = 1
+),
+earliest_diabetes_recorded as (
+    select 
+        *
+    from diabetes_ordering
+    where rank = 1
+),
 with_underlying_ncd_condition_indicators as (
     select 
         ncd_source_data.PatientPKHash,
@@ -135,7 +171,9 @@ select
     with_underlying_ncd_condition_indicators.IsDiabeticAndScreenedDiabetes,
     with_underlying_ncd_condition_indicators.IsDiabeticAndDiabetesControlledAtLastTest,
     with_underlying_ncd_condition_indicators.IsHyperTensiveAndScreenedBPLastVisit,
-    with_underlying_ncd_condition_indicators.IsHyperTensiveAndBPControlledAtLastVisit
+    with_underlying_ncd_condition_indicators.IsHyperTensiveAndBPControlledAtLastVisit,
+    first_hypertension.DateKey as FirstHypertensionRecoredeDateKey,
+    first_diabetes.DateKey as FirstDiabetesRecordedDateKey
 into NDWH.dbo.FactNCD
 from ncd_source_data
 left join with_underlying_ncd_condition_indicators on with_underlying_ncd_condition_indicators.PatientPKHash = ncd_source_data.PatientPKHash
@@ -148,9 +186,17 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = age_as_of_last_visit.AgeLastVisit
 left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = ncd_source_data.PatientPKHash
-    and patient.SiteCode = ncd_source_data.SiteCode;
+    and patient.SiteCode = ncd_source_data.SiteCode
+left join earliest_hpertension_recorded on earliest_hpertension_recorded.PatientPKHash = ncd_source_data.PatientPKHash
+    and earliest_hpertension_recorded.SiteCode = ncd_source_data.Sitecode
+left join earliest_diabetes_recorded on earliest_diabetes_recorded.PatientPKHash = ncd_source_data.PatientPKHash
+    and earliest_diabetes_recorded.SiteCode = ncd_source_data.SiteCode
+left join NDWH.dbo.DimDate as first_hypertension on first_hypertension.Date = cast(earliest_hpertension_recorded.VisitDate as date)
+left join NDWH.dbo.DimDate as first_diabetes on first_diabetes.Date = cast(earliest_diabetes_recorded.VisitDate as date)
+;
 
 
 alter table NDWH.dbo.FactNCD add primary key(FactKey);
 
 END
+

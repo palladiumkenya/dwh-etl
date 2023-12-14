@@ -10,8 +10,12 @@ with ncd_indicators as (
         IsHyperTensiveAndBPControlledAtLastVisit,
         Diabetes as HasDiabetes,
         IsDiabeticAndScreenedDiabetes,
-        IsDiabeticAndDiabetesControlledAtLastTest
-    from NDWH.dbo.FactNCD
+        IsDiabeticAndDiabetesControlledAtLastTest,
+        hypertension.Date as FirstHypertensionRecoredeDate,
+        diabetes.Date as FirstDiabetesRecordedDate
+    from NDWH.dbo.FactNCD as ncd
+    left join NDWH.dbo.DimDate as hypertension on hypertension.DateKey = ncd.FirstHypertensionRecoredeDateKey
+    left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey    
 )
 Select distinct 
     pat.PatientIDHash,
@@ -70,6 +74,8 @@ Select distinct
     coalesce(ncd.HasDiabetes, 0) as HasDiabetes,
     coalesce(ncd.IsDiabeticAndScreenedDiabetes, 0) as IsDiabeticAndScreenedDiabetes,
     coalesce(ncd.IsDiabeticAndDiabetesControlledAtLastTest, 0) as IsDiabeticAndDiabetesControlledAtLastTest,
+    ncd.FirstHypertensionRecoredeDate,
+    ncd.FirstDiabetesRecordedDate,
     CD4.LastCD4,
     CD4.LastCD4Percentage,
     ART.WhoStage,
