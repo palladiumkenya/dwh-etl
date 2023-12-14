@@ -29,10 +29,14 @@ BEGIN
 					WHEN 'HMIS' THEN 'Kenya HMIS II'
 			   ELSE P.[Project] 
 			   END AS [Project] 
-			  ,PB.[Voided],PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
+			  ,PB.[Processed],PB.[bWAB],PB.[bWABDate],PB.[eWAB],PB.[eWABDate],PB.[lastWAB]
 			  ,PB.[lastWABDate],PB.[Date_Created],PB.[Date_Last_Modified]
+			  ,PB.RecordUUID,PB.voided
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 	
 		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID 
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -44,8 +48,13 @@ BEGIN
 
 
 		WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
+		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)
+		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+=======
 		INSERT(ID,PatientID,PatientPK,SiteCode,bCD4,bCD4Date,bWHO,bWHODate,eCD4,eCD4Date,eWHO,eWHODate,lastWHO,lastWHODate,lastCD4,lastCD4Date,m12CD4,m12CD4Date,m6CD4,m6CD4Date,Emr,Project,[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],LoadDate)
 		VALUES(ID,PatientID,PatientPK,SiteCode,[eCD4],[eCD4Date],[eWHO],bWHODate,[bCD4],[bCD4Date],[bWHO],[bWHODate],[lastWHO],[lastWHODate],[lastCD4],[lastCD4Date],[m12CD4],[m12CD4Date],[m6CD4],[m6CD4Date],[Emr],[Project],[bWAB],[bWABDate],[eWAB],[eWABDate],[lastWAB],[lastWABDate],[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -73,7 +82,9 @@ BEGIN
 						a.lastWAB		= b.lastWAB	,
 						a.lastWABDate	= b.lastWABDate,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided;
 
 
 					

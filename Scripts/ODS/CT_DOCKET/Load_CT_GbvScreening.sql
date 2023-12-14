@@ -21,6 +21,7 @@ BEGIN
 							END AS Project,
 							GSE.[IPV] AS IPV,GSE.[PhysicalIPV],GSE.[EmotionalIPV],GSE.[SexualIPV],GSE.[IPVRelationship]						
 							,GSE.ID,GSE.[Date_Created],GSE.[Date_Last_Modified]
+							,GSE.RecordUUID,GSE.voided
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -33,8 +34,13 @@ BEGIN
 						AND  a.ID = b.ID)
 
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+=======
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],LoadDate) 
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -45,7 +51,10 @@ BEGIN
 						a.SexualIPV			=b.SexualIPV,
 						a.IPVRelationship	=b.IPVRelationship,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						 a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided
+						;
 					
 					
 					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]
