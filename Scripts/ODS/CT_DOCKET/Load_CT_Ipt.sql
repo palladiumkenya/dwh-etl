@@ -50,13 +50,14 @@ BEGIN
 						IE.[EvaluatedForIPT] AS EvaluatedForIPT,IE.[StartAntiTBs] AS StartAntiTBs,IE.[TBRxStartDate] AS TBRxStartDate,
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
 						IE.[IndicationForIPT] AS IndicationForIPT
-					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified] 
+					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified]
+					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation,
+					   IE.RecordUUID,IE.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID AND IE.Voided = 0
-					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
-					WHERE P.gender != 'Unknown') AS b 
+					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
+					WHERE P.gender != 'Unknown'  AND F.code >0) AS b 
 						ON(
-						--a.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS = b.PatientID COLLATE SQL_Latin1_General_CP1_CI_AS and
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
@@ -64,8 +65,8 @@ BEGIN
 						and a.ID =b.ID)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -90,7 +91,12 @@ BEGIN
 						a.StartIPT				=b.StartIPT,
 						a.IndicationForIPT		=b.IndicationForIPT,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						a.[TPTInitiationDate]	= b.[TPTInitiationDate],
+						a.IPTDiscontinuation    = b.IPTDiscontinuation,
+						a.DateOfDiscontinuation   = b.DateOfDiscontinuation,
+						a.RecordUUID			 = b.RecordUUID,
+						a.voided				= b.voided;
 						
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]

@@ -66,12 +66,12 @@ BEGIN
 							,[ZScoreAbsolute]
 							,RefillDate
 							,PaedsDisclosure,PV.[Date_Created],PV.[Date_Last_Modified]
-
+							,PV.RecordUUID
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
-						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID AND PV.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
-						WHERE p.gender!='Unknown') AS b 
+						WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 							 a.PatientPK  = b.PatientPK 
 							AND a.SiteCode = b.SiteCode
@@ -79,8 +79,8 @@ BEGIN
 							and a.visitDate = b.visitDate					
 							)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified]) 
-							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified])
+							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
+							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
 			
 					WHEN MATCHED THEN
 						UPDATE SET 	
@@ -137,7 +137,9 @@ BEGIN
 						a.RefillDate				=b.RefillDate,
 						a.PaedsDisclosure			=b.PaedsDisclosure,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						 a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided;
 
 			UPDATE [ODS].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()

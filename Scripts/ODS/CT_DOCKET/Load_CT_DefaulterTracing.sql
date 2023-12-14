@@ -25,12 +25,13 @@ BEGIN
 						  ,[TrueStatus]
 						  ,[CauseOfDeath]
 						  ,[Comments]
-						  ,Cast([BookingDate] As Date)[BookingDate]
+						  ,Cast([BookingDate] As Date)[BookingDate],
+						  C.RecordUUID,C.voided
 					 ,P.ID,C.[Date_Created],C.[Date_Last_Modified]
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
+					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID 
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-					WHERE P.gender != 'Unknown' ) AS b 
+					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
@@ -40,24 +41,31 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	
-						a.PatientID		=b.PatientID,
-						a.TracingType	=b.TracingType,
-						a.TracingOutcome=b.TracingOutcome,
-						a.AttemptNumber	=b.AttemptNumber,
-						a.IsFinalTrace	=b.IsFinalTrace,
-						a.TrueStatus	=b.TrueStatus,
-						a.CauseOfDeath	=b.CauseOfDeath,
-						a.Comments		=b.Comments,
-						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[PatientID]			=	b.[PatientID],
+						a.[FacilityName]		=	b.[FacilityName],
+						a.[VisitID]				=	b.[VisitID],
+						a.[VisitDate]			=	b.[VisitDate],
+						a.[EncounterId]			=	b.[EncounterId],
+						a.[TracingType]			=	b.[TracingType],
+						a.[TracingOutcome]		=	b.[TracingOutcome],
+						a.[AttemptNumber]		=	b.[AttemptNumber],
+						a.[IsFinalTrace]		=	b.[IsFinalTrace],
+						a.[TrueStatus]			=	b.[TrueStatus],
+						a.[CauseOfDeath]		=	b.[CauseOfDeath],
+						a.[Comments]			=	b.[Comments],
+						a.[BookingDate]			=	b.[BookingDate],
+						a.[Date_Last_Modified]	=	b.[Date_Last_Modified],
+						a.[Date_Created]		=	b.[Date_Created],
+						a.[RecordUUID]			=	b.[RecordUUID],
+						a.[voided]				=	b.[voided];
 
 
-				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]---
+				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 

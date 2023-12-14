@@ -56,10 +56,10 @@ BEGIN
 							,PA.ID
 							,PA.[Date_Created]
 						  ,PA.[Date_Last_Modified]
-
+						  , PA.RecordUUID,PA.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
-					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 ) AS b 
+					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID 
+					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 AND F.code >0 ) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
@@ -68,19 +68,28 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified]) 
-						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified])
+						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
+						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.EMR							=b.EMR,
-							a.Project						=b.Project,
-							a.PatientID						=b.PatientID,
-							a.AdverseEventIsPregnant		=b.AdverseEventIsPregnant,
-							a.[Date_Created]				=b.[Date_Created],
-							a.[Date_Last_Modified]			=b.[Date_Last_Modified];	
+							a.[PatientID]					= b.[PatientID],
+							a.[AdverseEvent]				= b.[AdverseEvent],
+							a.[AdverseEventStartDate]		= b.[AdverseEventStartDate],
+							a.[AdverseEventEndDate]			= b.[AdverseEventEndDate],
+							a.[Severity]					= b.[Severity],
+							a.[VisitDate]					= b.[VisitDate],
+							a.[AdverseEventCause]			= b.[AdverseEventCause],
+							a.[AdverseEventRegimen]			= b.[AdverseEventRegimen],
+							a.[AdverseEventActionTaken]		= b.[AdverseEventActionTaken],
+							a.[AdverseEventClinicalOutcome]	= b.[AdverseEventClinicalOutcome],
+							a.[AdverseEventIsPregnant]		= b.[AdverseEventIsPregnant],
+							a.[FacilityName]				= b.[FacilityName],
+							a.[Date_Last_Modified]			= b.[Date_Last_Modified],
+							a.[Date_Created]				= b.[Date_Created],
+							a.[RecordUUID]					= b.[RecordUUID],
+							a.[voided]						= b.[voided];
 
-					-----Remove duplicates from CT_AdverseEvents
 					
 			--------------------------------------------------------End
 				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
