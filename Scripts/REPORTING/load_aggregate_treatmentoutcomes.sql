@@ -1,7 +1,6 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateTreatmentOutcomes]', N'U') IS NOT NULL 		
-	drop TABLE [REPORTING].[dbo].[AggregateTreatmentOutcomes]
+	DROP TABLE [REPORTING].[dbo].[AggregateTreatmentOutcomes]
 GO
-
 
 SELECT DISTINCT
 	MFLCode,
@@ -14,6 +13,7 @@ SELECT DISTINCT
 	age.DATIMAgeGroup as AgeGroup,
 	Year(StartARTDateKey) StartYear,
 	Month(StartARTDateKey) StartMonth,
+    EOMONTH(date.Date) AsOfDate,
 	ARTOutcomeDescription,
 	Count(ARTOutcomeDescription) TotalOutcomes,
     CAST(GETDATE() AS DATE) AS LoadDate 
@@ -25,6 +25,17 @@ INNER JOIN NDWH.dbo.DimAgency a on a.AgencyKey = art.AgencyKey
 INNER JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = art.PatientKey
 INNER JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
 INNER JOIN NDWH.dbo.DimARTOutcome ot on ot.ARTOutcomeKey = art.ARTOutcomeKey
-
-GROUP BY MFLCode, f.FacilityName, County, SubCounty, p.PartnerName, a.AgencyName, pat.Gender, age.DATIMAgeGroup, Year(StartARTDateKey) ,
-	Month(StartARTDateKey) ,ARTOutcomeDescription
+INNER JOIN NDWH.dbo.DimDate as date on date.DateKey = art.StartARTDateKey
+GROUP BY 
+    MFLCode, 
+    f.FacilityName,
+    County,
+    SubCounty, 
+    p.PartnerName, 
+    a.AgencyName, 
+    pat.Gender, 
+    age.DATIMAgeGroup, 
+    Year(StartARTDateKey) ,
+    Month(StartARTDateKey),
+    EOMONTH(date.Date),
+    ARTOutcomeDescription

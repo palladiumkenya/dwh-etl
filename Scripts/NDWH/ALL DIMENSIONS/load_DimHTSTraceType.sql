@@ -1,20 +1,18 @@
-IF OBJECT_ID(N'[NDWH].[dbo].[DimHTSTraceType]', N'U') IS NOT NULL 
-	DROP TABLE [NDWH].[dbo].[DimHTSTraceType];
+MERGE [NDWH].[dbo].[DimHTSTraceType] AS a
+		USING	(	SELECT DISTINCT TracingType AS TraceType 
+					FROM ODS.dbo.HTS_ClientTracing
+					
+					UNION
 
-BEGIN
-    with source_data as (
-        select distinct TracingType as TraceType from ODS.dbo.HTS_ClientTracing
-        union
-        select distinct TraceType from ODS.dbo.HTS_PartnerTracings
-    )
-    select
-       distinct 
-       TraceTypeKey = IDENTITY(INT, 1, 1),
-       source_data.*,
-       cast(getdate() as date) as LoadDate
-    into [NDWH].[dbo].[DimHTSTraceType]
-	from source_data;
-
-	alter table NDWH.dbo.DimHTSTraceType add primary key(TraceTypeKey);
-
-END
+					SELECT DISTINCT TraceType 
+					FROM ODS.dbo.HTS_PartnerTracings
+				) AS b 
+						ON(
+							a.TraceType = b.TraceType
+						  )
+		WHEN NOT MATCHED THEN 
+						INSERT(TraceType,LoadDate) 
+						VALUES(TraceType,GetDate())
+		WHEN MATCHED THEN
+						UPDATE  						
+							SET	a.TraceType =b.TraceType;

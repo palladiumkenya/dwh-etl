@@ -12,7 +12,7 @@ BEGIN
 			MERGE [ODS].[dbo].[CT_Patient] AS a
 				USING(SELECT  DISTINCT P.ID,P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC
 										,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village
-									   ,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,
+									   ,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,Orphan,Inschool,null PatientType,null PopulationType,KeyPopulationType,PatientResidentCounty,
 									   PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
 									   ,Pkv,P.[Date_Created],P.[Date_Last_Modified]
 						FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
@@ -23,7 +23,7 @@ BEGIN
 									ON P.[FacilityId]  = F.Id  AND F.Voided=0 
 									GROUP BY  P.PatientPID,F.code)tn
 							on P.PatientPID = tn.PatientPID and F.code = tn.code and P.Created = tn.MaxCreated
-						WHERE P.Voided=0 and P.[Gender] is NOT NULL and p.gender!='Unknown'/* and P.Processed =1*/ ) AS b 
+						WHERE  P.[Gender] is NOT NULL and p.gender!='Unknown' AND F.code >0 ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
@@ -32,8 +32,8 @@ BEGIN
 						)
 
 						WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,Pkv,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,Pkv,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,Pkv,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,Emr,Project,Orphan,Inschool,PatientType,PopulationType,KeyPopulationType,PatientResidentCounty,PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI,Pkv,[Date_Created],[Date_Last_Modified],Getdate())
 				
 						WHEN MATCHED THEN
 							UPDATE SET 				

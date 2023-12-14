@@ -46,11 +46,11 @@ MERGE [ODS].[dbo].[PrEP_Pharmacy] AS a
 
 	 WHEN NOT MATCHED THEN 
 		  INSERT(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber
-		  ,VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified)
+		  ,VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,LoadDate)
 		  
 
 		  VALUES(ID,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,[Status],StatusDate,DateExtracted,FacilityId,FacilityName,PrepNumber,HtsNumber,
-          VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified) 
+          VisitID,RegimenPrescribed,DispenseDate,Duration,Date_Created,Date_Last_Modified,Getdate())
 
 	  WHEN MATCHED THEN
 						UPDATE SET 														

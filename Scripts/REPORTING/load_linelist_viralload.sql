@@ -19,6 +19,7 @@ SELECT DISTINCT
 	vl.LatestVLDate2Key,
 	LatestVL3,
 	vl.LatestVLDate3Key,
+	PBFW_ValidVL,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LineListViralLoad
 FROM NDWH.dbo.FactViralLoads vl

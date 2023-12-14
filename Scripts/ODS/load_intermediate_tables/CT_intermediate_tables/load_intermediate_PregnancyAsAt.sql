@@ -13,6 +13,7 @@ BEGIN
 	 INNER JOIN ODS.dbo.CT_Patient Patients ON  Visits.PatientPK=Patients.PatientPK AND Patients.SiteCode=Visits.SiteCode
 	 INNER JOIN ODS.dbo.CT_ARTPatients ART ON ART.PatientPK=Patients.PatientPK AND Patients.SiteCode=ART.SiteCode
 	  WHERE (Visits.Pregnant = 'YES' or Visits.Pregnant = 'Y')  AND Patients.Gender= 'F' 
+	  		AND VISITS.VOIDED=0
 	  GROUP BY Patients.PatientID ,Patients.PatientPK ,Patients.SiteCode, ART.StartARTDate, Visits.VisitDate
 	)
 	Select 

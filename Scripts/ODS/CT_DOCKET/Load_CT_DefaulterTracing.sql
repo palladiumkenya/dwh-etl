@@ -28,9 +28,9 @@ BEGIN
 						  ,Cast([BookingDate] As Date)[BookingDate]
 					 ,P.ID,C.[Date_Created],C.[Date_Last_Modified]
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID AND C.Voided=0
+					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID 
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-					WHERE P.gender != 'Unknown' ) AS b 
+					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
@@ -40,8 +40,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	

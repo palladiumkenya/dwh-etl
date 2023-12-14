@@ -46,7 +46,8 @@ BEGIN
     left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
     left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
     left join NDWH.dbo.DimTestKitName as kit_name1 on kit_name1.TestKitName = source_data.TestKitName1
-    left join NDWH.dbo.DimTestKitName as kit_name2 on kit_name2.TestKitName = source_data.TestKitName2;
+    left join NDWH.dbo.DimTestKitName as kit_name2 on kit_name2.TestKitName = source_data.TestKitName2
+	WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactHTSTestKits add primary key(FactKey); 
 

@@ -69,8 +69,10 @@ BEGIN
 						)
 
 				WHEN NOT MATCHED THEN 
+
 					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
 					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+
 			
 				WHEN MATCHED THEN
 					UPDATE SET 

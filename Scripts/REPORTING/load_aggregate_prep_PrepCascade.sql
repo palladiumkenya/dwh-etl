@@ -1,34 +1,31 @@
-
 IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.AggregatePrepCascade') AND type in (N'U')) 
     DROP TABLE REPORTING.dbo.AggregatePrepCascade
 GO
 
-WITH prepCascade AS  (
+with eligible_screened_data AS  (
 	SELECT DISTINCT 
-			MFLCode,		
-			f.FacilityName,
-			County,
-			SubCounty,
-			p.PartnerName,
-			a.AgencyName,
-			pat.Gender,
-			age.DATIMAgeGroup as AgeGroup,
-			ass.month AssMonth,
-			ass.year AssYear,
-			Sum(EligiblePrep) As EligiblePrep,
-			sum(ScreenedPrep) As Screened,
-			Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As PrepCT
-
+        MFLCode,		
+        f.FacilityName,
+        County,
+        SubCounty,
+        p.PartnerName,
+        a.AgencyName,
+        pat.Gender,
+        age.DATIMAgeGroup as AgeGroup,
+        ass.month AssMonth,
+        ass.year AssYear,
+        EOMONTH(ass.Date) as AsofDate,
+        Sum(EligiblePrep) As EligiblePrep,
+        sum(ScreenedPrep) As Screened
 	FROM NDWH.dbo.FactPrepAssessments prep
-
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 	LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 	LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
 	LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 	LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
 	LEFT JOIN NDWH.dbo.DimDate ass ON ass.DateKey = AssessmentVisitDateKey 
-
-	GROUP BY MFLCode,
+	GROUP BY 
+            MFLCode,
 			f.FacilityName,
 			County,
 			SubCounty,
@@ -37,7 +34,8 @@ WITH prepCascade AS  (
 			pat.Gender,
 			age.DATIMAgeGroup,
 			ass.Month,
-			ass.Year
+			ass.Year,
+            EOMONTH(ass.Date)
 ),
 prepStart AS (
 	SELECT DISTINCT 
@@ -51,18 +49,16 @@ prepStart AS (
 		age.DATIMAgeGroup as AgeGroup,
 		enrol.month EnrollmentMonth, 
 		enrol.year EnrollmentYear,
+        EOMONTH(enrol.Date) as AsofDate,
 		Count (distinct (concat(PrepNumber,PatientPKHash,MFLCode))) As StartedPrep
 	FROM NDWH.dbo.FactPrepAssessments prep
-
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 	LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
 	LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
 	LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 	LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
-	LEFT JOIN NDWH.dbo.DimDate enrol ON enrol.DateKey = PrepEnrollmentDateKey
-	
+	LEFT JOIN NDWH.dbo.DimDate enrol ON enrol.DateKey = PrepEnrollmentDateKey	
 	WHERE PrepEnrollmentDateKey IS NOT NULL
-
 	GROUP BY MFLCode,
 			f.FacilityName,
 			County,
@@ -72,26 +68,105 @@ prepStart AS (
 			pat.Gender,
 			age.DATIMAgeGroup,
 			enrol.Month,
-			enrol.Year
-)
-
-	
+			enrol.Year,
+            EOMONTH(enrol.Date)
+),
+prep_ct as (
+    select 
+        facility.MFLCode,
+        facility.FacilityName,
+        facility.County,
+        facility.SubCounty,
+        partner.PartnerName,
+        agency.AgencyName,
+        patient.Gender,
+        age_group.DATIMAgeGroup as AgeGroup,
+        date_visit.Month,
+        date_visit.Year, 
+        EOMONTH(date_visit.Date) as AsofDate,
+        count(distinct(concat(patient.PrepNumber,visits.PatientKey))) As PrepCT
+	from NDWH.dbo.FactPrepVisits as visits
+    left join NDWH.dbo.DimPatient as patient on patient.PatientKey = visits.PatientKey
+    left join NDWH.dbo.DimDate as date_visit on date_visit.DateKey = visits.VisitDateKey
+    left join NDWH.dbo.DimAgency as agency on agency.Agencykey = visits.AgencyKey
+    left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = visits.Partnerkey
+    left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = visits.AgeGroupKey 
+    left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = visits.FacilityKey
+    left join NDWH.dbo.DimDate as prep_enroll on prep_enroll.Datekey = patient.PrepEnrollmentDatekey
+	where VisitDateKey is not null 
+        and date_visit.Date <> prep_enroll.Date 
+	group by 
+        facility.MFLCode,
+        facility.FacilityName,
+        facility.County,
+        facility.SubCounty,
+        partner.PartnerName,
+        agency.AgencyName,
+        date_visit.Month ,
+        date_visit.Year,
+        patient.Gender,
+        age_group.DATIMAgeGroup,
+        EOMONTH(date_visit.Date)
+),
+eligible_screened_data_prep_start as (	
 SELECT
-	COALESCE(p.MFLCode, s.MFLCode) AS MFLCode,		
-	COALESCE(p.FacilityName, s.FacilityName) AS FacilityName,
-	COALESCE(p.County, s.County) AS County,
-	COALESCE(p.SubCounty, s.SubCounty) AS SubCounty,
-	COALESCE(p.PartnerName, s.PartnerName) AS PartnerName,
-	COALESCE(p.AgencyName, s.AgencyName) AS AgencyName,
-	COALESCE(p.Gender, s.Gender) AS Gender,
-	COALESCE(p.AgeGroup, s.AgeGroup) AS AgeGroup,
-	COALESCE(p.AssMonth, s.EnrollmentMonth) AS AssMonth,
-	COALESCE(p.AssYear, s.EnrollmentYear) AS AssYear,
-	COALESCE(p.EligiblePrep, 0) AS EligiblePrep,
-	COALESCE(p.Screened, 0) AS Screened,
-	COALESCE(p.PrepCT, 0) AS PrepCT,
-	COALESCE(s.StartedPrep, 0) AS StartedPrep,
-    CAST(GETDATE() AS DATE) AS LoadDate 
-  INTO REPORTING.dbo.AggregatePrepCascade
-FROM prepCascade p
-FULL OUTER JOIN prepStart s on p.MFLCode = s.MFLCode and s.FacilityName = p.FacilityName and s.County = p.County and s.SubCounty = p.SubCounty and s.PartnerName = p.PartnerName and s.AgencyName = p.AgencyName and s.Gender = p.Gender and s.AgeGroup = s.AgeGroup and AssMonth = EnrollmentMonth and AssYear = EnrollmentYear
+	coalesce(eligible_screened_data.MFLCode, prepStart.MFLCode) AS MFLCode,		
+	coalesce(eligible_screened_data.FacilityName, prepStart.FacilityName) AS FacilityName,
+	coalesce(eligible_screened_data.County, prepStart.County) AS County,
+	coalesce(eligible_screened_data.SubCounty, prepStart.SubCounty) AS SubCounty,
+	coalesce(eligible_screened_data.PartnerName, prepStart.PartnerName) AS PartnerName,
+	coalesce(eligible_screened_data.AgencyName, prepStart.AgencyName) AS AgencyName,
+	coalesce(eligible_screened_data.Gender, prepStart.Gender) AS Gender,
+	coalesce(eligible_screened_data.AgeGroup, prepStart.AgeGroup) AS AgeGroup,
+	coalesce(eligible_screened_data.AssMonth, prepStart.EnrollmentMonth) AS AssMonth,
+	coalesce(eligible_screened_data.AssYear, prepStart.EnrollmentYear) AS AssYear,
+    coalesce(eligible_screened_data.AsofDate, prepStart.AsofDate) AS AsofDate,
+	coalesce(eligible_screened_data.EligiblePrep, 0) AS EligiblePrep,
+	coalesce(eligible_screened_data.Screened, 0) AS Screened,
+	coalesce(prepStart.StartedPrep, 0) AS StartedPrep
+FROM eligible_screened_data 
+FULL OUTER JOIN prepStart on eligible_screened_data.MFLCode = prepStart.MFLCode 
+    and prepStart.FacilityName = eligible_screened_data.FacilityName 
+    and prepStart.County = eligible_screened_data.County 
+    and prepStart.SubCounty = eligible_screened_data.SubCounty 
+    and prepStart.PartnerName = eligible_screened_data.PartnerName 
+    and prepStart.AgencyName = eligible_screened_data.AgencyName 
+    and prepStart.Gender = eligible_screened_data.Gender 
+    and prepStart.AgeGroup = eligible_screened_data.AgeGroup 
+    and eligible_screened_data.AssMonth = prepStart.EnrollmentMonth 
+    and eligible_screened_data.AssYear = prepStart.EnrollmentYear
+),
+eligible_screened_data_prep_start_prep_ct as (
+    select 
+        coalesce(eligible_screened_data_prep_start.MFLCode, prep_ct.MFLCode)  as MFLCode,
+        coalesce(eligible_screened_data_prep_start.FacilityName, prep_ct.FacilityName) as FacilityName,
+        coalesce(eligible_screened_data_prep_start.County, prep_ct.County) as County,
+        coalesce(eligible_screened_data_prep_start.SubCounty, prep_ct.SubCounty) as SubCounty,
+        coalesce(eligible_screened_data_prep_start.PartnerName, prep_ct.PartnerName) as PartnerName,
+        coalesce(eligible_screened_data_prep_start.AgencyName, prep_ct.AgencyName) as AgencyName,
+        coalesce(eligible_screened_data_prep_start.Gender, prep_ct.Gender) as Gender,
+        coalesce(eligible_screened_data_prep_start.AgeGroup, prep_ct.AgeGroup) as AgeGroup,
+        coalesce(eligible_screened_data_prep_start.AssMonth, prep_ct.Month) as Month,
+        coalesce(eligible_screened_data_prep_start.AssYear, prep_ct.Year) as Year,
+        coalesce(eligible_screened_data_prep_start.AsofDate, prep_ct.AsofDate) as AsofDate,
+        coalesce(eligible_screened_data_prep_start.EligiblePrep, 0) as EligiblePrep,
+        coalesce(eligible_screened_data_prep_start.Screened, 0) as Screened,
+        coalesce(eligible_screened_data_prep_start.StartedPrep, 0) as StartedPrep,
+        coalesce(prep_ct.PrepCT, 0) as PrepCT,
+        cast(getdate() as date) as LoadDate 
+    from eligible_screened_data_prep_start
+    full join prep_ct on prep_ct.MFLCode  = eligible_screened_data_prep_start.MFLCode 
+        and prep_ct.FacilityName = eligible_screened_data_prep_start.FacilityName 
+        and prep_ct.County = eligible_screened_data_prep_start.County 
+        and prep_ct.SubCounty = eligible_screened_data_prep_start.SubCounty 
+        and prep_ct.PartnerName = eligible_screened_data_prep_start.PartnerName 
+        and prep_ct.AgencyName = eligible_screened_data_prep_start.AgencyName 
+        and prep_ct.Gender = eligible_screened_data_prep_start.Gender 
+        and prep_ct.AgeGroup = eligible_screened_data_prep_start.AgeGroup 
+        and prep_ct.Month = eligible_screened_data_prep_start.AssMonth
+        and prep_ct.Year = eligible_screened_data_prep_start.AssYear 
+)
+select 
+    *
+into REPORTING.dbo.AggregatePrepCascade
+from eligible_screened_data_prep_start_prep_ct

@@ -1,4 +1,5 @@
 BEGIN
+
 		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
 				   @OrderedbyDate					DATETIME
 				
@@ -41,9 +42,10 @@ BEGIN
 
 												
 					WHEN NOT MATCHED THEN 
+
 						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
 						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
-				
+
 					WHEN MATCHED THEN
 						UPDATE SET 
 							a.[PatientID]			= b.[PatientID],

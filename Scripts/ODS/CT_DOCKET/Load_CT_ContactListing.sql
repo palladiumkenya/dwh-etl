@@ -29,15 +29,15 @@ BEGIN
 					  CL.Created as DateCreated
 					  ,CL.ID,CL.[Date_Created],CL.[Date_Last_Modified]
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
+					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 					INNER JOIN (SELECT p.[PatientPID],F.code,CL.Contactage,max(cl.created)Maxcreated 
 								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID AND CL.Voided = 0
+								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 								INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 								GROUP BY p.[PatientPID],F.code,CL.Contactage)tn
 								on p.[PatientPID] = tn.[PatientPID] and F.code = tn.code and cl.created = tn.Maxcreated and cl.Contactage = tn.Contactage
-					WHERE P.gender != 'Unknown') AS b 
+					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and a.PatientPK  = b.PatientPK 
@@ -47,8 +47,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	

@@ -20,8 +20,8 @@ BEGIN
 						
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(Id,RefId,PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityId,FacilityName,PatientMnchID,BCG,OPVatBirth,OPV1,OPV2,OPV3,IPV,DPTHepBHIB1,DPTHepBHIB2,DPTHepBHIB3,PCV101,PCV102,PCV103,ROTA1,MeaslesReubella1,YellowFever,MeaslesReubella2,MeaslesAt6Months,ROTA2,DateOfNextVisit,BCGScarChecked,DateChecked,DateBCGrepeated,VitaminAAt6Months,VitaminAAt1Yr,VitaminAAt18Months,VitaminAAt2Years,VitaminAAt2To5Years,FullyImmunizedChild) 
-						VALUES(Id,RefId,PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityId,FacilityName,PatientMnchID,BCG,OPVatBirth,OPV1,OPV2,OPV3,IPV,DPTHepBHIB1,DPTHepBHIB2,DPTHepBHIB3,PCV101,PCV102,PCV103,ROTA1,MeaslesReubella1,YellowFever,MeaslesReubella2,MeaslesAt6Months,ROTA2,DateOfNextVisit,BCGScarChecked,DateChecked,DateBCGrepeated,VitaminAAt6Months,VitaminAAt1Yr,VitaminAAt18Months,VitaminAAt2Years,VitaminAAt2To5Years,FullyImmunizedChild)
+						INSERT(Id,RefId,PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityId,FacilityName,PatientMnchID,BCG,OPVatBirth,OPV1,OPV2,OPV3,IPV,DPTHepBHIB1,DPTHepBHIB2,DPTHepBHIB3,PCV101,PCV102,PCV103,ROTA1,MeaslesReubella1,YellowFever,MeaslesReubella2,MeaslesAt6Months,ROTA2,DateOfNextVisit,BCGScarChecked,DateChecked,DateBCGrepeated,VitaminAAt6Months,VitaminAAt1Yr,VitaminAAt18Months,VitaminAAt2Years,VitaminAAt2To5Years,FullyImmunizedChild,LoadDate)  
+						VALUES(Id,RefId,PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityId,FacilityName,PatientMnchID,BCG,OPVatBirth,OPV1,OPV2,OPV3,IPV,DPTHepBHIB1,DPTHepBHIB2,DPTHepBHIB3,PCV101,PCV102,PCV103,ROTA1,MeaslesReubella1,YellowFever,MeaslesReubella2,MeaslesAt6Months,ROTA2,DateOfNextVisit,BCGScarChecked,DateChecked,DateBCGrepeated,VitaminAAt6Months,VitaminAAt1Yr,VitaminAAt18Months,VitaminAAt2Years,VitaminAAt2To5Years,FullyImmunizedChild,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

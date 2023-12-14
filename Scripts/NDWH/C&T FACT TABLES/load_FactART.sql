@@ -39,6 +39,8 @@ with MFL_partner_agency_combination as (
         StartRegimen,
         lastRegimenline,
         StartRegimenline,
+        obs.WHOStage,
+        Patient.DateConfirmedHIVPositive,
         outcome.ARTOutcome
 
 from 
@@ -47,6 +49,7 @@ inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART
 left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
+left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
    )
 
    Select 
@@ -58,6 +61,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             age_group.AgeGroupKey,
             StartARTDate.DateKey As StartARTDateKey,
             LastARTDate.DateKey  as LastARTDateKey,
+            DateConfirmedPos.DateKey as DateConfirmedPosKey,
             ARTOutcome.ARTOutcomeKey,
             lastRegimen As CurrentRegimen,
             LastRegimenLine As CurrentRegimenline,
@@ -81,6 +85,7 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
             StartARTAtThisfacility,
             PreviousARTStartDate,
             PreviousARTRegimen,
+            WhoStage,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART
 from  Patient
@@ -91,9 +96,11 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = Patient.AgeLastVisit
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date = Patient.StartARTDate
 left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDate
+left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient.DateConfirmedHIVPositive
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
-left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome;
+left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
+WHERE pat.voided =0;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 
