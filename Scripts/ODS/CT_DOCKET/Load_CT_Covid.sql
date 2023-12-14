@@ -1,29 +1,5 @@
 BEGIN
 
-				;with cte AS ( Select            
-					P.PatientPID,            
-					C.PatientId,            
-					F.code,
-					C.VisitID,
-					C.Covid19AssessmentDate,
-					C.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,C.VisitID,C.Covid19AssessmentDate
-					ORDER BY C.created desc) Row_Num
-			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID AND C.Voided=0
-						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
-					WHERE P.gender != 'Unknown')      
-		
-			delete C from  [DWAPICentral].[dbo].[CovidExtract](NoLock) C
-			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON C.[PatientId]= P.ID AND C.Voided = 0       
-			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
-			inner join cte on C.PatientId = cte.PatientId  
-				and cte.Created = C.created 
-				and cte.Code =  f.Code     
-				and cte.VisitID = C.VisitID
-				and cte.Covid19AssessmentDate = C.Covid19AssessmentDate
-			where  Row_Num  > 1;
-
-
 		DECLARE	@MaxCovid19AssessmentDate_Hist			DATETIME,
 				    @Covid19AssessmentDate					DATETIME
 				
@@ -65,11 +41,12 @@ BEGIN
 						,BoosterDoseVerified
 						,[Sequence]
 						,COVID19TestResult
-						,P.ID,C.[Date_Created],C.[Date_Last_Modified]
+						,P.ID,C.[Date_Created],C.[Date_Last_Modified],
+						 C.RecordUUID,C.voided
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID AND C.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
-					WHERE P.gender != 'Unknown') AS b 
+					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
@@ -79,8 +56,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,[Sequence],COVID19TestResult,[Date_Created],[Date_Last_Modified]) 
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,[Sequence],COVID19TestResult,[Date_Created],[Date_Last_Modified])
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,[Sequence],COVID19TestResult,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,Covid19AssessmentDate,ReceivedCOVID19Vaccine,DateGivenFirstDose,FirstDoseVaccineAdministered,DateGivenSecondDose,SecondDoseVaccineAdministered,VaccinationStatus,VaccineVerification,BoosterGiven,BoosterDose,BoosterDoseDate,EverCOVID19Positive,COVID19TestDate,PatientStatus,AdmissionStatus,AdmissionUnit,MissedAppointmentDueToCOVID19,COVID19PositiveSinceLasVisit,COVID19TestDateSinceLastVisit,PatientStatusSinceLastVisit,AdmissionStatusSinceLastVisit,AdmissionStartDate,AdmissionEndDate,AdmissionUnitSinceLastVisit,SupplementalOxygenReceived,PatientVentilated,TracingFinalOutcome,CauseOfDeath,BoosterDoseVerified,[Sequence],COVID19TestResult,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -115,7 +92,9 @@ BEGIN
 						a.[Sequence]						=b.[Sequence],
 						a.COVID19TestResult					=b.COVID19TestResult,
 						a.[Date_Created]					=b.[Date_Created],
-						a.[Date_Last_Modified]				=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]				=b.[Date_Last_Modified],
+						a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided;
 											
 
 				UPDATE [ODS].[dbo].[CT_Covid_Log]
