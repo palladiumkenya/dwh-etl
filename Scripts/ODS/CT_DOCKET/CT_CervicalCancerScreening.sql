@@ -7,9 +7,9 @@ BEGIN
 						  ,[OtherPostTreatmentComplication],[ReferralReason],ccs.[Created],ccs.[Date_Created],ccs.[Date_Last_Modified]
 					  FROM [DWAPICentral].[dbo].[CervicalCancerScreeningExtract] ccs
 					  INNER JOIN [DWAPICentral].[dbo].[PatientExtract] P 
-						ON ccs.[PatientId]= P.ID AND ccs.Voided=0
+						ON ccs.[PatientId]= P.ID 
 					  INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
-					  WHERE p.gender!='Unknown' ) AS b 
+					  WHERE p.gender!='Unknown'AND F.code >0 ) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
@@ -19,8 +19,8 @@ BEGIN
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified) 
-					VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified)
+					INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified,LoadDate)  
+					VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Processed,Id,FacilityName,VisitID,VisitDate,VisitType,ScreeningMethod,TreatmentToday,ReferredOut,NextAppointmentDate,ScreeningType,ScreeningResult,PostTreatmentComplicationCause,OtherPostTreatmentComplication,ReferralReason,Created,Date_Created,Date_Last_Modified,Getdate())
 			
 				WHEN MATCHED THEN
 					UPDATE SET 

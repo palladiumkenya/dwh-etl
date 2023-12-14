@@ -18,7 +18,7 @@ BEGIN
             CAST(GETDATE() AS DATE) AS LoadDate  
 			INTO [REPORTING].[dbo].[AggregateNupi]
 			FROM [REPORTING].[dbo].[Linelist_FACTART]
-			WHERE ARTOutcomeDescription ='Active' and NUPI is not null-- and age between 0 and 120
+			WHERE ARTOutcomeDescription ='Active' and NUPI is not null
 			GROUP BY
 			SiteCode,
 			FacilityName,

@@ -65,8 +65,13 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
 						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
 						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
+=======
+						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

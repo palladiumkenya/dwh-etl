@@ -81,7 +81,8 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_ag
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = source_data.SiteCode
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, coalesce(source_data.AssessmentVisitDate, getdate()))
-left join NDWH.dbo.DimDate as assessment_date on assessment_date.Date = source_data.AssessmentVisitDate;
+left join NDWH.dbo.DimDate as assessment_date on assessment_date.Date = source_data.AssessmentVisitDate
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactPrepAssessments add primary key(FactKey);
 

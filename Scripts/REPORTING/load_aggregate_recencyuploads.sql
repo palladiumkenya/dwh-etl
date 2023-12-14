@@ -8,6 +8,7 @@ BEGIN
 			g.docket AS docket,
 			g.year AS year,
 			g.month AS month,
+            EOMONTH(CAST(CONCAT(g.year, '-', g.month, '-01') AS DATE)) AS AsofDate,
 			g.county AS county,
 			g.subcounty AS subcounty,
 			g.agency AS agency,
@@ -43,7 +44,18 @@ BEGIN
 			) g
 		WHERE
 			g.docket IS NOT NULL
-		GROUP BY g.docket, g.year, g.month, g.county, g.subcounty, g.agency, g.partner
+		GROUP BY 
+            g.docket,
+            g.year, 
+            g.month, 
+            g.county, 
+            g.subcounty, 
+            g.agency, 
+            g.partner,
+            EOMONTH(CAST(CONCAT(g.year, '-', g.month, '-01') AS DATE))
 	) 
-	select * into REPORTING.DBO.AggregateRecencyUploads  from uploads
+	select
+         * 
+    into REPORTING.DBO.AggregateRecencyUploads  
+    from uploads
 END

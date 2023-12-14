@@ -62,7 +62,8 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimDate as adverse_event_start on adverse_event_start.Date = source_data.AdverseEventStartDate
 left join NDWH.dbo.DimDate as adverse_event_end on adverse_event_end.Date = source_data.AdverseEventEndDate
 left join NDWH.dbo.DimDate as visit on visit.Date = source_data.VisitDate
-left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeLastVisit;
+left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeLastVisit
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactAdverseEvents add primary key(FactKey)
 

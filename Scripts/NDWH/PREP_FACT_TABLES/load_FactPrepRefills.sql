@@ -129,7 +129,8 @@ left join NDWH.dbo.DimDate as refill_month_1 on refill_month_1.Date = source_dat
 left join NDWH.dbo.DimDate as dispense_month_1 on dispense_month_1.Date = source_data.DispenseDateMonth1
 left join NDWH.dbo.DimDate as refill_month_3 on refill_month_3.Date = source_data.TestDateMonth3
 left join NDWH.dbo.DimDate as dispense_month_3 on dispense_month_3.Date = source_data.DispenseDateMonth3
-left join NDWH.dbo.DimDate as dispense_date on dispense_date.Date = source_data.DispenseDate;
+left join NDWH.dbo.DimDate as dispense_date on dispense_date.Date = source_data.DispenseDate
+WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactPrepRefills add primary key(FactKey);
 

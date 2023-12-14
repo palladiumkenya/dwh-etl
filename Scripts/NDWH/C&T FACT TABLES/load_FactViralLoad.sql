@@ -45,9 +45,60 @@ BEGIN
 		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
 			and art_patient.SiteCode = viral_loads.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 12
-		and art_patient.AgeLastVisit > 24
+		and art_patient.AgeLastVisit > 24 
+        
 	 ),
-	 valid_VL_indicators as (
+     /*Pregnant & Breastfeeding mothers  who  have a valid VL that is within the last 6 months from reporting period**/
+     PBFW_valid_vl AS (
+		select 
+	 		distinct viral_loads.PatientID,
+			 viral_loads.SiteCode,
+			 viral_loads.PatientPK,
+			 OrderedbyDate,
+			 Replace(TestResult ,',','') as TestResult	 
+		from ODS.dbo.Intermediate_LatestViralLoads as viral_loads
+		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = viral_loads.PatientPK
+			and art_patient.SiteCode = viral_loads.SiteCode
+          inner join ODS.dbo.intermediate_LatestObs as obs on obs.PatientPK=viral_loads.PatientPK and obs.SiteCode=viral_loads.SiteCode
+		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
+		and Pregnant='Yes'OR breastfeeding='Yes' and Gender='Female'
+         /*Check if period of gestation is within  9 months +6 for BF =15 */
+         and  DATEDIFF(DAY, DATEADD(DAY, -(CAST(FLOOR(CONVERT(FLOAT, GestationAge)) * 7 AS INT)), CAST(LMP AS DATE)), GETDATE()) <= 450
+     ),
+	 PBFW_valid_vl_indicators as (
+		select 
+			PatientPK,
+			SiteCode,
+			TestResult as ValidVLResult,
+			case 
+				when isnumeric([TestResult]) = 1 then 
+					case 
+						when cast(replace([TestResult], ',', '') as  float) < 200.00 then 1 
+						else 0 
+					end 
+				else 
+					case 
+						when [TestResult]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 1 
+						else 0 
+					end  
+			end as ValidVLSup,
+			OrderedbyDate as ValidVLDate,
+						case 
+			when ISNUMERIC(TestResult) = 1 then 
+				case 
+					when cast(replace(TestResult,',','') AS float) >= 1000.00 then '>1000' 
+					when cast(replace(TestResult,',','') as float) between 200.00 and 999.00  then '200-999'
+					when cast(replace(TestResult,',','') as float) between 50.00 and 199.00 then '51-199'
+					when cast(replace(TestResult,',','') as float) < 50 then '<50'
+				end 
+			else 
+				case 
+					when TestResult  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') then 'Undetectable'
+				end
+			end as ValidVLResultCategory
+		from PBFW_valid_vl
+	 ),
+     valid_VL_indicators as (
 		select 
 			PatientPK,
 			SiteCode,
@@ -70,7 +121,7 @@ BEGIN
 					case 
 						when cast(replace(TestResult,',','') AS float) >= 1000.00 then '>1000' 
 						when cast(replace(TestResult,',','') as float) between 200.00 and 999.00  then '200-999'
-						when cast(replace(TestResult,',','') as float) between 51.00 and 199.00 then '51-199'
+						when cast(replace(TestResult,',','') as float) between 50.00 and 199.00 then '51-199'
 						when cast(replace(TestResult,',','') as float) < 50 then '<50'
 					end 
 				else 
@@ -83,7 +134,7 @@ BEGIN
 					case 
 						when cast(replace(TestResult,',','') AS float) >= 1000.00 then 'UNSUPPRESSED' 
 						when cast(replace(TestResult,',','') as float) between 200.00 and 999.00  then 'High Risk LLV '
-						when cast(replace(TestResult,',','') as float) between 51.00 and 199.00 then 'Low Risk LLV'
+						when cast(replace(TestResult,',','') as float) between 50.00 and 199.00 then 'Low Risk LLV'
 						when cast(replace(TestResult,',','') as float) < 50 then 'LDL'
 					end
 			else
@@ -185,6 +236,46 @@ BEGIN
 		from ODS.dbo.Intermediate_OrderedViralLoads
 		where rank = 3
 	),
+
+SecondLatestVL As (SELECT 
+    PatientPk,
+    SiteCode,
+    TestResult,
+    orderedbydate as SecondLatestVLDate
+FROM ODS.dbo.Intermediate_OrderedViralLoads 
+WHERE rank = 2
+AND (
+   TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) >= 200.00
+)
+),
+RepeatVL As (Select 
+    vls.PatientPk,
+    vls.SiteCode,
+    vls.TestResult,
+    SecondLatestVLDate
+ from SecondLatestVL
+ inner join ODS.dbo.Intermediate_OrderedViralLoads vls  on SecondLatestVL.patientpk=vls.PatientPK and SecondLatestVL.Sitecode=Vls.SiteCode
+ where rank=1  AND DATEDIFF(MONTH, orderedbydate, SecondLatestVLDate) <= 6 
+),
+
+	 RepeatVlSupp as (Select 
+    Patientpk,
+    Sitecode
+    from  RepeatVL 
+ WHERE 
+
+   (TRY_CAST(REPLACE(TestResult, ',', '') AS FLOAT) < 200.00)
+   OR
+   (TestResult IN ('Undetectable', 'NOT DETECTED', '0 copies/ml', 'LDL', 'Less than Low Detectable Level'))
+),
+
+RepeatVlUnSupp as (Select 
+    Patientpk,
+    Sitecode
+    from  RepeatVL 
+    where  try_Cast(Replace(TestResult,',','') AS FLOAT) >= 200.00 
+ ),
+
 	combined_viral_load_dataset as (
 		select
 			patient.PatientPK,
@@ -193,10 +284,14 @@ BEGIN
 			eligible_for_VL.EligibleVL,
 			valid_VL_indicators.ValidVLResult,
 			case when valid_VL_indicators.ValidVLResult is not null then 1 else 0 end as HasValidVL,
-			valid_VL_indicators.ValidVLResultCategory1,
+            case when PBFW_valid_vl_indicators.PatientPK is not null then 1 else 0 end as PBFW_ValidVL,
+			PBFW_valid_vl_indicators.ValidVLResultCategory as PBFW_ValidVLResultCategory,
+			case when PBFW_valid_vl_indicators.ValidVLSup is not null then PBFW_valid_vl_indicators.ValidVLSup else 0 end as PBFW_ValidVLSup,
+			PBFW_valid_vl_indicators.ValidVLDate as PBFW_ValidVLDate,
+            valid_VL_indicators.ValidVLResultCategory1,
 			valid_VL_indicators.ValidVLResultCategory2,
 			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
-			valid_VL_indicators.ValidVLDate,
+			valid_VL_indicators.ValidVLDate,     
 			patient_viral_load_intervals.[_6MonthVLDate],
 			patient_viral_load_intervals.[_6MonthVL],
 			patient_viral_load_intervals.[_12MonthVLDate],
@@ -227,6 +322,9 @@ BEGIN
 			Case WHEN ISNUMERIC(valid_VL_indicators.ValidVLResult) = 1 
 				then CASE WHEN cast(Replace(valid_VL_indicators.ValidVLResult,',','')AS FLOAT) < 200.00 then 1 ELSE 0 END
 			END as LowViremia,
+             case when Vls.PatientPk is not null then 1 Else 0 End as RepeatVls,
+                case when RepeatVlSupp.PatientPk is not null then 1 Else 0 End as RepeatSuppressed,
+               case when RepeatVlUnSupp.PatientPk is not null then 1 Else 0 End as RepeatUnSuppressed,
 			datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
 			 cast(getdate() as date) as LoadDate
 		from ODS.dbo.CT_Patient as patient
@@ -254,6 +352,12 @@ BEGIN
 			and latest_VL_3.SiteCode = patient.SiteCode	
 		left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on patient.PatientPK = last_encounter.PatientPK
 			and last_encounter.SiteCode = patient.SiteCode
+        left join PBFW_valid_vl on PBFW_valid_vl.PatientPK=patient.PatientPK and PBFW_valid_vl.SiteCode=patient.SiteCode
+		Left join RepeatVL Vls on Patient.patientpk=Vls.patientpk and Patient.Sitecode=Vls.Sitecode 
+		Left join RepeatVlSupp on Patient.patientpk=RepeatVlSupp.patientpk and Patient.Sitecode=RepeatVlSupp.Sitecode
+        Left join RepeatVlUnSupp on Patient.patientpk=RepeatVlUnSupp.patientpk and Patient.Sitecode=RepeatVlUnSupp.Sitecode
+		left join PBFW_valid_vl_indicators on patient.PatientPK = PBFW_valid_vl_indicators.PatientPk 
+			and patient.SiteCode = PBFW_valid_vl_indicators.SiteCode
 	)
 	select
 		Factkey = IDENTITY(INT, 1, 1),
@@ -278,6 +382,10 @@ BEGIN
 		combined_viral_load_dataset.EligibleVL,
 		combined_viral_load_dataset.ValidVLResult,
 		combined_viral_load_dataset.HasValidVL,
+		combined_viral_load_dataset.PBFW_ValidVL,
+		combined_viral_load_dataset.PBFW_ValidVLResultCategory,
+		combined_viral_load_dataset.PBFW_ValidVLSup,
+		pbfw_validVL_date.DateKey as PBFW_ValidDateKey,
 		combined_viral_load_dataset.ValidVLResultCategory1,
 		combined_viral_load_dataset.ValidVLResultCategory2,		
 		combined_viral_load_dataset.ValidVLSup,
@@ -294,7 +402,10 @@ BEGIN
 		combined_viral_load_dataset.TimetoFirstVL,
 		combined_viral_load_dataset.TimeToFirstVLGrp,
 		combined_viral_load_dataset.HighViremia,
-		combined_viral_load_dataset.LowViremia
+		combined_viral_load_dataset.LowViremia,
+		combined_viral_load_dataset.RepeatVls,
+		combined_viral_load_dataset.RepeatSuppressed,
+        combined_viral_load_dataset.RepeatUnSuppressed
 	into [NDWH].[dbo].[FactViralLoads]
 	from combined_viral_load_dataset
 	left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = combined_viral_load_dataset.PatientPKHash
@@ -313,7 +424,10 @@ BEGIN
 	left join NDWH.dbo.DimDate as last_VL_date on last_VL_date.Date = combined_viral_load_dataset.LastVLDate
 	left join NDWH.dbo.DimDate as lastest_VL_date1 on lastest_VL_date1.Date = combined_viral_load_dataset.LatestVLDate1
 	left join NDWH.dbo.DimDate as lastest_VL_date2 on lastest_VL_date2.Date = combined_viral_load_dataset.LatestVLDate2
-	left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3;
+	left join NDWH.dbo.DimDate as lastest_VL_date3 on lastest_VL_date3.Date = combined_viral_load_dataset.LatestVLDate3
+	left join NDWH.dbo.DimDate as pbfw_validVL_date on pbfw_validVL_date.Date = combined_viral_load_dataset.PBFW_ValidVLDate
+	WHERE patient.voided =0;
+
 
 	alter table [NDWH].[dbo].[FactViralLoads] add primary key(FactKey);
 END

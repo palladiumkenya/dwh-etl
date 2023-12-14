@@ -150,3 +150,11 @@ UPDATE [ODS].[DBO].[CT_Patient]SET Gender =  CASE
             WHEN Gender = 'F' THEN 'Female'
         END
 WHERE Gender in ('F','M')
+
+----Added by Mugo,Bett,Nobert to cation null voided column. NUll voided are active patients
+
+UPDATE a
+    SET Voided = 0             
+    from [ODS].[DBO].[CT_Patient] a
+WHERE Voided is null;
+

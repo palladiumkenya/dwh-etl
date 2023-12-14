@@ -68,8 +68,13 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
 						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
 						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
+=======
+						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

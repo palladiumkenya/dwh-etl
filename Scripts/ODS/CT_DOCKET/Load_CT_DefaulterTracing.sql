@@ -41,8 +41,13 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
 						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
 						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+=======
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	

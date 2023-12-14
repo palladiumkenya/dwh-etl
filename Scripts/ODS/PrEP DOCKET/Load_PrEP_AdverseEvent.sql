@@ -48,12 +48,12 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 		  INSERT( Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,
 		  FacilityId,FacilityName,PrepNumber,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,
 		  AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,AdverseEventCause,
-		  AdverseEventRegimen,Date_Created,Date_Last_Modified) 
+		  AdverseEventRegimen,Date_Created,Date_Last_Modified,LoadDate) 
 
 		  VALUES(Id,RefId,Created,PatientPk,SiteCode,Emr,Project,Processed,QueueId,Status,StatusDate,DateExtracted,FacilityId,
 		  FacilityName,PrepNumber,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,
 		  AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,AdverseEventCause,AdverseEventRegimen,
-		  Date_Created,Date_Last_Modified) 
+		  Date_Created,Date_Last_Modified,Getdate())
 
 	WHEN MATCHED THEN UPDATE SET 															 								
 		a.AdverseEvent					=b.AdverseEvent,
