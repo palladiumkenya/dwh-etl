@@ -48,6 +48,7 @@ BEGIN
 						OE.[OVCEnrollmentDate],OE.[RelationshipToClient],OE.[EnrolledinCPIMS],OE.[CPIMSUniqueIdentifier],
 						OE.[PartnerOfferingOVCServices],OE.[OVCExitReason],OE.[ExitDate]
 						,P.ID ,OE.[Date_Created],OE.[Date_Last_Modified]
+						,OE.RecordUUID,OE.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -61,20 +62,30 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],LoadDate)  
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],Getdate())
+
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OVCEnrollmentDate,RelationshipToClient,EnrolledinCPIMS,CPIMSUniqueIdentifier,PartnerOfferingOVCServices,OVCExitReason,ExitDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-						a.PatientID					=b.PatientID,
-						a.FacilityName				=b.FacilityName,						
-						a.RelationshipToClient		=b.RelationshipToClient,
-						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
-						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
-						a.PartnerOfferingOVCServices=b.PartnerOfferingOVCServices,
-						a.OVCExitReason				=b.OVCExitReason,
-						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[PatientID]					=	b.[PatientID],
+						a.[FacilityName]				=	b.[FacilityName],
+						a.[VisitID]						=	b.[VisitID],
+						a.[VisitDate]					=	b.[VisitDate],
+						a.[Emr]							=	b.[Emr],
+						a.[Project]						=	b.[Project],
+						a.[OVCEnrollmentDate]			=	b.[OVCEnrollmentDate],
+						a.[RelationshipToClient]		=	b.[RelationshipToClient],
+						a.[EnrolledinCPIMS]				=	b.[EnrolledinCPIMS],
+						a.[CPIMSUniqueIdentifier]		=	b.[CPIMSUniqueIdentifier],
+						a.[PartnerOfferingOVCServices]	=	b.[PartnerOfferingOVCServices],
+						a.[OVCExitReason]				=	b.[OVCExitReason],
+						a.[ExitDate]					=	b.[ExitDate],
+						a.[Date_Last_Modified]			=	b.[Date_Last_Modified],
+						a.[Date_Created]				=	b.[Date_Created],
+						a.[RecordUUID]					=	b.[RecordUUID],
+						a.[voided]						=	b.[voided];
 					
 
 				UPDATE [ODS].[dbo].[CT_Ovc_Log]
