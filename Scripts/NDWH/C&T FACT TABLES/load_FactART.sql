@@ -1,3 +1,18 @@
+----Insert into FactArtHistorical
+--BEGIN
+--	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],[IsTXCurr],
+--												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
+--	SELECT [FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],NULL [AsOfDateKey],
+--		CASE 
+--			WHEN ARTOutcomeKey = 6 THEN 1
+--			ELSE 0
+--		END
+--		[IsTXCurr],
+--		[ARTOutcomeKey],[NextAppointmentDate],LastVisitDate,[LoadDate],
+--		Getdate() As DateTimeStamp
+--	FROM [NDWH].[dbo].[FactART]
+--E
+---------End
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -103,21 +118,6 @@ WHERE pat.voided =0;
 
 alter table NDWH.dbo.FactART add primary key(FactKey);
 
-----Insert into FactArtHistorical
-BEGIN
-	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],[IsTXCurr],
-												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
-	SELECT [FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],NULL [AsOfDateKey],
-		CASE 
-			WHEN ARTOutcomeKey = 6 THEN 1
-			ELSE 0
-		END
-		[IsTXCurr],
-		[ARTOutcomeKey],[NextAppointmentDate],LastVisitDate,[LoadDate],
-		Getdate() As DateTimeStamp
-	FROM [NDWH].[dbo].[FactART]
-END
----------End
 
 END
 
