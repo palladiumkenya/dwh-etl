@@ -51,7 +51,12 @@ BEGIN
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
 						IE.[IndicationForIPT] AS IndicationForIPT
 					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified]
+<<<<<<< HEAD
+					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation,
+					   IE.RecordUUID,IE.voided
+=======
 					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
@@ -64,8 +69,13 @@ BEGIN
 						and a.ID =b.ID)
 					
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,Getdate())
+=======
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,LoadDate)  
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -93,7 +103,13 @@ BEGIN
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 						a.[TPTInitiationDate]	= b.[TPTInitiationDate],
 						a.IPTDiscontinuation    = b.IPTDiscontinuation,
+<<<<<<< HEAD
+						a.DateOfDiscontinuation   = b.DateOfDiscontinuation,
+						a.RecordUUID			 = b.RecordUUID,
+						a.voided				= b.voided;
+=======
 						a.DateOfDiscontinuation   = b.DateOfDiscontinuation;
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 						
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
