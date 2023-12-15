@@ -109,7 +109,7 @@ BEGIN
 												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
 	SELECT [FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],NULL [AsOfDateKey],
 		CASE 
-			WHEN ARTOutcomeKey = 'ACTIVE' THEN 1
+			WHEN ARTOutcomeKey = 6 THEN 1
 			ELSE 0
 		END
 		[IsTXCurr],
