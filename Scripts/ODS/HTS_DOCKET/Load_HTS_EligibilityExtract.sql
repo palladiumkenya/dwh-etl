@@ -16,7 +16,7 @@ BEGIN
 							,HTSStrategy
 							,HTSEntryPoint
 							,HIVRiskCategory
-							,ReasonRefferredForTesting  
+							,ReasonRefferredForTesting
 							,ReasonNotReffered
 							,[HtsRiskScore]
 							
