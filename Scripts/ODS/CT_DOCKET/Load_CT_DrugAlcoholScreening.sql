@@ -36,13 +36,8 @@ BEGIN
 						)
 					
 					WHEN NOT MATCHED THEN 
-<<<<<<< HEAD
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
-=======
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],LoadDate)  
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],Getdate())
->>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
