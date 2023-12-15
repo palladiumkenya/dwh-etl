@@ -86,6 +86,7 @@ Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
 End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
+    end_month.Date as AsofDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
 from  NDWH.dbo.FACTART As ART 
@@ -101,6 +102,7 @@ left join NDWH.dbo.FactLatestObs as obs on obs.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimDifferentiatedCare as dif on dif.DifferentiatedCareKey = obs.DifferentiatedCareKey
 left join NDWH.dbo.DimDate as lastVL on lastVL.DateKey =  vl.LastVLDateKey
 left join ncd_indicators as ncd on ncd.PatientKey = ART.PatientKey
-left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey;
+left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
+left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END

@@ -1,4 +1,18 @@
-
+----Insert into FactArtHistorical
+--BEGIN
+--	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],[IsTXCurr],
+--												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
+--	SELECT [FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],NULL [AsOfDateKey],
+--		CASE 
+--			WHEN ARTOutcomeKey = 6 THEN 1
+--			ELSE 0
+--		END
+--		[IsTXCurr],
+--		[ARTOutcomeKey],[NextAppointmentDate],LastVisitDate,[LoadDate],
+--		Getdate() As DateTimeStamp
+--	FROM [NDWH].[dbo].[FactART]
+--E
+---------End
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -97,6 +111,7 @@ ncd_screening as (
             WhoStage,
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
+            end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART
 from  Patient
@@ -111,16 +126,16 @@ left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
+<<<<<<< HEAD
 left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
   and ncd_screening.SiteCode = patient.SiteCode
 WHERE pat.voided = 0;
+=======
+left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
+WHERE pat.voided =0;
+>>>>>>> db8543a524c410fa2bc23ed4017168e5fc99b52e
 
-alter table NDWH.dbo.FactART add primary key(FactKey)
+alter table NDWH.dbo.FactART add primary key(FactKey);
+
 
 END
-
-
-
-
-
-

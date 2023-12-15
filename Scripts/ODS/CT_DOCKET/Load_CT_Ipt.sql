@@ -103,13 +103,9 @@ BEGIN
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 						a.[TPTInitiationDate]	= b.[TPTInitiationDate],
 						a.IPTDiscontinuation    = b.IPTDiscontinuation,
-<<<<<<< HEAD
 						a.DateOfDiscontinuation   = b.DateOfDiscontinuation,
 						a.RecordUUID			 = b.RecordUUID,
 						a.voided				= b.voided;
-=======
-						a.DateOfDiscontinuation   = b.DateOfDiscontinuation;
->>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 						
 
 					UPDATE [ODS].[dbo].[CT_Ipt_Log]
