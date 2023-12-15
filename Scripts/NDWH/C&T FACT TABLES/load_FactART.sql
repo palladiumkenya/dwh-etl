@@ -86,6 +86,7 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
             PreviousARTStartDate,
             PreviousARTRegimen,
             WhoStage,
+            end_month.DateKey as EndOfMonthDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART
 from  Patient
@@ -100,14 +101,9 @@ left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
+left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 
 END
-
-
-
-
-
-
