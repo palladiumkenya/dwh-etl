@@ -6,12 +6,16 @@ with ncd_indicators as (
     select 
         PatientKey,
         Hypertension as HasHypertension,
-        ScreenedBPLastVisit,
-        IsBPControlledAtLastVisit,
+        IsHyperTensiveAndScreenedBPLastVisit,
+        IsHyperTensiveAndBPControlledAtLastVisit,
         Diabetes as HasDiabetes,
-        ScreenedDiabetes,
-        IsDiabetesControlledAtLastTest
-    from NDWH.dbo.FactNCD
+        IsDiabeticAndScreenedDiabetes,
+        IsDiabeticAndDiabetesControlledAtLastTest,
+        hypertension.Date as FirstHypertensionRecoredeDate,
+        diabetes.Date as FirstDiabetesRecordedDate
+    from NDWH.dbo.FactNCD as ncd
+    left join NDWH.dbo.DimDate as hypertension on hypertension.DateKey = ncd.FirstHypertensionRecoredeDateKey
+    left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey    
 )
 Select distinct 
     pat.PatientIDHash,
@@ -62,12 +66,16 @@ Select distinct
     vl.LowViremia,
     pat.ISTxCurr,
 	dif.DifferentiatedCare,
+    art.ScreenedBPLastVisit,
+    art.ScreenedDiabetes,
     coalesce(ncd.HasHypertension, 0) as HasHypertension, 
-    coalesce(ncd.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
-    coalesce(ncd.IsBPControlledAtLastVisit, 0) as IsBPControlledAtLastVisit,
+    coalesce(ncd.IsHyperTensiveAndScreenedBPLastVisit, 0) as IsHyperTensiveAndScreenedBPLastVisit,
+    coalesce(ncd.IsHyperTensiveAndBPControlledAtLastVisit, 0) as IsHyperTensiveAndBPControlledAtLastVisit,
     coalesce(ncd.HasDiabetes, 0) as HasDiabetes,
-    coalesce(ncd.ScreenedDiabetes, 0) as ScreenedDiabetes,
-    coalesce(ncd.IsDiabetesControlledAtLastTest, 0) as IsDiabetesControlledAtLastTest,
+    coalesce(ncd.IsDiabeticAndScreenedDiabetes, 0) as IsDiabeticAndScreenedDiabetes,
+    coalesce(ncd.IsDiabeticAndDiabetesControlledAtLastTest, 0) as IsDiabeticAndDiabetesControlledAtLastTest,
+    ncd.FirstHypertensionRecoredeDate,
+    ncd.FirstDiabetesRecordedDate,
     CD4.LastCD4,
     CD4.LastCD4Percentage,
     ART.WhoStage,
