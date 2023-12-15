@@ -27,7 +27,8 @@ BEGIN
 						CL.[KnowledgeOfHivStatus] AS KnowledgeOfHivStatus,CL.[PnsApproach] AS PnsApproach,					
 					  ContactPatientPK,
 					  CL.Created as DateCreated
-					  ,CL.ID,CL.[Date_Created],CL.[Date_Last_Modified]
+					  ,CL.ID,CL.[Date_Created],CL.[Date_Last_Modified],
+					  CL.RecordUUID,CL.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -47,14 +48,20 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
+<<<<<<< HEAD
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+=======
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],LoadDate)  
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,Emr,Project,PartnerPersonID,ContactAge,ContactSex,ContactMaritalStatus,RelationshipWithPatient,ScreenedForIpv,IpvScreening,IPVScreeningOutcome,CurrentlyLivingWithIndexClient,KnowledgeOfHivStatus,PnsApproach,ContactPatientPK,DateCreated,[Date_Created],[Date_Last_Modified],Getdate())
+>>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	
 						a.PatientID						=b.PatientID,
 						a.ContactAge					=b.ContactAge,
 						a.ContactSex					=b.ContactSex,
+						a.ContactPatientPK				=b.ContactPatientPK,
 						a.ContactMaritalStatus			=b.ContactMaritalStatus,
 						a.RelationshipWithPatient		=b.RelationshipWithPatient,
 						a.ScreenedForIpv				=b.ScreenedForIpv,
@@ -64,7 +71,9 @@ BEGIN
 						a.KnowledgeOfHivStatus			=b.KnowledgeOfHivStatus,
 						a.PnsApproach					=b.PnsApproach,
 						a.[Date_Created]				=b.[Date_Created],
-						a.[Date_Last_Modified]			=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]			=b.[Date_Last_Modified],
+						a.RecordUUID					=b.RecordUUID,
+						a.voided						=b.voided;
 
 						
 						
