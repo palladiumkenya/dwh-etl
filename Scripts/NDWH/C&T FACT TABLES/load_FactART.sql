@@ -126,14 +126,10 @@ left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
-<<<<<<< HEAD
 left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
   and ncd_screening.SiteCode = patient.SiteCode
-WHERE pat.voided = 0;
-=======
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
->>>>>>> db8543a524c410fa2bc23ed4017168e5fc99b52e
 
 alter table NDWH.dbo.FactART add primary key(FactKey);
 
