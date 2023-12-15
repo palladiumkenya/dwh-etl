@@ -46,7 +46,7 @@ WITH NDW_CurTx AS (
                     ,statusDate
                     ,indicatorDate
                 FROM ODS.dbo.livesync_Indicator
-                where stage like '%EMR' and name like '%TX_CURR' and indicatorDate= EOMONTH(DATEADD(mm,-2,GETDATE()))
+                where stage like '%EMR' and name like '%TX_CURR' and indicatorDate= EOMONTH(DATEADD(mm,-1,GETDATE()))
             ),
             DHIS2_CurTx AS (
                 SELECT
@@ -56,7 +56,7 @@ WITH NDW_CurTx AS (
                     [CurrentOnART_Total],
                     ReportMonth_Year
                 FROM [ODS].[dbo].[CT_DHIS2]
-                WHERE ReportMonth_Year =CONVERT(VARCHAR(6), DATEADD(MONTH, -2, GETDATE()), 112) and ISNUMERIC(SiteCode) >0
+                WHERE ReportMonth_Year =CONVERT(VARCHAR(6), DATEADD(MONTH, -1, GETDATE()), 112) and ISNUMERIC(SiteCode) >0
             ),
             LatestEMR AS (
                 Select
