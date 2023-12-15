@@ -15,7 +15,7 @@ WITH HTSPos AS (
                 LEFT JOIN NDWH.dbo.DimPartner AS part ON link.PartnerKey = part.PartnerKey
                 LEFT JOIN NDWH.dbo.DimFacility AS fac ON link.FacilityKey = fac.FacilityKey
                 LEFT JOIN NDWH.dbo.DimAgency AS agency ON link.AgencyKey = agency.AgencyKey
-                where link.DateTestedKey  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-2, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -2, GETDATE())-1, -1) and FinalTestResult='Positive' and MFLCode is not null and TestType in ('Initial Test', 'Initial')
+                where link.DateTestedKey  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) and FinalTestResult='Positive' and MFLCode is not null and TestType in ('Initial Test', 'Initial')
                 GROUP BY MFLCode, FacilityName, PartnerName, County
             ),
 
@@ -35,7 +35,7 @@ emr.County,
 count (*) as HTSPos_total
 from ODS.dbo.Intermediate_EncounterHTSTests as hts_encounter
 left join ODS.dbo.ALL_EMRSites as emr on emr.MFL_Code = hts_encounter.SiteCode
-WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-2, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -2, GETDATE())-1, -1) and FinalTestResult='Positive' and SiteCode is not null and TestType in ('Initial Test', 'Initial')
+WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) and FinalTestResult='Positive' and SiteCode is not null and TestType in ('Initial Test', 'Initial')
    Group by SiteCode, Facility_Name, SDP, County	
 
 ),
@@ -62,7 +62,7 @@ WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-2, 0) and
                     ,statusDate
                     ,indicatorDate
                 FROM ODS.dbo.livesync_Indicator
-                where stage like '%EMR' and name like '%HTS_TESTED_POS' and indicatorDate=EOMONTH(DATEADD(mm,-2,GETDATE())) and facilityCode is not null
+                where stage like '%EMR' and name like '%HTS_TESTED_POS' and indicatorDate=EOMONTH(DATEADD(mm,-1,GETDATE())) and facilityCode is not null
             ),
             Facilityinfo AS (
                 Select
@@ -80,7 +80,7 @@ WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-2, 0) and
                     Positive_Total,
                     ReportMonth_Year
                 FROM [NDWH].[dbo].FACT_HTS_DHIS2
-               WHERE ReportMonth_Year =CONVERT(VARCHAR(6), DATEADD(MONTH, -2, GETDATE()), 112) and ISNUMERIC(SiteCode) >0
+               WHERE ReportMonth_Year =CONVERT(VARCHAR(6), DATEADD(MONTH, -1, GETDATE()), 112) and ISNUMERIC(SiteCode) >0
             ),
             LatestEMR AS (
                 Select
