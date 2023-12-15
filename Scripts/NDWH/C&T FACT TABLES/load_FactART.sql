@@ -86,7 +86,7 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
             PreviousARTStartDate,
             PreviousARTRegimen,
             WhoStage,
-            end_month.DateKey as EndOfMonthDateKey,
+            end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART
 from  Patient
