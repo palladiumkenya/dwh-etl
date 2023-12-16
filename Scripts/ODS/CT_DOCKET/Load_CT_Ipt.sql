@@ -51,12 +51,8 @@ BEGIN
 						IE.[TBScreening] AS TBScreening,IE.[IPTClientWorkUp] AS IPTClientWorkUp,IE.[StartIPT] AS StartIPT,
 						IE.[IndicationForIPT] AS IndicationForIPT
 					   ,P.ID,IE.[Date_Created],IE.[Date_Last_Modified]
-<<<<<<< HEAD
 					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation,
 					   IE.RecordUUID,IE.voided
-=======
-					   ,IE.[TPTInitiationDate],IE.IPTDiscontinuation,IE.DateOfDiscontinuation
->>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
