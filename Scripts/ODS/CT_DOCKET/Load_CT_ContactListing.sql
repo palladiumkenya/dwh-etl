@@ -44,6 +44,7 @@ BEGIN
 						and a.PatientPK  = b.PatientPK 
 						and a.Contactage = b.Contactage 
 						and a.RelationshipWithPatient =b.RelationshipWithPatient 
+						and a.voided   = b.voided
 						and a.ID = b.ID
 						)
 

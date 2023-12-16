@@ -37,6 +37,7 @@ BEGIN
 						and a.voided = b.voided
 						and  a.TestResult =  b.TestResult					
 						and  a.TestName =  b.TestName 
+						and a.voided   = b.voided
 						and a.ID		=b.ID
 						)
 

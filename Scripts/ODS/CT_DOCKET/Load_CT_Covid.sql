@@ -52,6 +52,7 @@ BEGIN
 						and  a.PatientPK  = b.PatientPK 
 						and a.visitID = b.visitID
 						AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
+						and a.voided   = b.voided
 						and a.ID = b.ID
 						)
 

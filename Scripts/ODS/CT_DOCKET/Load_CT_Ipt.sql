@@ -66,16 +66,12 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
+						and a.voided   = b.voided
 						and a.ID =b.ID)
 					
 					WHEN NOT MATCHED THEN 
-<<<<<<< HEAD
 						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,LoadDate)  
 						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,Getdate())
-=======
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,LoadDate)  
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,Getdate())
->>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 				
 					WHEN MATCHED THEN
 						UPDATE SET 

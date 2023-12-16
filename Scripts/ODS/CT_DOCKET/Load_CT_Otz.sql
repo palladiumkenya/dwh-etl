@@ -58,6 +58,7 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
+						and a.voided   = b.voided
 						and a.ID =b.ID
 						)
 					
