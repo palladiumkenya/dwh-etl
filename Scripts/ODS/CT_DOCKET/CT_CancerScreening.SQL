@@ -85,6 +85,7 @@ MERGE [ODS].[dbo].[CT_CancerScreening] AS a USING(
 ) AS b ON( a.SiteCode = b.SiteCode
 	AND a.PatientPK = b.PatientPK
 	AND a.visitID = b.visitID
+	and a.voided   = b.voided
 	AND a.visitDate = b.visitDate
 
 	AND a.ID = b.ID 

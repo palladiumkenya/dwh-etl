@@ -31,6 +31,7 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID			=b.VisitID
 						and a.VisitDate			=b.VisitDate
+						and a.voided   = b.voided
 						AND  a.ID = b.ID)
 
 					WHEN NOT MATCHED THEN 

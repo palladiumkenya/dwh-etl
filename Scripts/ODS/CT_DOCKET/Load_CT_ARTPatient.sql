@@ -32,6 +32,7 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.lastvisit = b.lastvisit
+						and a.voided   = b.voided
 						and a.ID = b.ID
 						
 						)

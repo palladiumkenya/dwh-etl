@@ -64,6 +64,7 @@ BEGIN
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
 						and a.VisitDate	=b.VisitDate
+						and a.voided   = b.voided
 						and a.ID = b.ID
 						)
 

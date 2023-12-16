@@ -86,6 +86,7 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.exitdate = b.exitdate
 						and a.ExitReason = b.ExitReason
+						and a.voided   = b.voided
 
 						)
 					WHEN NOT MATCHED THEN 
