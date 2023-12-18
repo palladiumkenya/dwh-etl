@@ -33,7 +33,7 @@ with source_viral_loads as (
 		and art.SiteCode = labs.SiteCode
 	where TestName = 'Viral Load'
 			and TestName <>'CholesterolLDL (mmol/L)' and TestName <> 'Hepatitis C viral load' 
-			and TestResult is not null
+			and TestResult is not null AND labs.VOIDED =0 AND art.VOIDED = 0
 ), 
 _6monthVL_data as (
 	select

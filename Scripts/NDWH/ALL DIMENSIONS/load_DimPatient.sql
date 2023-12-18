@@ -39,7 +39,7 @@ BEGIN
                     LEFT JOIN ods.dbo.intermediate_artoutcomes AS outcomes
                            ON outcomes.patientpkhash = patients.patientpkhash
                               AND outcomes.sitecode = patients.sitecode
-            where patients.voided = 0
+
             ),
          hts_patient_source
          AS (SELECT DISTINCT htsnumberhash,
@@ -52,7 +52,7 @@ BEGIN
                              nupihash,
 							 clients.voided
              FROM   ods.dbo.hts_clients AS clients
-            where voided =0
+   
             ),
          prep_patient_source
          AS (SELECT DISTINCT patientpkhash,

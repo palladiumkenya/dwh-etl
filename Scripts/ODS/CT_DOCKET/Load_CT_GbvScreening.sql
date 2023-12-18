@@ -21,20 +21,22 @@ BEGIN
 							END AS Project,
 							GSE.[IPV] AS IPV,GSE.[PhysicalIPV],GSE.[EmotionalIPV],GSE.[SexualIPV],GSE.[IPVRelationship]						
 							,GSE.ID,GSE.[Date_Created],GSE.[Date_Last_Modified]
+							,GSE.RecordUUID,GSE.voided
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID AND GSE.Voided = 0
+						INNER JOIN [DWAPICentral].[dbo].[GbvScreeningExtract](NoLock) GSE ON GSE.[PatientId] = P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
-						WHERE P.gender != 'Unknown') AS b 
+						WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.VisitID			=b.VisitID
 						and a.VisitDate			=b.VisitDate
+						and a.voided   = b.voided
 						AND  a.ID = b.ID)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],LoadDate) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],Getdate())
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,IPV,PhysicalIPV,EmotionalIPV,SexualIPV,IPVRelationship,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -45,7 +47,10 @@ BEGIN
 						a.SexualIPV			=b.SexualIPV,
 						a.IPVRelationship	=b.IPVRelationship,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						 a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided
+						;
 					
 					
 					UPDATE [ODS].[dbo].[CT_GbvScreening_Log]

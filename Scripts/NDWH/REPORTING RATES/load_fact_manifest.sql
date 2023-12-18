@@ -1,7 +1,7 @@
 SQL
 IF OBJECT_ID(N'NDWH.DBO.Fact_manifest ', N'U') IS NOT NULL 
     DROP TABLE NDWH.DBO.Fact_manifest ;
-BEGIN
+
     with MFL_partner_agency_combination as (
     select 
         distinct MFL_Code,
@@ -26,7 +26,9 @@ BEGIN
                         GROUP BY ID,[start],[end],YEAR(m.DateRecieved), 
                     MONTH(m.DateRecieved), SiteCode 
 
+
         UNION ALL 
+
 
         SELECT  Id  AS manifestId, 
                 CAST(MAX(m.DateArrived) AS DATE) AS timeId,
@@ -45,6 +47,7 @@ BEGIN
 
             UNION ALL 
 
+
         SELECT Id AS manifestId, 
                 CAST(MAX(m.DateArrived) AS DATE) AS timeId, 
                 MAX(m.SiteCode) AS facilityId,
@@ -59,23 +62,26 @@ BEGIN
         YEAR(DateArrived), 
                     MONTH(DateArrived), SiteCode
     )
-    SELECT 
-            FactKey= IDENTITY(INT,1,1),
-             manifestId,
-             timeId,
-             facilityId,
-             emrId,
-             docketId,
-             upload,
-             partner.PartnerKey,
+
+
+	
+	SELECT 
+			FactKey= IDENTITY(INT,1,1),
+	         manifestId,
+			 timeId,
+			 facilityId,
+			 emrId,
+			 docketId,
+			 upload,
+			 partner.PartnerKey,
              agency.AgencyKey,
              started.DateKey as StartDateKey,
              ended.DateKey as EndDateKey,
-             cast (GETDATE() as date) as Loaddate
-    INTO NDWH.DBO.Fact_manifest
-    FROM Fact_manifest as  manifest
-    left join NDWH.dbo.DimFacility as facility on facility.MFLCode=manifest.facilityId
-    left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=manifest.facilityId
+			 LoadDate
+	INTO NDWH.DBO.Fact_manifest as manifest
+	FROM Fact_manifest
+	left join NDWH.dbo.DimFacility as facility on facility.MFLCode=manifest.facilityId
+    left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=manifest.SiteCode
     left join NDWH.dbo.DimPartner as partner on partner.PartnerName=MFL_partner_agency_combination.SDP collate Latin1_General_CI_AS
     left join NDWH.dbo.DimAgency as agency on Agency.AgencyName=MFL_partner_agency_combination.Agency collate Latin1_General_CI_AS
     left join NDWH.dbo.DimDate as UploadDates on UploadDates.Date = manifest.timeId

@@ -54,36 +54,50 @@ BEGIN
 					  ,PP.StopRegimenReason StopRegimenReason
 					  ,PP.StopRegimenDate StopRegimenDate,					  
 					  PP.ID, PP.[Date_Created],PP.[Date_Last_Modified]
-
+					  ,PP.RecordUUID
 						FROM [DWAPICentral].[dbo].[PatientExtract] P 
-						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID AND PP.Voided=0
+						INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
-					WHERE p.gender!='Unknown' ) AS b 
+					WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
 						and a.visitID = b.visitID
 						and a.DispenseDate = b.DispenseDate
+						and a.voided   = b.voided
 						and a.ID =b.ID						
 
 						)
 
 				WHEN NOT MATCHED THEN 
-					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],LoadDate) 
-					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],Getdate())
+
+					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
+					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+
 			
 				WHEN MATCHED THEN
 					UPDATE SET 
-						a.PatientID					=b.PatientID,
-						a.FacilityName				=b.FacilityName,
-						a.PeriodTaken				=b.PeriodTaken,
-						a.ProphylaxisType			=b.ProphylaxisType,
-						a.RegimenLine				=b.RegimenLine,
-						a.RegimenChangedSwitched	=b.RegimenChangedSwitched,
-						a.RegimenChangeSwitchReason	=b.RegimenChangeSwitchReason,
-						a.StopRegimenReason			=b.StopRegimenReason,
-						 a.[Date_Created]			=b.[Date_Created],
-						 a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[PatientID]					= b.[PatientID],
+						a.[FacilityName]				= b.[FacilityName],
+						a.[VisitID]						= b.[VisitID],
+						a.[Drug]						= b.[Drug],
+						a.[DispenseDate]				= b.[DispenseDate],
+						a.[Duration]					= b.[Duration],
+						a.[ExpectedReturn]				= b.[ExpectedReturn],
+						a.[TreatmentType]				= b.[TreatmentType],
+						a.[PeriodTaken]					= b.[PeriodTaken],
+						a.[ProphylaxisType]				= b.[ProphylaxisType],
+						a.[Emr]							= b.[Emr],
+						a.[RegimenLine]					= b.[RegimenLine],
+						a.[RegimenChangedSwitched]		= b.[RegimenChangedSwitched],
+						a.[RegimenChangeSwitchReason]	= b.[RegimenChangeSwitchReason],
+						a.[StopRegimenReason]			= b.[StopRegimenReason],
+						a.[StopRegimenDate]				= b.[StopRegimenDate],
+						a.[Date_Last_Modified]			= b.[Date_Last_Modified],
+						a.[Date_Created]				= b.[Date_Created],
+						a.[RecordUUID]					= b.[RecordUUID],
+						a.[voided]						= b.[voided];
+
 
 				
 			
