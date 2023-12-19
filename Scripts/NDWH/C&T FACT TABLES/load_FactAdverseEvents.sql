@@ -32,6 +32,7 @@ source_data as (
         and patient.SiteCode = adverse_events.SiteCode
     left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPK = adverse_events.PatientPK
         and last_encounter.SiteCode = adverse_events.SiteCode
+    where adverse_events.voided = 0
 )
 select 
     Factkey = IDENTITY(INT, 1, 1),
@@ -63,7 +64,8 @@ left join NDWH.dbo.DimDate as adverse_event_start on adverse_event_start.Date = 
 left join NDWH.dbo.DimDate as adverse_event_end on adverse_event_end.Date = source_data.AdverseEventEndDate
 left join NDWH.dbo.DimDate as visit on visit.Date = source_data.VisitDate
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeLastVisit
-WHERE patient.voided =0;
+WHERE patient.voided =0
+    and source_data.AdverseEvent is not null;
 
 alter table NDWH.dbo.FactAdverseEvents add primary key(FactKey)
 
