@@ -10,48 +10,6 @@ with MFL_partner_agency_combination as (
 	from ODS.dbo.All_EMRSites 
 ),
 
-   Patient As ( Select    
-     
-      Patient.PatientIDHash,
-      Patient.PatientPKHash,
-      cast (Patient.SiteCode as nvarchar) As SiteCode,
-      DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
-      DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
-      ART.StartARTAtThisfacility,
-      ART.PreviousARTStartDate,
-      ART.PreviousARTRegimen,
-      ART.StartARTDate,
-      LastARTDate,
-      CASE WHEN [DateConfirmedHIVPositive] IS NOT NULL AND ART.StartARTDate IS NOT NULL
-				 THEN CASE WHEN DateConfirmedHIVPositive<= ART.StartARTDate THEN DATEDIFF(DAY,DateConfirmedHIVPositive,ART.StartARTDate)
-					ELSE NULL END
-				ELSE NULL END AS TimetoARTDiagnosis,
-      CASE WHEN Patient.RegistrationAtCCC IS NOT NULL AND ART.StartARTDate IS NOT NULL
-				THEN CASE WHEN Patient.RegistrationAtCCC<=ART.StartARTDate  THEN DATEDIFF(DAY,Patient.[RegistrationAtCCC],ART.StartARTDate)
-				ELSE NULL END
-				ELSE NULL END AS TimetoARTEnrollment,
-        Pre.PregnantARTStart,
-        Pre.PregnantAtEnrol,
-        las.LastEncounterDate As LastVisitDate,
-        las.NextAppointmentDate,
-        datediff(yy, patient.DOB, las.LastEncounterDate) as AgeLastVisit,
-        lastRegimen,
-        StartRegimen,
-        lastRegimenline,
-        StartRegimenline,
-        obs.WHOStage,
-        Patient.DateConfirmedHIVPositive,
-        outcome.ARTOutcome
-
-from 
-ODS.dbo.CT_Patient Patient
-inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
-left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
-left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
-left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
-left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
-   ),
-
    DepressionScreening as (Select 
    PatientPkHash,
    sitecode,
@@ -65,8 +23,20 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
     PHQ_9_rating
     from DepressionScreening
     where Num=1
-   )
-
+   
+),
+ncd_screening as (
+    select 
+        patient.PatientPKHash,
+        patient.SiteCode,
+        ScreenedDiabetes,
+        ScreenedBPLastVisit
+    from Patient
+    left join ODS.dbo.Intermediate_LatestDiabetesTests as latest_diabetes_test on latest_diabetes_test.PatientPKHash = Patient.PatientPKHash
+        and latest_diabetes_test.SiteCode = Patient.SiteCode
+    left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = Patient.PatientPK
+        and visit.SiteCode = Patient.SiteCode
+)
    Select 
             Factkey = IDENTITY(INT, 1, 1),
             pat.PatientKey,
@@ -104,6 +74,9 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
             PHQ_9_rating,
             case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as DepressionScreening,
             [Mental illness],
+            coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
+            coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
+            end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
@@ -120,13 +93,16 @@ left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKH
 left join LatestDepressionScreening on LatestDepressionScreening.Patientpkhash=patient.patientpkhash and LatestDepressionScreening.sitecode=patient.sitecode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
 left join NDWH.dbo.FactNCD as NCD on NCD.patientkey=pat.patientkey
+left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
+  and ncd_screening.SiteCode = patient.SiteCode
+left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
-
-
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 
 END
+
+
 
 
 

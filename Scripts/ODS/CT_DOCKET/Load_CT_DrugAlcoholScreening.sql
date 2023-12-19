@@ -21,7 +21,8 @@ BEGIN
 							END AS Project,
 							DAS.[DrinkingAlcohol] AS DrinkingAlcohol,DAS.[Smoking] AS Smoking,DAS.[DrugUse] AS DrugUse
 
-							,DAS.ID ,DAS.[Date_Created],DAS.[Date_Last_Modified]
+							,DAS.ID ,DAS.[Date_Created],DAS.[Date_Last_Modified],
+							DAS.RecordUUID,DAS.voided
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[DrugAlcoholScreeningExtract](NoLock) DAS ON DAS.[PatientId] = P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -31,12 +32,13 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate	=b.VisitDate
+						and a.voided   = b.voided
 						and a.ID =b.ID
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],LoadDate)  
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],Getdate())
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,DrinkingAlcohol,Smoking,DrugUse,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -45,7 +47,9 @@ BEGIN
 						a.Smoking			=b.Smoking,
 						a.DrugUse			=b.DrugUse,
 						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided;
 											
 					
 					UPDATE [ODS].[dbo].[CT_DrugAlcoholScreening_Log]

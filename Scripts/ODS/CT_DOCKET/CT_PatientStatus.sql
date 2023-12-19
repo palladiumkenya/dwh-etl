@@ -69,7 +69,7 @@ BEGIN
 						PS.TOVerifiedDate TOVerifiedDate,
 						PS.ReEnrollmentDate ReEnrollmentDate
 						,PS.[Date_Created],PS.[Date_Last_Modified]
-
+						,PS.[RecordUUID]
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 						INNER JOIN [DWAPICentral].[dbo].[PatientStatusExtract]PS WITH (NoLock)  ON PS.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F (NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -86,23 +86,33 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.exitdate = b.exitdate
 						and a.ExitReason = b.ExitReason
+						and a.voided   = b.voided
 
 						)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],LoadDate)  
-							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[Date_Last_Modified],Getdate())
+							INSERT(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[RecordUUID],[Date_Last_Modified],LoadDate)  
+							VALUES(PatientID,SiteCode,FacilityName,ExitDescription,ExitDate,ExitReason,PatientPK,Emr,Project,TOVerified,TOVerifiedDate,ReEnrollmentDate,DeathDate,EffectiveDiscontinuationDate,ReasonForDeath,SpecificDeathReason,[Date_Created],[RecordUUID],[Date_Last_Modified],Getdate())
 			
 						WHEN MATCHED THEN
 							UPDATE SET 
-								a.PatientID						=b.PatientID,
-								a.FacilityName					=b.FacilityName,
-								a.ExitDescription				=b.ExitDescription,
-								a.TOVerified					=b.TOVerified	,							
-								a.ReasonForDeath				=b.ReasonForDeath,
-								a.SpecificDeathReason			=b.SpecificDeathReason,
-								a.DeathDate						=b.DeathDate,
-								a.[Date_Created]				=b.[Date_Created],
-								a.[Date_Last_Modified]			=b.[Date_Last_Modified];
+								a.[PatientID]						=	b.[PatientID],
+								a.[FacilityName]					=	b.[FacilityName],
+								a.[ExitDescription]					=	b.[ExitDescription],
+								a.[ExitDate]						=	b.[ExitDate],
+								a.[ExitReason]						=	b.[ExitReason],
+								a.[Emr]								=	b.[Emr],
+								a.[Project]							=	b.[Project],
+								a.[TOVerified]						=	b.[TOVerified],
+								a.[TOVerifiedDate]					=	b.[TOVerifiedDate],
+								a.[ReEnrollmentDate]				=	b.[ReEnrollmentDate],
+								a.[ReasonForDeath]					=	b.[ReasonForDeath],
+								a.[SpecificDeathReason]				=	b.[SpecificDeathReason],
+								a.[DeathDate]						=	b.[DeathDate],
+								a.[EffectiveDiscontinuationDate]	=	b.[EffectiveDiscontinuationDate],
+								a.[Date_Last_Modified]				=	b.[Date_Last_Modified],
+								a.[Date_Created]					=	b.[Date_Created],
+								a.[RecordUUID]						=	b.[RecordUUID],
+								a.[voided]							=	b.[voided];
 						
 							
 

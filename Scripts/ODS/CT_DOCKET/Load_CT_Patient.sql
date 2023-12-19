@@ -27,6 +27,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.voided   = b.voided
 						and a.ID =b.ID
 
 						)
