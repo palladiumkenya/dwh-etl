@@ -1,4 +1,4 @@
-SQL
+
 IF OBJECT_ID(N'NDWH.DBO.Fact_manifest ', N'U') IS NOT NULL 
     DROP TABLE NDWH.DBO.Fact_manifest ;
 BEGIN
@@ -37,7 +37,7 @@ BEGIN
                 [Start],
                 [End],
                 cast(getdate() as date) as LoadDate
-        FROM ODS.DBO.HTS_Manifests m 
+        FROM ODS.DBO.HTS_FacilityManifest m 
             INNER JOIN ODS.DBO.ALL_EMRSites h ON m.SiteCode = h.MFL_Code 
         GROUP BY    ID,[start],[end],
         YEAR(DateArrived), 
@@ -54,7 +54,7 @@ BEGIN
                 [Start],
                 [End],
                  cast(getdate() as date) as LoadDate
-        FROM ODS.dbo.CBS_Manifests m INNER JOIN ODS.dbo.all_emrsites h ON m.SiteCode = h.MFL_Code 
+        FROM ODS.dbo.CBS_FacilityManifest m INNER JOIN ODS.dbo.all_emrsites h ON m.SiteCode = h.MFL_Code 
         GROUP BY ID,[start],[end],
         YEAR(DateArrived), 
                     MONTH(DateArrived), SiteCode
