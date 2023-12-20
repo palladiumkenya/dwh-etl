@@ -24,7 +24,8 @@ with source_data as (
 		elig.HIVRiskCategory,
 		elig.HtsRiskScore,
 		tests.FinalTestResult as HTSResult,
-		elig.ReasonRefferredForTesting
+		elig.ReasonRefferredForTesting,
+		tests.ReferredForPreventativeServices
 	from 
 		NDWH.dbo.FactHTSClientTests as tests
 	left join NDWH.dbo.FactHTSEligibilityExtract elig on elig.PatientKey = tests.PatientKey
@@ -68,13 +69,14 @@ select
 		HtsRiskScore,
 		HTSResult,
 		ReasonRefferredForTesting,
-		case
-			when latest_prep_assessment.PatientKey is not null then 1
-			else 0
-		end as ReferredForPreventativeServices
+		ReferredForPreventativeServices
+		-- case
+		-- 	when latest_prep_assessment.PatientKey is not null then 1
+		-- 	else 0
+		-- end as ReferredForPreventativeServices
 into REPORTING.dbo.LineListHTSRiskCategorizationAndTestResults
 from source_data
-left join latest_prep_assessment on latest_prep_assessment.PatientKey = source_data.PatientKey
+--left join latest_prep_assessment on latest_prep_assessment.PatientKey = source_data.PatientKey
 where source_data.num = 1
 
 END
