@@ -10,10 +10,11 @@ with MFL_partner_agency_combination as (
 	from ODS.dbo.All_EMRSites 
 ),
 
-   Patient As ( Select    
+Patient As ( Select    
      
       Patient.PatientIDHash,
       Patient.PatientPKHash,
+      Patient.Patientpk,
       cast (Patient.SiteCode as nvarchar) As SiteCode,
       DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
       DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
@@ -42,16 +43,42 @@ with MFL_partner_agency_combination as (
         obs.WHOStage,
         Patient.DateConfirmedHIVPositive,
         outcome.ARTOutcome
-
-from 
+        from 
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
-   )
+),
 
+   DepressionScreening as (Select 
+   PatientPkHash,
+   sitecode,
+ ROW_NUMBER()OVER (PARTITION by SiteCode,PatientPK  ORDER BY VisitDate Desc ) As NUM,
+   PHQ_9_rating
+   from ODS.dbo.CT_DepressionScreening
+   ),
+   LatestDepressionScreening As (Select
+    PatientPkHash,
+    Sitecode,
+    PHQ_9_rating
+    from DepressionScreening
+    where Num=1
+   
+),
+ncd_screening as (
+    select 
+        patient.PatientPKHash,
+        patient.SiteCode,
+        ScreenedDiabetes,
+        ScreenedBPLastVisit
+    from Patient
+    left join ODS.dbo.Intermediate_LatestDiabetesTests as latest_diabetes_test on latest_diabetes_test.PatientPKHash = Patient.PatientPKHash
+        and latest_diabetes_test.SiteCode = Patient.SiteCode
+    left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = Patient.PatientPK
+        and visit.SiteCode = Patient.SiteCode
+)
    Select 
             Factkey = IDENTITY(INT, 1, 1),
             pat.PatientKey,
@@ -86,8 +113,13 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
             PreviousARTStartDate,
             PreviousARTRegimen,
             WhoStage,
+            PHQ_9_rating,
+            case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
+            coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
+            coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
+            end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
-INTO NDWH.dbo.FACTART
+INTO NDWH.dbo.FACTART 
 from  Patient
 left join NDWH.dbo.DimPatient as Pat on pat.PatientPKHash=Patient.PatientPkHash and Pat.SiteCode=Patient.SiteCode
 left join NDWH.dbo.Dimfacility fac on fac.MFLCode=Patient.SiteCode
@@ -99,12 +131,18 @@ left join NDWH.dbo.DimDate as LastARTDate on  LastARTDate.Date=Patient.LastARTDa
 left join NDWH.dbo.DimDate as DateConfirmedPos on  DateConfirmedPos.Date=Patient.DateConfirmedHIVPositive
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join ODS.dbo.Intermediate_ARTOutcomes As IOutcomes  on IOutcomes.PatientPKHash = Patient.PatientPkHash  and IOutcomes.SiteCode = Patient.SiteCode
+left join LatestDepressionScreening on LatestDepressionScreening.Patientpkhash=patient.patientpkhash and LatestDepressionScreening.sitecode=patient.sitecode
 left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.ARTOutcome
+left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
+  and ncd_screening.SiteCode = patient.SiteCode
+left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
 
 alter table NDWH.dbo.FactART add primary key(FactKey)
 
 END
+
+
 
 
 
