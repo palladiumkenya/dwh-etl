@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 ----Insert into FactArtHistorical
 --BEGIN
@@ -16,6 +17,8 @@
 --E
 ---------End
 >>>>>>> e4a0da4cb4f2d23a3e0e6e2381e79169c376b078
+=======
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -27,12 +30,16 @@ with MFL_partner_agency_combination as (
 	from ODS.dbo.All_EMRSites 
 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
 
 Patient As ( Select    
      
       Patient.PatientIDHash,
       Patient.PatientPKHash,
       Patient.Patientpk,
+<<<<<<< HEAD
 =======
 Patient As ( 
   Select     
@@ -40,6 +47,8 @@ Patient As (
       Patient.PatientPKHash,
       Patient.PatientPK,
 >>>>>>> e4a0da4cb4f2d23a3e0e6e2381e79169c376b078
+=======
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
       cast (Patient.SiteCode as nvarchar) As SiteCode,
       DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
       DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
@@ -76,6 +85,9 @@ left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
 
    DepressionScreening as (Select 
    PatientPkHash,
@@ -92,8 +104,11 @@ left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK 
     where Num=1
    
 ),
+<<<<<<< HEAD
 =======
 >>>>>>> e4a0da4cb4f2d23a3e0e6e2381e79169c376b078
+=======
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
 ncd_screening as (
     select 
         patient.PatientPKHash,
@@ -141,10 +156,15 @@ ncd_screening as (
             PreviousARTRegimen,
             WhoStage,
 <<<<<<< HEAD
+<<<<<<< HEAD
             PHQ_9_rating,
             case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
 =======
 >>>>>>> e4a0da4cb4f2d23a3e0e6e2381e79169c376b078
+=======
+            PHQ_9_rating,
+            case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
             end_month.DateKey as AsOfDateKey,
@@ -172,8 +192,13 @@ alter table NDWH.dbo.FactART add primary key(FactKey);
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 END
 
 =======
 END
 >>>>>>> e4a0da4cb4f2d23a3e0e6e2381e79169c376b078
+=======
+END
+
+>>>>>>> a0b222e067d392cebc13af9af0b861c6399c7543
