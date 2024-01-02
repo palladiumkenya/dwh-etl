@@ -1,4 +1,3 @@
-
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -43,8 +42,7 @@ Patient As ( Select
         obs.WHOStage,
         Patient.DateConfirmedHIVPositive,
         outcome.ARTOutcome
-        from 
-ODS.dbo.CT_Patient Patient
+from ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= Patient.PatientPK and Pre.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
@@ -138,14 +136,8 @@ left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
 
-alter table NDWH.dbo.FactART add primary key(FactKey)
+alter table NDWH.dbo.FactART add primary key(FactKey);
+
 
 END
-
-
-
-
-
-
-
 
