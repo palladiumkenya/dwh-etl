@@ -34,6 +34,7 @@ Select
         age_group.AgeGroupKey,
         AsofDate,
         cast(getdate() as date) as LoadDate
+		
         into NDWH.dbo.FACTAppointments
         from ODS.dbo.[HistoricalAppointmentStatus] as apt
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = apt.MFLCode

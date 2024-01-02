@@ -1,31 +1,4 @@
 BEGIN
-		;with cte AS ( Select            
-					f.code,
-					pl.PatientId,
-						P.[PatientPID],
-						visitID,pl.created,
-						OrderedbyDate,TestResult,TestName,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,visitID,OrderedbyDate,TestResult,TestName
-					ORDER BY pl.created desc) Row_Num
-			FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-			INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID AND PL.Voided=0
-			INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
-			WHERE p.gender!='Unknown' AND F.code >0 ) 
-			
-			--select * from  cte  where Row_Num >1
-		
-			delete pb from  [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) pb
-			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
-			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
-			inner join cte on cte.PatientId = pb.PatientId   
-				and cte.Code =  f.Code    
-				and cte.VisitId =pb.VisitId
-				and cte.OrderedByDate = pb.OrderedByDate
-				and cte.TestResult = pb.TestResult
-				and cte.TestName = pb.TestName
-				and cte.created = pb.created
-			where  Row_Num  > 1;
-
-			
 
 		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
 				   @OrderedbyDate					DATETIME
@@ -51,6 +24,7 @@ BEGIN
 						PL.SampleType,
 						p.ID ,
 						reason,PL.[Date_Created],PL.[Date_Last_Modified]
+						,PL.RecordUUID,PL.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -60,28 +34,39 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID		=b.VisitID
 						and a.OrderedbyDate	=b.OrderedbyDate
+						and a.voided = b.voided
 						and  a.TestResult =  b.TestResult					
 						and  a.TestName =  b.TestName 
-						--and a.ID		=b.ID
+						and a.voided   = b.voided
+						and a.ID		=b.ID
 						)
 
 												
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified],LoadDate)  
-						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified],Getdate())
-				
+
+						INSERT(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
+						VALUES(ID,PatientID,PatientPk,SiteCode,FacilityName,VisitID,OrderedbyDate,ReportedbyDate,TestName,EnrollmentTest,TestResult,Emr,Project,DateSampleTaken,SampleType,reason,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
+
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.PatientID			=b.PatientID,
-							a.FacilityName		=b.FacilityName	,
-							a.EnrollmentTest	=b.EnrollmentTest,		
-							a.DateSampleTaken	=b.DateSampleTaken	,
-							a.SampleType		=b.SampleType,
-							a.reason			=b.reason,
-							a.[Date_Created]			=b.[Date_Created],
-							a.[Date_Last_Modified]		=b.[Date_Last_Modified];
-
-					
+							a.[PatientID]			= b.[PatientID],
+							a.[FacilityName]		= b.[FacilityName],
+							a.[VisitID]				= b.[VisitID],
+							a.[OrderedbyDate]		= b.[OrderedbyDate],
+							a.[ReportedbyDate]		= b.[ReportedbyDate],
+							a.[TestName]			= b.[TestName],
+							a.[EnrollmentTest]		= b.[EnrollmentTest],
+							a.[TestResult]			= b.[TestResult],
+							a.[Emr]					= b.[Emr],
+							a.[Project]				= b.[Project],
+							a.[DateSampleTaken]		= b.[DateSampleTaken],
+							a.[SampleType]			= b.[SampleType],
+							a.[Reason]				= b.[Reason],
+							a.[Date_Last_Modified]	= b.[Date_Last_Modified],
+							a.[Date_Created]		= b.[Date_Created],
+							a.[RecordUUID]			= b.[RecordUUID],
+							a.[voided]				= b.[voided];
+				
 
 					UPDATE [ODS].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()

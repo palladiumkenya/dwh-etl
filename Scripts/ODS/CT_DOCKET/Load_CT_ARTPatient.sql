@@ -17,7 +17,8 @@ BEGIN
 						,PA.[PreviousARTPurpose]
 						,PA.[DateLastUsed]
 						,PA.[Date_Created],PA.[Date_Last_Modified]
-						,GETDATE () AS DateAsOf
+						,GETDATE () AS DateAsOf,
+						PA.RecordUUID,PA.voided
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
@@ -31,6 +32,7 @@ BEGIN
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
 						and a.lastvisit = b.lastvisit
+						and a.voided   = b.voided
 						and a.ID = b.ID
 						
 						)
@@ -39,11 +41,11 @@ BEGIN
 
 						INSERT(
 							  ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],LoadDate)
+							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)
 							   
 						VALUES(
 								ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],Getdate())
+								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
 
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -75,7 +77,9 @@ BEGIN
 								a.[DateLastUsed]			=b.[DateLastUsed],
 								a.lastvisit					=b.lastvisit,
 								a.[Date_Created]			=b.[Date_Created],
-								a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+								a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+								a.RecordUUID				=b.RecordUUID,
+								a.voided					=b.voided;
 
 								with cte AS (
 								Select

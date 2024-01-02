@@ -48,7 +48,7 @@ BEGIN
 						OE.[TransitionAttritionReason],
 						OE.[OutcomeDate]
 						,P.ID,OE.[Date_Created],OE.[Date_Last_Modified]
-
+						,OE.RecordUUID,OE.voided
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -58,24 +58,37 @@ BEGIN
 						and a.SiteCode = b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
+						and a.voided   = b.voided
 						and a.ID =b.ID
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified],LoadDate) 
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified],Getdate())
+
+						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
+						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OTZEnrollmentDate,TransferInStatus,ModulesPreviouslyCovered,ModulesCompletedToday,SupportGroupInvolvement,Remarks,TransitionAttritionReason,OutcomeDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
-						a.PatientID						=b.PatientID,						
-						a.TransferInStatus			=b.TransferInStatus,
-						a.ModulesPreviouslyCovered	=b.ModulesPreviouslyCovered,
-						a.ModulesCompletedToday		=b.ModulesCompletedToday,
-						a.SupportGroupInvolvement	=b.SupportGroupInvolvement,
-						a.Remarks					=b.Remarks,
-						a.TransitionAttritionReason	=b.TransitionAttritionReason,
-						a.[Date_Created]			=b.[Date_Created],
-						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
+						a.[PatientID]					= b.[PatientID],
+						a.[FacilityName]				= b.[FacilityName],
+						a.[VisitID]						= b.[VisitID],
+						a.[VisitDate]					= b.[VisitDate],
+						a.[Emr]							= b.[Emr],
+						a.[Project]						= b.[Project],
+						a.[OTZEnrollmentDate]			= b.[OTZEnrollmentDate],
+						a.[TransferInStatus]			= b.[TransferInStatus],
+						a.[ModulesPreviouslyCovered]	= b.[ModulesPreviouslyCovered],
+						a.[ModulesCompletedToday]		= b.[ModulesCompletedToday],
+						a.[SupportGroupInvolvement]		= b.[SupportGroupInvolvement],
+						a.[Remarks]						= b.[Remarks],
+						a.[TransitionAttritionReason]	= b.[TransitionAttritionReason],
+						a.[OutcomeDate]					= b.[OutcomeDate],
+						a.[Date_Last_Modified]			= b.[Date_Last_Modified],
+						a.[Date_Created]				=	b.[Date_Created],
+						a.[RecordUUID]					=b.[RecordUUID],
+						a.[voided]						=	b.[voided];
+
 						
 
 					UPDATE [ODS].[dbo].[CT_Otz_Log]

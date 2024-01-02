@@ -2,9 +2,9 @@ with cte AS (
 									Select
 									PatientPK,
 									SiteCode,
-									ExitDate,
+									ExitDate,voided,
 
-									 ROW_NUMBER() OVER (PARTITION BY SiteCode,PatientPK,ExitDate ORDER BY
+									 ROW_NUMBER() OVER (PARTITION BY SiteCode,PatientPK,voided,ExitDate ORDER BY
 									EffectiveDiscontinuationDate,ReEnrollmentDate desc) Row_Num
 									FROM [ODS].[dbo].[CT_PatientStatus]PS WITH (NoLock)
 									)
