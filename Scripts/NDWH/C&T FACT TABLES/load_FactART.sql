@@ -1,4 +1,5 @@
 
+
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -139,7 +140,8 @@ left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
   and ncd_screening.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
-
 alter table NDWH.dbo.FactART add primary key(FactKey)
+
+
 
 END
