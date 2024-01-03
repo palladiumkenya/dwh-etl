@@ -3,9 +3,9 @@
 						PatientPK,
 						Sitecode,
 						visitID,
-						visitDate,
+						visitDate,voided,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,voided,visitDate ORDER BY
 						visitDate desc) Row_Num
 						FROM [ODS].[dbo].[CT_GbvScreening](NoLock)
 						)

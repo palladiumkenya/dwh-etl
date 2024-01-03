@@ -9,12 +9,11 @@ with MFL_partner_agency_combination as (
 	  SDP_Agency as Agency
 	from ODS.dbo.All_EMRSites 
 ),
-
-Patient As ( Select    
-     
+Patient As ( 
+  Select     
       Patient.PatientIDHash,
       Patient.PatientPKHash,
-      Patient.Patientpk,
+      Patient.PatientPK,
       cast (Patient.SiteCode as nvarchar) As SiteCode,
       DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
       DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
@@ -115,6 +114,9 @@ ncd_screening as (
             WhoStage,
             PHQ_9_rating,
             case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
+            coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
+            coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
+            end_month.DateKey as AsOfDateKey,
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
             end_month.DateKey as AsOfDateKey,

@@ -152,8 +152,7 @@ eligible_screened_data_prep_start_prep_ct as (
         coalesce(eligible_screened_data_prep_start.EligiblePrep, 0) as EligiblePrep,
         coalesce(eligible_screened_data_prep_start.Screened, 0) as Screened,
         coalesce(eligible_screened_data_prep_start.StartedPrep, 0) as StartedPrep,
-        coalesce(prep_ct.PrepCT, 0) as PrepCT,
-        cast(getdate() as date) as LoadDate 
+        coalesce(prep_ct.PrepCT, 0) as PrepCT
     from eligible_screened_data_prep_start
     full join prep_ct on prep_ct.MFLCode  = eligible_screened_data_prep_start.MFLCode 
         and prep_ct.FacilityName = eligible_screened_data_prep_start.FacilityName 
@@ -165,8 +164,76 @@ eligible_screened_data_prep_start_prep_ct as (
         and prep_ct.AgeGroup = eligible_screened_data_prep_start.AgeGroup 
         and prep_ct.Month = eligible_screened_data_prep_start.AssMonth
         and prep_ct.Year = eligible_screened_data_prep_start.AssYear 
+),
+prep_turned_positive as (
+    select 
+        facility.MFLCode,
+        facility.FacilityName,
+        facility.County,
+        facility.SubCounty,
+        partner.PartnerName,
+        agency.AgencyName,
+        patient.Gender,
+        age_group.DATIMAgeGroup as AgeGroup,
+        date_test.[Month] as TestMonth,
+        date_test.[Year] as TestYear,
+        EOMONTH(date_test.Date) as AsofDate,
+        count(distinct tests.PatientKey) as CountPositive
+    from NDWH.dbo.FactHTSClientTests as tests
+    inner join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
+    left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tests.PatientKey
+    left join NDWH.dbo.DimDate as date_test on date_test.DateKey = tests.DateTestedKey
+    left join NDWH.dbo.DimAgency as agency on agency.Agencykey = tests.AgencyKey
+    left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = tests.Partnerkey
+    left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = tests.AgeGroupKey 
+    left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = tests.FacilityKey
+    where FinalTestResult = 'Positive'
+        and patient.PrepEnrollmentDateKey is not null
+    group by 
+        facility.MFLCode,
+        facility.FacilityName,
+        facility.County,
+        facility.SubCounty,
+        partner.PartnerName,
+        agency.AgencyName,
+        patient.Gender,
+        age_group.DATIMAgeGroup,
+        date_test.[Month],
+        date_test.[Year],
+        EOMONTH(date_test.Date)
+),
+eligible_screened_data_prep_start_prep_ct_turned_positive as (
+    select
+        coalesce(eligible_screened_data_prep_start_prep_ct.MFLCode, prep_turned_positive.MFLCode)  as MFLCode,
+        coalesce(eligible_screened_data_prep_start_prep_ct.FacilityName, prep_turned_positive.FacilityName) as FacilityName,
+        coalesce(eligible_screened_data_prep_start_prep_ct.County, prep_turned_positive.County) as County,
+        coalesce(eligible_screened_data_prep_start_prep_ct.SubCounty, prep_turned_positive.SubCounty) as SubCounty,
+        coalesce(eligible_screened_data_prep_start_prep_ct.PartnerName, prep_turned_positive.PartnerName) as PartnerName,
+        coalesce(eligible_screened_data_prep_start_prep_ct.AgencyName, prep_turned_positive.AgencyName) as AgencyName,
+        coalesce(eligible_screened_data_prep_start_prep_ct.Gender, prep_turned_positive.Gender) as Gender,
+        coalesce(eligible_screened_data_prep_start_prep_ct.AgeGroup, prep_turned_positive.AgeGroup) as AgeGroup,
+        coalesce(eligible_screened_data_prep_start_prep_ct.Month, prep_turned_positive.TestMonth) as Month,
+        coalesce(eligible_screened_data_prep_start_prep_ct.Year, prep_turned_positive.TestYear) as Year,
+        coalesce(eligible_screened_data_prep_start_prep_ct.AsofDate, prep_turned_positive.AsofDate) as AsofDate,
+        coalesce(eligible_screened_data_prep_start_prep_ct.EligiblePrep, 0) as EligiblePrep,
+        coalesce(eligible_screened_data_prep_start_prep_ct.Screened, 0) as Screened,
+        coalesce(eligible_screened_data_prep_start_prep_ct.StartedPrep, 0) as StartedPrep,
+        coalesce(eligible_screened_data_prep_start_prep_ct.PrepCT, 0) as PrepCT,
+        coalesce(prep_turned_positive.CountPositive, 0) as TurnedPositive,
+        cast(getdate() as date) as LoadDate 
+    from eligible_screened_data_prep_start_prep_ct
+    full join prep_turned_positive on prep_turned_positive.MFLCode  = eligible_screened_data_prep_start_prep_ct.MFLCode 
+        and prep_turned_positive.FacilityName = eligible_screened_data_prep_start_prep_ct.FacilityName 
+        and prep_turned_positive.County = eligible_screened_data_prep_start_prep_ct.County 
+        and prep_turned_positive.SubCounty = eligible_screened_data_prep_start_prep_ct.SubCounty 
+        and prep_turned_positive.PartnerName = eligible_screened_data_prep_start_prep_ct.PartnerName 
+        and prep_turned_positive.AgencyName = eligible_screened_data_prep_start_prep_ct.AgencyName 
+        and prep_turned_positive.Gender = eligible_screened_data_prep_start_prep_ct.Gender 
+        and prep_turned_positive.AgeGroup = eligible_screened_data_prep_start_prep_ct.AgeGroup 
+        and prep_turned_positive.TestMonth = eligible_screened_data_prep_start_prep_ct.Month
+        and prep_turned_positive.TestYear = eligible_screened_data_prep_start_prep_ct.Year
 )
 select 
     *
 into REPORTING.dbo.AggregatePrepCascade
-from eligible_screened_data_prep_start_prep_ct
+from eligible_screened_data_prep_start_prep_ct_turned_positive;
