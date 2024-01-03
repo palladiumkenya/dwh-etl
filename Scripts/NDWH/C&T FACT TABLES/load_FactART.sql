@@ -9,12 +9,11 @@ with MFL_partner_agency_combination as (
 	  SDP_Agency as Agency
 	from ODS.dbo.All_EMRSites 
 ),
-
-Patient As ( Select    
-     
+Patient As ( 
+  Select     
       Patient.PatientIDHash,
       Patient.PatientPKHash,
-      Patient.Patientpk,
+      Patient.PatientPK,
       cast (Patient.SiteCode as nvarchar) As SiteCode,
       DATEDIFF(yy,Patient.DOB,Patient.RegistrationAtCCC) AgeAtEnrol,
       DATEDIFF(yy,Patient.DOB,ART.StartARTDate) AgeAtARTStart,
@@ -137,7 +136,8 @@ left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
   and ncd_screening.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 WHERE pat.voided =0;
-
 alter table NDWH.dbo.FactART add primary key(FactKey)
+
+
 
 END
