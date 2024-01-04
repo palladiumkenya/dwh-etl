@@ -45,5 +45,5 @@ SELECT
 	,cast(getdate() as date) as LoadDate
 INTO REPORTING.dbo.AggregateFACT_CT_DHIS2
 FROM NDWH.dbo.FACT_CT_DHIS2 CT
-LEFT JOIN HIS_Implementation.dbo.ALL_EMRSites Sites on CT.SiteCode COLLATE Latin1_General_CI_AS=Sites.MFL_Code;
+LEFT JOIN ODS.dbo.ALL_EMRSites Sites on CT.SiteCode COLLATE Latin1_General_CI_AS=Sites.MFL_Code;
 -- WHERE Sites.SDP IS NOT NULL;
