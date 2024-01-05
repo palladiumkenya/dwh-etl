@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[LineListHTSEligibilityExtract]', N'U') IS NOT NULL 			
-	DROP TABLE [REPORTING].[dbo].[LineListHTSEligibilityExtract];
+IF OBJECT_ID(N'[REPORTING].[dbo].[LinelistHTSEligibilty]', N'U') IS NOT NULL 			
+	DROP TABLE [REPORTING].[dbo].[LinelistHTSEligibilty];
 
 
 SELECT
@@ -26,7 +26,7 @@ SELECT
 	ReferredForTesting,
 	ReasonRefferredForTesting
 	ReasonNotReffered
-INTO LineListHTSEligibilityExtract
+INTO LinelistHTSEligibilty
 FROM NDWH.dbo.FactHTSEligibilityextract ex
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = ex.FacilityKey
 LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = ex.AgencyKey
