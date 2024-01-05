@@ -266,7 +266,8 @@ BEGIN
              patientsource,
              enrollmentwhokey,
              datebaselinewhokey,
-             baselinewhokey,PrepEnrollmentDateKey,
+             baselinewhokey,
+             PrepEnrollmentDateKey,
              istxcurr,
              loaddate,
 			 voided)
