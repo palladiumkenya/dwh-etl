@@ -12,6 +12,7 @@ SELECT
 	pat.Gender,
 	age_group.Age,
 	age_group.DATIMAgeGroup AgeGroup,
+	visit.Date VisitDate,
 	HTSStrategy,
 	HTSEntryPoint,
 	PartnerHivStatus,
