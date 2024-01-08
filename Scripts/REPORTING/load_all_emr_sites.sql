@@ -40,7 +40,6 @@ Select
   Longitude, 
   EMR, 
   isCT, 
-  isPkv, 
   isHts, 
   COALESCE(
     CASE WHEN SiteCode IS NOT NULL THEN 1 ELSE NULL END, 
