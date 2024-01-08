@@ -11,8 +11,7 @@ With EMRSites as (
     fac.Latitude, 
     fac.Longitude, 
     fac.EMR, 
-    fac.isCT, 
-    fac.isPkv, 
+    fac.isCT,  
     fac.isHts, 
 	a.EMR_Status,
     CAST(
