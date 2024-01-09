@@ -203,35 +203,41 @@ BEGIN
                            ON combined_data_ct_hts_prep.patientpkhash =
                               pmtct_patient_source.patientpkhash
                               AND combined_data_ct_hts_prep.sitecode =
-                                  pmtct_patient_source.sitecode)
+                                  pmtct_patient_source.sitecode),
+        combined_matched_all_programs AS (
+            SELECT combined_data_ct_hts_prep_pmtct.*, golden_id as GoldenId
+            FROM combined_data_ct_hts_prep_pmtct LEFT JOIN MPI_MatchingOutput mmo ON mmo.site_code = combined_data_ct_hts_prep_pmtct.sitecode
+            AND mmo.patient_pk_hash = combined_data_ct_hts_prep_pmtct.patientpkhash
+        )
     MERGE [NDWH].[DBO].[dimpatient] AS a
-    using (SELECT combined_data_ct_hts_prep_pmtct.patientidhash,
-                  combined_data_ct_hts_prep_pmtct.patientpkhash,
-                  combined_data_ct_hts_prep_pmtct.htsnumberhash,
-                  combined_data_ct_hts_prep_pmtct.prepnumber,
-                  combined_data_ct_hts_prep_pmtct.sitecode,
-                  combined_data_ct_hts_prep_pmtct.nupi,
-                  combined_data_ct_hts_prep_pmtct.dob,
-                  combined_data_ct_hts_prep_pmtct.maritalstatus,
+    using (SELECT combined_matched_all_programs.patientidhash,
+                  combined_matched_all_programs.patientpkhash,
+                  combined_matched_all_programs.htsnumberhash,
+                  combined_matched_all_programs.prepnumber,
+                  combined_matched_all_programs.sitecode,
+                  combined_matched_all_programs.nupi,
+                  combined_matched_all_programs.goldenid,
+                  combined_matched_all_programs.dob,
+                  combined_matched_all_programs.maritalstatus,
                   CASE
-                    WHEN combined_data_ct_hts_prep_pmtct.gender = 'M' THEN
+                    WHEN combined_matched_all_programs.gender = 'M' THEN
                     'Male'
-                    WHEN combined_data_ct_hts_prep_pmtct.gender = 'F' THEN
+                    WHEN combined_matched_all_programs.gender = 'F' THEN
                     'Female'
-                    ELSE combined_data_ct_hts_prep_pmtct.gender
+                    ELSE combined_matched_all_programs.gender
                   END AS Gender,
-                  combined_data_ct_hts_prep_pmtct.clienttype,
-                  combined_data_ct_hts_prep_pmtct.patientsource,
-                  combined_data_ct_hts_prep_pmtct.enrollmentwhokey,
-                  combined_data_ct_hts_prep_pmtct.datebaselinewhokey,
-                  combined_data_ct_hts_prep_pmtct.baselinewhokey,
-                  combined_data_ct_hts_prep_pmtct.prepenrollmentdatekey,
-                  combined_data_ct_hts_prep_pmtct.istxcurr,
-                  combined_data_ct_hts_prep_pmtct.patientmnchidhash,
-                  combined_data_ct_hts_prep_pmtct.firstenrollmentatmnchdatekey,
-                  combined_data_ct_hts_prep_pmtct.loaddate,
-				  combined_data_ct_hts_prep_pmtct.voided
-           FROM   combined_data_ct_hts_prep_pmtct) AS b
+                  combined_matched_all_programs.clienttype,
+                  combined_matched_all_programs.patientsource,
+                  combined_matched_all_programs.enrollmentwhokey,
+                  combined_matched_all_programs.datebaselinewhokey,
+                  combined_matched_all_programs.baselinewhokey,
+                  combined_matched_all_programs.prepenrollmentdatekey,
+                  combined_matched_all_programs.istxcurr,
+                  combined_matched_all_programs.patientmnchidhash,
+                  combined_matched_all_programs.firstenrollmentatmnchdatekey,
+                  combined_matched_all_programs.loaddate,
+				  combined_matched_all_programs.voided
+           FROM   combined_matched_all_programs) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
 		 and a.voided  = b.voided
@@ -243,6 +249,7 @@ BEGIN
              prepnumber,
              sitecode,
              nupi,
+             goldenid,
              dob,
              maritalstatus,
              gender,
@@ -260,6 +267,7 @@ BEGIN
              prepnumber,
              sitecode,
              nupi,
+             goldenid,
              dob,
              maritalstatus,
              gender,
@@ -277,6 +285,7 @@ BEGIN
                  a.patientsource	= b.patientsource,
 				 a.patientidhash   = b.patientidhash,
                  a.nupi				= b.nupi,
+                 a.goldenid      = b.goldenid,
                  a.dob				= b.dob,
                  a.gender			= b.gender,
                  a.prepnumber		= b.prepnumber,
