@@ -1,4 +1,4 @@
-MERGE [ODS].[dbo].[HTS_Manifests] AS a
+MERGE [ODS].[dbo].[HTS_FacilityManifest] AS a
 	USING( SELECT distinct [Id]
 				  ,[SiteCode],[Name],[Sent],[Recieved],[DateLogged],[DateArrived],[Status]
 				  ,[StatusDate],[FacilityId],[EmrId],[EmrName],[EmrSetup],[RefId],[End]

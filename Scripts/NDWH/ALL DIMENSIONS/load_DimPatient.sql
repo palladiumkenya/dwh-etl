@@ -35,7 +35,7 @@ BEGIN
              FROM   ods.dbo.ct_patient AS patients
                     LEFT JOIN ods.dbo.ct_patientbaselines AS baselines
                            ON patients.patientpkhash = baselines.patientpkhash
-                              AND patients.sitecode = baselines.sitecode
+                              AND patients.sitecode = baselines.sitecode and baselines.voided=0
                     LEFT JOIN ods.dbo.intermediate_artoutcomes AS outcomes
                            ON outcomes.patientpkhash = patients.patientpkhash
                               AND outcomes.sitecode = patients.sitecode
@@ -240,6 +240,7 @@ BEGIN
            FROM   combined_matched_all_programs) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
+		 and a.voided  = b.voided
         )
     WHEN NOT matched THEN
       INSERT(patientidhash,

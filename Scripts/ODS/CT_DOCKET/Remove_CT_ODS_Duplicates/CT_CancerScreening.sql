@@ -1,4 +1,4 @@
-with cte AS (
+	with cte AS (
 						Select
 						Sitecode,
 						PatientPK,
@@ -6,8 +6,8 @@ with cte AS (
 						VisitDate,
 
 						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,VisitDate ORDER BY
-						VisitDate desc) Row_Num
-						FROM [ODS].[dbo].[CT_DepressionScreening](NoLock)
+						PatientPK,Sitecode,visitID,VisitDate) Row_Num
+						FROM [ODS].[dbo].[CT_CancerScreening](NoLock)
 						)
 						delete from cte 
 						Where Row_Num >1 ;

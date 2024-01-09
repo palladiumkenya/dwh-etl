@@ -33,10 +33,6 @@ BEGIN
 			  ,PB.[lastWABDate],PB.[Date_Created],PB.[Date_Last_Modified]
 			  ,PB.RecordUUID,PB.voided
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f9544cb11f2780c837474b70a149f7843eb99a2
 		FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 	
 		INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract](NoLock) PB ON PB.[PatientId]= P.ID 
 		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
