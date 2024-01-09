@@ -3,9 +3,9 @@
 						Sitecode,
 						PatientPK,
 						visitID,
-						Covid19AssessmentDate,voided,
+						Covid19AssessmentDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,voided,visitID,Covid19AssessmentDate ORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,Covid19AssessmentDate ORDER BY
 						PatientPK,Sitecode,visitID,Covid19AssessmentDate) Row_Num
 						FROM [ODS].[dbo].[CT_Covid](NoLock)
 						)

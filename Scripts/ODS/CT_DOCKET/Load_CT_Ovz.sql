@@ -59,6 +59,7 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.voided   = b.voided
+						and a.[RelationshipToClient] = b.[RelationshipToClient]
 						and a.ID = b.ID
 						)
 
