@@ -17,9 +17,10 @@ with ncd_source_data as (
                 end as value,
                 PatientPKHash,
                 PatientPK,               
-                SiteCode              
-            from ODS.dbo.CT_AllergiesChronicIllness  as chronic  
-                cross apply STRING_SPLIT(chronic.ChronicIllness, '|')
+                SiteCode,
+                voided             
+            from ODS.dbo.CT_AllergiesChronicIllness as chronic  
+            cross apply STRING_SPLIT(chronic.ChronicIllness, '|')
             ) as chronic 
             pivot(
                 count(value)
@@ -52,6 +53,7 @@ with ncd_source_data as (
                     "Thyroid disease"
                 )
             ) as pivot_table
+    where voided = 0
 ),
 MFL_partner_agency_combination as (
 	select 
@@ -59,33 +61,6 @@ MFL_partner_agency_combination as (
 		SDP,
 	    SDP_Agency as Agency 
 	from ODS.dbo.All_EMRSites 
-),
-diabetes_tests_ordering as (
-    /* get all Diabetes tests and order by date*/
-    SELECT 
-        ROW_NUMBER() OVER (PARTITION BY PatientPKHash, Sitecode ORDER BY OrderedbyDate DESC) AS RowNum,
-        PatientPKHash,
-        SiteCode,
-        TestName,
-        TRY_CAST(TestResult AS NUMERIC(18, 2)) AS NumericTestResult
-    FROM ODS.dbo.CT_PatientLabs
-    WHERE 
-        TestName in ('HgB', 'HbsAg', 'HBA1C') 
-            or TestName in ('FBS', 'Blood Sugar')
-        
-),
-latest_diabetes_test as  (
- select 
-    *
- from diabetes_tests_ordering where RowNum = 1
-),
-latest_diabetes_test_controlled as (
-    /* get all last Diabetes tests that are within the controlled range*/
-    select 
-        * 
-    from latest_diabetes_test
-    where (TestName IN ('HgB', 'HbsAg', 'HBA1C') AND NumericTestResult <= 6.5)
-        or (TestName IN ('FBS', 'Blood Sugar') AND NumericTestResult < 7.0)
 ),
 visits_ordering as (
     select 
@@ -95,6 +70,7 @@ visits_ordering as (
         VisitDate,
         row_number() over (partition by PatientPK, Sitecode order by VisitDate desc) as rank
     from ODS.dbo.CT_AllergiesChronicIllness as chronic
+    where chronic.voided = 0  
 ),
 age_as_of_last_visit as (
     select 
@@ -105,7 +81,60 @@ age_as_of_last_visit as (
     from visits_ordering
     inner join ODS.dbo.CT_Patient as patient on patient.PatientPKHash = visits_ordering.PatientPKHash 
 	and patient.SiteCode = visits_ordering.SiteCode
+    and patient.voided = 0
+    where rank = 1 
+),
+hypertensives_ordering as (
+    select 
+        PatientPKHash,
+        PatientPK,               
+        SiteCode,
+        VisitDate,
+        ChronicIllness,
+        row_number() over (partition by PatientPK, Sitecode order by VisitDate asc) as rank
+    from ODS.dbo.CT_AllergiesChronicIllness as chronic
+    where chronic.voided = 0 
+        and ChronicIllness like '%Hypertension%' 
+),
+diabetes_ordering as (
+    select 
+        PatientPKHash,
+        PatientPK,               
+        SiteCode,
+        VisitDate,
+        ChronicIllness,
+        row_number() over (partition by PatientPK, Sitecode order by VisitDate asc) as rank
+    from ODS.dbo.CT_AllergiesChronicIllness as chronic
+    where chronic.voided = 0 
+        and ChronicIllness like '%Diabetes%' 
+),
+earliest_hpertension_recorded as (
+    select 
+        *
+    from hypertensives_ordering
     where rank = 1
+),
+earliest_diabetes_recorded as (
+    select 
+        *
+    from diabetes_ordering
+    where rank = 1
+),
+with_underlying_ncd_condition_indicators as (
+    select 
+        ncd_source_data.PatientPKHash,
+        ncd_source_data.SiteCode,
+        coalesce(ScreenedDiabetes, 0) as IsDiabeticAndScreenedDiabetes,
+        coalesce(IsDiabetesControlledAtLastTest, 0) as IsDiabeticAndDiabetesControlledAtLastTest,
+        coalesce(visit.ScreenedBPLastVisit,0) as IsHyperTensiveAndScreenedBPLastVisit,
+        coalesce(visit.IsBPControlledAtLastVisit, 0) as IsHyperTensiveAndBPControlledAtLastVisit
+    from ncd_source_data
+    left join ODS.dbo.Intermediate_LatestDiabetesTests as latest_diabetes_test on latest_diabetes_test.PatientPKHash = ncd_source_data.PatientPKHash
+        and latest_diabetes_test.SiteCode = ncd_source_data.SiteCode
+        and ncd_source_data."Diabetes" = 1
+    left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = ncd_source_data.PatientPK
+        and visit.SiteCode = ncd_source_data.SiteCode
+        and ncd_source_data."Hypertension" = 1
 )
 select
     Factkey = IDENTITY(INT, 1, 1),
@@ -139,30 +168,35 @@ select
     ncd_source_data."Osteoporosis",
     ncd_source_data."Sickle Cell Anaemia",
     ncd_source_data."Thyroid disease",
-    case when latest_diabetes_test.PatientPKHash is not null then 1 else 0 end as ScreenedDiabetes,
-    case when latest_diabetes_test_controlled.PatientPKHash is not null then 1 else 0 end as IsDiabetesControlledAtLastTest,
-    coalesce(visit.ScreenedBPLastVisit,0) as ScreenedBPLastVisit,
-    coalesce(visit.IsBPControlledAtLastVisit, 0) as IsBPControlledAtLastVisit
+    with_underlying_ncd_condition_indicators.IsDiabeticAndScreenedDiabetes,
+    with_underlying_ncd_condition_indicators.IsDiabeticAndDiabetesControlledAtLastTest,
+    with_underlying_ncd_condition_indicators.IsHyperTensiveAndScreenedBPLastVisit,
+    with_underlying_ncd_condition_indicators.IsHyperTensiveAndBPControlledAtLastVisit,
+    first_hypertension.DateKey as FirstHypertensionRecoredeDateKey,
+    first_diabetes.DateKey as FirstDiabetesRecordedDateKey
 into NDWH.dbo.FactNCD
 from ncd_source_data
-left join latest_diabetes_test on latest_diabetes_test.PatientPKHash = ncd_source_data.PatientPKHash
-    and latest_diabetes_test.SiteCode = ncd_source_data.SiteCode
-left join latest_diabetes_test_controlled on latest_diabetes_test_controlled.PatientPKHash = ncd_source_data.PatientPKHash
-    and latest_diabetes_test_controlled.SiteCode = ncd_source_data.SiteCode
-left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = ncd_source_data.PatientPKHash
-    and patient.SiteCode = ncd_source_data.SiteCode
-left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = ncd_source_data.PatientPK
-    and visit.SiteCode = ncd_source_data.SiteCode
+left join with_underlying_ncd_condition_indicators on with_underlying_ncd_condition_indicators.PatientPKHash = ncd_source_data.PatientPKHash
+    and with_underlying_ncd_condition_indicators.SiteCode = ncd_source_data.SiteCode
 left join age_as_of_last_visit on age_as_of_last_visit.PatientPKHash = ncd_source_data.PatientPKHash
     and age_as_of_last_visit.SiteCode = ncd_source_data.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = ncd_source_data.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = ncd_source_data.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
-left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = age_as_of_last_visit.AgeLastVisit;
-
+left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = age_as_of_last_visit.AgeLastVisit
+left join NDWH.dbo.DimPatient as patient on patient.PatientPKHash = ncd_source_data.PatientPKHash
+    and patient.SiteCode = ncd_source_data.SiteCode
+left join earliest_hpertension_recorded on earliest_hpertension_recorded.PatientPKHash = ncd_source_data.PatientPKHash
+    and earliest_hpertension_recorded.SiteCode = ncd_source_data.Sitecode
+left join earliest_diabetes_recorded on earliest_diabetes_recorded.PatientPKHash = ncd_source_data.PatientPKHash
+    and earliest_diabetes_recorded.SiteCode = ncd_source_data.SiteCode
+left join NDWH.dbo.DimDate as first_hypertension on first_hypertension.Date = cast(earliest_hpertension_recorded.VisitDate as date)
+left join NDWH.dbo.DimDate as first_diabetes on first_diabetes.Date = cast(earliest_diabetes_recorded.VisitDate as date)
+;
 
 
 alter table NDWH.dbo.FactNCD add primary key(FactKey);
 
 END
+

@@ -15,6 +15,7 @@ With source_data as (
     BP,
 	  CASE WHEN NextAppointmentDate IS NULL THEN DATEADD(dd,30,VisitDate) ELSE NextAppointmentDate End AS NextAppointment
 	FROM ODS.dbo.CT_PatientVisits
+  WHERE VOIDED=0
 ),
 controlled_BP as (
   select 
