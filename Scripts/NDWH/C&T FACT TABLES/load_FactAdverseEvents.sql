@@ -32,7 +32,6 @@ source_data as (
         and patient.SiteCode = adverse_events.SiteCode
     left join ODS.dbo.Intermediate_LastPatientEncounter as last_encounter on last_encounter.PatientPK = adverse_events.PatientPK
         and last_encounter.SiteCode = adverse_events.SiteCode
-    where adverse_events.voided = 0
 )
 select 
     Factkey = IDENTITY(INT, 1, 1),

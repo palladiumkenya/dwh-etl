@@ -143,7 +143,7 @@ WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and
             Percent_variance_EMR_DWH as Proportion_variance_EMR_DWH,
             Percent_variance_KHIS_DWH as Proportion_variance_KHIS_DWH,
             Percent_variance_KHIS_EMR as Proportion_variance_KHIS_EMR,
-             EOMONTH(DATEADD(mm,-1,GETDATE())) as Reporting_Month,
+            EOMONTH(DATEADD(mm,-1,GETDATE())) as Reporting_Month,
            Cast(getdate() as date) as LoadDate
         into NDWH.dbo.FactHTSPosConcordance
         from Summary
