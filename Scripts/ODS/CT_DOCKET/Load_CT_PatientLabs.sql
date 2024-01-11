@@ -38,6 +38,8 @@ BEGIN
 						and  a.TestResult =  b.TestResult					
 						and  a.TestName =  b.TestName 
 						and a.voided   = b.voided
+						and a.[Date_Created] = b.[Date_Created]
+						and a.RecordUUID = b.RecordUUID
 						and a.ID		=b.ID
 						)
 

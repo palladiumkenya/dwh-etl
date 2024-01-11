@@ -3,9 +3,9 @@ with cte AS (
 						PatientPK,
 						Sitecode,
 						visitID,
-						visitDate,voided,
+						visitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,voided,visitDate ORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,visitID,visitDate ORDER BY
 						PatientPK,Sitecode,visitID,visitDate) Row_Num
 						FROM [ODS].[dbo].[CT_Otz](NoLock)
 						)
