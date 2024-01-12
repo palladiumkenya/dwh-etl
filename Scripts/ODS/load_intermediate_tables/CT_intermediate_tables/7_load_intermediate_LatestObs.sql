@@ -196,6 +196,6 @@ latest_Who as (
         and latest_breastfeeding.Sitecode=patient.SiteCode
     left join latest_Who on latest_Who.PatientPK=patient.PatientPK and latest_Who.Sitecode=patient.Sitecode
     left join latest_TBScreening on latest_TBScreening.PatientPK=patient.PatientPK and latest_TBScreening.SiteCode=patient.SiteCode
-
+	where patient.voided = 0
 END
 
