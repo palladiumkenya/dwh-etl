@@ -12,7 +12,7 @@ Select
    Proportion_variance_EMR_DWH,
    Proportion_variance_KHIS_DWH,
    Proportion_variance_KHIS_EMR,
-   Reporting_Month,
+   Reporting_Month
    into Reporting.dbo.aggregate_concordance_htspos 
 from
    NDWH.dbo.FactHTSPosConcordance as htspos 
@@ -27,3 +27,5 @@ from
       on pat.PartnerKey = htspos.PartnerKey 
 ORDER BY
    Proportion_variance_EMR_DWH DESC
+
+ 
