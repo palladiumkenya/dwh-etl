@@ -206,7 +206,7 @@ BEGIN
                                   pmtct_patient_source.sitecode),
         combined_matched_all_programs AS (
             SELECT combined_data_ct_hts_prep_pmtct.*, golden_id as GoldenId
-            FROM combined_data_ct_hts_prep_pmtct LEFT JOIN MPI_MatchingOutput mmo ON mmo.site_code = combined_data_ct_hts_prep_pmtct.sitecode
+            FROM combined_data_ct_hts_prep_pmtct LEFT JOIN ODS.dbo.MPI_MatchingOutput mmo ON mmo.site_code = combined_data_ct_hts_prep_pmtct.sitecode
             AND mmo.patient_pk_hash = combined_data_ct_hts_prep_pmtct.patientpkhash
         )
     MERGE [NDWH].[DBO].[dimpatient] AS a
