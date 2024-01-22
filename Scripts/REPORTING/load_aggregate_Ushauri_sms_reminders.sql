@@ -1,5 +1,5 @@
 IF Object_id(N'[Reporting].[Dbo].[AggregateUshauriSMSReminders]', N'U') IS NOT NULL
-  DROP TABLE [Reporting].[Dbo].[Aggregateushaurismsreminders];
+  DROP TABLE [Reporting].[Dbo].[AggregateUshauriSmsReminders];
 
 BEGIN
     WITH Bookedappointments
@@ -22,17 +22,14 @@ BEGIN
              WHERE  Consentforsms = 'YES'
              GROUP  BY Asofdate,
                        Mflcode),
-         Receivedsms
-         AS (SELECT COALESCE(Try_convert(Date, Fourweeksmssenddate),
-                               Try_convert(Date, Threeweeksmssenddate),
-                               Try_convert(Date, Twoweeksmssenddate),
-                               Try_convert(Date, Oneweeksmssenddate),
-                               Try_convert(Date, Onedaysmssenddate)) AS AsofDate
-                    ,
-                    Count(Patientkey)
-                    AS
-                    NumberReceivedSMS
-                    ,
+         Receivedsms AS (
+              SELECT 
+              COALESCE(Try_convert(Date,FourWeekSMSSendDateKey) , 
+                               Try_convert(Date, ThreeWeekSMSSendDateKey) ,
+                               Try_convert(Date, Twoweeksmssenddatekey) ,
+                               Try_convert(Date, Oneweeksmssenddatekey) ,
+                               Try_convert(Date, Onedaysmssenddatekey)) AS AsofDate,
+                    Count(Patientkey) AS NumberReceivedSMS ,
                     Mflcode
              FROM   Ndwh.Dbo.Factushaurismsreminders Sms
                     LEFT JOIN Ndwh.Dbo.Dimfacility Fac
@@ -40,11 +37,11 @@ BEGIN
              WHERE  COALESCE(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
-             GROUP  BY Try_convert(Date, Fourweeksmssenddate),
-                       Try_convert(Date, Threeweeksmssenddate),
-                       Try_convert(Date, Twoweeksmssenddate),
-                       Try_convert(Date, Oneweeksmssenddate),
-                       Try_convert(Date, Onedaysmssenddate),
+             GROUP  BY Try_convert(Date, FourWeekSMSSendDateKey) ,
+                       Try_convert(Date, ThreeWeekSMSSendDateKey),
+                       Try_convert(Date, TwoWeekSMSSendDateKey) ,
+                       Try_convert(Date, OneWeekSMSSendDateKey) ,
+                       Try_convert(Date, OneDaySMSSendDateKey) ,
                        Mflcode),
          Honouredappointments
          AS (SELECT Asofdate,
@@ -56,8 +53,7 @@ BEGIN
              WHERE  Appointmentstatus = 'honoured'
              GROUP  BY Asofdate,
                        Mflcode),
-         Appointmentcounts
-         AS (SELECT Asofdate,
+         Appointmentcounts AS (SELECT Asofdate,
                     Count(Patientkey) AS TotalAppointments,
                     Mflcode
              FROM   Ndwh.Dbo.Factushaurismsreminders Sms
@@ -79,7 +75,7 @@ BEGIN
                     ) /
                              Appointmentcounts.Totalappointments * 100, 0) AS
            PercentHonoured
-    INTO   Reporting.Dbo.Aggregateushaurismsreminders
+    INTO   Reporting.Dbo.AggregateUshauriSmsReminders
     FROM   Appointmentcounts
            LEFT JOIN Bookedappointments
                   ON Appointmentcounts.Mflcode = Bookedappointments.Mflcode
@@ -98,3 +94,4 @@ BEGIN
     WHERE  Appointmentcounts.Mflcode > 0
            AND Appointmentcounts.Asofdate IS NOT NULL
 END 
+
