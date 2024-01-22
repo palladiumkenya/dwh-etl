@@ -1,5 +1,5 @@
 name: sqlcheck workflow2
-on: pull_request
+on: [push, pull_request]
 
 jobs:
   sqlcheck:
@@ -19,9 +19,9 @@ jobs:
           sqlx
           schema
         directories: |
-          sql
-          build/sql_dir
-          tests/sql_dir
+          Scripts/ODS
+          Scripts/NDWH
+          Scripts/REPORTING
     - name: Get output
       run: echo "Issues found in previous step"
       if: steps.sqlcheck.outputs.issue-found
