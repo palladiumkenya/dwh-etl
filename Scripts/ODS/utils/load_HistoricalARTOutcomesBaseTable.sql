@@ -1,5 +1,8 @@
 use tmp_and_adhoc;
 
+--truncate the table
+truncate table tmp_and_adhoc.dbo.HistoricalARTOutcomesBaseTable;
+
 -- first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 
 declare 
@@ -43,14 +46,15 @@ begin
 with clinical_visits_as_of_date as (
     /* get visits as of date */
     select 
-        PatientPK,
-        PatientID,
+        PatientPKHash,
+        PatientIDHash,
         SiteCode,
         VisitDate,
         NextAppointmentDate,
         PopulationType,
         KeyPopulationType,
         CurrentRegimen,
+        DifferentiatedCare,
         Emr
     from  ODS.dbo.CT_PatientVisits
     where SiteCode > 0 and VisitDate <= @as_of_date
@@ -58,8 +62,8 @@ with clinical_visits_as_of_date as (
 pharmacy_visits_as_of_date as (
      /* get pharmacy dispensations as of date */
     select 
-        PatientPK,
-        PatientID,
+        PatientPKHash,
+        PatientIDHash,
         SiteCode,
         DispenseDate,
         ExpectedReturn,
@@ -70,8 +74,8 @@ pharmacy_visits_as_of_date as (
 patient_art_and_enrollment_info as (
      /* get patients' ART start date */
     select
-        distinct ARTPatients.PatientID,
-        ARTPatients.PatientPK,
+        distinct ARTPatients.PatientIDHash,
+        ARTPatients.PatientPKHash,
         ARTPatients.SiteCode,
         ARTPatients.StartARTDate,
         ARTPatients.StartRegimen,
@@ -83,21 +87,21 @@ patient_art_and_enrollment_info as (
         Patients.DateConfirmedHIVPositive,
         datediff(yy, Patients.DOB, Patients.RegistrationAtCCC) as AgeEnrollment
     from ODS.dbo.CT_ARTPatients as ARTPatients
-    left join ODS.dbo.CT_Patient as Patients on Patients.PatientPK = ARTPatients.PatientPK
+    left join ODS.dbo.CT_Patient as Patients on Patients.PatientPKHash = ARTPatients.PatientPKHash
     	and Patients.SiteCode = ARTPatients.SiteCode
 ),
 visit_encounter_as_of_date_ordering as (
      /* order visits as of date by the VisitDate */
     select 
         clinical_visits_as_of_date.*,
-        row_number() over (partition by PatientPK, SiteCode order by VisitDate desc) as rank
+        row_number() over (partition by PatientPKHash, SiteCode order by VisitDate desc) as rank
     from clinical_visits_as_of_date
 ),
 pharmacy_dispense_as_of_date_ordering as (
     /* order pharmacy dispensations as of date by the VisitDate */
     select 
         pharmacy_visits_as_of_date.*,
-        row_number() over (partition by PatientPK, SiteCode order by DispenseDate desc) as rank
+        row_number() over (partition by PatientPKHash, SiteCode order by DispenseDate desc) as rank
     from pharmacy_visits_as_of_date
 ),
 last_visit_encounter_as_of_date as (
@@ -117,8 +121,8 @@ last_pharmacy_dispense_as_of_date as (
 exits_as_of_date as (
     /* get exits as of date */
     select 
-        PatientID,
-        PatientPK,
+        PatientIDHash,
+        PatientPKHash,
         SiteCode,
         ExitDate,
         ExitReason,
@@ -130,14 +134,14 @@ exits_as_of_date as (
 exits_as_of_date_ordering as (
     /* order the exits by the ExitDate*/
     select 
-        PatientID,
-        PatientPK,
+        PatientIDHash,
+        PatientPKHash,
         SiteCode,
         ExitDate,
         ExitReason,
 		ReEnrollmentDate,
 		EffectiveDiscontinuationDate,
-        row_number() over (partition by PatientPK, SiteCode order by ExitDate desc) as rank
+        row_number() over (partition by PatientPKHash, SiteCode order by ExitDate desc) as rank
     from exits_as_of_date
 ),
 last_exit_as_of_date as (
@@ -150,10 +154,11 @@ last_exit_as_of_date as (
 visits_and_dispense_encounters_combined_tbl as (
     /* combine latest visits and latest pharmacy dispensation records as of date */
     /* we don't include the CT_ARTPatients table logic because this table has only the latest records of the patients (no history) */
-    select  distinct coalesce (last_visit.PatientID, last_dispense.PatientID) as PatientID,
+    select  distinct coalesce (last_visit.PatientIDHash, last_dispense.PatientIDHash) as PatientIDHash,
             coalesce(last_visit.SiteCode, last_dispense.SiteCode) as SiteCode,
-            coalesce(last_visit.PatientPK, last_dispense.PatientPK) as PatientPK ,
+            coalesce(last_visit.PatientPKHash, last_dispense.PatientPKHash) as PatientPKHash ,
             coalesce(last_visit.Emr, last_dispense.Emr) as Emr,
+            DifferentiatedCare,
             case
                 when last_visit.VisitDate >= last_dispense.DispenseDate then last_visit.VisitDate 
                 else isnull(last_dispense.DispenseDate, last_visit.VisitDate)
@@ -164,7 +169,7 @@ visits_and_dispense_encounters_combined_tbl as (
             end as NextAppointmentDate
     from last_visit_encounter_as_of_date as last_visit
     full join last_pharmacy_dispense_as_of_date as last_dispense on last_visit.SiteCode = last_dispense.SiteCode 
-        and last_visit.PatientPK = last_dispense.PatientPK
+        and last_visit.PatientPKHash = last_dispense.PatientPKHash
     where 
         case
             when last_visit.VisitDate >= last_dispense.DispenseDate then last_visit.VisitDate 
@@ -174,11 +179,12 @@ visits_and_dispense_encounters_combined_tbl as (
 last_encounter_cleaned as (
     /* cleaning TCA dates far away */
     select
-        visits_and_dispense_encounters_combined_tbl.PatientID,
+        visits_and_dispense_encounters_combined_tbl.PatientIDHash,
         visits_and_dispense_encounters_combined_tbl.SiteCode,
-        visits_and_dispense_encounters_combined_tbl.PatientPK,
+        visits_and_dispense_encounters_combined_tbl.PatientPKHash,
         visits_and_dispense_encounters_combined_tbl.Emr,
         visits_and_dispense_encounters_combined_tbl.LastEncounterDate,
+        DifferentiatedCare,
         case 
 			when datediff(dd, @as_of_date, visits_and_dispense_encounters_combined_tbl.NextAppointmentDate) >= 365 then dateadd(day, 30, LastEncounterDate)
             else visits_and_dispense_encounters_combined_tbl.NextAppointmentDate 
@@ -189,17 +195,18 @@ last_encounter_cleaned as (
 last_encounter as (
     /* preparing the latest encounter records as of date */
     select
-		last_encounter_cleaned.PatientID,
+		last_encounter_cleaned.PatientIDHash,
 		last_encounter_cleaned.SiteCode,
-		last_encounter_cleaned.PatientPK,
+		last_encounter_cleaned.PatientPKHash,
 		last_encounter_cleaned.Emr,
 		last_encounter_cleaned.LastEncounterDate,
+        last_encounter_cleaned.DifferentiatedCare,
 		case 
 			when visits_and_dispense_encounters_combined_tbl.NextAppointmentDate > last_encounter_cleaned.NextAppointmentDate then visits_and_dispense_encounters_combined_tbl.NextAppointmentDate
 			else last_encounter_cleaned.NextAppointmentDate
 		end as NextAppointmentDate
     from last_encounter_cleaned
-	left join visits_and_dispense_encounters_combined_tbl on visits_and_dispense_encounters_combined_tbl.PatientPK = last_encounter_cleaned.PatientPK
+	left join visits_and_dispense_encounters_combined_tbl on visits_and_dispense_encounters_combined_tbl.PatientPKHash = last_encounter_cleaned.PatientPKHash
 		and visits_and_dispense_encounters_combined_tbl.SiteCode = last_encounter_cleaned.SiteCode 
 ),
 ARTOutcomesCompuation as (
@@ -233,17 +240,18 @@ ARTOutcomesCompuation as (
 	@as_of_date as AsOfDate
     from last_encounter
     left join last_exit_as_of_date on last_exit_as_of_date.SiteCode = last_encounter.SiteCode
-        and last_exit_as_of_date.PatientPK = last_encounter.PatientPK
+        and last_exit_as_of_date.PatientPKHash = last_encounter.PatientPKHash
     left join patient_art_and_enrollment_info on patient_art_and_enrollment_info.SiteCode = last_encounter.SiteCode
-        and patient_art_and_enrollment_info.PatientPK = last_encounter.PatientPK
+        and patient_art_and_enrollment_info.PatientPKHash = last_encounter.PatientPKHash
     where patient_art_and_enrollment_info.startARTDate is not null
 )
 insert into tmp_and_adhoc.dbo.HistoricalARTOutcomesBaseTable
 select 
-	ARTOutcomesCompuation.PatientID as PatientID,
-    ARTOutcomesCompuation.PatientPK,
+    ARTOutcomesCompuation.PatientIDHash as PatientIDHash,
+    ARTOutcomesCompuation.PatientPKHash as PatientPKHash,
     ARTOutcomesCompuation.SiteCode as MFLCode,
     ARTOutcomesCompuation.ARTOutcome,
+    ARTOutcomesCompuation.DifferentiatedCare,
 	ARTOutcomesCompuation.LastEncounterDate,
 	ARTOutcomesCompuation.NextAppointmentDate,
 	ARTOutcomesCompuation.AsOfDate
