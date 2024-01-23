@@ -121,7 +121,7 @@ ushauri_patient_source
              LEFT JOIN ods.dbo.intermediate_artoutcomes AS outcomes
                 ON outcomes.patientpkhash = ushauri.patientpkhash
                 AND outcomes.sitecode = ushauri.sitecode
-                where Patient.PatientPKHash is null
+                where Patient.PatientPKHash is null and patient.voided=0
              
               ),
 
