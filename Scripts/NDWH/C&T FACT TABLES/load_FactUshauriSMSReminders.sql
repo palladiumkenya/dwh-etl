@@ -13,7 +13,7 @@ BEGIN
            Partner.Partnerkey,
            Patient.Patientkey,
            Agency.Agencykey,
-           Apt.Maritalstatus,
+           Patient.Maritalstatus,
            Age_group.Agegroupkey,
            Appointment.Datekey           AS AppointmentDateKey,
            Appointmenttype,
