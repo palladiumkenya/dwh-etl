@@ -13,7 +13,6 @@ BEGIN
            Partner.Partnerkey,
            Patient.Patientkey,
            Agency.Agencykey,
-           EOMONTH(TRY_CONVERT(date, Appointmentdate)) AS AsofDate, ---This date has conversion issues----
            Apt.Maritalstatus,
            Age_group.Agegroupkey,
            Appointment.Datekey           AS AppointmentDateKey,
@@ -72,8 +71,7 @@ BEGIN
            LEFT JOIN Ndwh.Dbo.Dimagency AS Agency
                   ON Agency.Agencyname = Mfl_partner_agency_combination.Agency
            LEFT JOIN Ndwh.Dbo.Dimagegroup AS Age_group
-                  ON Age_group.Agegroupkey = Datediff(Yy, Patient.Dob,
-                                             Try_convert (Date, Appointmentdate))
+                  ON Age_group.Agegroupkey = DATEDIFF(YEAR, TRY_CONVERT(DATE, Apt.Dob), TRY_CONVERT(DATE, Appointmentdate))
            LEFT JOIN Ndwh.Dbo.Dimdate AS As_of
                   ON As_of.Date = Try_convert(Date, Apt.Appointmentdate)
            LEFT JOIN Ndwh.Dbo.Dimdate AS Appointment
