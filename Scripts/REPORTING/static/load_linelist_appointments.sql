@@ -3,11 +3,13 @@ drop table [REPORTING].[dbo].LinelistAppointments
 
 GO
 
-with dsd_models as (
+with dsd_models_as_of as (
 	select 
 		PatientKey,
-		DifferentiatedCare
-	from NDWH.dbo.FactLatestObs
+		DifferentiatedCare,
+    AsofDateKey
+	from NDWH.dbo.FactARTHistory
+	where DifferentiatedCare is not null and DifferentiatedCare <> ''
 )
 select 
   Patient.PatientIDHash,
@@ -28,7 +30,7 @@ select
   apt.AppointmentStatus,
   apt.AsOfDate,
   age_group.DATIMAgeGroup,
-  dsd_models.DifferentiatedCare as LatestDSDModel,
+  dsd_models_as_of.DifferentiatedCare as DSDModel,
   CAST(GETDATE() AS DATE) AS LoadDate 
 into [REPORTING].[dbo].LinelistAppointments
 from NDWH.dbo.FACTAppointments as apt
@@ -37,7 +39,6 @@ left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = apt.PartnerKey
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = apt.PatientKey
 left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = apt.AgencyKey
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.AgeGroupKey = DATEDIFF(YY,patient.DOB,apt.AsOfDate)
-left join dsd_models on dsd_models.PatientKey = apt.PatientKey
+left join dsd_models_as_of on dsd_models_as_of.PatientKey = apt.PatientKey
+  and dsd_models_as_of.AsofDateKey = apt.AsOfDateKey
 where AsOfDate >='2017-01-31'
-
-
