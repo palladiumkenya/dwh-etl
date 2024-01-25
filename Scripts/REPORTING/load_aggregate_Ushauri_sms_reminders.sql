@@ -1,97 +1,160 @@
-IF Object_id(N'[Reporting].[Dbo].[AggregateUshauriSMSReminders]', N'U') IS NOT NULL
-  DROP TABLE [Reporting].[Dbo].[AggregateUshauriSmsReminders];
+If Object_id(N'[Reporting].[Dbo].[AggregateUshauriSMSReminders]', N'U') Is Not
+   Null
+  Drop Table [Reporting].[Dbo].[Aggregateushaurismsreminders];
 
-BEGIN
-    WITH Bookedappointments
-         AS (SELECT Asofdate,
-                    Count(Patientkey) AS NumberBooked,
-                    Mflcode
-             FROM   Ndwh.Dbo.Factushaurismsreminders Sms
-                    LEFT JOIN Ndwh.Dbo.Dimfacility Fac
-                           ON Fac.Facilitykey = Sms.Facilitykey
-             WHERE  Appointmentstatus IS NOT NULL
-             GROUP  BY Asofdate,
-                       Mflcode),
-         Consentedappointments
-         AS (SELECT Asofdate,
-                    Count(Patientkey) AS NumberConsented,
-                    Mflcode
-             FROM   Ndwh.Dbo.Factushaurismsreminders Sms
-                    LEFT JOIN Ndwh.Dbo.Dimfacility Fac
-                           ON Fac.Facilitykey = Sms.Facilitykey
-             WHERE  Consentforsms = 'YES'
-             GROUP  BY Asofdate,
-                       Mflcode),
-         Receivedsms AS (
-              SELECT 
-              COALESCE(Try_convert(Date,FourWeekSMSSendDateKey) , 
-                               Try_convert(Date, ThreeWeekSMSSendDateKey) ,
-                               Try_convert(Date, Twoweeksmssenddatekey) ,
-                               Try_convert(Date, Oneweeksmssenddatekey) ,
-                               Try_convert(Date, Onedaysmssenddatekey)) AS AsofDate,
-                    Count(Patientkey) AS NumberReceivedSMS ,
-                    Mflcode
-             FROM   Ndwh.Dbo.Factushaurismsreminders Sms
-                    LEFT JOIN Ndwh.Dbo.Dimfacility Fac
-                           ON Fac.Facilitykey = Sms.Facilitykey
-             WHERE  COALESCE(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
+Begin
+    With bookedappointments
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberBooked,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.Factushaurismsreminders Sms
+             Where  Appointmentstatus Is Not Null
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+         consentedappointments
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberConsented,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.Factushaurismsreminders Sms
+             Where  Consentforsms = 'YES'
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+         receivedsms
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberReceivedSMS,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.Factushaurismsreminders Sms
+             Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
-             GROUP  BY Try_convert(Date, FourWeekSMSSendDateKey) ,
-                       Try_convert(Date, ThreeWeekSMSSendDateKey),
-                       Try_convert(Date, TwoWeekSMSSendDateKey) ,
-                       Try_convert(Date, OneWeekSMSSendDateKey) ,
-                       Try_convert(Date, OneDaySMSSendDateKey) ,
-                       Mflcode),
-         Honouredappointments
-         AS (SELECT Asofdate,
-                    Count(Patientkey) AS NumberHonouredAppointment,
-                    Mflcode
-             FROM   Ndwh.Dbo.Factushaurismsreminders Sms
-                    LEFT JOIN Ndwh.Dbo.Dimfacility Fac
-                           ON Fac.Facilitykey = Sms.Facilitykey
-             WHERE  Appointmentstatus = 'honoured'
-             GROUP  BY Asofdate,
-                       Mflcode),
-         Appointmentcounts AS (SELECT Asofdate,
-                    Count(Patientkey) AS TotalAppointments,
-                    Mflcode
-             FROM   Ndwh.Dbo.Factushaurismsreminders Sms
-                    LEFT JOIN Ndwh.Dbo.Dimfacility Fac
-                           ON Fac.Facilitykey = Sms.Facilitykey
-             GROUP  BY Asofdate,
-                       Mflcode)
-    SELECT Appointmentcounts.Mflcode,
-           Appointmentcounts.Asofdate,
-           COALESCE(Bookedappointments.Numberbooked, 0)                    AS
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+         honouredappointments
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                       NumberHonouredAppointment,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.Factushaurismsreminders Sms
+             Where  Appointmentstatus = 'honoured'
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+         appointmentcounts
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    Totalappointments,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.Factushaurismsreminders Sms
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey)
+    Select Bookedappointments.Asofdate,
+           Fac.Mflcode,
+           Partner.Partnername,
+           Agency.Agencyname,
+           Age.Agegroupkey
+           As
+           AgeGroup,
+           Coalesce (Bookedappointments.Numberbooked, 0)
+           As
            NumberBooked,
-           COALESCE(Consentedappointments.Numberconsented, 0)              AS
+           Coalesce (Consentedappointments.Numberconsented, 0)
+           As
            NumberConsented,
-           COALESCE(Receivedsms.Numberreceivedsms, 0)                      AS
+           Coalesce (Receivedsms.Numberreceivedsms, 0)
+           As
            NumberReceivedSMS,
-           COALESCE(Honouredappointments.Numberhonouredappointment, 0)     AS
+           Coalesce (Honouredappointments.Numberhonouredappointment, 0)
+           As
            NumberHonouredAppointment,
-           COALESCE(Cast(Honouredappointments.Numberhonouredappointment AS Float
+           Coalesce(Cast(Honouredappointments.Numberhonouredappointment As Float
                     ) /
-                             Appointmentcounts.Totalappointments * 100, 0) AS
+                    Nullif(
+                             Appointmentcounts.Totalappointments, 0) * 100, 0)
+           As
            PercentHonoured
-    INTO   Reporting.Dbo.AggregateUshauriSmsReminders
-    FROM   Appointmentcounts
-           LEFT JOIN Bookedappointments
-                  ON Appointmentcounts.Mflcode = Bookedappointments.Mflcode
-                     AND Bookedappointments.Asofdate =
-                         Appointmentcounts.Asofdate
-           LEFT JOIN Consentedappointments
-                  ON Appointmentcounts.Mflcode = Consentedappointments.Mflcode
-                     AND Appointmentcounts.Asofdate =
-                         Consentedappointments.Asofdate
-           LEFT JOIN Receivedsms
-                  ON Appointmentcounts.Mflcode = Receivedsms.Mflcode
-                     AND Appointmentcounts.Asofdate = Receivedsms.Asofdate
-           LEFT JOIN Honouredappointments
-                  ON Appointmentcounts.Mflcode = Receivedsms.Mflcode
-                     AND Appointmentcounts.Asofdate = Receivedsms.Asofdate
-    WHERE  Appointmentcounts.Mflcode > 0
-           AND Appointmentcounts.Asofdate IS NOT NULL
-END 
-
+    Into   reporting.dbo.Aggregateushaurismsreminders
+    From   bookedappointments
+           Left Join ndwh.dbo.Dimfacility Fac
+                  On Fac.Facilitykey = Bookedappointments.Facilitykey
+           Left Join ndwh.dbo.Dimagency Agency
+                  On Agency.Agencykey = Bookedappointments.Agencykey
+           Left Join ndwh.dbo.Dimpartner Partner
+                  On Partner.Partnerkey = Bookedappointments.Partnerkey
+           Left Join ndwh.dbo.Dimagegroup Age
+                  On Age.Agegroupkey = Bookedappointments.Agegroupkey
+           Left Join consentedappointments
+                  On Consentedappointments.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And Consentedappointments.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And Consentedappointments.Agencykey =
+                         Bookedappointments.Agencykey
+                     And Consentedappointments.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And Consentedappointments.Asofdate =
+                         Bookedappointments.Asofdate
+           Left Join receivedsms
+                  On Receivedsms.Facilitykey = Bookedappointments.Facilitykey
+                     And Receivedsms.Partnerkey = Bookedappointments.Partnerkey
+                     And Receivedsms.Agencykey = Bookedappointments.Agencykey
+                     And Receivedsms.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And Receivedsms.Asofdate = Bookedappointments.Asofdate
+           Left Join honouredappointments
+                  On Honouredappointments.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And Honouredappointments.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And Honouredappointments.Agencykey =
+                         Bookedappointments.Agencykey
+                     And Honouredappointments.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And Honouredappointments.Asofdate =
+                         Bookedappointments.Asofdate
+           Left Join appointmentcounts
+                  On Appointmentcounts.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And Appointmentcounts.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And Appointmentcounts.Agencykey =
+                         Bookedappointments.Agencykey
+                     And Appointmentcounts.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And Appointmentcounts.Asofdate =
+                         Bookedappointments.Asofdate
+    Where  Bookedappointments.Asofdate Is Not Null
+End 
