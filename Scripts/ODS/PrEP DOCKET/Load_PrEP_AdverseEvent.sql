@@ -2,7 +2,7 @@
 BEGIN
 --truncate table [ODS].[dbo].[PrEP_AdverseEvent]
 MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
-	USING(SELECT 
+	USING(SELECT distinct
 				  a.[Id]
 				  ,a.[RefId]
 				  ,a.[Created]
@@ -32,12 +32,16 @@ MERGE [ODS].[dbo].[PrEP_AdverseEvent] AS a
 				  ,a.[Date_Last_Modified]
 				  
 			FROM [PREPCentral].[dbo].[PrepAdverseEvents](NoLock) a
+			INNER JOIN 
+			(SELECT patientPK,sitecode,max(cast(created as date))as Maxcreated from [PREPCentral].[dbo].[PrepAdverseEvents](NoLock) group by patientPK,sitecode)tn
+			on a.patientPK = tn.patientPK 
+				and a.sitecode =tn.sitecode and cast(a.created as date) = tn.Maxcreated
 			inner join    [PREPCentral].[dbo].[PrepPatients](NoLock) b
-		on a.SiteCode = b.SiteCode 
-		and a.PatientPk =  b.PatientPk
-		and a.[PrepNumber] = b.[PrepNumber]
-		) AS b 	 
-		ON(
+			on a.SiteCode = b.SiteCode 
+			and a.PatientPk =  b.PatientPk
+			and a.[PrepNumber] = b.[PrepNumber]
+			) AS b 	 
+			ON(
 
 			a.PatientPK  = b.PatientPK						
 			and a.SiteCode = b.SiteCode

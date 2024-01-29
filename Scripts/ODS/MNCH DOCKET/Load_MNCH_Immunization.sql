@@ -9,9 +9,9 @@ BEGIN
 								  ,[BCGScarChecked],[DateChecked],[DateBCGrepeated],[VitaminAAt6Months],[VitaminAAt1Yr],[VitaminAAt18Months]
 								  ,[VitaminAAt2Years],[VitaminAAt2To5Years],[FullyImmunizedChild]
 							  FROM [MNCHCentral].[dbo].[MnchImmunizations]i (NoLock)
-						inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[MnchImmunizations] (NoLock)tn
+						inner join (select tn.PatientPK,tn.SiteCode,max(cast(tn.DateExtracted as date))MaxDateExtracted FROM [MNCHCentral].[dbo].[MnchImmunizations] (NoLock)tn
 						group by tn.PatientPK,tn.SiteCode)tm
-							on i.PatientPk = tm.PatientPk and i.SiteCode = tm.SiteCode and i.DateExtracted = tm.MaxDateExtracted ) AS b 
+							on i.PatientPk = tm.PatientPk and i.SiteCode = tm.SiteCode and cast(i.DateExtracted as date) = tm.MaxDateExtracted ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode

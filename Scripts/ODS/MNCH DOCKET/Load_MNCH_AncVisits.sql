@@ -14,24 +14,18 @@ BEGIN
 					  ,[ReferredFrom],[ReferredTo],[ReferralReasons],cast([NextAppointmentANC] as date)[NextAppointmentANC]
 					  ,[ClinicalNotes] , P.[Date_Last_Modified]
 				  FROM [MNCHCentral].[dbo].[AncVisits] (NoLock) P
-					inner join (select tn.PatientPK,tn.SiteCode,tn.VisitDate,max(tn.DateExtracted)MaxDateExtracted 
+					inner join (select tn.PatientPK,tn.SiteCode,tn.VisitDate,max(cast(tn.DateExtracted as date))MaxDateExtracted 
 									FROM [MNCHCentral].[dbo].[AncVisits] (NoLock)tn
 									group by tn.PatientPK,tn.SiteCode,tn.VisitDate
 								)tm
 					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode
-					and p.VisitDate = tm.VisitDate  and p.DateExtracted = tm.MaxDateExtracted
-					--INNER JOIN  [MNCHCentral].[dbo].[MnchPatients](NOLOCK)  Mnchp -- to be reviwed later
-					--on P.PatientPK = Mnchp.patientPK and P.SiteCode = Mnchp.Sitecode
+					and p.VisitDate = tm.VisitDate  and cast(p.DateExtracted as date) = tm.MaxDateExtracted
 					INNER JOIN [MNCHCentral].[dbo].[Facilities](NoLock) F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
-						--and a.[PatientMnchID]  = b.[PatientMnchID]
-						--and a.[ANCClinicNumber]  = b.[ANCClinicNumber]
-						--and a.DateExtracted = b.DateExtracted
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate  
-						--and a.ChronicIllness  = b.ChronicIllness
 
 						)
 					WHEN NOT MATCHED THEN 

@@ -1,5 +1,4 @@
 BEGIN
-    --truncate table [ODS].[dbo].[MNCH_PncVisits]
 	MERGE [ODS].[dbo].[MNCH_PncVisits] AS a
 			USING(
 					SELECT distinct P.[PatientMnchID],P.[PatientPk],[PNCRegisterNumber],P.[SiteCode],P.[EMR],F.Name FacilityName,P.[Project]
@@ -20,12 +19,10 @@ BEGIN
 						  ,[VisitTimingMother]
 
 					  FROM [MNCHCentral].[dbo].[PncVisits] P (nolock)
-					  inner join (select tn.SiteCode,tn.PatientPK,tn.VisitDate,tn.visitID,max(tn.DateExtracted)MaxDateExtracted 
+					  inner join (select tn.SiteCode,tn.PatientPK,tn.VisitDate,tn.visitID,max(cast(tn.DateExtracted as date))MaxDateExtracted 
 									FROM [MNCHCentral].[dbo].[PncVisits] (NoLock)tn
 								  group by tn.SiteCode,tn.PatientPK,tn.VisitDate,tn.visitID)tm
-								on  p.SiteCode = tm.SiteCode and P.PatientPk = tm.PatientPk and p.VisitDate = tm.VisitDate and p.VisitID = tm.VisitID and   p.DateExtracted = tm.MaxDateExtracted
-					  -- INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)
-							--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+								on  p.SiteCode = tm.SiteCode and P.PatientPk = tm.PatientPk and p.VisitDate = tm.VisitDate and p.VisitID = tm.VisitID and   cast(p.DateExtracted as Date) = tm.MaxDateExtracted
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id ) AS b 
 						ON(
 						 a.PatientPK	= b.PatientPK 

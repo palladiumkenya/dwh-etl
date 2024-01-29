@@ -1,26 +1,5 @@
 BEGIN
-		
-			--;with cte AS ( Select            
-			--		a.PatientPk,
-			--		a.sitecode,
-			--		a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited,  ROW_NUMBER() OVER (PARTITION BY a.PatientPk,a.sitecode,a.PartnerPersonID,a.PartnerPatientPk,a.DateElicited
-			--		ORDER BY a.DateElicited desc) Row_Num
-			--FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
-			--INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-			--  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode) 
-			
-		
-			--delete pb from  [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) pb		 
-			--inner join cte on cte.PatientPk = pb.PatientPk   
-			--	and cte.SiteCode =  pb.SiteCode    
-			--	and cte.PartnerPersonID =pb.PartnerPersonID
-			--	and cte.PartnerPatientPk = pb.PartnerPatientPk
-			--	and cte.DateElicited = pb.DateElicited
 
-			--where  Row_Num  > 1;
-
-
-		--truncate table [ODS].[dbo].[HTS_PartnerNotificationServices]
 		MERGE [ODS].[dbo].[HTS_PartnerNotificationServices] AS a
 			USING(SELECT DISTINCT a.ID,a.[FacilityName]
 				  ,a.[SiteCode]
@@ -48,9 +27,6 @@ BEGIN
 				  ,[LinkDateLinkedToCare]
 					,a.Dateextracted
 			  FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
-			  --inner join ( select n.SiteCode,n.PatientPk,n.HtsNumber,n.KnowledgeOfHivStatus,n.RelationsipToIndexClient,Max(n.DateExtracted)MaxDateExtracted FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock)n
-					--		group by n.SiteCode,n.PatientPk,n.HtsNumber,n.KnowledgeOfHivStatus,n.RelationsipToIndexClient)tn
-					--on a.siteCode = tn.SiteCode and a.patientPK =tn.patientPK and  a.KnowledgeOfHivStatus=tn.KnowledgeOfHivStatus and a.RelationsipToIndexClient = tn.RelationsipToIndexClient and a.DateExtracted=tn.MaxDateExtracted
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
 			  ) AS b 

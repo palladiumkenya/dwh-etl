@@ -27,11 +27,13 @@ BEGIN
 					 ,pkv
 					FROM [HTSCentral].[dbo].[Clients](NoLock) a
 				INNER JOIN (
-								SELECT SiteCode,PatientPK, MAX(datecreated) AS Maxdatecreated
+								SELECT SiteCode,PatientPK, MAX(cast(datecreated as date)) AS Maxdatecreated
 								FROM  [HTSCentral].[dbo].[Clients](NoLock)
 								GROUP BY SiteCode,PatientPK
 							) tm 
-				ON a.[SiteCode] = tm.[SiteCode] and a.PatientPK=tm.PatientPK and a.datecreated = tm.Maxdatecreated
+				ON a.[SiteCode] = tm.[SiteCode] and 
+				a.PatientPK=tm.PatientPK and 
+				cast(a.datecreated as date) = tm.Maxdatecreated
 				 WHERE a.DateExtracted > '2019-09-08'
 					) AS b 
 						ON(

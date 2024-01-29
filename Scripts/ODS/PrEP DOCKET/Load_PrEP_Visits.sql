@@ -1,11 +1,7 @@
 
 BEGIN
---ALTER DATABASE SCOPED CONFIGURATION 
---  SET VERBOSE_TRUNCATION_WARNINGS = ON;
---truncate table [ODS].[dbo].[PrEP_Visits]
 MERGE [ODS].[dbo].[PrEP_Visits] AS a
 	USING(SELECT distinct
-				  -- a.[Id]
 				  a.[RefId]
 				  ,a.[Created]
 				  ,a.[PatientPk]
@@ -70,15 +66,15 @@ MERGE [ODS].[dbo].[PrEP_Visits] AS a
 				  ,a.[Date_Created]
 				  ,a.[Date_Last_Modified]
 		FROM [PREPCentral].[dbo].[PrepVisits](NoLock) a
-			INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated 
+			INNER JOIN (SELECT PatientPk, SiteCode, max(cast(Created as date)) AS maxCreated 
 						from [PREPCentral].[dbo].[PrepVisits]
 							group by PatientPk,SiteCode) tn
-		ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+		ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and cast(a.Created as date) = tn.maxCreated
 
-		INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted 
+		INNER JOIN (SELECT PatientPk, SiteCode, max(cast(DateExtracted as date)) AS maxDateExtracted 
 					from [PREPCentral].[dbo].[PrepVisits]
 					group by PatientPk,SiteCode) tm
-			ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+			ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and cast(a.DateExtracted as date)= tm.maxDateExtracted
 		)AS b      
             ON(
 

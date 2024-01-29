@@ -68,9 +68,18 @@ BEGIN
 							,PaedsDisclosure,PV.[Date_Created],PV.[Date_Last_Modified]
 							,PV.RecordUUID
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
-						LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
-						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 
+						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 						
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+						INNER JOIN (
+								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,[VisitId],visitDate,InnerPV.voided, MAX(InnerPV.created) AS Maxdatecreated
+								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
+									INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] InnerPV WITH(NoLock)  ON InnerPV.[PatientId]= P.ID 
+									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+								GROUP BY F.code,p.[PatientPID],[VisitId],visitDate,InnerPV.voided
+							) tm 
+							ON f.code = tm.[SiteCode] and p.PatientPID=tm.PatientPK and 
+							pv.[VisitId] = tm.[VisitId] and pv.visitDate = tm.visitDate and pv.voided = tm.voided and 
+							pv.created = tm.Maxdatecreated
 						WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 							 a.PatientPK  = b.PatientPK 

@@ -1,3 +1,19 @@
+---------------Insert into FactArtHistory before droping FactART for new data
+BEGIN
+	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],[IsTXCurr],
+												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
+	SELECT [FactKey],[FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],NULL [AsOfDateKey],
+		CASE 
+			WHEN ARTOutcomeKey = 'ACTIVE' THEN 1
+			ELSE 0
+		END
+		[IsTXCurr],
+		[ARTOutcomeKey],[NextAppointmentDate],LastVisitDate,[LoadDate],
+		Getdate() As DateTimeStamp
+	FROM [NDWH].[dbo].[FactART]
+END
+---------------End
+
 
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];

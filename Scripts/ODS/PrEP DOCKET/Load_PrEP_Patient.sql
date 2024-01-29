@@ -1,6 +1,5 @@
 
 BEGIN
---truncate table [ODS].[dbo].[PrEP_Patient]
 MERGE [ODS].[dbo].[PrEP_Patient] AS a
 	USING(SELECT  ID
 				  ,[RefId]
@@ -46,9 +45,9 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 				  ,[Date_Last_Modified]
  	 FROM [PREPCentral].[dbo].[PrepPatients](NoLock) c
 	 INNER JOIN 
-		(SELECT patientPK,sitecode,max(created)as Maxcreated from [PREPCentral].[dbo].[PrepPatients](NoLock) group by patientPK,sitecode)tn
+		(SELECT patientPK,sitecode,max(cast(created as date))as Maxcreated from [PREPCentral].[dbo].[PrepPatients](NoLock) group by patientPK,sitecode)tn
 		on c.patientPK = tn.patientPK 
-			and c.sitecode =tn.sitecode and c.created = tn.Maxcreated) AS b 
+			and c.sitecode =tn.sitecode and cast(c.created as date) = tn.Maxcreated) AS b 
 	 
 	ON(
 			a.PatientPK  = b.PatientPK						
