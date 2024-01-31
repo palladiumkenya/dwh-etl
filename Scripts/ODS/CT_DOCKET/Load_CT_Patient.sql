@@ -42,6 +42,7 @@ BEGIN
 						WHEN MATCHED THEN
 							UPDATE SET 				
 							a.PatientID					=b.PatientID,
+							a.nupi       				 = b.nupi,
 							a.PatientSource				=b.PatientSource,							
 							a.ContactRelation			=b.ContactRelation,
 							a.LastVisit					=b.LastVisit,
