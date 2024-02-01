@@ -12,7 +12,7 @@ BEGIN
 			MERGE [ODS].[dbo].[CT_Patient] AS a
 				USING(SELECT  DISTINCT P.ID,P.[PatientCccNumber] as PatientID,P.[PatientPID] as PatientPK,F.Code as SiteCode,F.[Name] as FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC
 										,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village
-									   ,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,Orphan,Inschool,null PatientType,null PopulationType,KeyPopulationType,PatientResidentCounty,
+									   ,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,P.Emr,P.Project,Orphan,Inschool,PatientType,null PopulationType,null KeyPopulationType,PatientResidentCounty,
 									   PatientResidentSubCounty,PatientResidentLocation,PatientResidentSubLocation,PatientResidentWard,PatientResidentVillage,TransferInDate,Occupation,NUPI
 									   ,Pkv,P.[Date_Created],P.[Date_Last_Modified]
 									   ,P.RecordUUID,P.voided

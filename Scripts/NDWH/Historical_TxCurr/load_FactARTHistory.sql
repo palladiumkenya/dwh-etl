@@ -1,10 +1,26 @@
 BEGIN
-	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],[IsTXCurr],
-												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
-	SELECT [FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey] [AsOfDateKey],
-		 ARTOutcomeKey,
-		
-		[ARTOutcomeKey],[NextAppointmentDate],LastVisitDate,[LoadDate],
-		Getdate() As DateTimeStamp
-	FROM [NDWH].[dbo].[FactART]
-END
+    INSERT INTO [NDWH].[dbo].[factarthistory]
+                ([facilitykey],
+                 [partnerkey],
+                 [agencykey],
+                 [patientkey],
+                 [asofdatekey],
+                 [istxcurr],
+                 [artoutcomekey],
+                 [nextappointmentdate],
+                 [lastencounterdate],
+                 [loaddate],
+                 datetimestamp)
+    SELECT [facilitykey],
+           [partnerkey],
+           [agencykey],
+           [patientkey],
+           [asofdatekey] [AsOfDateKey],
+           artoutcomekey,
+           [artoutcomekey],
+           [nextappointmentdate],
+           lastvisitdate,
+           [loaddate],
+           Getdate()     AS DateTimeStamp
+    FROM   [NDWH].[dbo].[factart]
+END 
