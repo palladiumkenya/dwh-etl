@@ -45,7 +45,7 @@ BEGIN
 					 LEFT JOIN ods.dbo.lkp_htsStrategy mp
 						on a.TestStrategy = mp.Source_htsStrategy
 					 INNER JOIN ( select  ct.sitecode,ct.patientPK,ct.FinalTestResult,ct.TestDate,ct.EncounterId
-										  ,max(DateExtracted)MaxDateExtracted  
+										  ,max(cast(DateExtracted as date))MaxDateExtracted  
 									from [HTSCentral].[dbo].[HtsClientTests] ct								  
 									LEFT JOIN ods.dbo.lkp_patient_source mn
 										on ct.entryPoint = mn.source_name
@@ -56,7 +56,7 @@ BEGIN
 										)tn
 									on a.sitecode = tn.sitecode 
 									and a.patientPK = tn.patientPK 
-									and a.DateExtracted = tn.MaxDateExtracted								
+									and cast(a.DateExtracted as date) = tn.MaxDateExtracted								
 									and a.FinalTestResult = tn.FinalTestResult
 									and a.TestDate = tn.TestDate									
 									and coalesce(a.EncounterId,-1) = coalesce(tn.EncounterId,-1)

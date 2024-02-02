@@ -28,9 +28,9 @@ MERGE [ODS].[dbo].[PrEP_Lab] AS a
 			  ,a.[Date_Created]
 			  ,a.[Date_Last_Modified]
 		FROM [PREPCentral].[dbo].[PrepLabs](NoLock) a
-			inner join (select tn.PatientPK,tn.SiteCode,tn.PrepNumber,max(tn.Created)MaxCreated FROM [PREPCentral].[dbo].[PrepLabs](NoLock)tn
+			inner join (select tn.PatientPK,tn.SiteCode,tn.PrepNumber,max(cast(tn.Created as date))MaxCreated FROM [PREPCentral].[dbo].[PrepLabs](NoLock)tn
 						GROUP BY tn.PatientPK,tn.SiteCode,tn.PrepNumber)tm
-			on a.PatientPk = tm.PatientPk and a.SiteCode =tm.SiteCode and a.Created = tm.MaxCreated
+			on a.PatientPk = tm.PatientPk and a.SiteCode =tm.SiteCode and cast(a.Created as date) = tm.MaxCreated
 		INNER JOIN  [PREPCentral].[dbo].[PrepPatients](NoLock) b	
 		ON a.sitecode = b.sitecode
 		and a.patientPK = b.patientPK

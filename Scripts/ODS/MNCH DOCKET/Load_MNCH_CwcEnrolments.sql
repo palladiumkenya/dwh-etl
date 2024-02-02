@@ -1,6 +1,5 @@
 
 BEGIN
-    --truncate table [ODS].[dbo].[MNCH_CwcEnrolments]
 	MERGE [ODS].[dbo].[MNCH_CwcEnrolments] AS a
 			USING(
 					SELECT Distinct [PatientIDCWC],[HEIID],P.[PatientPk],P.[SiteCode],P.[EMR],F.Name FacilityName,P.[Project],cast(P.[DateExtracted] as date)[DateExtracted]
@@ -13,11 +12,9 @@ BEGIN
 						  ,P.[Date_Last_Modified]
 
 					  FROM [MNCHCentral].[dbo].[CwcEnrolments]P(Nolock)
-					  inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[CwcEnrolments] (NoLock)tn
+					  inner join (select tn.PatientPK,tn.SiteCode,max(cast(tn.DateExtracted as date))MaxDateExtracted FROM [MNCHCentral].[dbo].[CwcEnrolments] (NoLock)tn
 						group by tn.PatientPK,tn.SiteCode)tm
-					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
-					--  INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock)  -- to be reviwed later
-					--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and cast(p.DateExtracted as date) = tm.MaxDateExtracted
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities]F on F.Id=P.FacilityId ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 

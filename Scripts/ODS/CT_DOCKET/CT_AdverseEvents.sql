@@ -1,107 +1,175 @@
-BEGIN
+BEGIN ;
+    WITH cte
+         AS (SELECT P.patientpid,
+                    PA.patientid,
+                    F.code,
+                    PA.visitdate,
+                    PA.created,
+                    Row_number()
+                      OVER (
+                        partition BY P.patientpid, F.code, PA.visitdate
+                        ORDER BY PA.created DESC) Row_Num
+             FROM   [DWAPICentral].[dbo].[patientextract](nolock) P
+                    INNER JOIN
+                    [DWAPICentral].[dbo].patientadverseeventextract(nolock) PA
+                            ON PA.[patientid] = P.id
+                               AND PA.voided = 0
+                    INNER JOIN [DWAPICentral].[dbo].[facility](nolock) F
+                            ON P.[facilityid] = F.id
+                               AND F.voided = 0)
+    DELETE pb
+    FROM   [DWAPICentral].[dbo].patientadverseeventextract(nolock) pb
+           INNER JOIN [DWAPICentral].[dbo].[patientextract](nolock) P
+                   ON PB.[patientid] = P.id
+                      AND PB.voided = 0
+           INNER JOIN [DWAPICentral].[dbo].[facility](nolock) F
+                   ON P.[facilityid] = F.id
+                      AND F.voided = 0
+           INNER JOIN cte
+                   ON pb.patientid = cte.patientid
+                      AND cte.created = pb.created
+                      AND cte.code = f.code
+                      AND cte.visitdate = pb.visitdate
+    WHERE  Row_Num > 1;
 
-				;with cte AS ( Select            
-					P.PatientPID,            
-					PA.PatientId,            
-					F.code,
-					PA.VisitDate,
-					PA.created,  ROW_NUMBER() OVER (PARTITION BY P.PatientPID,F.code ,PA.VisitDate
-					ORDER BY PA.created desc) Row_Num
-				FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID AND PA.Voided=0
-					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 )      
-		
-			delete pb from     [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) pb
-			inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON PB.[PatientId]= P.ID AND PB.Voided = 0       
-			inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
-			inner join cte on pb.PatientId = cte.PatientId  
-				and cte.Created = pb.created 
-				and cte.Code =  f.Code     
-				and cte.VisitDate = pb.VisitDate
-			where  Row_Num  > 1;
+    DECLARE @MaxAdverseEventStartDate DATETIME,
+            @AdverseEventStartDate    DATETIME,
+            @MaxCreatedDate           DATETIME
 
+    SELECT @MaxAdverseEventStartDate = Max(maxadverseeventstartdate)
+    FROM   [ODS].[dbo].[ct_adverseevent_log] (nolock);
 
-		DECLARE	@MaxAdverseEventStartDate	DATETIME,
-				@AdverseEventStartDate		DATETIME,
-				@MaxCreatedDate				DATETIME
-				
-		SELECT @MaxAdverseEventStartDate		= MAX(MaxAdverseEventStartDate) FROM [ODS].[dbo].[CT_AdverseEvent_Log]  (NoLock);
-		SELECT @AdverseEventStartDate	= MAX(AdverseEventStartDate)	FROM [DWAPICentral].[dbo].[PatientAdverseEventExtract] WITH (NOLOCK) ;
-		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_AdverseEventCount_Log] WITH (NOLOCK) ;
-				
-		--insert into  [ODS].[dbo].[CT_AdverseEventCount_Log](CreatedDate)
-		--values(dateadd(year,-1,getdate()))
-						
-		INSERT INTO  [ODS].[dbo].[CT_AdverseEvent_Log](MaxAdverseEventStartDate,LoadStartDateTime)
-		VALUES(@AdverseEventStartDate,GETDATE());
+    SELECT @AdverseEventStartDate = Max(adverseeventstartdate)
+    FROM   [DWAPICentral].[dbo].[patientadverseeventextract] WITH (nolock);
 
-			--CREATE INDEX CT_AdverseEvents  ON [ODS].[dbo].[CT_AdverseEvents] (sitecode,PatientPK);
-	       ---- Refresh [ODS].[dbo].[CT_AdverseEvents]
-			MERGE [ODS].[dbo].[CT_AdverseEvents] AS a
-				USING(SELECT Distinct
-							P.[PatientCccNumber] AS PatientID, 
-							P.[PatientPID] AS PatientPK,
-							F.Name AS FacilityName, 
-							F.Code AS SiteCode,
-							[AdverseEvent], [AdverseEventStartDate], [AdverseEventEndDate], 
-							CASE [Severity]
-								WHEN '1' THEN 'Mild'
-								WHEN '2' THEN 'Moderate'
-								WHEN '3' THEN 'Severe' 
-								ELSE [Severity] 
-							END AS [Severity] , 
-							[VisitDate], 
-							PA.[EMR], PA.[Project], [AdverseEventCause], [AdverseEventRegimen],
-							[AdverseEventActionTaken],[AdverseEventClinicalOutcome], [AdverseEventIsPregnant]
-							,PA.ID
-							,PA.[Date_Created]
-						  ,PA.[Date_Last_Modified]
-						  , PA.RecordUUID,PA.voided
-					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].PatientAdverseEventExtract(NoLock) PA ON PA.[PatientId]= P.ID 
-					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 AND F.code >0 ) AS b 
-						ON(
-						 a.SiteCode = b.SiteCode
-						and  a.PatientPK  = b.PatientPK 
-						and a.VisitDate	=b.VisitDate
-						and a.voided   = b.voided
-						and a.ID = b.ID
-						)
+    SELECT @MaxCreatedDate = Max(createddate)
+    FROM   [ODS].[dbo].[ct_adverseeventcount_log] WITH (nolock);
 
-					WHEN NOT MATCHED THEN 
-						INSERT(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
-						VALUES(PatientID,Patientpk,SiteCode,AdverseEvent,AdverseEventStartDate,AdverseEventEndDate,Severity,VisitDate,EMR,Project,AdverseEventCause,AdverseEventRegimen,AdverseEventActionTaken,AdverseEventClinicalOutcome,AdverseEventIsPregnant,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
-				
-					WHEN MATCHED THEN
-						UPDATE SET 
-							a.[PatientID]					= b.[PatientID],
-							a.[AdverseEvent]				= b.[AdverseEvent],
-							a.[AdverseEventStartDate]		= b.[AdverseEventStartDate],
-							a.[AdverseEventEndDate]			= b.[AdverseEventEndDate],
-							a.[Severity]					= b.[Severity],
-							a.[VisitDate]					= b.[VisitDate],
-							a.[AdverseEventCause]			= b.[AdverseEventCause],
-							a.[AdverseEventRegimen]			= b.[AdverseEventRegimen],
-							a.[AdverseEventActionTaken]		= b.[AdverseEventActionTaken],
-							a.[AdverseEventClinicalOutcome]	= b.[AdverseEventClinicalOutcome],
-							a.[AdverseEventIsPregnant]		= b.[AdverseEventIsPregnant],
-							a.[FacilityName]				= b.[FacilityName],
-							a.[Date_Last_Modified]			= b.[Date_Last_Modified],
-							a.[Date_Created]				= b.[Date_Created],
-							a.[RecordUUID]					= b.[RecordUUID],
-							a.[voided]						= b.[voided];
+    --insert into  [ODS].[dbo].[CT_AdverseEventCount_Log](CreatedDate)
+    --values(dateadd(year,-1,getdate()))
+    INSERT INTO [ODS].[dbo].[ct_adverseevent_log]
+                (maxadverseeventstartdate,
+                 loadstartdatetime)
+    VALUES     (@AdverseEventStartDate,
+                Getdate());
 
-					
-			--------------------------------------------------------End
-				UPDATE [ODS].[dbo].[CT_AdverseEvent_Log]
-				  SET LoadEndDateTime = GETDATE()
-				  WHERE MaxAdverseEventStartDate = @AdverseEventStartDate;
+    --CREATE INDEX CT_AdverseEvents  ON [ODS].[dbo].[CT_AdverseEvents] (sitecode,PatientPK);
+    ---- Refresh [ODS].[dbo].[CT_AdverseEvents]
+    MERGE [ODS].[dbo].[ct_adverseevents] AS a
+    using(SELECT DISTINCT P.[patientcccnumber] AS PatientID,
+                          P.[patientpid]       AS PatientPK,
+                          F.NAME               AS FacilityName,
+                          F.code               AS SiteCode,
+                          [adverseevent],
+                          [adverseeventstartdate],
+                          [adverseeventenddate],
+                          CASE [severity]
+                            WHEN '1' THEN 'Mild'
+                            WHEN '2' THEN 'Moderate'
+                            WHEN '3' THEN 'Severe'
+                            ELSE [severity]
+                          END                  AS [Severity],
+                          [visitdate],
+                          PA.[emr],
+                          PA.[project],
+                          [adverseeventcause],
+                          [adverseeventregimen],
+                          [adverseeventactiontaken],
+                          [adverseeventclinicaloutcome],
+                          [adverseeventispregnant],
+                          PA.id,
+                          PA.[date_created],
+                          PA.[date_last_modified],
+                          PA.recorduuid,
+                          PA.voided
+          FROM   [DWAPICentral].[dbo].[patientextract](nolock) P
+                 INNER JOIN
+                 [DWAPICentral].[dbo].patientadverseeventextract(nolock)
+                 PA
+                         ON PA.[patientid] = P.id
+                 INNER JOIN [DWAPICentral].[dbo].[facility](nolock) F
+                         ON P.[facilityid] = F.id
+                            AND F.voided = 0
+                            AND F.code > 0) AS b
+    ON( a.sitecode = b.sitecode
+        AND a.patientpk = b.patientpk
+        AND a.visitdate = b.visitdate
+        AND a.voided = b.voided
+        AND a.id = b.id )
+    WHEN NOT matched THEN
+      INSERT(patientid,
+             patientpk,
+             sitecode,
+             adverseevent,
+             adverseeventstartdate,
+             adverseeventenddate,
+             severity,
+             visitdate,
+             emr,
+             project,
+             adverseeventcause,
+             adverseeventregimen,
+             adverseeventactiontaken,
+             adverseeventclinicaloutcome,
+             adverseeventispregnant,
+             [date_created],
+             [date_last_modified],
+             recorduuid,
+             voided,
+             loaddate)
+      VALUES(patientid,
+             patientpk,
+             sitecode,
+             adverseevent,
+             adverseeventstartdate,
+             adverseeventenddate,
+             severity,
+             visitdate,
+             emr,
+             project,
+             adverseeventcause,
+             adverseeventregimen,
+             adverseeventactiontaken,
+             adverseeventclinicaloutcome,
+             adverseeventispregnant,
+             [date_created],
+             [date_last_modified],
+             recorduuid,
+             voided,
+             Getdate())
+    WHEN matched THEN
+      UPDATE SET a.[patientid] = b.[patientid],
+                 a.[adverseevent] = b.[adverseevent],
+                 a.[adverseeventstartdate] = b.[adverseeventstartdate],
+                 a.[adverseeventenddate] = b.[adverseeventenddate],
+                 a.[severity] = b.[severity],
+                 a.[visitdate] = b.[visitdate],
+                 a.[adverseeventcause] = b.[adverseeventcause],
+                 a.[adverseeventregimen] = b.[adverseeventregimen],
+                 a.[adverseeventactiontaken] = b.[adverseeventactiontaken],
+                 a.[adverseeventclinicaloutcome] =
+                 b.[adverseeventclinicaloutcome],
+                 a.[adverseeventispregnant] = b.[adverseeventispregnant],
+                 a.[facilityname] = b.[facilityname],
+                 a.[date_last_modified] = b.[date_last_modified],
+                 a.[date_created] = b.[date_created],
+                 a.[recorduuid] = b.[recorduuid],
+                 a.[voided] = b.[voided];
 
-				--truncate table [ODS].[dbo].[CT_AdverseEventCount_Log]
-				INSERT INTO [ODS].[dbo].[CT_AdverseEventCount_Log]([SiteCode],[CreatedDate],[AdverseEventCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS AdverseEventCount 
-				FROM [ODS].[dbo].[CT_AdverseEvents] 
-				--WHERE @MaxCreatedDate  > @MaxCreatedDate
-				GROUP BY SiteCode;
+    --------------------------------------------------------End
+    UPDATE [ODS].[dbo].[ct_adverseevent_log]
+    SET    loadenddatetime = Getdate()
+    WHERE  maxadverseeventstartdate = @AdverseEventStartDate;
 
-	END
+    --truncate table [ODS].[dbo].[CT_AdverseEventCount_Log]
+    INSERT INTO [ODS].[dbo].[ct_adverseeventcount_log]
+                ([sitecode],
+                 [createddate],
+                 [adverseeventcount])
+    SELECT sitecode,
+           Getdate(),
+           Count(Concat(sitecode, patientpk)) AS AdverseEventCount
+    FROM   [ODS].[dbo].[ct_adverseevents]
+    --WHERE @MaxCreatedDate  > @MaxCreatedDate
+    GROUP  BY sitecode;
+END 

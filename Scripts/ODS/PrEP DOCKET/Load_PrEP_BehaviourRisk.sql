@@ -47,13 +47,13 @@ MERGE [ODS].[dbo].[PrEP_BehaviourRisk] AS a
 
 on a.SiteCode = b.SiteCode and a.PatientPk =  b.PatientPk 
 
-INNER JOIN (SELECT PatientPk, SiteCode, max(Created) AS maxCreated from [PREPCentral].[dbo].[PrepBehaviourRisks]
+INNER JOIN (SELECT PatientPk, SiteCode, max(cast(Created as date)) AS maxCreated from [PREPCentral].[dbo].[PrepBehaviourRisks]
               group by PatientPk,SiteCode) tn
-ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and a.Created = tn.maxCreated
+ON a.PatientPk = tn.PatientPk and a.SiteCode = tn.SiteCode and cast(a.Created as date) = tn.maxCreated
 
-INNER JOIN (SELECT PatientPk, SiteCode, max(DateExtracted) AS maxDateExtracted from [PREPCentral].[dbo].[PrepBehaviourRisks]
+INNER JOIN (SELECT PatientPk, SiteCode, max(cast(DateExtracted as date)) AS maxDateExtracted from [PREPCentral].[dbo].[PrepBehaviourRisks]
               group by PatientPk,SiteCode) tm
-ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and a.DateExtracted = tm.maxDateExtracted
+ON a.PatientPk = tm.PatientPk and a.SiteCode = tm.SiteCode and cast(a.DateExtracted as date) = tm.maxDateExtracted
 
 )
 AS b    			ON(

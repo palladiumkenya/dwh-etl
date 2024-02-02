@@ -28,6 +28,20 @@ BEGIN
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+					INNER JOIN (
+								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,
+								InnerPL.TestResult,InnerPL.TestName,InnerPL.OrderedbyDate,
+								InnerPL.voided,
+								MAX(cast(InnerPL.created as date)) AS Maxdatecreated
+								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
+									INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract] InnerPL WITH(NoLock)  ON InnerPL.[PatientId]= P.ID 
+									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+								GROUP BY F.code,p.[PatientPID],InnerPL.TestResult,InnerPL.TestName,InnerPL.OrderedbyDate,InnerPL.voided
+							) tm 
+							ON f.code = tm.[SiteCode] and p.PatientPID=tm.PatientPK and 
+							PL.TestResult = tm.TestResult and PL.TestName = tm.TestName and PL.OrderedbyDate = tm.OrderedbyDate and
+							PL.voided = tm.voided and
+							cast(PL.created as date) = tm.Maxdatecreated
 					WHERE p.gender!='Unknown') AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
@@ -41,6 +55,7 @@ BEGIN
 						and a.[Date_Created] = b.[Date_Created]
 						and a.RecordUUID = b.RecordUUID
 						and a.ID		=b.ID
+						and a.[Date_Last_Modified] = b.[Date_Last_Modified]
 						)
 
 												

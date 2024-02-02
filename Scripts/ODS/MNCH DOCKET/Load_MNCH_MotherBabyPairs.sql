@@ -1,6 +1,5 @@
 
 BEGIN
-    --truncate table [ODS].[dbo].[MNCH_MotherBabyPairs]
 	BEGIN
 		update MNCHCentral.[dbo].[MotherBabyPairs]
 			set MNCHCentral.[dbo].[MotherBabyPairs].FacilityId = [Facilities].id
@@ -18,18 +17,15 @@ BEGIN
 						  ,convert(nvarchar(64), hashbytes('SHA2_256', cast(MotherPatientPK  as nvarchar(36))), 2)MotherPatientPKHash
 						  ,convert(nvarchar(64), hashbytes('SHA2_256', cast(MotherPatientMncHeiID  as nvarchar(36))), 2)MotherPatientMncHeiIDHash
 					  FROM [MNCHCentral].[dbo].[MotherBabyPairs] P (Nolock)
-						INNER JOIN (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[MotherBabyPairs] (NoLock)tn
+						INNER JOIN (select tn.PatientPK,tn.SiteCode,max(cast(tn.DateExtracted as date))MaxDateExtracted FROM [MNCHCentral].[dbo].[MotherBabyPairs] (NoLock)tn
 						GROUP BY tn.PatientPK,tn.SiteCode)tm
-							ON P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
-							--INNER JOIN  [MNCHCentral].[dbo].[MnchPatients] MnchP(Nolock) -- to be reviwed later
-							--on P.patientPK = MnchP.patientPK and P.Sitecode = MnchP.Sitecode
+							ON P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and cast(p.DateExtracted as date) = tm.MaxDateExtracted
 						INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id) AS b 
 						ON(
 
 						 a.PatientPK			= b.PatientPK 
 					    and a.SiteCode			= b.SiteCode
 						and a.[BabyPatientPK]	= b.[BabyPatientPK]
-						--and a.[MotherPatientPK] = b.[MotherPatientPK]
 							)
 					WHEN NOT MATCHED THEN 
 						INSERT(PatientIDCCC,PatientPk,BabyPatientPK,MotherPatientPK,BabyPatientMncHeiID,MotherPatientMncHeiID,SiteCode,FacilityName,EMR,Project,Date_Last_Modified,DateExtracted,PatientPKHash,BabyPatientPKHash,MotherPatientPKHash,MotherPatientMncHeiIDHash,LoadDate)  

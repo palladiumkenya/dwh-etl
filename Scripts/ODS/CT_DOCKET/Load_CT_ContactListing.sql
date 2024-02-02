@@ -32,12 +32,15 @@ BEGIN
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
-					INNER JOIN (SELECT p.[PatientPID],F.code,CL.Contactage,max(cl.created)Maxcreated 
+					INNER JOIN (SELECT p.[PatientPID],F.code,CL.Contactage,max(cast(cl.created as date))Maxcreated 
 								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 								INNER JOIN [DWAPICentral].[dbo].[ContactListingExtract](NoLock) CL ON CL.[PatientId] = P.ID 
 								INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 								GROUP BY p.[PatientPID],F.code,CL.Contactage)tn
-								on p.[PatientPID] = tn.[PatientPID] and F.code = tn.code and cl.created = tn.Maxcreated and cl.Contactage = tn.Contactage
+								on p.[PatientPID] = tn.[PatientPID] and 
+								F.code = tn.code and 
+								cast(cl.created as date) = tn.Maxcreated and
+								 cl.Contactage = tn.Contactage
 					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
