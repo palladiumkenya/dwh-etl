@@ -1,13 +1,27 @@
 ---------------Insert into FactArtHistory before droping FactART for new data
 BEGIN
-	INSERT INTO [NDWH].[dbo].[FactARTHistory]([FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],
-												[ARTOutcomeKey],[NextAppointmentDate],[LastEncounterDate],[LoadDate],DateTimeStamp)
-	SELECT [FacilityKey],[PartnerKey],[AgencyKey],[PatientKey],[AsOfDateKey],
-		
-			 ARTOutcomeKey ,
-            [NextAppointmentDate],LastVisitDate,[LoadDate],
-		Getdate() As DateTimeStamp
-	FROM [NDWH].[dbo].[FactART]
+	INSERT INTO [NDWH].[dbo].[factarthistory]
+            ([facilitykey],
+             [partnerkey],
+             [agencykey],
+             [patientkey],
+             [asofdatekey],
+             [artoutcomekey],
+             [nextappointmentdate],
+             [lastencounterdate],
+             [loaddate],
+             datetimestamp)
+SELECT [facilitykey],
+       [partnerkey],
+       [agencykey],
+       [patientkey],
+       [asofdatekey],
+       artoutcomekey,
+       [nextappointmentdate],
+       lastvisitdate,
+       [loaddate],
+       Getdate() AS DateTimeStamp
+FROM   [NDWH].[dbo].[factart] 
 END
 
 ---------------End
