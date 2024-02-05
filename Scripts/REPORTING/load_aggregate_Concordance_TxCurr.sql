@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].aggregate_concordance_txcurr', N'U') IS NOT NULL drop table [REPORTING].[dbo].aggregate_concordance_txcurr 
+IF OBJECT_ID(N'[REPORTING].[dbo].Aggregate_Concordance_Txcurr', N'U') IS NOT NULL drop table [REPORTING].[dbo].Aggregate_Concordance_Txcurr 
 Select
    MFLCode,
    FacilityName,
@@ -16,7 +16,7 @@ Select
    Proportion_variance_KHIS_DWH,
    Proportion_variance_KHIS_EMR ,
    DwapiVersion
-   into Reporting.dbo.aggregate_concordance_txcurr
+   into Reporting.dbo.Aggregate_Concordance_Txcurr
   
 from
    NDWH.dbo.FACTTxCurrConcordance as txcurr 
