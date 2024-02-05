@@ -1,6 +1,8 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].aggregate_concordance_htspos', N'U') IS NOT NULL drop table [REPORTING].[dbo].aggregate_concordance_htspos 
 Select
+   MFLCode,
    FacilityName,
+   County,
    PartnerName,
    Agency,
    KHIS_HTSPos,
@@ -12,7 +14,8 @@ Select
    Proportion_variance_EMR_DWH,
    Proportion_variance_KHIS_DWH,
    Proportion_variance_KHIS_EMR,
-   Reporting_Month
+   Reporting_Month,
+   DwapiVersion
    into Reporting.dbo.aggregate_concordance_htspos 
 from
    NDWH.dbo.FactHTSPosConcordance as htspos 
