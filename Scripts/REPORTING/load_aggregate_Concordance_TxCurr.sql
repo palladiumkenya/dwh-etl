@@ -1,6 +1,8 @@
 IF OBJECT_ID(N'[REPORTING].[dbo].aggregate_concordance_txcurr', N'U') IS NOT NULL drop table [REPORTING].[dbo].aggregate_concordance_txcurr 
 Select
+   MFLCode,
    FacilityName,
+   County,
    PartnerName,
    Agency,
    txcurr.EMR,
@@ -12,7 +14,10 @@ Select
    DiffKHISEMR,
    Proportion_variance_EMR_DWH,
    Proportion_variance_KHIS_DWH,
-   Proportion_variance_KHIS_EMR into Reporting.dbo.aggregate_concordance_txcurr 
+   Proportion_variance_KHIS_EMR ,
+   DwapiVersion
+   into Reporting.dbo.aggregate_concordance_txcurr
+  
 from
    NDWH.dbo.FACTTxCurrConcordance as txcurr 
    LEFT join
