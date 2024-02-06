@@ -11,7 +11,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus Is Not Null
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -27,7 +27,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Consentforsms = 'YES'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -42,7 +42,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
@@ -59,7 +59,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus = 'honoured'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -74,7 +74,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
                        Partnerkey,
@@ -89,7 +89,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus ='not honoured'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -107,7 +107,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  (Tracingcalls = 1 OR TracingSMS = 1 OR TracingHomevisits = 1)
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -125,7 +125,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found '
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -142,7 +142,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracinghomevisits=1
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -159,7 +159,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracingoutcome='Client returned to care '
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -304,3 +304,4 @@ Begin
                          Bookedappointments.Asofdate
     Where  Bookedappointments.Asofdate Is Not Null
 End 
+
