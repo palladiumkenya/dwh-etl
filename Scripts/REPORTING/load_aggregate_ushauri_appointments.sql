@@ -6,7 +6,6 @@ Begin
          As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
                     Count(Patientkey)                              As
                     NumberBooked,
-                    Patientkey,
                     Facilitykey,
                     Partnerkey,
                     Agencykey,
@@ -14,7 +13,6 @@ Begin
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus Is Not Null
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
-                       Patientkey,
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
