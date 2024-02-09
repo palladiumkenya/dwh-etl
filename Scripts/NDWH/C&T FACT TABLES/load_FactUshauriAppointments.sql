@@ -1,5 +1,5 @@
-IF Object_id(N'[NDWH].[dbo].[FactUshauriSmsReminders]', N'U') IS NOT NULL
-  DROP TABLE [Ndwh].[Dbo].[FactUshauriSmsReminders];
+IF Object_id(N'[NDWH].[dbo].[FactUshauriAppointments]', N'U') IS NOT NULL
+  DROP TABLE [Ndwh].[Dbo].[FactUshauriAppointments];
 
 BEGIN
     WITH Mfl_partner_agency_combination
@@ -56,7 +56,7 @@ BEGIN
            Datereturnedtocare.Datekey    AS DateReturnedToCareDateKey,
            Daysdefaulted,
            Nupihash
-    INTO   Ndwh.Dbo.FactUshauriSmsReminders
+    INTO   Ndwh.Dbo.FactUshauriAppointments
     FROM   Ods.Dbo.Ushauri_patientappointments AS Apt
            LEFT JOIN Ndwh.Dbo.Dimfacility AS Facility
                   ON Facility.Mflcode = Apt.Sitecode
@@ -101,7 +101,7 @@ BEGIN
                   ON Datereturnedtocare.Date =
                      Try_convert(Date, Apt.Datereturnedtocare)
 
-    ALTER TABLE Ndwh.Dbo.Factushaurismsreminders
+    ALTER TABLE Ndwh.Dbo.FactUshauriAppointments
       ADD PRIMARY KEY(Factkey);
 END 
 

@@ -1,6 +1,6 @@
-If Object_id(N'[Reporting].[Dbo].[AggregateUshauriSMSReminders]', N'U') Is Not
+If Object_id(N'[Reporting].[Dbo].[AggregateUshauriAppointments]', N'U') Is Not
    Null
-  Drop Table [Reporting].[Dbo].[Aggregateushaurismsreminders];
+  Drop Table [Reporting].[Dbo].[AggregateUshauriAppointments];
 
 Begin
     With bookedappointments
@@ -106,7 +106,7 @@ Begin
                              Appointmentcounts.Totalappointments, 0) * 100, 0)
            As
            PercentHonoured
-    Into   reporting.dbo.Aggregateushaurismsreminders
+    Into   reporting.dbo.AggregateUshauriAppointments
     From   bookedappointments
            Left Join ndwh.dbo.Dimfacility Fac
                   On Fac.Facilitykey = Bookedappointments.Facilitykey
