@@ -14,14 +14,3 @@ UPDATE a
 FROM [ODS].[dbo].[Ushauri_Patient] a
 WHERE a.PatientPK IS NULL;
 
-UPDATE a
-	SET PatientPKHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPk  as nvarchar(36))), 2)
-FROM [ODS].[dbo].[Ushauri_Patient] a
-WHERE PatientPKHash IS NULL;
-
-
-UPDATE a
-	SET  UshauriPatientPKHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[UshauriPatientPk]  as nvarchar(36))), 2),
-		 PatientIDHash  =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.PatientID  as nvarchar(36))), 2) ,
-		 NUPIHash  =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[NUPI]  as nvarchar(36))), 2) 
-FROM [ODS].[dbo].[Ushauri_Patient] a
