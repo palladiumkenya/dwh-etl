@@ -9,8 +9,3 @@ FROM [ODS].[dbo].[Ushauri_Patient] a
 ON  a.sitecode = p.sitecode AND a.patientID = p.patientID;
 
 
-UPDATE a
-    SET a.PatientPK = a.UshauriPatientPK
-FROM [ODS].[dbo].[Ushauri_Patient] a
-WHERE a.PatientPK IS NULL;
-
