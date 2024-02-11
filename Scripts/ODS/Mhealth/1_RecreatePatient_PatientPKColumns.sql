@@ -1,4 +1,6 @@
+/* Renaming patientPK column coming from mhealth to UshauriPatientPK for the purpose of matching patient from C&T to  ones coming from ushauri. */
 BEGIN
+  
 		IF  EXISTS(SELECT * FROM sys.columns  
            WHERE Name = N'PatientPK' 
              AND Object_ID = Object_ID(N'[ODS].[dbo].[Ushauri_Patient]'))
