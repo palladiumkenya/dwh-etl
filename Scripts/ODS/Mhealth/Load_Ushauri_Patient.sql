@@ -73,11 +73,5 @@ BEGIN
 						a.[Date_Modified]					=	b.[Date_Modified],
 						a.[PKV]							=	b.[PKV],
 						a.[NUPI]							=	b.[NUPI];
-
-				UPDATE a
-				SET  PatientPKHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[PatientPk]  as nvarchar(36))), 2),
-					PatientIDHash  =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.PatientID  as nvarchar(36))), 2) ,
-					NUPIHash  =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[NUPI]  as nvarchar(36))), 2) 
-				FROM [ODS].[dbo].[Ushauri_Patient] a
 		
 	END
