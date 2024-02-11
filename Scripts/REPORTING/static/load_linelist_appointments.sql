@@ -29,8 +29,12 @@ select
   DiffExpectedTCADateLastEncounter,
   apt.AppointmentStatus,
   apt.AsOfDate,
+  RegimenAsof,
+	StartARTDate,
+  Patienttype,
+  NoOfUnscheduledVisitsAsOf,
   age_group.DATIMAgeGroup,
-  dsd_models_as_of.DifferentiatedCare as DSDModel,
+  dsd_models_as_of.DifferentiatedCare as DSDModelAsOf,
   CAST(GETDATE() AS DATE) AS LoadDate 
 into [REPORTING].[dbo].LinelistAppointments
 from NDWH.dbo.FACTAppointments as apt

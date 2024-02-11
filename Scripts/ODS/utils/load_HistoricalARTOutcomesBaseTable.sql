@@ -1,16 +1,14 @@
 use tmp_and_adhoc;
 
---truncate the table
+-- NB:first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
+--truncate the table if you need to load afresh 
 truncate table tmp_and_adhoc.dbo.HistoricalARTOutcomesBaseTable;
 
--- first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 
+-- declare your start and end dates.
 declare 
 @start_date date = <>,
 @end_date date = <>;
--- declare your start and end dates.
-
-
 
 ---creating a temporary table with end of day dates for each month between start and end
 with dates as (
