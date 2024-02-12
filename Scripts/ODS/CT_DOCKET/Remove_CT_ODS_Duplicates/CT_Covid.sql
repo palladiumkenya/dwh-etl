@@ -11,3 +11,8 @@
 						)
 						delete from cte 
 						Where Row_Num >1 ;
+
+				INSERT INTO [ODS].[dbo].[ODS_Logs].[dbo].[CT_CovidCount_Log]([SiteCode],[CreatedDate],[CovidCount])
+				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS CovidCount 
+				FROM [ODS].[dbo].[CT_Covid] 
+				GROUP BY SiteCode;
