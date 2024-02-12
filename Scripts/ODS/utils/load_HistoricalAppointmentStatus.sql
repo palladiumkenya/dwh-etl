@@ -7,8 +7,8 @@ truncate table tmp_and_adhoc.dbo.HistoricalAppointmentStatus;
 
 ---declare your start and end dates.
 declare 
-@start_date date = '2020-06-01',
-@end_date date = '2023-06-30';
+@start_date date = '2020-01-01',
+@end_date date = '2023-12-31';
 
 with dates as (
      
@@ -49,7 +49,7 @@ with clinical_visits_as_of_date as (
         SiteCode,
         VisitDate,
         NextAppointmentDate,
-        CurrentRegimen as Regimen  
+        CurrentRegimen as RegimenAsof  
     from  ODS.dbo.CT_PatientVisits
     where SiteCode > 0 and NextAppointmentDate >= DATEADD(month, -6, @as_of_date) 
 
@@ -214,7 +214,7 @@ last_exit_as_of_date as (
                 when last_visit.NextAppointmentDate >= last_dispense.ExpectedReturn then last_visit.NextAppointmentDate 
                 else isnull(last_dispense.ExpectedReturn, last_visit.NextAppointmentDate)  
             end as NextAppointmentDate,
-            Regimen
+            RegimenAsOf
     from last_visit_encounter_as_of_date as last_visit
     full join last_pharmacy_dispense_as_of_date as last_dispense on  last_visit.SiteCode = last_dispense.SiteCode 
         and last_visit.PatientPK = last_dispense.PatientPK
@@ -313,7 +313,7 @@ from ODS.dbo.CT_FacilityManifest
             when datediff(dd, @as_of_date, visits_and_dispense_encounters_combined_tbl.NextAppointmentDate) >= 365 then dateadd(day, 30, LastEncounterDate)
             else visits_and_dispense_encounters_combined_tbl.NextAppointmentDate 
         end As NextAppointmentDate,
-        Regimen   
+        RegimenAsOf   
     from visits_and_dispense_encounters_combined_tbl
      ),
 
@@ -333,7 +333,6 @@ ARTOutcomesCompuation as (
         second_last_encounter.second_last_NextAppointmentDate as ExpectedNextAppointmentDate,
 		second_last_encounter.Second_Last_EncounterDate as ExpectedLastEncounter,
         datediff(mm, patient_art_and_enrollment_info.StartARTDate, eomonth(@as_of_date)) ARTDurationMonths,
-        Regimen,
         @as_of_date as AsOfDate
     from last_encounter
     left join latest_effective_discontinuation on latest_effective_discontinuation.PatientPK = last_encounter.PatientPK
@@ -381,7 +380,7 @@ select
     ARTOutcomesCompuation.StartARTDate,
     ARTOutcomesCompuation.ARTDurationMonths,
     last_upload_as_of_date.DateRecieved,
-    Regimen
+    RegimenAsof
 from ARTOutcomesCompuation  
 left join last_exit_as_of_date on  last_exit_as_of_date.PatientPK= ARTOutcomesCompuation.PatientPK
     and last_exit_as_of_date.sitecode=ARTOutcomesCompuation.sitecode
@@ -402,18 +401,19 @@ unscheduled_visits_as_of_date as (
         PatientPK,
         SiteCode
 )
-  --Insert into ODS.dbo.[HistoricalAppointmentStatus]
-    -- select * from Summary 
+insert into tmp_and_adhoc.dbo.HistoricalAppointmentStatus
 Select 
-    * 
-into ODS.dbo.[HistoricalAppointmentStatus]
+    summary.* ,
+	unscheduled_visits_as_of_date.NoOfUnscheduledVisits
+
 from Summary
 left join unscheduled_visits_as_of_date on unscheduled_visits_as_of_date.PatientPK = summary.PatientPK 
-    and unscheduled_visits_as_of_date.SiteCode = summary.SiteCode
+    and unscheduled_visits_as_of_date.SiteCode = summary.MFLCode
     and unscheduled_visits_as_of_date.AsOfDate = summary.AsOfDate
 where AppointmentStatus in ('Came before','Dead','IIT and RTT beyond 30 days','IIT and RTT within 30 days','LostinHMIS','LTFU','Missed 1-7 days','Missed 15-30 days','Missed 8-14 days','On time','Still IIT','Stopped','Transfer-Out') 
 
 fetch next from cursor_AsOfDates into @as_of_date
+
 end
 
 --free up objects

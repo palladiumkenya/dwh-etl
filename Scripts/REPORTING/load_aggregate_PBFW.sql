@@ -19,7 +19,7 @@ SELECT
     SUM (Case When HasValidVL=1 and PBFW_ValidVLSup=1 Then 1 else 0 End) AS PBFWSuppressed,
     SUM (Case When HasValidVL=1 and PBFW_ValidVLSup=0 Then 1 Else 0 End ) AS PBFWUnsuppressed,
     Sum (Case When RepeatVls=1 Then 1 Else 0 End) As PBFWRepeatVl,
-     Sum (Case When RepeatSuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlSuppressed,
+    Sum (Case When RepeatSuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlSuppressed,
     Sum (Case When RepeatUnsuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlUnSuppressed,
     Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC1=1 Then 1 else 0 End) As PBFWUnsupReceivedEAC1,
     Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC2=1 Then 1 Else 0 End) As PBFWUnsupReceivedEAC2,
