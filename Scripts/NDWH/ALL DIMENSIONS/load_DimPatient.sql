@@ -265,7 +265,6 @@ ushauri_patient_source_nonEMR
            FROM   combined_matched_all_programs) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
-		 and a.voided  = b.voided
         )
     WHEN NOT matched THEN
       INSERT(patientidhash,
@@ -318,7 +317,8 @@ ushauri_patient_source_nonEMR
 				 a.IsTXCurr          = b.IsTXCurr,
 				 a.enrollmentwhokey  =b.enrollmentwhokey,
 				 a.baselinewhokey  =b.baselinewhokey,
-				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey;
+				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
+                 a.voided=b.voided;
 				
 END 
 
