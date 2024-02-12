@@ -318,8 +318,8 @@ ushauri_patient_source_nonEMR
 				 a.IsTXCurr          = b.IsTXCurr,
 				 a.enrollmentwhokey  =b.enrollmentwhokey,
 				 a.baselinewhokey  =b.baselinewhokey,
-				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
-				 a.voided				= b.voided;
+				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey;
+				
 END 
 
 
