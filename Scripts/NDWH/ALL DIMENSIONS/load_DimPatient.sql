@@ -84,7 +84,7 @@ BEGIN
 
 ushauri_patient_source_nonEMR
          AS (SELECT DISTINCT 
-                             ushauri.patientpkhash,
+                             ushauri.UshauriPatientPkHash,
                              ushauri.PatientIDHash,
                              ushauri.patientpk,
                              ushauri.sitecode,
@@ -94,41 +94,15 @@ ushauri_patient_source_nonEMR
                              ushauri.gender,
                              ushauri.maritalstatus,
                              ushauri.nupihash,
-                             baselines.ewho
-                                AS EnrollmentWHOKey,
-                             Cast(Format(COALESCE(ewhodate, '1900-01-01'),
-                                  'yyyyMMdd') AS
-                                  INT) AS
-                             DateEnrollmentWHOKey,
-                             bwho
-                                AS BaseLineWHOKey,
-                             Cast(Format(COALESCE(bwhodate, '1900-01-01'),
-                                  'yyyyMMdd') AS
-                                  INT) AS
-                             DateBaselineWHOKey,
-                             CASE
-                               WHEN outcomes.artoutcome = 'V' THEN 1
-                               ELSE 0
-                             END
-                                AS IsTXCurr,
-                                ushauri.SiteType
+                             ushauri.SiteType
              FROM   ods.dbo.Ushauri_Patient AS ushauri
-             LEFT JOIN ods.dbo.CT_Patient As patient
-              ON ushauri.PatientPKHash=patient.PatientPKHash
-              AND ushauri.SiteCode=patient.SiteCode
-              LEFT JOIN ods.dbo.ct_patientbaselines AS baselines
-              ON ushauri.patientpkhash = baselines.patientpkhash
-                AND ushauri.sitecode = baselines.sitecode and baselines.voided=0
-             LEFT JOIN ods.dbo.intermediate_artoutcomes AS outcomes
-                ON outcomes.patientpkhash = ushauri.patientpkhash
-                AND outcomes.sitecode = ushauri.sitecode
-                where Patient.PatientPKHash is null and patient.voided=0
+                where ushauri.PatientPKHash is null 
              
               ),
 
          combined_data_ct_hts_ushauri
          AS (SELECT COALESCE(ct_patient_source.patientpkhash,
-                    hts_patient_source.patientpkhash,ushauri_patient_source_nonEMR.patientpkhash) AS
+                    hts_patient_source.patientpkhash,ushauri_patient_source_nonEMR.UshauriPatientPKHash) AS
                     PatientPKHash,
                     COALESCE(ct_patient_source.sitecode,
                     hts_patient_source.sitecode,ushauri_patient_source_nonEMR.sitecode)
@@ -147,11 +121,11 @@ ushauri_patient_source_nonEMR
                     COALESCE (ct_patient_source.patientidhash,ushauri_patient_source_nonEMR.patientidhash) As PatientIdhash,
                     COALESCE (ct_patient_source.patienttype,ushauri_patient_source_nonEMR.patienttype) AS ClientType,
                     COALESCE(ct_patient_source.patientsource,ushauri_patient_source_nonEMR.patientsource) As Patientsource,
-                    COALESCE(ct_patient_source.enrollmentwhokey,ushauri_patient_source_nonEMR.enrollmentwhokey) As enrollmentwhokey,
-                    COALESCE(ct_patient_source.dateenrollmentwhokey,ushauri_patient_source_nonEMR.dateenrollmentwhokey) As dateenrollmentwhokey,
-                    COALESCE (ct_patient_source.baselinewhokey,ushauri_patient_source_nonEMR.baselinewhokey) As baselinewhokey,
-                    COALESCE (ct_patient_source.datebaselinewhokey,ushauri_patient_source_nonEMR.datebaselinewhokey) As datebaselinewhokey,
-                    COALESCE(ct_patient_source.istxcurr,ushauri_patient_source_nonEMR.istxcurr) As istxcurr,
+                    ct_patient_source.enrollmentwhokey As enrollmentwhokey,
+                    ct_patient_source.dateenrollmentwhokey As dateenrollmentwhokey,
+                    ct_patient_source.baselinewhokey As baselinewhokey,
+                    ct_patient_source.datebaselinewhokey As datebaselinewhokey,
+                    ct_patient_source.istxcurr As istxcurr,
                     hts_patient_source.htsnumberhash,
                     sitetype,
                     Cast(Getdate() AS DATE)
@@ -164,7 +138,7 @@ ushauri_patient_source_nonEMR
                     AND ct_patient_source.sitecode =
                                   hts_patient_source.sitecode
                     FULL JOIN ushauri_patient_source_nonEMR
-                    ON ushauri_patient_source_nonEMR.PatientPKHash=ct_patient_source.PatientPKHash
+                    ON ushauri_patient_source_nonEMR.UshauriPatientPkHash=ct_patient_source.PatientPKHash
                     AND ushauri_patient_source_nonEMR.SiteCode=ct_patient_source.SiteCode
                                   ),
          combined_data_ct_hts_prep_ushauri
@@ -349,10 +323,4 @@ ushauri_patient_source_nonEMR
 END 
 
 
-select 
-    ushauripatientpk,
-    Emr,
-    PatientPK
 
- from ODS.dbo.Ushauri_Patient
- where emr='KenyaEMR'
