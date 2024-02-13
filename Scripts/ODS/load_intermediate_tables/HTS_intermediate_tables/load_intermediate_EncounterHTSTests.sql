@@ -29,7 +29,6 @@ BEGIN
             TestType,
             Setting,
             Consent,
-            ReferredForServices,
             ReferredServices
         from ODS.dbo.HTS_ClientTests
         where FinalTestResult is not null and TestDate is not null and EncounterId is not null
