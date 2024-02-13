@@ -1,3 +1,4 @@
+
 BEGIN
     WITH ct_patient_source
          AS (SELECT DISTINCT patients.patientidhash,
@@ -261,7 +262,8 @@ ushauri_patient_source_nonEMR
                   combined_matched_all_programs.patientmnchidhash,
                   combined_matched_all_programs.firstenrollmentatmnchdatekey,
                   combined_matched_all_programs.loaddate,
-				  combined_matched_all_programs.voided
+				  combined_matched_all_programs.voided,
+				  sitetype
            FROM   combined_matched_all_programs) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
@@ -284,7 +286,8 @@ ushauri_patient_source_nonEMR
              baselinewhokey,PrepEnrollmentDateKey,
              istxcurr,
              loaddate,
-			 voided)
+			 voided,
+			 sitetype)
       VALUES(patientidhash,
              patientpkhash,
              htsnumberhash,
@@ -303,7 +306,8 @@ ushauri_patient_source_nonEMR
              PrepEnrollmentDateKey,
              istxcurr,
              loaddate,
-			 voided)
+			 voided,
+			 sitetype)
     WHEN matched THEN
       UPDATE SET a.maritalstatus = b.maritalstatus,
                  a.clienttype		= b.clienttype,
@@ -318,9 +322,7 @@ ushauri_patient_source_nonEMR
 				 a.enrollmentwhokey  =b.enrollmentwhokey,
 				 a.baselinewhokey  =b.baselinewhokey,
 				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
-                 a.voided=b.voided;
+                 a.voided=b.voided,
+				 a.sitetype   = b.sitetype;
 				
 END 
-
-
-
