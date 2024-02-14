@@ -28,10 +28,10 @@ BEGIN
 	 DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
-			SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_AllergiesChronicIllness_Log]  (NoLock)
+			SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log]  (NoLock)
 			SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] WITH (NOLOCK) 					
 					
-			INSERT INTO  [ODS].[dbo].[CT_AllergiesChronicIllness_Log](MaxVisitDate,LoadStartDateTime)
+			INSERT INTO  [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log](MaxVisitDate,LoadStartDateTime)
 			VALUES(@VisitDate,GETDATE())
 
 	       ---- Refresh [ODS].[dbo].[CT_AllergiesChronicIllness]
@@ -92,16 +92,10 @@ BEGIN
 							a.RecordUUID			=b.RecordUUID,
 							a.voided		=b.voided;
 												
-
 					
-					UPDATE [ODS].[dbo].[CT_AllergiesChronicIllness_Log]
+					UPDATE [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 					
-					INSERT INTO [ODS].[dbo].[CT_AllergiesChronicIllnessCount_Log]([SiteCode],[CreatedDate],[AllergiesChronicIllnessCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount 
-					FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
-					--WHERE @MaxCreatedDate  > @MaxCreatedDate
-					GROUP BY SiteCode;
 
 	END
