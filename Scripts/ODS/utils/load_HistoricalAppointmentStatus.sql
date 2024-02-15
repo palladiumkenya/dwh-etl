@@ -7,8 +7,8 @@ truncate table tmp_and_adhoc.dbo.HistoricalAppointmentStatus;
 
 ---declare your start and end dates.
 declare 
-@start_date date = '2020-01-01',
-@end_date date = '2023-12-31';
+@start_date date = <>,
+@end_date date = <>;
 
 with dates as (
      
