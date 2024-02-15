@@ -63,7 +63,7 @@ BEGIN
 						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 						
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
 						INNER JOIN (
-								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,[VisitId],visitDate,InnerPV.voided, MAX(InnerPV.created) AS Maxdatecreated
+								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,[VisitId],visitDate,InnerPV.voided,max(InnerPV.ID) maxID, MAX(InnerPV.created) AS Maxdatecreated
 								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
 									INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] InnerPV WITH(NoLock)  ON InnerPV.[PatientId]= P.ID 
 									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -71,7 +71,8 @@ BEGIN
 							) tm 
 							ON f.code = tm.[SiteCode] and p.PatientPID=tm.PatientPK and 
 							pv.[VisitId] = tm.[VisitId] and pv.visitDate = tm.visitDate and pv.voided = tm.voided and 
-							pv.created = tm.Maxdatecreated
+							pv.created = tm.Maxdatecreated and
+							PV.ID =tm. maxID
 						WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 							 a.PatientPK  = b.PatientPK 
