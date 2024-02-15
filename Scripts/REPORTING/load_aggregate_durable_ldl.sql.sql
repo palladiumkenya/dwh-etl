@@ -72,7 +72,7 @@ eligible_for_two_vl_tests as (
 		left join NDWH.dbo.DimDate as start_date on start_date.DateKey = art.StartARTDateKey
 			and datediff(month, start_date.Date, eomonth(dateadd(mm,-1,getdate()))) >= 9
 ),
-two_consecutive_tests_within_the_year as (
+two_consecutive_tests_within_two_years as (
 	select
 		eligible_for_two_vl_tests.PatientKey,
 		vl.LatestVL1,
@@ -83,7 +83,7 @@ two_consecutive_tests_within_the_year as (
 	inner join NDWH.dbo.FactViralLoads as vl on vl.PatientKey =eligible_for_two_vl_tests.PatientKey
 	inner join NDWH.dbo.DimDate as vl2Date on vl2Date.DateKey = vl.LatestVLDate2Key
 	inner join NDWH.dbo.DimDate as vl1Date on vl1Date.DateKey = vl.LatestVLDate1Key
-	where datediff(month, vl2Date.Date, eomonth(dateadd(mm,-1,getdate()))) <= 12  /* make sure the second last vl is within 12 months */
+	where datediff(month, vl2Date.Date, eomonth(dateadd(mm,-1,getdate()))) <= 24  /* make sure the second last vl is within 24 months */
 		and concat(LatestVL1,LatestVLDate1Key) <> concat(LatestVL2,LatestVLDate2Key) /* clean up to ommit duplicate entries on same day */
 ),
 durable_LDL as (
@@ -91,7 +91,7 @@ durable_LDL as (
 		Patientkey,
 		LatestVL1,
 		LatestVL2
-	from two_consecutive_tests_within_the_year
+	from two_consecutive_tests_within_two_years
 	where (isnumeric(LatestVL2) = 1 and  cast(replace(LatestVL2, ',', '') as  float) < 50.00  or
 		LatestVL2 in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level'))
 	and 
@@ -113,15 +113,15 @@ select
 	sum(EligibleVL) as EligibleVL,
 	sum(HasValidVL) as HasValidVL,
 	sum(case when eligible_for_two_vl_tests.PatientKey is not null then 1 else 0 end) as CountEligibleForTwoVLTests,
-	sum(case when two_consecutive_tests_within_the_year.PatientKey is not null then 1 else 0 end) as CountTwoConsecutiveTestsWithinTheYear,
+	sum(case when two_consecutive_tests_within_two_years.PatientKey is not null then 1 else 0 end) as CountTwoConsecutiveTestsWithinTwoYears,
     sum(
-        case when (isnumeric(two_consecutive_tests_within_the_year.LatestVL1) = 1 and cast(replace(two_consecutive_tests_within_the_year.LatestVL1, ',', '') as  float) < 50.00 ) or
-		    (two_consecutive_tests_within_the_year.LatestVL1 in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level')) then 1 else 0 end) as CountLDLLastOneTest,
+        case when (isnumeric(two_consecutive_tests_within_two_years.LatestVL1) = 1 and cast(replace(two_consecutive_tests_within_two_years.LatestVL1, ',', '') as  float) < 50.00 ) or
+		    (two_consecutive_tests_within_two_years.LatestVL1 in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level')) then 1 else 0 end) as CountLDLLastOneTest,
     sum(case when durable_LDL.PatientKey is not null then 1 else 0 end) as CountDurableLDL
 into REPORTING.dbo.AggregateLDLDurable
 from base_data
 left join eligible_for_two_vl_tests on eligible_for_two_vl_tests.PatientKey = base_data.PatientKey
-left join two_consecutive_tests_within_the_year on two_consecutive_tests_within_the_year.PatientKey = base_data.PatientKey
+left join two_consecutive_tests_within_two_years on two_consecutive_tests_within_two_years.PatientKey = base_data.PatientKey
 left join durable_LDL on durable_LDL.PatientKey = base_data.PatientKey
 left join NDWH.dbo.DimAgeGroup g ON g.AgeGroupKey= base_data.AgeGroupKey
 left join NDWH.dbo.DimFacility f ON f.FacilityKey = base_data.FacilityKey
@@ -139,3 +139,4 @@ group by
 	g.DATIMAgeGroup,
 	PBFWCategory,
 	ValidVLResultCategory
+
