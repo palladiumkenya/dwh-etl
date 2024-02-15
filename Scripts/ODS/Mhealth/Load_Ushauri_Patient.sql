@@ -13,18 +13,17 @@ BEGIN
 					FROM [mhealthCentral].[dbo].[CT_Patient](NoLock) P
 					) AS b	
 						ON(
-						 a.PatientPK  = b.PatientPK 
+						 a.[UshauriPatientPK]  = b.PatientPK 
 						and a.SiteCode = b.SiteCode						
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPK,MPIPKV,PatientPKHash,PartnerName,SiteCode,SiteType,PatientID,PatientIDHash,FacilityID,Emr,Project,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,Inschool,KeyPopulationType,Orphan,County,PatientResidentLocation,PatientResidentSubCounty,PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,PatientType,PopulationType,TransferInDate,Occupation,DateCreated,DateModified,StatelitteName,Date_Created,Date_Modified,PKV,NUPI,LoadDate) 
+						INSERT([UshauriPatientPK],MPIPKV,PatientPKHash,PartnerName,SiteCode,SiteType,PatientID,PatientIDHash,FacilityID,Emr,Project,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,Inschool,KeyPopulationType,Orphan,County,PatientResidentLocation,PatientResidentSubCounty,PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,PatientType,PopulationType,TransferInDate,Occupation,DateCreated,DateModified,StatelitteName,Date_Created,Date_Modified,PKV,NUPI,LoadDate) 
 						VALUES(PatientPK,MPIPKV,PatientPKHash,PartnerName,SiteCode,SiteType,PatientID,PatientIDHash,FacilityID,Emr,Project,FacilityName,Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,PreviousARTStartDate,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,Inschool,KeyPopulationType,Orphan,County,PatientResidentLocation,PatientResidentSubCounty,PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,PatientType,PopulationType,TransferInDate,Occupation,DateCreated,DateModified,StatelitteName,Date_Created,Date_Modified,PKV,NUPI,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
 						a.[MPIPKV]						=	b.[MPIPKV],
-						a.[PatientPKHash]					=	b.[PatientPKHash],
 						a.[PartnerName]					=	b.[PartnerName],
 						a.[SiteType]						=	b.[SiteType],
 						a.[PatientID]						=	b.[PatientID],
@@ -72,6 +71,6 @@ BEGIN
 						a.[Date_Created]					=	b.[Date_Created],
 						a.[Date_Modified]					=	b.[Date_Modified],
 						a.[PKV]							=	b.[PKV],
-						a.[NUPI]							=	b.[NUPI];
+						a.[NUPI]							=	b.[NUPI] ;
 		
 	END

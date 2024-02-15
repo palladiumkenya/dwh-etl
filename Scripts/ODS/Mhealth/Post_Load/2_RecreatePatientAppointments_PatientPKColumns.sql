@@ -57,4 +57,16 @@ BEGIN
 					add PatientPKHash nvarchar(150) null
 			END;
 
+			IF NOT EXISTS (
+			  SELECT
+				*
+			  FROM
+				INFORMATION_SCHEMA.COLUMNS
+			  WHERE
+				TABLE_NAME = 'Ushauri_PatientAppointments' AND COLUMN_NAME = 'UshauriPatientPKHash')
+			BEGIN
+			  alter table [ODS].[dbo].[Ushauri_PatientAppointments]
+					add UshauriPatientPKHash nvarchar(150) null
+			END;
+
 END
