@@ -145,6 +145,7 @@ joined_data as (
 select 
 	coalesce(visits_source.SiteCode, latest_anc.SiteCode, latest_pnc.SiteCode, latest_mat.SiteCode) as SiteCode,
 	coalesce(visits_source.PatientPKHash, latest_anc.PatientPKHash, latest_pnc.PatientPKhash, latest_mat.PatientPKHash) as PatientPKHash,
+    coalesce(visits_source.PatientPK, latest_anc.PatientPK, latest_pnc.PatientPK, latest_mat.PatientPK) as PatientPK,
     visits_source.Breastfeeding,
 	visits_source.Pregnant,
 	coalesce(visits_source.StartARTDate, earliest_mnch_start_art.StartARTDate) as StartARTDate,
@@ -173,6 +174,7 @@ left join first_anc_from_visits on first_anc_from_visits.PatientPK = visits_sour
 select 
 	SiteCode,
 	PatientPKHash,
+    PatientPK,
 	Breastfeeding,
 	Pregnant,
 	StartARTDate,
