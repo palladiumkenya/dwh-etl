@@ -153,7 +153,7 @@ BEGIN
              FROM   Switches
              WHERE  Num = 1),
          Summary
-         AS (SELECT distinct Patient.PatientPKHash,
+         AS (SELECT Patient.PatientPKHash,
                     Patient.Sitecode,
                     Dob,
                     Gender,

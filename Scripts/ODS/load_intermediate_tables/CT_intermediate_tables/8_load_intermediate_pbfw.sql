@@ -222,6 +222,7 @@ left join first_anc_from_visits on first_anc_from_visits.PatientPK = joined_visi
 select 
 	SiteCode,
 	PatientPKHash,
+    PatientPK,
 	Breastfeeding,
 	Pregnant,
 	StartARTDate,
