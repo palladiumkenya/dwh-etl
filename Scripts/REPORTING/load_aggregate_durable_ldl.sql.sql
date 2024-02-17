@@ -32,7 +32,8 @@ WITH Pbfw_patient
                 Pbfw.Agegroupkey,
                 CASE
                   WHEN Newpositives = 1 THEN 'New Positives'
-                  ELSE 'Known Positives'
+                  WHEN KnownPositive = 1 THEN  'Known Positives'
+                  ELSE 'Unknown'
                 END                           AS PBFWCategory,
                 Vl.Pbfw_validvlresultcategory AS ValidVLResultCategory,
                 Patient.Istxcurr              AS IsTXCurr,
