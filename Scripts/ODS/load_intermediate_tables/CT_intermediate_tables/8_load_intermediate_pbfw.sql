@@ -141,40 +141,87 @@ latest_mnch_enrollment as (
 	from mnch_enrollment_ordering
 	where num = 1
 ),
-joined_data as (
+joined_visits_source_anc as (
 select 
-	coalesce(visits_source.SiteCode, latest_anc.SiteCode, latest_pnc.SiteCode, latest_mat.SiteCode) as SiteCode,
-	coalesce(visits_source.PatientPKHash, latest_anc.PatientPKHash, latest_pnc.PatientPKhash, latest_mat.PatientPKHash) as PatientPKHash,
-    coalesce(visits_source.PatientPK, latest_anc.PatientPK, latest_pnc.PatientPK, latest_mat.PatientPK) as PatientPK,
+	coalesce(visits_source.SiteCode, latest_anc.SiteCode) as SiteCode,
+	coalesce(visits_source.PatientPK, latest_anc.PatientPK) as PatientPK,
+	coalesce(visits_source.PatientPKHash, latest_anc.PatientPKHash) as PatientPKHash,
     visits_source.Breastfeeding,
 	visits_source.Pregnant,
-	coalesce(visits_source.StartARTDate, earliest_mnch_start_art.StartARTDate) as StartARTDate,
+	visits_source.StartARTDate as StartARTDate,
 	visits_source.DateConfirmedHIVPositive,
-	coalesce(visits_source.LastvisitDate, latest_anc.VisitDate, latest_pnc.VisitDate, latest_mat.VisitDate) as LastvisitDate,
-	coalesce(latest_mnch_enrollment.HIVStatusBeforeANC, latest_anc.HIVStatusBeforeANC) as HIVStatusBeforeANC,
+	coalesce(visits_source.LastvisitDate, latest_anc.VisitDate) as LastvisitDate,
+	latest_anc.HIVStatusBeforeANC,
 	visits_source.Gender,
 	visits_source.DOB,
-	case when latest_anc.PatientPK is not null then 1 else 0 end as IsAncSource,
-	latest_anc.HIVStatusBeforeANC as HIVStatusBeforeANCSource,
-	first_anc_from_visits.VisitDate as ANCdate1
+	case when latest_anc.PatientPK is not null then 1 else 0 end as IsAncSource
 from visits_source
 full join latest_anc on visits_source .Patientpk = latest_anc.Patientpk
 	and visits_source .Sitecode = latest_anc.Sitecode
-full join latest_pnc on latest_pnc.Patientpk = visits_source.Patientpk
-	and latest_pnc.Sitecode = visits_source.Sitecode
-full join latest_mat on latest_mat.Patientpk = visits_source.Patientpk
-	and visits_source.Sitecode = latest_mat.Sitecode
-left join earliest_mnch_start_art on earliest_mnch_start_art.Patientpk = visits_source.Patientpk
-	and visits_source.Sitecode = earliest_mnch_start_art.Sitecode
-left join latest_mnch_enrollment on latest_mnch_enrollment.PatientPK = visits_source.PatientPK 
-	and latest_mnch_enrollment.SiteCode = visits_source.SiteCode
-left join first_anc_from_visits on first_anc_from_visits.PatientPK = visits_source.PatientPK
-	and first_anc_from_visits.SiteCode = visits_source.SiteCode
+),
+joined_visits_source_anc_pnc as (
+	select 
+		coalesce(joined_visits_source_anc.Patientpk, latest_pnc.PatientPK) as PatientPK,
+		coalesce(joined_visits_source_anc.PatientpkHash, latest_pnc.PatientPKHash) as PatientPKHash,
+		coalesce(joined_visits_source_anc.SiteCode, latest_pnc.SiteCode) as SiteCode,
+		coalesce(joined_visits_source_anc.LastvisitDate, latest_pnc.VisitDate) as LastvisitDate,
+		joined_visits_source_anc.DateConfirmedHIVPositive,
+		joined_visits_source_anc.StartARTDate,
+		joined_visits_source_anc.HIVStatusBeforeANC,
+		Breastfeeding,
+		Pregnant,
+		Gender,
+		DOB,
+		IsAncSource
+	from joined_visits_source_anc
+	full join latest_pnc on latest_pnc.Patientpk = joined_visits_source_anc.Patientpk
+	and latest_pnc.Sitecode = joined_visits_source_anc.Sitecode
+),
+joined_visits_source_anc_pnc_mat as (
+	select 
+		coalesce(joined_visits_source_anc_pnc.Patientpk, latest_mat.PatientPK) as PatientPK,
+		coalesce(joined_visits_source_anc_pnc.PatientpkHash, latest_mat.PatientPKHash) as PatientPKHash,
+		coalesce(joined_visits_source_anc_pnc.SiteCode, latest_mat.SiteCode) as SiteCode,
+		coalesce(joined_visits_source_anc_pnc.LastvisitDate, latest_mat.VisitDate) as LastvisitDate,
+		joined_visits_source_anc_pnc.DateConfirmedHIVPositive,
+		joined_visits_source_anc_pnc.StartARTDate,
+		joined_visits_source_anc_pnc.HIVStatusBeforeANC,
+		Breastfeeding,
+		Pregnant,
+		Gender,
+		DOB,
+		IsAncSource
+	from joined_visits_source_anc_pnc
+	full join latest_mat on latest_mat.Patientpk = joined_visits_source_anc_pnc.Patientpk
+	and latest_mat.Sitecode = joined_visits_source_anc_pnc.Sitecode
+),
+joined_data as (
+	select 
+		joined_visits_source_anc_pnc_mat.PatientPK,
+		joined_visits_source_anc_pnc_mat.PatientPKHash,
+		joined_visits_source_anc_pnc_mat.SiteCode,
+		joined_visits_source_anc_pnc_mat.LastvisitDate,
+		joined_visits_source_anc_pnc_mat.Breastfeeding,
+		joined_visits_source_anc_pnc_mat.Pregnant,
+		joined_visits_source_anc_pnc_mat.Gender,
+		joined_visits_source_anc_pnc_mat.DOB,
+		joined_visits_source_anc_pnc_mat.IsAncSource,
+		joined_visits_source_anc_pnc_mat.DateConfirmedHIVPositive,
+		joined_visits_source_anc_pnc_mat.HIVStatusBeforeANC as HIVStatusBeforeANCSource,
+		coalesce(joined_visits_source_anc_pnc_mat.StartARTDate, earliest_mnch_start_art.StartARTDate) as StartARTDate,
+		coalesce(latest_mnch_enrollment.HIVStatusBeforeANC, joined_visits_source_anc_pnc_mat.HIVStatusBeforeANC) as HIVStatusBeforeANC,
+		first_anc_from_visits.VisitDate as ANCdate1
+from joined_visits_source_anc_pnc_mat
+left join earliest_mnch_start_art on earliest_mnch_start_art.Patientpk = joined_visits_source_anc_pnc_mat.Patientpk
+	and joined_visits_source_anc_pnc_mat.Sitecode = earliest_mnch_start_art.Sitecode
+left join latest_mnch_enrollment on latest_mnch_enrollment.PatientPK = joined_visits_source_anc_pnc_mat.PatientPK 
+	and latest_mnch_enrollment.SiteCode = joined_visits_source_anc_pnc_mat.SiteCode
+left join first_anc_from_visits on first_anc_from_visits.PatientPK = joined_visits_source_anc_pnc_mat.PatientPK
+	and first_anc_from_visits.SiteCode = joined_visits_source_anc_pnc_mat.SiteCode
 )
 select 
 	SiteCode,
 	PatientPKHash,
-    PatientPK,
 	Breastfeeding,
 	Pregnant,
 	StartARTDate,
