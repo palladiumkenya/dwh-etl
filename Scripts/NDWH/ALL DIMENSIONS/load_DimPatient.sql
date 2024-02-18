@@ -302,7 +302,7 @@ BEGIN
            FROM   combined_matched_all_programs) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
-		 and a.voided  = b.voided
+		
         )
     WHEN NOT matched THEN
       INSERT(patientidhash,
