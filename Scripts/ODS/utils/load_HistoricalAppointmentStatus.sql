@@ -2,7 +2,7 @@ use tmp_and_adhoc;
 
 -- NB:first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 --truncate the table if you need to load afresh 
-truncate table tmp_and_adhoc.dbo.HistoricalAppointmentStatus;
+truncate table Historical.dbo.HistoricalAppointmentStatus;
 
 
 ---declare your start and end dates.

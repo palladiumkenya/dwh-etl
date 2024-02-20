@@ -37,7 +37,7 @@ Select
         patient_info.Patienttype,
         cast(getdate() as date) as LoadDate		
 into NDWH.dbo.FACTAppointments
-from tmp_and_adhoc.dbo.[HistoricalAppointmentStatus] as apt
+from Historical.dbo.[HistoricalAppointmentStatus] as apt
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = apt.MFLCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code=apt.MFLCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
