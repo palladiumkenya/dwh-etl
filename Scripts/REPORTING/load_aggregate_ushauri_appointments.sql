@@ -302,3 +302,4 @@ Begin
                          Bookedappointments.Asofdate
     Where  Bookedappointments.Asofdate Is Not Null
 End
+ 
