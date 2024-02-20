@@ -1,4 +1,4 @@
-use tmp_and_adhoc;
+use Historical;
 
 -- NB:first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 --truncate the table if you need to load afresh 
@@ -401,7 +401,7 @@ unscheduled_visits_as_of_date as (
         PatientPK,
         SiteCode
 )
-insert into tmp_and_adhoc.dbo.HistoricalAppointmentStatus
+insert into Historical.dbo.HistoricalAppointmentStatus
 Select 
     summary.* ,
 	unscheduled_visits_as_of_date.NoOfUnscheduledVisits

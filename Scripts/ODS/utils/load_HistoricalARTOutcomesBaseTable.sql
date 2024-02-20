@@ -1,4 +1,4 @@
-use tmp_and_adhoc;
+use Historical;
 
 -- NB:first you need to create the table that everything will go into: dbo.HistoricalARTOutcomesBaseTable
 --truncate the table if you need to load afresh 
@@ -243,7 +243,7 @@ ARTOutcomesCompuation as (
         and patient_art_and_enrollment_info.PatientPKHash = last_encounter.PatientPKHash
     where patient_art_and_enrollment_info.startARTDate is not null
 )
-insert into tmp_and_adhoc.dbo.HistoricalARTOutcomesBaseTable
+insert into Historical.dbo.HistoricalARTOutcomesBaseTable
 select 
     ARTOutcomesCompuation.PatientIDHash as PatientIDHash,
     ARTOutcomesCompuation.PatientPKHash as PatientPKHash,
