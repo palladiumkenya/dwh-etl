@@ -26,6 +26,7 @@ BEGIN
 				  ,a.[Dob]
 				  ,[LinkDateLinkedToCare]
 					,a.Dateextracted
+					,a.RecordUUID
 			  FROM [HTSCentral].[dbo].[HtsPartnerNotificationServices](NoLock) a
 			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
@@ -41,8 +42,8 @@ BEGIN
 
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,LoadDate /*,Dateextracted*/) 
-		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,Getdate()/*,Dateextracted*/)
+		INSERT(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,RecordUUID,LoadDate ) 
+		VALUES(ID,FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,PartnerPatientPk,KnowledgeOfHivStatus,PartnerPersonID,CccNumber,IpvScreeningOutcome,ScreenedForIpv,PnsConsent,RelationsipToIndexClient,LinkedToCare,MaritalStatus,PnsApproach,FacilityLinkedTo,Gender,CurrentlyLivingWithIndexClient,Age,DateElicited,Dob,LinkDateLinkedToCare,RecordUUID,Getdate())
 
 	WHEN MATCHED THEN
 		UPDATE SET 
@@ -58,7 +59,8 @@ BEGIN
 				a.[FacilityLinkedTo]				=b.[FacilityLinkedTo],
 				a.[Gender]							=b.[Gender],
 				a.[CurrentlyLivingWithIndexClient]	=b.[CurrentlyLivingWithIndexClient],	
-				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare];
+				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare],
+				a.RecordUUID                         = b.RecordUUID;
 
 				
 
