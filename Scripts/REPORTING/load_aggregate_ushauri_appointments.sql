@@ -157,4 +157,5 @@ Begin
                      And Appointmentcounts.Asofdate =
                          Bookedappointments.Asofdate
     Where  Bookedappointments.Asofdate Is Not Null
-End 
+End
+ 

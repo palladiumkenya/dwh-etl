@@ -11,6 +11,7 @@ BEGIN
 				  ,[TracingType]
 				  ,[TracingDate]
 				  ,[TracingOutcome]
+				  ,a.RecordUUID
 			  FROM [HTSCentral].[dbo].[HtsClientTracing] (NoLock)a
 				INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
 			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
@@ -26,8 +27,8 @@ BEGIN
 			and a.FacilityName  = b.FacilityName
 			)
 	WHEN NOT MATCHED THEN 
-		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,LoadDate)  
-		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,Getdate())
+		INSERT(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,RecordUUID,LoadDate)  
+		VALUES(FacilityName,SiteCode,PatientPk,HtsNumber,Emr,Project,TracingType,TracingDate,TracingOutcome,RecordUUID,Getdate())
 
 	WHEN MATCHED THEN
 		UPDATE SET 
@@ -35,6 +36,7 @@ BEGIN
 				
 				a.[TracingType]		=b.[TracingType],
 				a.[TracingDate]		=b.[TracingDate],
-				a.[TracingOutcome]	=b.[TracingOutcome];
+				a.[TracingOutcome]	=b.[TracingOutcome],
+				a.RecordUUID    =b.RecordUUID;
 END
 
