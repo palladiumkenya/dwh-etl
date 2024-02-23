@@ -119,7 +119,7 @@ dyslipidemia_ordering as (
         row_number() over (partition by PatientPK, Sitecode order by VisitDate asc) as rank
     from ODS.dbo.CT_AllergiesChronicIllness as chronic
     where chronic.voided = 0 
-        and ChronicIllness like '%Dyslipidemia %' 
+        and ChronicIllness like '%Dyslipidemia%' 
 ),
 earliest_hpertension_recorded as (
     select 

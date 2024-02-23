@@ -13,11 +13,13 @@ with ncd_indicators as (
         IsDiabeticAndDiabetesControlledAtLastTest,
         hypertension.Date as FirstHypertensionRecoredeDate,
         diabetes.Date as FirstDiabetesRecordedDate,
+        dyslipidemia.Date as FirstDyslipidemiaRecordedDate,
         [Mental illness],
         Dyslipidemia
     from NDWH.dbo.FactNCD as ncd
     left join NDWH.dbo.DimDate as hypertension on hypertension.DateKey = ncd.FirstHypertensionRecoredeDateKey
-    left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey    
+    left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey 
+    left join NDWH.dbo.DimDate as dyslipidemia on dyslipidemia.DateKey =ncd.FirstDyslipidemiaRecordedDateKey
 )
 Select distinct 
     pat.PatientIDHash,
