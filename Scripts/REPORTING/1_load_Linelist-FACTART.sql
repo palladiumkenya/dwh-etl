@@ -13,7 +13,8 @@ with ncd_indicators as (
         IsDiabeticAndDiabetesControlledAtLastTest,
         hypertension.Date as FirstHypertensionRecoredeDate,
         diabetes.Date as FirstDiabetesRecordedDate,
-        [Mental illness]
+        [Mental illness],
+        Dyslipidemia
     from NDWH.dbo.FactNCD as ncd
     left join NDWH.dbo.DimDate as hypertension on hypertension.DateKey = ncd.FirstHypertensionRecoredeDateKey
     left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey    
@@ -80,16 +81,17 @@ Select distinct
     CD4.LastCD4,
     CD4.LastCD4Percentage,
     ART.WhoStage,
-Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
-    OR age.Age<5 
-        OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
-    Else 0 
-End as AHD,
+    Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
+        OR age.Age<5 
+            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
+        Else 0 
+    End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
-    PHQ_9_rating,
-    ScreenedForDepression,
-   [Mental illness] as hasMentalIllness,
+    ART.PHQ_9_rating,
+    ART.ScreenedForDepression,
+    case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
+    case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
