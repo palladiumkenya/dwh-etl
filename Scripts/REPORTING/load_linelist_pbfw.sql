@@ -53,7 +53,7 @@ select
         else 0
     end as KnowPositivesSupVL,
     case 
-        when viral_load_metrics.PBFW_ValidVLSup = 0 and KnownPositive = 1 then 1
+        when viral_load_metrics.PBFW_ValidVLSup = 0  and PBFW_ValidVL=1 and  KnownPositive = 1 then 1
         else 0
     end as  KnowPositivesUnSupVL,
     case 
@@ -71,7 +71,7 @@ select
     case when viral_load_metrics.RepeatVls = 1 then 1 else 0 end as HasRepeatVL,
     case when viral_load_metrics.RepeatSuppressed = 1 then 1 else 0 end as HasRepeatVLSupressed,
     case when viral_load_metrics.RepeatUnSuppressed = 1 then 1 else 0 end as HasRepeatVLUnSuppressed,
-    pbfw.PBFWRegLineSwitch as HasRegLineSwitch
+    case when viral_load_metrics.RepeatUnSuppressed = 1 and pbfw.PBFWRegLineSwitch =1 and Knownpositive=1  and viral_load_metrics.PBFW_ValidVL=1 Then 1 else 0 end as HasRegLineSwitch
 into [REPORTING].[dbo].LineListPBFW
 from NDWH.dbo.FactPBFW as pbfw
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = pbfw.PatientKey

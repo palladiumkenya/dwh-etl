@@ -63,7 +63,8 @@ left join NDWH.dbo.DimDate as adverse_event_start on adverse_event_start.Date = 
 left join NDWH.dbo.DimDate as adverse_event_end on adverse_event_end.Date = source_data.AdverseEventEndDate
 left join NDWH.dbo.DimDate as visit on visit.Date = source_data.VisitDate
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = source_data.AgeLastVisit
-WHERE patient.voided =0;
+WHERE patient.voided =0
+    and source_data.AdverseEvent is not null;
 
 alter table NDWH.dbo.FactAdverseEvents add primary key(FactKey)
 

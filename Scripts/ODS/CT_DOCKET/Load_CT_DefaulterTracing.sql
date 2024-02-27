@@ -2,10 +2,10 @@ BEGIN
 		DECLARE	@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
-		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_DefaulterTracing_Log]  (NoLock)
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_Logs].[dbo].[CT_DefaulterTracing_Log]  (NoLock)
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock)		
 					
-		INSERT INTO  [ODS].[dbo].[CT_DefaulterTracing_Log](MaxVisitDate,LoadStartDateTime)
+		INSERT INTO  [ODS_Logs].[dbo].[CT_DefaulterTracing_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@MaxVisitDate_Hist,GETDATE())
 	       ---- Refresh [ODS].[dbo].[CT_DefaulterTracing]
 			MERGE [ODS].[dbo].[CT_DefaulterTracing] AS a
@@ -47,33 +47,24 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	
-						a.[PatientID]			=	b.[PatientID],
-						a.[FacilityName]		=	b.[FacilityName],
-						a.[VisitID]				=	b.[VisitID],
-						a.[VisitDate]			=	b.[VisitDate],
-						a.[EncounterId]			=	b.[EncounterId],
-						a.[TracingType]			=	b.[TracingType],
-						a.[TracingOutcome]		=	b.[TracingOutcome],
-						a.[AttemptNumber]		=	b.[AttemptNumber],
-						a.[IsFinalTrace]		=	b.[IsFinalTrace],
-						a.[TrueStatus]			=	b.[TrueStatus],
-						a.[CauseOfDeath]		=	b.[CauseOfDeath],
-						a.[Comments]			=	b.[Comments],
-						a.[BookingDate]			=	b.[BookingDate],
-						a.[Date_Last_Modified]	=	b.[Date_Last_Modified],
-						a.[Date_Created]		=	b.[Date_Created],
-						a.[RecordUUID]			=	b.[RecordUUID],
-						a.[voided]				=	b.[voided];
+						a.PatientID		=b.PatientID,
+						a.TracingType	=b.TracingType,
+						a.TracingOutcome=b.TracingOutcome,
+						a.AttemptNumber	=b.AttemptNumber,
+						a.IsFinalTrace	=b.IsFinalTrace,
+						a.TrueStatus	=b.TrueStatus,
+						a.CauseOfDeath	=b.CauseOfDeath,
+						a.Comments		=b.Comments,
+						a.[Date_Created]			=b.[Date_Created],
+						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
+						a.RecordUUID			=b.RecordUUID,
+						a.voided		=b.voided
+						;
 
 
-				UPDATE [ODS].[dbo].[CT_DefaulterTracing_Log]
+				UPDATE [ODS_Logs].[dbo].[CT_DefaulterTracing_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-				INSERT INTO [ODS].[dbo].[CT_DefaulterTracingCount_Log]([SiteCode],[CreatedDate],[DefaulterTracingCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DefaulterTracingCount 
-				FROM [ODS].[dbo].CT_DefaulterTracing
-				--WHERE @MaxCreatedDate  > @MaxCreatedDate
-				GROUP BY SiteCode;
 
 	END

@@ -11,8 +11,7 @@ With EMRSites as (
     fac.Latitude, 
     fac.Longitude, 
     fac.EMR, 
-    fac.isCT, 
-    fac.isPkv, 
+    fac.isCT,  
     fac.isHts, 
 	a.EMR_Status,
     CAST(
@@ -41,7 +40,6 @@ Select
   Longitude, 
   EMR, 
   isCT, 
-  isPkv, 
   isHts, 
   COALESCE(
     CASE WHEN SiteCode IS NOT NULL THEN 1 ELSE NULL END, 

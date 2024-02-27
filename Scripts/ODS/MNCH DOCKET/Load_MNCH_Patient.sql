@@ -1,25 +1,25 @@
 
 BEGIN
-    --truncate table [ODS].[dbo].[MNCH_Patient]
 	MERGE [ODS].[dbo].[MNCH_Patient] AS a
 			USING(
 					SELECT distinct P.[PatientPk],P.[SiteCode],P.[Emr],[Project],[Processed],[QueueId],[Status],[StatusDate],[DateExtracted]
 						  ,[FacilityId],[FacilityName],[Pkv],[PatientMnchID],[PatientHeiID],[Gender],[DOB],[FirstEnrollmentAtMnch],[Occupation]
 						  ,[MaritalStatus],[EducationLevel],[PatientResidentCounty],[PatientResidentSubCounty],[PatientResidentWard],[InSchool]
-						  ,[Date_Created],[Date_Last_Modified],[NUPI]
+						  ,[Date_Created],[Date_Last_Modified],[NUPI],RecordUUID
 					  FROM [MNCHCentral].[dbo].[MnchPatients] P(nolock)
-					   inner join (select tn.PatientPK,tn.SiteCode,max(tn.DateExtracted)MaxDateExtracted FROM [MNCHCentral].[dbo].[MnchPatients] (NoLock)tn
+					   inner join (select tn.PatientPK,tn.SiteCode,Max(ID) As MaxID,max(cast(tn.DateExtracted as date))MaxDateExtracted FROM [MNCHCentral].[dbo].[MnchPatients] (NoLock)tn
 					group by tn.PatientPK,tn.SiteCode)tm
-					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and p.DateExtracted = tm.MaxDateExtracted
+					on P.PatientPk = tm.PatientPk and p.SiteCode = tm.SiteCode and cast(p.DateExtracted as date) = tm.MaxDateExtracted and p.ID = tm.MaxID
 					  INNER JOIN [MNCHCentral].[dbo].[Facilities] F ON P.[FacilityId] = F.Id) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode
+						and a.RecordUUID = b.RecordUUID
 						
 							)
 					WHEN NOT MATCHED THEN 
-						INSERT(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI,LoadDate)  
-						VALUES(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI,Getdate())
+						INSERT(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI,LoadDate,RecordUUID)  
+						VALUES(PatientPk,SiteCode,Emr,Project,DateExtracted,FacilityName,Pkv,PatientMnchID,PatientHeiID,Gender,DOB,FirstEnrollmentAtMnch,Occupation,MaritalStatus,EducationLevel,PatientResidentCounty,PatientResidentSubCounty,PatientResidentWard,InSchool,Date_Created,Date_Last_Modified,NUPI,Getdate(),RecordUUID)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -32,7 +32,8 @@ BEGIN
 							a.PatientResidentCounty = b.PatientResidentCounty,
 							a.PatientResidentSubCounty = b.PatientResidentSubCounty,
 							a.PatientResidentWard = b.PatientResidentWard,
-							a.InSchool = b.InSchool;
+							a.InSchool = b.InSchool,
+							a.RecordUUID = b.RecordUUID;
 
 				with cte AS (
 						Select

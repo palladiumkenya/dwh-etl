@@ -28,10 +28,10 @@ BEGIN
 		DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
 				
-		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_DepressionScreening_Log]  (NoLock)
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_DepressionScreening_Log]  (NoLock)
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock)		
 					
-		INSERT INTO  [ODS].[dbo].[CT_DepressionScreening_Log](MaxVisitDate,LoadStartDateTime)
+		INSERT INTO  [ODS_logs].[dbo].[CT_DepressionScreening_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@MaxVisitDate_Hist,GETDATE())
 
 	       ---- Refresh [ODS].[dbo].[CT_DepressionScreening]
@@ -59,6 +59,7 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.voided   = b.voided
+						and a.[Date_Created] = b.[Date_Created]
 						and a.ID =b.ID
 						)
 
@@ -86,14 +87,10 @@ BEGIN
 						a.voided					=b.voided;
 											
 	
-					UPDATE [ODS].[dbo].[CT_DepressionScreening_Log]
+					UPDATE [ODS_logs].[dbo].[CT_DepressionScreening_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-				INSERT INTO [ODS].[dbo].[CT_DepressionScreeningCount_Log]([SiteCode],[CreatedDate],[DepressionScreeningCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DepressionScreeningCount 
-				FROM [ODS].[dbo].[CT_DepressionScreening] 
-				--WHERE @MaxCreatedDate  > @MaxCreatedDate
-				GROUP BY SiteCode;
+
 
 	END

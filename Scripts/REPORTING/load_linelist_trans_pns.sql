@@ -31,7 +31,6 @@ With cte1 as (
 		e.Date DateElicited,
 		f.Date TestDate, 
 		d.ReportedCCCNumber
--- 			d.ReportedStartARTDate 
 	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
 	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
 	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
@@ -71,7 +70,6 @@ With cte1 as (
         ELSE 0 End  Linked,
         d.ReportedCCCNumber,
         FacilityLinkedTo,
-        LinkedToCare,
         h.Date LinkDateLinkedToCare
     FROM  NDWH.dbo.FactHTSClientTests a
     INNER JOIN NDWH.dbo.FactHTSPartnerNotificationServices b on b.PatientKey=a.PatientKey and b.FacilityKey=a.FacilityKey
@@ -116,7 +114,6 @@ SELECT
     Linked,
     ReportedCCCNumber,
     FacilityLinkedTo,
-    LinkedToCare,
     LinkDateLinkedToCare,
     CAST(GETDATE() AS DATE) AS LoadDate 
     INTO REPORTING.dbo.LineListTransPNS

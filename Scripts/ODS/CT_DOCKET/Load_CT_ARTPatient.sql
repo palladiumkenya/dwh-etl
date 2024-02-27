@@ -22,11 +22,11 @@ BEGIN
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
-						INNER JOIN (SELECT a.PatientPID,c.code,Max(b.created)MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract]  a  with (NoLock)
+						INNER JOIN (SELECT a.PatientPID,c.code,Max(cast(b.created as date))MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract]  a  with (NoLock)
 											INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] b with(NoLock) ON b.[PatientId]= a.ID 
 											INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0 
 											GROUP BY  a.PatientPID,c.code)tn
-									on P.PatientPID = tn.PatientPID and F.code = tn.code and PA.Created = tn.MaxCreated
+									on P.PatientPID = tn.PatientPID and F.code = tn.code and cast(PA.Created as date) = tn.MaxCreated
 						WHERE p.gender!='Unknown' AND F.code >0) AS b	
 						ON(
 						 a.PatientPK  = b.PatientPK 
@@ -80,27 +80,5 @@ BEGIN
 								a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 								a.RecordUUID				=b.RecordUUID,
 								a.voided					=b.voided;
-
-								with cte AS (
-								Select
-								PatientPK,
-								sitecode,
-								lastvisit,
-								 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode ORDER BY
-								lastvisit desc) Row_Num
-								FROM [ODS].[dbo].[CT_ARTPatients](NoLock)
-								)
-							delete from cte 
-								Where Row_Num >1;
-
-
-					--UPDATE CT_ARTPatient_Log
-					--SET LoadEndDateTime = GETDATE()
-					--WHERE MaxVisitDate = @MaxVisitDate_Hist;
-
-					INSERT INTO  [ODS].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount 
-					FROM [ODS].[dbo].[CT_ARTPatients]
-					group by SiteCode
 
 	END

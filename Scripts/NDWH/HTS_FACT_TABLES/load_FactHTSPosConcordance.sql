@@ -5,18 +5,12 @@ GO
 
 WITH HTSPos AS (
                 SELECT
-                    MFLCode SiteCode,
-                    FacilityName,
-                    PartnerName SDP,
-                    County  collate Latin1_General_CI_AS County,
-                    SUM(positive) AS HTSPos_total
-                FROM NDWH.dbo.FactHTSClientTests link
-								LEFT JOIN NDWH.dbo.DimPatient AS pat ON link.PatientKey = pat.PatientKey
-                LEFT JOIN NDWH.dbo.DimPartner AS part ON link.PartnerKey = part.PartnerKey
-                LEFT JOIN NDWH.dbo.DimFacility AS fac ON link.FacilityKey = fac.FacilityKey
-                LEFT JOIN NDWH.dbo.DimAgency AS agency ON link.AgencyKey = agency.AgencyKey
-                where link.DateTestedKey  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) and FinalTestResult='Positive' and MFLCode is not null and TestType in ('Initial Test', 'Initial')
-                GROUP BY MFLCode, FacilityName, PartnerName, County
+                     SiteCode,
+                    SUM(CASE WHEN FinalTestResult = 'Positive' THEN 1 ELSE 0 END) AS HTSPos_total,
+                    TestDate
+                FROM ODS.dbo.Intermediate_EncounterHTSTests link
+                where link.TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) and FinalTestResult='Positive' and SiteCode is not null and TestType in ('Initial Test', 'Initial')
+                GROUP BY SiteCode, TestDate
             ),
 
  MFL_partner_agency_combination as (
@@ -79,7 +73,7 @@ WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and
                     [County],
                     Positive_Total,
                     ReportMonth_Year
-                FROM [NDWH].[dbo].FACT_HTS_DHIS2
+                FROM [ODS].[dbo].HTS_DHIS2
                WHERE ReportMonth_Year =CONVERT(VARCHAR(6), DATEADD(MONTH, -1, GETDATE()), 112) and ISNUMERIC(SiteCode) >0
             ),
             LatestEMR AS (
@@ -143,6 +137,8 @@ WHERE  TestDate  between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and
             Percent_variance_EMR_DWH as Proportion_variance_EMR_DWH,
             Percent_variance_KHIS_DWH as Proportion_variance_KHIS_DWH,
             Percent_variance_KHIS_EMR as Proportion_variance_KHIS_EMR,
+            EOMONTH(DATEADD(mm,-1,GETDATE())) as Reporting_Month,
+            dwapi.DwapiVersion,
            Cast(getdate() as date) as LoadDate
         into NDWH.dbo.FactHTSPosConcordance
         from Summary
@@ -150,6 +146,7 @@ left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Summary.MFLCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = Summary.MFLCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = Summary.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
+left join DWAPI on DWAPI.SiteCode=Summary.MFLCode
  ORDER BY Percent_variance_EMR_DWH DESC
 
 

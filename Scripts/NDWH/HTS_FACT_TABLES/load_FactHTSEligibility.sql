@@ -71,7 +71,11 @@ BEGIN
             TypeGBV,
 			HIVRiskCategory,
 			HtsRiskScore,
-            ReasonRefferredForTesting
+            ReasonRefferredForTesting,
+            ReasonNotReffered,
+            HTSStrategy,
+            HTSEntryPoint,
+            CurrentlyOnPrep
         from ODS.dbo.HTS_EligibilityExtract
     )
     select 
@@ -136,6 +140,10 @@ BEGIN
         source_data.HIVRiskCategory,
         source_data.HtsRiskScore,
         source_data.ReasonRefferredForTesting,
+        source_data.ReasonNotReffered,
+        source_data.HTSStrategy,
+        source_data.CurrentlyOnPrep,
+        source_data.HTSEntryPoint,
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactHTSEligibilityextract
     from source_data

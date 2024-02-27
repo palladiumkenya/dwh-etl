@@ -1,0 +1,24 @@
+ -------------------Altered to include New partner names by Mary on 21st January  2021---------------------  
+
+---ALTER TABLE HIS_Implementation.dbo.All_EMRSites
+---ADD Project varchar(100);
+
+Update HIS_Implementation.dbo.All_EMRSites
+SET Project = 
+CASE  WHEN MFL_Code in (12875,12911,12973,13075,13169,13191,13207,13220,13230,17548,17719,18219,18409,18743)
+        THEN 'EDARP'
+		WHEN EMR='OpenMRS' THEN 'Kenya HMIS II'
+		WHEN EMR='AMRS' and  MFL_Code in ('16347','14280','14358','14437','19173','14555','14586','14701',
+		'14799','14841','14947','15167','15204','15205','15206','15209','15229','15463','15464','17243',
+'15623','18776','15703','15753','15758','15788')
+ THEN 'Ampath'
+ WHEN EMR='AMRS' and  MFL_Code ='13528' THEN 'Ampath'
+ WHEN EMR='AMRS' and  MFL_Code in ('15800',
+'15808','15823','15824','15834','16421','15910','17242','15925','15939','15993','16004','16016','16018','16025',
+'16029','17680','16091','16126','16150','16161') THEN 'USAID Dumisha Afya'
+ WHEN EMR='AMRS' and  MFL_Code  ='14524' THEN 'Kenya HMIS II'
+
+		WHEN SDP='IRDO' THEN 'IRDO'
+        WHEN MFL_Code not in (12875,12911,12973,13075,13169,13191,13207,13220,13230,17548,17719,18219,18409,18743)
+        THEN 'Kenya HMIS II'
+    ELSE NULL END

@@ -8,6 +8,15 @@ WHERE TBScreening IN ('1', 'Screening not done', '0')
 
 GO
 
+UPDATE ods.dbo.CT_IPT  SET TbScreening =  CASE  
+            WHEN TbScreening ='On TB Treatment' THEN 'On TB Treatment'  
+			WHEN TbScreening ='No Signs' THEN 'No Signs'
+            WHEN TbScreening ='Suspect' THEN 'Presumed TB'   
+            WHEN TbScreening in ('TB Confirmed','Confirmed') THEN 'TB Confirmed'            
+           ELSE 'Not Done'    
+                END
+
+
 
 -- clean IndicationForIPT
 UPDATE [ODS].[DBO].[CT_Ipt]

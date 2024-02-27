@@ -25,11 +25,11 @@ BEGIN
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
 				
-		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Ipt_Log]  (NoLock);
+		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_Ipt_Log]  (NoLock);
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock);
 	
 					
-		INSERT INTO  [ODS].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
+		INSERT INTO  [ODS_logs].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@VisitDate,GETDATE());
 
 	       ---- Refresh [ODS].[dbo].[CT_Ipt]
@@ -100,15 +100,8 @@ BEGIN
 						a.voided				= b.voided;
 						
 
-					UPDATE [ODS].[dbo].[CT_Ipt_Log]
+					UPDATE [ODS_logs].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
-
-					INSERT INTO [ODS].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS IptCount 
-					FROM [ODS].[dbo].[CT_Ipt] 
-					--WHERE @MaxCreatedDate  > @MaxCreatedDate
-					GROUP BY SiteCode;
-
-					
+				
 END

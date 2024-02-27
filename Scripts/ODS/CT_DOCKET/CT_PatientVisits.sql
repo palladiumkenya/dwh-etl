@@ -1,4 +1,3 @@
-
 BEGIN
 		;with cte AS ( Select      distinct      
 			P.PatientPID,            
@@ -28,22 +27,15 @@ BEGIN
 				@VisitDate				DATETIME,
 				@MaxCreatedDate			DATETIME
 				
-		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS].[dbo].[CT_Visit_Log]  (NoLock);
+		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS_Logs].[dbo].[CT_Visit_Log]  (NoLock);
 		SELECT @VisitDate			= MAX(VisitDate)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK) ;
-		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) ;
+		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS_logs].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) ;
 				
-		--insert into  [ODS].[dbo].[CT_VisitCount_Log](CreatedDate)
-		--values(dateadd(year,-1,getdate()))
-
-		
-				
-		INSERT INTO  [ODS].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
+		INSERT INTO  [ODS_Logs].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@VisitDate,GETDATE());
 
-	       ---- Refresh [ODS].[dbo].[CT_PatientVisits]
-		   --truncate table [ODS].[dbo].[CT_PatientVisits]
 			MERGE [ODS].[dbo].[CT_PatientVisits] AS a
-				USING(SELECT distinct  P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
+				USING(SELECT distinct   P.[PatientCccNumber] AS PatientID, P.[PatientPID] AS PatientPK,F.[Name] AS FacilityName, F.Code AS SiteCode,PV.[VisitId] VisitID,PV.[VisitDate] VisitDate
 						  ,PV.[Service] [SERVICE],PV.[VisitType] VisitType,PV.[WHOStage] WHOStage,PV.[WABStage] WABStage,PV.[Pregnant] Pregnant,PV.[LMP] LMP,PV.[EDD] EDD,PV.[Height] [Height],PV.[Weight] [Weight],PV.[BP] [BP],PV.[OI] [OI],PV.[OIDate] [OIDate]
 						  ,PV.[SubstitutionFirstlineRegimenDate] SubstitutionFirstlineRegimenDate,PV.[SubstitutionFirstlineRegimenReason] SubstitutionFirstlineRegimenReason,PV.[SubstitutionSecondlineRegimenDate] SubstitutionSecondlineRegimenDate,PV.[SubstitutionSecondlineRegimenReason] SubstitutionSecondlineRegimenReason
 						  ,PV.[SecondlineRegimenChangeDate] SecondlineRegimenChangeDate,PV.[SecondlineRegimenChangeReason] SecondlineRegimenChangeReason,PV.[Adherence] Adherence,PV.[AdherenceCategory] AdherenceCategory,PV.[FamilyPlanningMethod] FamilyPlanningMethod
@@ -68,9 +60,19 @@ BEGIN
 							,PaedsDisclosure,PV.[Date_Created],PV.[Date_Last_Modified]
 							,PV.RecordUUID
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
-						LEFT JOIN [DWAPICentral].[dbo].[PatientArtExtract] PA WITH(NoLock)  ON PA.[PatientId]= P.ID
-						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 
+						INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 						
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+						INNER JOIN (
+								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,[VisitId],visitDate,InnerPV.voided,max(InnerPV.ID) maxID, MAX(InnerPV.created) AS Maxdatecreated
+								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
+									INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] InnerPV WITH(NoLock)  ON InnerPV.[PatientId]= P.ID 
+									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
+								GROUP BY F.code,p.[PatientPID],[VisitId],visitDate,InnerPV.voided
+							) tm 
+							ON f.code = tm.[SiteCode] and p.PatientPID=tm.PatientPK and 
+							pv.[VisitId] = tm.[VisitId] and pv.visitDate = tm.visitDate and pv.voided = tm.voided and 
+							pv.created = tm.Maxdatecreated and
+							PV.ID =tm. maxID
 						WHERE p.gender!='Unknown' AND F.code >0) AS b 
 						ON(
 							 a.PatientPK  = b.PatientPK 
@@ -142,17 +144,8 @@ BEGIN
 						 a.RecordUUID			=b.RecordUUID,
 						a.voided		=b.voided;
 
-			UPDATE [ODS].[dbo].[CT_Visit_Log]
+			UPDATE [ODS_Logs].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
-				  WHERE MaxVisitDate = @VisitDate;
-
-				  --truncate table [CT_VisitCount_Log]
-			INSERT INTO [ODS].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
-			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS VisitCount 
-			FROM [ODS].[dbo].[CT_PatientVisits] 
-			---WHERE @MaxCreatedDate  > @MaxCreatedDate
-			GROUP BY SiteCode;
+				  WHERE MaxVisitDate = @VisitDate;			
 			
 END
-
-
