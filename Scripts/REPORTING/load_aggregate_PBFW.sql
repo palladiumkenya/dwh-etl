@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL 
+  IF OBJECT_ID(N'[REPORTING].[dbo].[AggregatePBFW]', N'U') IS NOT NULL 
     DROP TABLE [REPORTING].[dbo].[AggregatePBFW];
 GO
 
@@ -23,8 +23,8 @@ SELECT
     Sum (Case When RepeatUnsuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlUnSuppressed,
     Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC1=1 Then 1 else 0 End) As PBFWUnsupReceivedEAC1,
     Sum (Case When RepeatUnsuppressed=1 and ReceivedEAC2=1 Then 1 Else 0 End) As PBFWUnsupReceivedEAC2,
-    Sum(Case when RepeatUnsuppressed=1 and ReceivedEAC3=1 Then 1 Else 0 End) As PBFWUnsupReceivedEAC3,
-    Sum (Case when PBFWRegLineSwitch=1 Then 1 Else 0 End) As PBFWRegLineSwitch
+    Sum(Case when  RepeatUnsuppressed=1 and ReceivedEAC3=1 Then 1 Else 0 End) As PBFWUnsupReceivedEAC3,
+    Sum (Case when RepeatUnsuppressed=1 and PBFWRegLineSwitch=1 Then 1 Else 0 End) As PBFWRegLineSwitch
  
 INTO REPORTING.dbo.AggregatePBFW
 FROM NDWH.dbo.FactPBFW AS PBFW
