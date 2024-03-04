@@ -12,7 +12,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus Is Not Null
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Patientkey,
@@ -28,7 +28,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Consentforsms = 'YES'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -43,7 +43,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
@@ -60,7 +60,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus = 'honoured'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -75,7 +75,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
                        Partnerkey,
