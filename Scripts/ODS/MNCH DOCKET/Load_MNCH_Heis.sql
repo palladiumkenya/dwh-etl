@@ -36,11 +36,10 @@ BEGIN
 
 					;with cte AS ( Select            
 									P.PatientPK,            
-									P.SiteCode,  
-									[DNAPCR1Date],HEIExitCritearia,
+									P.SiteCode,
 					
-					ROW_NUMBER() OVER (PARTITION BY P.PatientPK,P.SiteCode,HEIExitCritearia
-					ORDER BY P.PatientPK,P.SiteCode,[DNAPCR1Date]) Row_Num
+					ROW_NUMBER() OVER (PARTITION BY P.SiteCode,P.PatientPK
+					ORDER BY P.PatientPK,P.SiteCode) Row_Num
 					FROM [ODS].[dbo].[MNCH_Heis] p
 					where HEIExitCritearia like '%Confirmed HIV Positive%')   
 		

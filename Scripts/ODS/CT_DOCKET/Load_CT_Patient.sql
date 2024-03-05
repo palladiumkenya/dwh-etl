@@ -19,14 +19,15 @@ BEGIN
 						FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
 						INNER JOIN [DWAPICentral].[dbo].[Facility] F with (NoLock)  
 						ON P.[FacilityId]  = F.Id  AND F.Voided=0 	
-						INNER JOIN (SELECT P.PatientPID,F.code,max(p.ID) As Max_ID,Max(cast(P.created as date))MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
+						INNER JOIN (SELECT P.PatientPID,p.PatientCccNumber,F.code,max(p.ID) As Max_ID,Max(cast(P.created as date))MaxCreated FROM [DWAPICentral].[dbo].[PatientExtract]  P  with (NoLock)
 									INNER JOIN [DWAPICentral].[dbo].[Facility] F with (NoLock)  
 									ON P.[FacilityId]  = F.Id
-									GROUP BY  P.PatientPID,F.code)tn
+									GROUP BY  P.PatientPID,F.code,p.PatientCccNumber)tn
 							on P.PatientPID = tn.PatientPID and 
 							F.code = tn.code and 
 							cast(P.Created as date) = tn.MaxCreated
 							and P.ID = tn.Max_ID
+							and p.PatientCccNumber = tn.PatientCccNumber
 						WHERE  P.[Gender] is NOT NULL and p.gender!='Unknown' AND F.code >0 ) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 

@@ -26,3 +26,15 @@ MERGE [NDWH].[dbo].[DimHTSTraceOutcome] AS a
 								END 
 		FROM [NDWH].[dbo].[DimHTSTraceOutcome] source_data;
 
+		with cte AS (
+						Select
+						TraceOutcome,
+						
+
+						 ROW_NUMBER() OVER (PARTITION BY TraceOutcome ORDER BY
+						TraceOutcome) Row_Num
+						FROM NDWH.dbo.DimHTSTraceOutcome(NoLock)
+						)
+						DELETE from cte 
+						Where Row_Num >1 ;
+

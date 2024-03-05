@@ -13,8 +13,19 @@ BEGIN
 				  ,[TracingOutcome]
 				  ,a.RecordUUID
 			  FROM [HTSCentral].[dbo].[HtsClientTracing] (NoLock)a
-				INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
-			  on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+			INNER JOIN [HTSCentral].[dbo].Clients (NoLock) Cl
+			on a.PatientPk = Cl.PatientPk and a.SiteCode = Cl.SiteCode
+				Inner join ( select innerCT.sitecode,innerCT.patientPK,innerCT.htsNumber,innerCT.voided,max(ID)As MaxID,max(Dateextracted)MaxDateextracted
+				from [HTSCentral].[dbo].[HtsClientTracing] innerCT
+									group by innerCT.sitecode,innerCT.patientPK,innerCT.htsNumber,innerCT.voided
+						  )tn
+
+									on a.sitecode = tn.sitecode and a.patientPK = tn.patientPK
+									and a.Dateextracted = tn.MaxDateextracted
+									and a.htsNumber = tn.htsNumber
+									and a.voided = tn.voided
+									and a.ID = tn.MaxID
+			  
 			  where a.TracingType is not null and a.TracingOutcome is not null
 			  ) AS b 
 			ON(

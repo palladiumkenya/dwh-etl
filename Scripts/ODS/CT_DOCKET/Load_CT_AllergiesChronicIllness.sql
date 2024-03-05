@@ -51,6 +51,7 @@ BEGIN
 						ACI.[Abdomen] AS Abdomen,ACI.[CNS] AS CNS,ACI.[Genitourinary] AS Genitourinary
 						,ACI.[Date_Created],ACI.[Date_Last_Modified],
 						 ACI.RecordUUID,ACI.voided
+						 ,ACI.Controlled
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 					INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID 
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
@@ -66,8 +67,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,LoadDate)  
-						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Getdate())
+						INSERT(ID,AllergiesChronicIllnessUnique_ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Controlled,LoadDate)  
+						VALUES(ID,ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,ChronicIllness,ChronicOnsetDate,knownAllergies,AllergyCausativeAgent,AllergicReaction,AllergySeverity,AllergyOnsetDate,Skin,Eyes,ENT,Chest,CVS,Abdomen,CNS,Genitourinary,[Date_Created],[Date_Last_Modified], RecordUUID,voided,Controlled,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -90,7 +91,8 @@ BEGIN
 							a.[Date_Created]		=b.[Date_Created],
 							a.[Date_Last_Modified]	=b.[Date_Last_Modified],
 							a.RecordUUID			=b.RecordUUID,
-							a.voided		=b.voided;
+							a.voided		=b.voided
+							a.Controlled    = b.Controlled;
 												
 					
 					UPDATE [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log]
