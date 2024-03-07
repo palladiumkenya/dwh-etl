@@ -18,11 +18,6 @@ SELECT
 	,partner.PartnerKey
 	,agency.AgencyKey 
      ,DHISOrgId
-      ,SiteCode
-      ,summary.FacilityName
-      ,summary.County
-      ,summary.
-       SubCounty
       ,Ward
       ,ReportMonth_Year
       ,Enrolled_Total
