@@ -1,5 +1,4 @@
-If Object_id(N'[Reporting].[Dbo].[AggregateUshauriAppointments]', N'U') Is Not
-   Null
+If Object_id(N'[Reporting].[Dbo].[AggregateUshauriAppointments]', N'U') Is Not Null
   Drop Table [Reporting].[Dbo].[AggregateUshauriAppointments];
 
 Begin
@@ -7,15 +6,13 @@ Begin
          As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
                     Count(Patientkey)                              As
                     NumberBooked,
-                    Patientkey,
                     Facilitykey,
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus Is Not Null
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
-                       Patientkey,
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
@@ -28,7 +25,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Consentforsms = 'YES'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -43,7 +40,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
@@ -60,7 +57,7 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus = 'honoured'
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
@@ -75,12 +72,99 @@ Begin
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
-             From   ndwh.dbo.Factushaurismsreminders Sms
+             From   ndwh.dbo.FactUshauriAppointments Sms
              Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
-                       Agegroupkey)
+                       Agegroupkey),
+       missingappointments
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberMissedAppointment,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where  Appointmentstatus ='not honoured'
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+
+         Traced
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberTraced,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where  (Tracingcalls = 1 OR TracingSMS = 1 OR TracingHomevisits = 1)
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+
+              SuccessfullyTraced
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberSuccessfullyTraced,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found '
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey)  ,
+              HomeVisits
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberOfHomeVisits,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where Tracinghomevisits=1
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey),
+        ReturnedToCare
+         As (Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    Count(Patientkey)                              As
+                    NumberReturnedToCare,
+                    Patientkey,
+                    Facilitykey,
+                    Partnerkey,
+                    Agencykey,
+                    Agegroupkey
+             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where Tracingoutcome='Client returned to care '
+             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+                       Patientkey,
+                       Facilitykey,
+                       Partnerkey,
+                       Agencykey,
+                       Agegroupkey)            
     Select Bookedappointments.Asofdate,
            Fac.Mflcode,
            Partner.Partnername,
@@ -105,7 +189,12 @@ Begin
                     Nullif(
                              Appointmentcounts.Totalappointments, 0) * 100, 0)
            As
-           PercentHonoured
+           PercentHonoured,
+           Coalesce (missingappointments.NumberMissedAppointment,0) As NumberMissedAppointment,
+           Coalesce (Traced.NumberTraced,0) As NumberTraced,
+           Coalesce (SuccessfullyTraced.NumberSuccessfullyTraced,0) As NumberSuccessfullyTraced,
+           Coalesce (HomeVisits.NumberOfHomeVisits,0) As NumberOfHomeVisits,
+           Coalesce (ReturnedToCare.NumberReturnedToCare,0) As NumberReturnedToCare
     Into   reporting.dbo.AggregateUshauriAppointments
     From   bookedappointments
            Left Join ndwh.dbo.Dimfacility Fac
@@ -156,5 +245,61 @@ Begin
                          Bookedappointments.Agegroupkey
                      And Appointmentcounts.Asofdate =
                          Bookedappointments.Asofdate
+          Left Join missingappointments
+                  On missingappointments.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And missingappointments.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And missingappointments.Agencykey =
+                         Bookedappointments.Agencykey
+                     And missingappointments.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And missingappointments.Asofdate =
+                         Bookedappointments.Asofdate 
+        Left Join Traced
+                  On Traced.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And Traced.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And Traced.Agencykey =
+                         Bookedappointments.Agencykey
+                     And Traced.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And Traced.Asofdate =
+                         Bookedappointments.Asofdate
+        Left Join SuccessfullyTraced
+                  On SuccessfullyTraced.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And SuccessfullyTraced.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And SuccessfullyTraced.Agencykey =
+                         Bookedappointments.Agencykey
+                     And SuccessfullyTraced.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And SuccessfullyTraced.Asofdate =
+                         Bookedappointments.Asofdate
+         Left Join HomeVisits
+                  On HomeVisits.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And HomeVisits.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And HomeVisits.Agencykey =
+                         Bookedappointments.Agencykey
+                     And HomeVisits.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And HomeVisits.Asofdate =
+                         Bookedappointments.Asofdate
+        Left Join ReturnedToCare
+                  On ReturnedToCare.Facilitykey =
+                     Bookedappointments.Facilitykey
+                     And ReturnedToCare.Partnerkey =
+                         Bookedappointments.Partnerkey
+                     And ReturnedToCare.Agencykey =
+                         Bookedappointments.Agencykey
+                     And ReturnedToCare.Agegroupkey =
+                         Bookedappointments.Agegroupkey
+                     And ReturnedToCare.Asofdate =
+                         Bookedappointments.Asofdate
     Where  Bookedappointments.Asofdate Is Not Null
-End 
+End
+ 
