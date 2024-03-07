@@ -1,13 +1,13 @@
 MERGE [NDWH].[dbo].[DimHTSTraceOutcome] AS a
 		USING	(	SELECT DISTINCT TracingOutcome AS TraceOutcome
 					FROM ODS.dbo.HTS_ClientTracing 
-					WHERE  TracingOutcome <> 'null' AND TracingOutcome <> ''
+					WHERE  TracingOutcome <> 'null' AND TracingOutcome <> '' AND TracingOutcome IS NOT NULL
 				
 					UNION
 
 					SELECT DISTINCT TraceOutcome 
 					FROM ODS.dbo.HTS_PartnerTracings
-					WHERE  TraceOutcome <> 'null' AND TraceOutcome <> ''
+					WHERE  TraceOutcome <> 'null' AND TraceOutcome <> ''AND TracingOutcome IS NOT NULL
 				) AS b 
 						ON(
 							a.[TraceOutcome] = b.[TraceOutcome]
@@ -26,15 +26,5 @@ MERGE [NDWH].[dbo].[DimHTSTraceOutcome] AS a
 								END 
 		FROM [NDWH].[dbo].[DimHTSTraceOutcome] source_data;
 
-		with cte AS (
-						Select
-						TraceOutcome,
-						
-
-						 ROW_NUMBER() OVER (PARTITION BY TraceOutcome ORDER BY
-						TraceOutcome) Row_Num
-						FROM NDWH.dbo.DimHTSTraceOutcome(NoLock)
-						)
-						DELETE from cte 
-						Where Row_Num >1 ;
+		
 

@@ -40,8 +40,7 @@ BEGIN
 					
 					ROW_NUMBER() OVER (PARTITION BY P.SiteCode,P.PatientPK
 					ORDER BY P.PatientPK,P.SiteCode) Row_Num
-					FROM [ODS].[dbo].[MNCH_Heis] p
-					where HEIExitCritearia like '%Confirmed HIV Positive%')   
+					FROM [ODS].[dbo].[MNCH_Heis] p)   
 		
 				delete from cte
 				where  Row_Num  > 1;  	
