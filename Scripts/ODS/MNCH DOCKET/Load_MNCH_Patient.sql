@@ -46,6 +46,10 @@ BEGIN
 						)
 						delete from cte 
 						Where Row_Num >1 ;
+
+			update ods.dbo.MNCH_Patient
+set voided =0
+where voided is null
 END
 
 

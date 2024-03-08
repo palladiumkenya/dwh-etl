@@ -35,6 +35,10 @@
 		on n.SiteCode = c.SiteCode and n.PatientPK = c.PatientPK
 		WHERE  n.PatientPKHash IS NULL OR n.HTSNumberHash IS NULL;
 
+	  	update [ODS].[dbo].[Hts_PartnerNotificationServices] 
+		set IndexPatientPkHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(IndexPatientPk  as nvarchar(36))), 2)			
+			WHERE  IndexPatientPkHash IS NULL ;
+
 	update PT
 	set PatientPKHash = c.PatientPKHash,
 		PT.HTSNumberHash = C.HTSNumberHash
