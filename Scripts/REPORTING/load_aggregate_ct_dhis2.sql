@@ -2,12 +2,12 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateFACT_CT_DHIS2]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[AggregateFACT_CT_DHIS2];
 
 SELECT 
-	id
-	,DHISOrgId
-	,SiteCode
+	
+	DHISOrgId
+	,MFLCode
 	,FacilityName
-	,CT.County
-	,CT.SubCounty
+	,facility.County
+	,facility.SubCounty
 	,Ward
 	,ReportMonth_Year
 	,Enrolled_Total
@@ -40,10 +40,11 @@ SELECT
 	,On_ART_20_24_F
 	,On_ART_25_Plus_M
 	,On_ART_25_Plus_F
-	,Sites.SDP PartnerName
-	,Sites.[SDP_Agency] AgencyName
+	,PartnerName
+	, Agency as AgencyName
 	,cast(getdate() as date) as LoadDate
-INTO REPORTING.dbo.AggregateFACT_CT_DHIS2
+INTO REPORTING.dbo.AggregateFACT_CT_DHIS2 
 FROM NDWH.dbo.FACT_CT_DHIS2 CT
-LEFT JOIN ODS.dbo.ALL_EMRSites Sites on CT.SiteCode COLLATE Latin1_General_CI_AS=Sites.MFL_Code;
--- WHERE Sites.SDP IS NOT NULL;
+LEFT join NDWH.dbo.DimFacility facility on facility.FacilityKey=CT.facilitykey 
+left join NDWH.dbo.DimPartner partner on partner.PartnerKey=ct.PartnerKey
+ WHERE MFLCode IS NOT NULL;
