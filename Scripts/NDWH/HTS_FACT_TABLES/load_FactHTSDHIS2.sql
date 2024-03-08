@@ -50,8 +50,7 @@ With Facilityinfo AS (
         left join Facilityinfo on Facilityinfo.MFL_Code=Summary.SiteCode COLLATE SQL_Latin1_General_CP1_CI_AS
         left join NDWH.dbo.DimPartner as partner on partner.PartnerName = Facilityinfo.PartnerName
         left join NDWH.dbo.DimAgency as agency on agency.AgencyName = Facilityinfo.Agency
-	
-
+       where MFLCode is not null
          alter table NDWH.dbo.FACT_HTS_DHIS2 add primary key(FactKey)
          END
 
