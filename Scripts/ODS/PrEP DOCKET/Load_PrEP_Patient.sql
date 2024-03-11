@@ -86,7 +86,19 @@ MERGE [ODS].[dbo].[PrEP_Patient] AS a
 					a.DateStartedPrEPattransferringfacility=b.DateStartedPrEPattransferringfacility,
 					a.ClientPreviouslyonPrep=b.ClientPreviouslyonPrep,
 					a.PrevPrepReg=b.PrevPrepReg,
-					a.RecordUUID = b.RecordUUID;										
+					a.RecordUUID = b.RecordUUID;
+
+			with cte AS (
+				Select
+				PatientPK,
+				sitecode,
+
+				 ROW_NUMBER() OVER (PARTITION BY PatientPK,sitecode ORDER BY
+				PatientPK,sitecode) Row_Num
+				FROM [ODS].[dbo].[PrEP_Patient](NoLock)
+				)
+			delete   from cte 
+				Where Row_Num >1;										
 
 	END
 

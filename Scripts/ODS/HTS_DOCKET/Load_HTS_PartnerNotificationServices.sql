@@ -61,7 +61,7 @@ BEGIN
 				a.[Gender]							=b.[Gender],
 				a.[CurrentlyLivingWithIndexClient]	=b.[CurrentlyLivingWithIndexClient],	
 				a.[LinkDateLinkedToCare]			=b.[LinkDateLinkedToCare],
-				a.RecordUUID                         = b.RecordUUID
+				a.RecordUUID                         = b.RecordUUID,
 				a.IndexPatientPk                     = b.IndexPatientPk;
 
 				

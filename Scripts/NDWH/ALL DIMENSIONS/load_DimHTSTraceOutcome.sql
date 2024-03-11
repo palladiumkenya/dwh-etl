@@ -7,7 +7,7 @@ MERGE [NDWH].[dbo].[DimHTSTraceOutcome] AS a
 
 					SELECT DISTINCT TraceOutcome 
 					FROM ODS.dbo.HTS_PartnerTracings
-					WHERE  TraceOutcome <> 'null' AND TraceOutcome <> ''AND TracingOutcome IS NOT NULL
+					WHERE  TraceOutcome <> 'null' AND TraceOutcome <> ''AND TraceOutcome IS NOT NULL
 				) AS b 
 						ON(
 							a.[TraceOutcome] = b.[TraceOutcome]

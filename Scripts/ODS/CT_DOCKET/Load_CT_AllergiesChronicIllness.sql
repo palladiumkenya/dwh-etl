@@ -91,7 +91,7 @@ BEGIN
 							a.[Date_Created]		=b.[Date_Created],
 							a.[Date_Last_Modified]	=b.[Date_Last_Modified],
 							a.RecordUUID			=b.RecordUUID,
-							a.voided		=b.voided
+							a.voided		=b.voided,
 							a.Controlled    = b.Controlled;
 												
 					
