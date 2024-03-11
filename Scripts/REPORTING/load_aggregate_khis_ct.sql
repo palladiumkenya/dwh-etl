@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateFACT_CT_DHIS2]', N'U') IS NOT NULL 
-	DROP TABLE [REPORTING].[dbo].[AggregateFACT_CT_DHIS2];
+IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateKHIS_CT]', N'U') IS NOT NULL 
+	DROP TABLE [REPORTING].[dbo].[AggregateKHIS_CT];
 
 SELECT 
 	
@@ -44,7 +44,7 @@ SELECT
 	, Agency as AgencyName
 	,cast(getdate() as date) as LoadDate
 INTO REPORTING.dbo.AggregateFACT_CT_DHIS2 
-FROM NDWH.dbo.FACT_CT_DHIS2 CT
+FROM NDWH.dbo.AggregateKHIS_CT as  CT
 LEFT join NDWH.dbo.DimFacility facility on facility.FacilityKey=CT.facilitykey 
 left join NDWH.dbo.DimPartner partner on partner.PartnerKey=ct.PartnerKey
  WHERE MFLCode IS NOT NULL;
