@@ -301,5 +301,6 @@ Begin
                      And ReturnedToCare.Asofdate =
                          Bookedappointments.Asofdate
     Where  Bookedappointments.Asofdate Is Not Null
+
 End
- 
+
