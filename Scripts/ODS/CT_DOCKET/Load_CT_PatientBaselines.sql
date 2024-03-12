@@ -49,7 +49,7 @@ BEGIN
 		ON a.patientPK = b.PatientPK  
 		and a.sitecode = b.sitecode 
 		and a.voided   = b.voided
-		--and a.ID =b. ID
+		and a.ID =b. ID
 
 
 		WHEN NOT MATCHED THEN 

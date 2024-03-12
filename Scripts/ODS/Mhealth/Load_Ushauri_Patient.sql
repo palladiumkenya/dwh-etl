@@ -72,5 +72,18 @@ BEGIN
 						a.[Date_Modified]					=	b.[Date_Modified],
 						a.[PKV]							=	b.[PKV],
 						a.[NUPI]							=	b.[NUPI] ;
+
+		with cte AS (
+						Select
+						Sitecode,
+						UshauriPatientPK,
+						
+						 ROW_NUMBER() OVER (PARTITION BY UshauriPatientPK,Sitecode ORDER BY
+						UshauriPatientPK) Row_Num
+						FROM [ODS].[dbo].[Ushauri_Patient](NoLock)
+						)
+						delete from cte 
+						Where Row_Num >1 ;
+
 		
 	END
