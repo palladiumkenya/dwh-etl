@@ -13,7 +13,7 @@ BEGIN
            Partner.Partnerkey,
            Patient.Patientkey,
            Agency.Agencykey,
-           Age_group.Agegroupkey,
+           coalesce(Age_group.Agegroupkey, -999) as Agegroupkey,
            Appointment.Datekey           AS AppointmentDateKey,
            Appointmenttype,
            Appointmentstatus,
@@ -104,4 +104,3 @@ BEGIN
     ALTER TABLE Ndwh.Dbo.FactUshauriAppointments
       ADD PRIMARY KEY(Factkey);
 END 
-
