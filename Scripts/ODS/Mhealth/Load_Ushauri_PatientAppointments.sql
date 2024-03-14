@@ -4,17 +4,17 @@ BEGIN
 			MERGE [ODS].[dbo].[Ushauri_PatientAppointments] AS a
 				USING(SELECT Distinct
 						PatientPK,Null As PatientPKHash,SiteCode,SiteType,PatientID,Null As PatientIDHash,Null As NUPI,PartnerName,FacilityID,FacilityName,
-						DOB,Gender,MaritalStatus,PatientResidentCounty,PatientResidentLocation,PatientResidentSubCounty,
-						PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,RegistrationDate,RegistrationAtCCC,
-						RegistrationAtPMTCT,RegistrationAtTBClinic,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,AgeAtAppointment,
-						AppointmentID,AppointmentDate,AppointmentType,AppointmentStatus,EntryPoint,VisitType,DateAttended,ConsentForSMS,
-						SMSLanguage,SMSTargetGroup,SMSPreferredSendTime,FourWeekSMSSent,FourWeekSMSSendDate,FourWeekSMSDeliveryStatus
-						,FourWeekSMSDeliveryFailureReason,ThreeWeekSMSSent,ThreeWeekSMSSendDate,ThreeWeekSMSDeliveryStatus,
-						ThreeWeekSMSDeliveryFailureReason,TwoWeekSMSSent,TwoWeekSMSSendDate,TwoWeekSMSDeliveryStatus,
-						TwoWeekSMSDeliveryFailureReason,OneWeekSMSSent,OneWeekSMSSendDate,OneWeekSMSDeliveryStatus,
-						OneWeekSMSDeliveryFailureReason,OneDaySMSSent,OneDaySMSSendDate,OneDaySMSDeliveryStatus,OneDaySMSDeliveryFailureReason,
-						MissedAppointmentSMSSent,MissedAppointmentSMSSendDate,MissedAppointmentSMSDeliveryStatus,MissedAppointmentSMSDeliveryFailureReason,
-						TracingCalls,TracingSMS,TracingHomeVisits,TracingOutcome,TracingOutcomeDate,DateReturnedToCare,DaysDefaulted
+						DOB_Date As DOB,Gender,MaritalStatus,PatientResidentCounty,PatientResidentLocation,PatientResidentSubCounty,
+						PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,RegistrationDate_Date As RegistrationDate,RegistrationAtCCC_Date as RegistrationAtCCC,
+						RegistrationAtPMTCT_Date As RegistrationAtPMTCT,RegistrationAtTBClinic_date As RegistrationAtTBClinic,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,AgeAtAppointment,
+						AppointmentID,AppointmentDate_Date As AppointmentDate,AppointmentType,AppointmentStatus,EntryPoint,VisitType,DateAttended_Date As DateAttended,ConsentForSMS,
+						SMSLanguage,SMSTargetGroup,SMSPreferredSendTime,FourWeekSMSSent,FourWeekSMSSendDate_Date As FourWeekSMSSendDate,FourWeekSMSDeliveryStatus
+						,FourWeekSMSDeliveryFailureReason,ThreeWeekSMSSent,ThreeWeekSMSSendDate_Date AS ThreeWeekSMSSendDate,ThreeWeekSMSDeliveryStatus,
+						ThreeWeekSMSDeliveryFailureReason,TwoWeekSMSSent,TwoWeekSMSSendDate_Date As TwoWeekSMSSendDate,TwoWeekSMSDeliveryStatus,
+						TwoWeekSMSDeliveryFailureReason,OneWeekSMSSent,OneWeekSMSSendDate_Date As OneWeekSMSSendDate,OneWeekSMSDeliveryStatus,
+						OneWeekSMSDeliveryFailureReason,OneDaySMSSent,OneDaySMSSendDate_Date As OneDaySMSSendDate,OneDaySMSDeliveryStatus,OneDaySMSDeliveryFailureReason,
+						MissedAppointmentSMSSent,MissedAppointmentSMSSendDate_Date As MissedAppointmentSMSSendDate,MissedAppointmentSMSDeliveryStatus,MissedAppointmentSMSDeliveryFailureReason,
+						TracingCalls,TracingSMS,TracingHomeVisits,TracingOutcome,TracingOutcomeDate_Date As TracingOutcomeDate,DateReturnedToCare_Date As DateReturnedToCare,DaysDefaulted
 					FROM [mhealthCentral].[dbo].[CT_PatientAppointments](NoLock) P
 					) AS b	
 						ON(
