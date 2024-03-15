@@ -3,7 +3,7 @@ If Object_id(N'[Reporting].[Dbo].[AggregateUshauriAppointments]', N'U') Is Not N
 
 Begin
         with bookedappointments As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberBooked,
                     Facilitykey,
                     Partnerkey,
@@ -11,14 +11,14 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus Is Not Null
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         consentedappointments As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberConsented,
                     Facilitykey,
                     Partnerkey,
@@ -26,14 +26,14 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Consentforsms = 'YES'
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         receivedsms As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberReceivedSMS,
                     Facilitykey,
                     Partnerkey,
@@ -44,14 +44,14 @@ Begin
                     Oneweeksmssent,
                             Onedaysmssent) = 'Success'
                     and Consentforsms = 'YES'
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         honouredappointments As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberHonouredAppointment,
                     Facilitykey,
                     Partnerkey,
@@ -59,28 +59,28 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus = 'honoured'
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         appointmentcounts As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As Totalappointments,
                     Facilitykey,
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         missingappointments As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberMissedAppointment,
                     Facilitykey,
                     Partnerkey,
@@ -88,14 +88,14 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  Appointmentstatus ='not honoured'
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         Traced As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey)  As NumberTraced,
                     Facilitykey,
                     Partnerkey,
@@ -103,14 +103,14 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where  (Tracingcalls = 1 OR TracingSMS = 1 OR TracingHomevisits = 1)
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
        ),
         SuccessfullyTraced As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberSuccessfullyTraced,
                     Facilitykey,
                     Partnerkey,
@@ -118,7 +118,7 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found '
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
@@ -126,7 +126,7 @@ Begin
         ),
         HomeVisits As (
             Select 
-                    Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+                    eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberOfHomeVisits,
                     Facilitykey,
                     Partnerkey,
@@ -134,14 +134,14 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracinghomevisits=1
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
         ReturnedToCare As (
-            Select Eomonth(Try_convert(Date, Appointmentdatekey)) As AsofDate,
+            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberReturnedToCare,
                     Facilitykey,
                     Partnerkey,
@@ -149,7 +149,7 @@ Begin
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
              Where Tracingoutcome='Client returned to care '
-             Group  By Eomonth(Try_convert(Date, Appointmentdatekey)),
+             Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
