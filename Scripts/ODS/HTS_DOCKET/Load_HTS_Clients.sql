@@ -40,7 +40,7 @@ BEGIN
 						ON(
 						 a.PatientPK  = b.PatientPK 
 						and a.SiteCode = b.SiteCode	
-						and a.RecordUUID = b.RecordUUID
+						--and a.RecordUUID = b.RecordUUID
 						)
 
 					WHEN NOT MATCHED THEN 
@@ -61,4 +61,15 @@ BEGIN
 							a.Ward			   =b.Ward,
 							a.pkv				=b.pkv,
 							a.RecordUUID        =b.RecordUUID;
+
+
+   with cte AS ( Select           
+		a.[PatientPk],           
+		a.[SiteCode],            
+		ROW_NUMBER() OVER (PARTITION BY a.[PatientPk],a.[SiteCode]
+		ORDER BY a.[PatientPk],a.[SiteCode] desc) Row_Num
+        FROM [ODS].[dbo].[HTS_clients]a)
+
+delete from cte where Row_Num>1 
 	END
+

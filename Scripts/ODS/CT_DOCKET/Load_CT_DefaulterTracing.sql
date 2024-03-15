@@ -25,9 +25,13 @@ BEGIN
 						  ,[TrueStatus]
 						  ,[CauseOfDeath]
 						  ,[Comments]
-						  ,Cast([BookingDate] As Date)[BookingDate],
-						  C.RecordUUID,C.voided
-					 ,P.ID,C.[Date_Created],C.[Date_Last_Modified]
+						  ,Cast([BookingDate] As Date)[BookingDate]
+						  ,C.RecordUUID
+						  ,C.voided
+						  ,[DatePromisedToCome]
+     					 ,[ReasonForMissedAppointment]
+      					,[DateOfMissedAppointment]
+					 	,P.ID,C.[Date_Created],C.[Date_Last_Modified]
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID 
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -42,8 +46,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)  
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided   ,[DatePromisedToCome],[ReasonForMissedAppointment],[DateOfMissedAppointment],LoadDate)  
+						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided   ,[DatePromisedToCome],[ReasonForMissedAppointment],[DateOfMissedAppointment],Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	
@@ -58,7 +62,10 @@ BEGIN
 						a.[Date_Created]			=b.[Date_Created],
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 						a.RecordUUID			=b.RecordUUID,
-						a.voided		=b.voided
+						a.voided		=b.voided,
+						a.[DatePromisedToCome]   = b.[DatePromisedToCome],
+   						a.[ReasonForMissedAppointment]  = b.[ReasonForMissedAppointment],
+   						a.[DateOfMissedAppointment]   = b.[DateOfMissedAppointment]
 						;
 
 

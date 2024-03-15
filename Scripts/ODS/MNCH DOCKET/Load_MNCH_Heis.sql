@@ -25,24 +25,32 @@ BEGIN
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
-							a.[Status]		=b.[Status],
-							a.DNAPCR1Date	=b.DNAPCR1Date,
-							a.DNAPCR2Date	= b.DNAPCR2Date,
-							a.DNAPCR3Date			= b.DNAPCR3Date,
-							a.ConfirmatoryPCRDate = b.ConfirmatoryPCRDate,
-							a.BasellineVLDate   = b.BasellineVLDate,
-							a.FinalyAntibodyDate  =b.FinalyAntibodyDate,
-							a.RecordUUID   =b.RecordUUID;
+							a.[DNAPCR1Date]=b.[DNAPCR1Date],
+							a.[DNAPCR2Date]=b.[DNAPCR2Date],
+							a.[DNAPCR3Date]=b.[DNAPCR3Date],
+							a.[ConfirmatoryPCRDate]=b.[ConfirmatoryPCRDate],
+							a.[BasellineVLDate]=b.[BasellineVLDate],
+							a.[FinalyAntibodyDate]=b.[FinalyAntibodyDate],
+							a.[DNAPCR1]=b.[DNAPCR1],
+							a.[DNAPCR2]=b.[DNAPCR2],
+							a.[DNAPCR3]=b.[DNAPCR3],
+							a.[ConfirmatoryPCR]=b.[ConfirmatoryPCR],
+							a.[BasellineVL]=b.[BasellineVL],
+							a.[FinalyAntibody]=b.[FinalyAntibody],
+							a.[HEIExitDate]=b.[HEIExitDate],
+							a.[HEIHIVStatus]=b.[HEIHIVStatus],
+							a.[HEIExitCritearia]=b.[HEIExitCritearia],
+							a.[Date_Created]=b.[Date_Created],
+							a.[Date_Last_Modified]=b.[Date_Last_Modified],
+							a.[RecordUUID]=b.[RecordUUID];
 
 					;with cte AS ( Select            
 									P.PatientPK,            
-									P.SiteCode,  
-									[DNAPCR1Date],HEIExitCritearia,
+									P.SiteCode,
 					
-					ROW_NUMBER() OVER (PARTITION BY P.PatientPK,P.SiteCode,HEIExitCritearia
-					ORDER BY P.PatientPK,P.SiteCode,[DNAPCR1Date]) Row_Num
-					FROM [ODS].[dbo].[MNCH_Heis] p
-					where HEIExitCritearia like '%Confirmed HIV Positive%')   
+					ROW_NUMBER() OVER (PARTITION BY P.SiteCode,P.PatientPK
+					ORDER BY RecordUUID desc) Row_Num
+					FROM [ODS].[dbo].[MNCH_Heis] p)   
 		
 				delete from cte
 				where  Row_Num  > 1;  	
