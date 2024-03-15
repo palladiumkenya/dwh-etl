@@ -4,12 +4,12 @@ BEGIN
 			MERGE [ODS].[dbo].[Ushauri_Patient] AS a
 				USING(SELECT Distinct
 						PatientPK,MPIPKV,null PatientPKHash,PartnerName,SiteCode,SiteType,PatientID,null PatientIDHash,FacilityID,Emr,Project,FacilityName,
-						Gender,DOB,RegistrationDate,RegistrationAtCCC,RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,
-						Village,ContactRelation,LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,
+						Gender,DOB_Date AS DOB,RegistrationDate_Date As RegistrationDate,RegistrationAtCCC_Date As RegistrationAtCCC,RegistrationAtPMTCT_Date As RegistrationAtPMTCT,RegistrationAtTBClinic,PatientSource,Region,District,
+						Village,ContactRelation,LastVisit_Date As LastVisit,MaritalStatus,EducationLevel,DateConfirmedHIVPositive,PreviousARTExposure,
 						PreviousARTStartDate,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,Inschool,KeyPopulationType,Orphan,PatientResidentCounty As County,
 						PatientResidentLocation,PatientResidentSubCounty,PatientResidentSubLocation,PatientResidentVillage,
-						PatientResidentWard,PatientType,PopulationType,TransferInDate,Occupation,DateCreated,DateModified,StatelitteName,
-						Date_Created,Date_Modified,PKV,NUPI
+						PatientResidentWard,PatientType,PopulationType,TransferInDate,Occupation,DateCreated_Date As DateCreated,DateModified_Date As DateModified,StatelitteName,
+						Date_Created_Date As Date_Created,Date_Modified_Date As Date_Modified,PKV,NUPI
 					FROM [mhealthCentral].[dbo].[CT_Patient](NoLock) P
 					) AS b	
 						ON(
