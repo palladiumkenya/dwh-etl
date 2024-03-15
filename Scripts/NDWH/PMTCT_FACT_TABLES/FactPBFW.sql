@@ -202,7 +202,9 @@ BEGIN
                       WHEN Receivedeac3.Patientpk IS NOT NULL THEN 1
                       ELSE 0
                     END       AS ReceivedEAC3,
-                    Pbfwreglineswitch
+                    Pbfwreglineswitch,
+                    Pregnant,
+                    Breastfeeding
              FROM   Pbfw_patient AS Patient
                      LEFT JOIN Ancdate1
                            ON Patient.Patientpk = Ancdate1.Patientpk
@@ -261,7 +263,9 @@ BEGIN
            Receivedeac1,
            Receivedeac2,
            Receivedeac3,
-           Pbfwreglineswitch
+           Pbfwreglineswitch,
+           Pregnant,
+           Breastfeeding
     INTO   Ndwh.Dbo.Factpbfw
     FROM   Summary
            LEFT JOIN Ndwh.Dbo.Dimfacility AS Facility
