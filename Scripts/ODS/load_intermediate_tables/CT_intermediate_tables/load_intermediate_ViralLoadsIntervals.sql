@@ -1,3 +1,4 @@
+
 IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_ViralLoadsIntervals]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[Intermediate_ViralLoadsIntervals];
 
@@ -5,7 +6,6 @@ BEGIN
 
 with source_viral_loads as (
 	select
-		labs.PatientID,
 		labs.SiteCode,
 		labs.PatientPK,
 		cast( '' as nvarchar(100)) PatientPKHash,
@@ -34,7 +34,9 @@ with source_viral_loads as (
 	where TestName = 'Viral Load'
 			and TestName <>'CholesterolLDL (mmol/L)' and TestName <> 'Hepatitis C viral load' 
 			and TestResult is not null AND labs.VOIDED =0 AND art.VOIDED = 0
-), 
+)
+
+, 
 _6monthVL_data as (
 	select
 		row_number() over(partition by  SiteCode, PatientPK order by OrderedbyDate asc) as rank, 
@@ -58,7 +60,8 @@ _12monthVL_data as (
 	from 
 	source_viral_loads
 	where datediff(mm, startARTDate, OrderedbyDate) = 12
-),
+)
+,
 _18monthVL_data as (
 	select
 		row_number() over(partition by  SiteCode, PatientPK order by OrderedbyDate asc) as rank, 
@@ -70,7 +73,9 @@ _18monthVL_data as (
 	from 
 	source_viral_loads
 	where datediff(mm, startARTDate, OrderedbyDate) = 18
-),
+)
+
+,
 _24monthVL_data as (
 	select
 		row_number() over(partition by  SiteCode, PatientPK order by OrderedbyDate asc) as rank, 
@@ -87,19 +92,15 @@ distinct_viral_load_clients as (
 	select
 		distinct Sitecode,
 		PatientPK,
-		PatientID,
 		PatientPKHash,
 		PatientIDHash
 	from source_viral_loads
 )
 select 
-	/* filter for rank = 1 to pick the latest result 
-        because a client can have more than one result in a month 
-    */
-	--cast( '' as nvarchar(100)) PatientPKHash,
+	
 	distinct_viral_load_clients.PatientPk,
-	distinct_viral_load_clients.PatientID,
 	distinct_viral_load_clients.SiteCode,
+	null As PatientID,
 	distinct_viral_load_clients.PatientPKHash,
 	distinct_viral_load_clients.PatientIDHash,
 	_6monthVL_data._6monthVL,
@@ -129,5 +130,6 @@ left join _18monthVL_data on _18monthVL_data.PatientPk = distinct_viral_load_cli
 left join _24monthVL_data on _24monthVL_data.PatientPk = distinct_viral_load_clients .PatientPK
 	and _24monthVL_data.SiteCode = distinct_viral_load_clients.SiteCode
 	and _24monthVL_data.rank = 1
+
 	
 END
