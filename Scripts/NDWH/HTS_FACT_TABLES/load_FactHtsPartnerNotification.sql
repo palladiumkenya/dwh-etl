@@ -19,7 +19,6 @@ BEGIN
             Emr,
             Project,
 			CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(PartnerPatientPk as NVARCHAR(36))), 2) As PartnerPatientPk,
-            IndexPatientPk,
             IndexPatientPkHash,
             KnowledgeOfHivStatus,
             PartnerPersonID,            
