@@ -53,7 +53,6 @@ BEGIN
         agency.AgencyKey,
 		age_group.AgeGroupKey,
         PartnerPatientPk,
-        IndexPatientPk,
         IndexPatientPkHash,
         KnowledgeOfHivStatus,
         PartnerPersonID,
