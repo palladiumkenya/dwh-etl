@@ -20,6 +20,7 @@ source_data as (
         IsPartnerHighrisk,
         PartnerARTRisk,
         ClientAssessments,
+        PrepEnrollmentDate,
         ClientWillingToTakePrep,
         PrEPDeclineReason,
         RiskReductionEducationOffered,
@@ -69,6 +70,7 @@ select
     NumberofchildrenWithPartner,
     ClientRisk,
     assessment_date.DateKey As AssessmentVisitDateKey,
+    prep_enrol_Date.DateKey As PrepEnrollmentDateKey,
     EligiblePrep,
     ScreenedPrep,
     cast(getdate() as date) as LoadDate
@@ -82,6 +84,8 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = source_data.SiteCode
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, coalesce(source_data.AssessmentVisitDate, getdate()))
 left join NDWH.dbo.DimDate as assessment_date on assessment_date.Date = source_data.AssessmentVisitDate
+left join NDWH.dbo.DimDate as prep_enrol_Date on prep_enrol_Date.Date = source_data.PrepEnrollmentDate
+
 WHERE patient.voided =0;
 
 alter table NDWH.dbo.FactPrepAssessments add primary key(FactKey);
