@@ -33,22 +33,29 @@ Begin
                        Agegroupkey
         ),
         receivedsms As (
-            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As NumberReceivedSMS,
-                    Facilitykey,
-                    Partnerkey,
-                    Agencykey,
-                    Agegroupkey as Agegroupkey
-             From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
-                    Oneweeksmssent,
-                            Onedaysmssent) = 'Success'
-                    and Consentforsms = 'YES'
-             Group  By eomonth(cast(Appointmentdatekey as date)),
-                       Facilitykey,
-                       Partnerkey,
-                       Agencykey,
-                       Agegroupkey
+           SELECT
+            EOMONTH(CAST(Appointmentdatekey AS DATE)) AS AsofDate,
+            COUNT(DISTINCT Patientkey) AS NumberReceivedSMS,
+            Facilitykey,
+            Partnerkey,
+            Agencykey,
+            Agegroupkey AS Agegroupkey
+FROM
+    ndwh.dbo.FactUshauriAppointments Sms
+WHERE
+        (Fourweeksmssent = 'Success' OR
+        Threeweeksmssent = 'Success' OR
+        Twoweeksmssent = 'Success' OR
+        Oneweeksmssent = 'Success' OR
+        Onedaysmssent = 'Success')
+        AND Consentforsms = 'YES'
+GROUP BY
+    EOMONTH(CAST(Appointmentdatekey AS DATE)),
+    Facilitykey,
+    Partnerkey,
+    Agencykey,
+    Agegroupkey
+
         ),
         honouredappointments As (
             Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
@@ -102,7 +109,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  (Tracingcalls = 1 OR TracingSMS = 1 OR TracingHomevisits = 1)
+             Where  (Tracingcalls > 0 OR TracingSMS > 0 OR TracingHomevisits > 0)
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -117,7 +124,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found '
+             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -133,7 +140,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracinghomevisits=1
+             Where Tracinghomevisits> 0
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
