@@ -293,7 +293,7 @@ select
     sum(NumberMissedAppointment) as NumberMissedAppointment ,
     sum(NumberTraced) as NumberTraced,
     sum(NumberSuccessfullyTraced) as NumberSuccessfullyTraced,
-    sum(NumberOfHomeVisits) as NumberOfHomeVisits,
+    sum(NoOfPatientswithHomeVisits) as NoOfPatientswithHomeVisits,
     sum(NumberReturnedToCare) as NumberReturnedToCare
 into REPORTING.dbo.AggregateUshauriAppointments
 from joined_indicator
