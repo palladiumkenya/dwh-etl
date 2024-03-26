@@ -177,7 +177,7 @@ GROUP BY
             Coalesce (missingappointments.NumberMissedAppointment,0) As NumberMissedAppointment,
             Coalesce (Traced.NumberTraced,0) As NumberTraced,
             Coalesce (SuccessfullyTraced.NumberSuccessfullyTraced,0) As NumberSuccessfullyTraced,
-            Coalesce (HomeVisits.NumberOfHomeVisits,0) As NumberOfHomeVisits,
+            Coalesce (HomeVisits.NoOfPatientswithHomeVisits,0) As NoOfPatientswithHomeVisits,
             Coalesce (ReturnedToCare.NumberReturnedToCare,0) As NumberReturnedToCare
         From  bookedappointments
             Left Join consentedappointments
