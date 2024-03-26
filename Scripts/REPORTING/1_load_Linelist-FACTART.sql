@@ -94,6 +94,7 @@ Select distinct
     ART.ScreenedForDepression,
     case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
+    art.IsRTTLast12MonthsAfter3monthsIIT,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
@@ -114,5 +115,4 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
-
       
