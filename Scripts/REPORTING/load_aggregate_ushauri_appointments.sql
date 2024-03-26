@@ -134,7 +134,7 @@ GROUP BY
         HomeVisits As (
             Select 
                     eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As NumberOfHomeVisits,
+                    Count(distinct Patientkey) As NoOfPatientswithHomeVisits,
                     Facilitykey,
                     Partnerkey,
                     Agencykey,
