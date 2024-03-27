@@ -113,7 +113,7 @@ second_last_pharmacy_dispense_as_of_date as (
 ),
 visits_and_dispense_encounters_combined_tbl as (
     /* combine latest visits and latest pharmacy dispensation records*/
-    /* we don't include the stg_ARTPatients table logic because this table has only the latest records of the patients (no history) */
+    /* we don't include the CT_ARTPatients table logic because this table has only the latest records of the patients (no history) */
     select  distinct coalesce (last_visit.PatientIDHash, last_dispense.PatientIDHash) as PatientIDHash,
             coalesce(last_visit.SiteCode, last_dispense.SiteCode) as SiteCode,
             coalesce(last_visit.PatientPKHash, last_dispense.PatientPKHash) as PatientPKhash,
