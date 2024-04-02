@@ -1,5 +1,5 @@
-If Object_id(N'[NDWH].[dbo].[ModulesUptake]', N'U') Is Not Null
-  Drop Table [Ndwh].[Dbo].[Modulesuptake];
+If Object_id(N'[NDWH].[dbo].[FactModulesuptake]', N'U') Is Not Null
+  Drop Table [Ndwh].[Dbo].[FactModulesuptake];
 
 Begin
     With Sites
@@ -143,7 +143,7 @@ Begin
            Pmtct,
            Iit,
            Htsml
-    Into   Ndwh.Dbo.Modulesuptake
+    Into   Ndwh.Dbo.FactModulesuptake
     From   Summary
            Left Join Ndwh.Dbo.Dimpartner As Partner
                   On Partner.Partnername = Summary.Sdp
