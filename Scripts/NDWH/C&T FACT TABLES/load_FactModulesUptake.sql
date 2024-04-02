@@ -150,5 +150,5 @@ Begin
            Left Join Ndwh.Dbo.Dimagency As Agency
                   On Agency.Agencyname = Summary.Sdp_agency
 
-    Alter Table Ndwh.Dbo.Modulesuptake Add Primary Key(Factkey);
+    Alter Table Ndwh.Dbo.FactModulesuptake Add Primary Key(Factkey);
 End 
