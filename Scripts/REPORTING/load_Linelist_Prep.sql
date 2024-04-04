@@ -20,7 +20,7 @@ WITH prepCascade AS  (
         EOMONTH(ass.Date) as AsofDate,
         EligiblePrep,
         ScreenedPrep,
-        prepEnrol.DateKey as PrepEnrollmentDate
+        cast (prepEnrol.DateKey as date) as PrepEnrollmentDate
  
     FROM NDWH.dbo.FactPrepAssessments prep
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
@@ -29,7 +29,7 @@ WITH prepCascade AS  (
 	LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
 	LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
 	LEFT JOIN NDWH.dbo.DimDate ass ON ass.DateKey = AssessmentVisitDateKey 	
-    LEFT JOIN NDWH.dbo.DimDate prepEnrol ON prepEnrol.DateKey = prep.PrepEnrollmentDateKey 	
+    LEFT JOIN NDWH.dbo.DimDate prepEnrol ON prepEnrol.DateKey = pat.PrepEnrollmentDateKey 	
 ),
 risk_category_ordering as (
     select 
@@ -58,7 +58,7 @@ select
         AgeGroup,
         AssessmentMonth,
         AssessmentYear,
-        cast (PrepEnrollmentDate as date) as PrepEnrollmentDate ,
+        PrepEnrollmentDate ,
         AsofDate,
         EligiblePrep,
         ScreenedPrep,
