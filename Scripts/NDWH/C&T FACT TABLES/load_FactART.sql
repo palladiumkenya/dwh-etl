@@ -69,7 +69,12 @@ Patient As (
         StartRegimenline,
         obs.WHOStage,
         Patient.DateConfirmedHIVPositive,
-        outcome.ARTOutcome
+        outcome.ARTOutcome,
+        Case When DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) <=89 THEN '<3 Months'
+    when DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) >=90 and DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) <=150 THEN '<3-5 Months'
+    When DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) >151 THEN '>6+ Months'
+    Else 'Unclassified'
+    END As AppointmentsCategory
         from 
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
@@ -144,6 +149,7 @@ ncd_screening as (
             case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
+            AppointmentsCategory,
             end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 

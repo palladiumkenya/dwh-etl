@@ -96,11 +96,7 @@ Select distinct
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
     onMMD,
     StabilityAssessment,
-    Case When DATEDIFF(DAY,LastVisitDate,NextAppointmentDate) <=89 THEN '<3 Months'
-    when DATEDIFF(DAY,LastVisitDate,NextAppointmentDate) >=90 and DATEDIFF(DAY,LastVisitDate,NextAppointmentDate) <=150 THEN '<3-5 Months'
-    When DATEDIFF(DAY,LastVisitDate,NextAppointmentDate) >151 THEN '>6+ Months'
-    Else 'Unclassified'
-    END As AppointmentsCategory,
+    AppointmentsCategory,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
