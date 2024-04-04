@@ -111,7 +111,7 @@ Begin
              From   Ods.Dbo.Hts_eligibilityextract Htsml
                     Left Join Ods.Dbo.All_emrsites Emr
                            On Emr.Mfl_code = Htsml.Sitecode
-             Where  Datediff(Month, Visitdate, Eomonth( Dateadd(Mm, -1, Getdate())))  <= 12
+             Where  Datediff(Month, Visitdate, Eomonth( Dateadd(Mm, -1, Getdate())))  <= 12 and HIVRiskCategory is not null
              Group  By Sdp,
                        Sdp_agency,
                        County),
