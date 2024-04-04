@@ -20,7 +20,7 @@ WITH prepCascade AS  (
         EOMONTH(ass.Date) as AsofDate,
         EligiblePrep,
         ScreenedPrep,
-        cast (prepEnrol.DateKey as date) as PrepEnrollmentDate
+       prepEnrol.Date as PrepEnrollmentDate
  
     FROM NDWH.dbo.FactPrepAssessments prep
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
@@ -67,4 +67,3 @@ select
 INTO REPORTING.dbo.LinelistPrep 
 from prepCascade prep
 left join latest_risk_category  on latest_risk_category.PatientKey = prep.PatientKey 
-
