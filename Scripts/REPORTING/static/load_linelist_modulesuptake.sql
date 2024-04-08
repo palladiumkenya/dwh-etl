@@ -15,6 +15,7 @@ WITH ModulesUptake AS (
         isHTSML,
         isIITML,
         isOTZ,
+        isOVC,
         isPMTCT,
         isPrep,
         CAST(GETDATE() AS DATE) AS LoadDate 
