@@ -3,7 +3,7 @@ BEGIN
 
 			MERGE [ODS].[dbo].[Ushauri_PatientAppointments] AS a
 				USING(SELECT Distinct
-						PatientPK,Null As PatientPKHash,SiteCode,SiteType,PatientID,Null As PatientIDHash,Null As NUPI,PartnerName,FacilityID,FacilityName,
+						PatientPK,Null As PatientPKHash,SiteCode,SiteType,PatientID,Null As PatientIDHash, NUPI,PartnerName,FacilityID,FacilityName,
 						DOB_Date As DOB,Gender,MaritalStatus,PatientResidentCounty,PatientResidentLocation,PatientResidentSubCounty,
 						PatientResidentSubLocation,PatientResidentVillage,PatientResidentWard,RegistrationDate_Date As RegistrationDate,RegistrationAtCCC_Date as RegistrationAtCCC,
 						RegistrationAtPMTCT_Date As RegistrationAtPMTCT,RegistrationAtTBClinic_date As RegistrationAtTBClinic,StatusAtCCC,StatusAtPMTCT,StatusAtTBClinic,AgeAtAppointment,
@@ -18,9 +18,9 @@ BEGIN
 					FROM [mhealthCentral].[dbo].[CT_PatientAppointments](NoLock) P
 					) AS b	
 						ON(
-						 a.[UshauriPatientPK]  = b.PatientPK 
-						and a.SiteCode = b.SiteCode	
-						and a.AppointmentDate = b.AppointmentDate
+						-- a.[UshauriPatientPK]  = b.PatientPK 
+						 a.SiteCode = b.SiteCode	
+						--and a.AppointmentDate = b.AppointmentDate
 						and a.[AppointmentID] = b.[AppointmentID]
 						)
 					
@@ -31,7 +31,7 @@ BEGIN
 					WHEN MATCHED THEN
 						UPDATE SET 						
 						a.[SiteType]									=	b.[SiteType],
-						a.[PatientID]									=	b.[PatientID],
+						a.[PatientID]									=	b.[PatientID],					
 						a.[NUPI]										=	b.[NUPI],
 						a.[PartnerName]									=	b.[PartnerName],
 						a.[FacilityName]								=	b.[FacilityName],
@@ -52,8 +52,6 @@ BEGIN
 						a.[StatusAtPMTCT]								=	b.[StatusAtPMTCT],
 						a.[StatusAtTBClinic]							=	b.[StatusAtTBClinic],
 						a.[AgeAtAppointment]							=	b.[AgeAtAppointment],
-						a.[AppointmentID]								=	b.[AppointmentID],
-						a.[AppointmentDate]								=	b.[AppointmentDate],
 						a.[AppointmentType]								=	b.[AppointmentType],
 						a.[AppointmentStatus]							=	b.[AppointmentStatus],
 						a.[EntryPoint]									=	b.[EntryPoint],

@@ -1,4 +1,5 @@
 
+
 IF OBJECT_ID(N'[ODS].[dbo].[Intermediate_ViralLoadsIntervals]', N'U') IS NOT NULL 
 	DROP TABLE [ODS].[dbo].[Intermediate_ViralLoadsIntervals];
 
@@ -9,7 +10,6 @@ with source_viral_loads as (
 		labs.SiteCode,
 		labs.PatientPK,
 		cast( '' as nvarchar(100)) PatientPKHash,
-		cast( '' as nvarchar(100)) PatientIDHash,
 		VisitID,
 		[OrderedbyDate],
 		[ReportedbyDate],
@@ -92,17 +92,14 @@ distinct_viral_load_clients as (
 	select
 		distinct Sitecode,
 		PatientPK,
-		PatientPKHash,
-		PatientIDHash
+		PatientPKHash
 	from source_viral_loads
 )
 select 
 	
 	distinct_viral_load_clients.PatientPk,
 	distinct_viral_load_clients.SiteCode,
-	null As PatientID,
 	distinct_viral_load_clients.PatientPKHash,
-	distinct_viral_load_clients.PatientIDHash,
 	_6monthVL_data._6monthVL,
 	_6monthVL_data._6monthVLDate,
 	_6monthVL_data._6MonthVLSup,
@@ -133,3 +130,4 @@ left join _24monthVL_data on _24monthVL_data.PatientPk = distinct_viral_load_cli
 
 	
 END
+

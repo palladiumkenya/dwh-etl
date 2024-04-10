@@ -19,6 +19,9 @@ BEGIN
 							,R.[Date_Created]
 							,R.[Date_Last_Modified]
 							,R.[Created]
+							,R.PersonAPatientPk
+							,R.PersonBPatientPk
+							,R.PatientRelationshipToOther
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[RelationshipsExtract](NoLock) R  ON R.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
@@ -32,8 +35,8 @@ BEGIN
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,LoadDate)  
-						VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,Getdate())
+						INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,PersonAPatientPk,PersonBPatientPk,PatientRelationshipToOther,LoadDate)  
+						VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,PersonAPatientPk,PersonBPatientPk,PatientRelationshipToOther,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -49,7 +52,10 @@ BEGIN
 						a.[RecordUUID]=b.[RecordUUID],
 						a.[Date_Created]=b.[Date_Created],
 						a.[Date_Last_Modified]=b.[Date_Last_Modified],
-						a.[Created]=b.[Created];
+						a.[Created]=b.[Created],
+						a.PersonAPatientPk = b.PersonAPatientPk,
+						a.PersonBPatientPk  = b.PersonBPatientPk,
+						a.PatientRelationshipToOther-  =b.PatientRelationshipToOther;
 											
 
 
