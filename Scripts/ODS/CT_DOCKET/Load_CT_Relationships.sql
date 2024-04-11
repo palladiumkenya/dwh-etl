@@ -19,24 +19,37 @@ BEGIN
 							,R.[Date_Created]
 							,R.[Date_Last_Modified]
 							,R.[Created]
-							,R.PersonAPatientPk
-							,R.PersonBPatientPk
-							,R.PatientRelationshipToOther
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 						INNER JOIN [DWAPICentral].[dbo].[RelationshipsExtract](NoLock) R  ON R.[PatientId]= P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
+
+						INNER JOIN (
+								SELECT F.code as SiteCode,p.[PatientPID] as PatientPK,
+								InnerR.voided,
+								max(InnerR.ID) As Max_ID,
+								MAX(cast(InnerR.created as date)) AS Maxdatecreated
+								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
+								INNER JOIN [DWAPICentral].[dbo].[RelationshipsExtract](NoLock) InnerR  ON InnerR.[PatientId]= P.ID 
+								INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0 
+								GROUP BY F.code,p.[PatientPID],InnerR.voided
+							) tm 
+							ON f.code = tm.[SiteCode] and p.PatientPID=tm.PatientPK and 							
+							cast(R.created as date) = tm.Maxdatecreated
+							and R.ID = tm.Max_ID
+
+
 					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.SiteCode = b.SiteCode
 						and  a.PatientPK  = b.PatientPK 
 						and a.voided   = b.voided
-						and a.[RecordUUID] = b.[RecordUUID]
+						--and a.[RecordUUID] = b.[RecordUUID]
 						and a.ID = b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,PersonAPatientPk,PersonBPatientPk,PatientRelationshipToOther,LoadDate)  
-						VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,PersonAPatientPk,PersonBPatientPk,PatientRelationshipToOther,Getdate())
+						INSERT(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,LoadDate)  
+						VALUES(SiteCode,PatientPK,PatientID,Emr,Project,Voided,Id,FacilityName,RelationshipToPatient,StartDate,EndDate,RecordUUID,Date_Created,Date_Last_Modified,Created,Getdate())
 				
 					WHEN MATCHED THEN
 						UPDATE SET 						
@@ -52,10 +65,7 @@ BEGIN
 						a.[RecordUUID]=b.[RecordUUID],
 						a.[Date_Created]=b.[Date_Created],
 						a.[Date_Last_Modified]=b.[Date_Last_Modified],
-						a.[Created]=b.[Created],
-						a.PersonAPatientPk = b.PersonAPatientPk,
-						a.PersonBPatientPk  = b.PersonBPatientPk,
-						a.PatientRelationshipToOther-  =b.PatientRelationshipToOther;
+						a.[Created]=b.[Created];
 											
 
 

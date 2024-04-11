@@ -5,7 +5,7 @@ with cte AS (
 						visitID,
 						VisitDate,
 
-						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,onTBDrugs,OnIPT,EverOnIPT,EvaluatedForIPT,TBScreening,VisitDateORDER BY
+						 ROW_NUMBER() OVER (PARTITION BY PatientPK,Sitecode,onTBDrugs,OnIPT,EverOnIPT,EvaluatedForIPT,TBScreening,VisitDate ORDER BY
 						Date_created  desc) Row_Num
 						FROM [ODS].[dbo].[CT_Ipt](NoLock)
 						)
