@@ -184,6 +184,8 @@ SELECT Mflcode,
        Pat.Gender,
        G.Datimagegroup         AS AgeGroup,
        Pbfwcategory,
+       Pregnant,
+       Breastfeeding,
        Validvlresultcategory,
        Sum(Base_data.Istxcurr) AS TXCurr,
        Sum(Eligiblevl)         AS EligibleVL,
@@ -233,6 +235,7 @@ FROM   Base_data
               ON Pat.Patientkey = Base_data.Patientkey
        LEFT JOIN Ndwh.Dbo.Dimpartner P
               ON P.Partnerkey = Base_data.Partnerkey
+       LEFT JOIN NDWH.dbo.Factpbfw pbfw on pbfw.Patientkey=Base_data.PatientKey
 GROUP  BY Mflcode,
           F.Facilityname,
           County,
@@ -242,6 +245,8 @@ GROUP  BY Mflcode,
           Pat.Gender,
           G.Datimagegroup,
           Pbfwcategory,
-          Validvlresultcategory 
+          Validvlresultcategory ,
+          Pregnant,
+          Breastfeeding
 
 
