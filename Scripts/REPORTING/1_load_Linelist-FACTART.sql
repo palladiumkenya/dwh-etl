@@ -92,11 +92,14 @@ Select distinct
     obs.TBScreening,
     ART.PHQ_9_rating,
     ART.ScreenedForDepression,
+	ScreenedDepressionDate,
     case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
     onMMD,
     StabilityAssessment,
     AppointmentsCategory,
+	art.Pregnant,
+	art.Breastfeeding,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
