@@ -18,9 +18,7 @@ BEGIN
 					FROM [mhealthCentral].[dbo].[CT_PatientAppointments](NoLock) P
 					) AS b	
 						ON(
-						-- a.[UshauriPatientPK]  = b.PatientPK 
 						 a.SiteCode = b.SiteCode	
-						--and a.AppointmentDate = b.AppointmentDate
 						and a.[AppointmentID] = b.[AppointmentID]
 						)
 					
