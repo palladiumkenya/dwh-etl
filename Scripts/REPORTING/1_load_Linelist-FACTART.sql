@@ -97,6 +97,7 @@ Select distinct
     onMMD,
     StabilityAssessment,
     AppointmentsCategory,
+    art.IsRTTLast12MonthsAfter3monthsIIT,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
@@ -117,7 +118,10 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> 0bc6d73c447d6b62d05ec973b43187e0a967c5d4
       
