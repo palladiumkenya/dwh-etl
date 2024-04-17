@@ -5,8 +5,9 @@ UPDATE a
     SET a.PatientPK = null,a.PatientPKHash =null
 FROM [ODS].[dbo].[Ushauri_HEI] a;
 
-UPDATE a
-    SET a.PatientPK = p.PatientPK
-FROM [ODS].[dbo].[Ushauri_HEI] a
-    JOIN ods.dbo.MNCH_HEIs p
-ON  a.sitecode = p.sitecode AND a.UshauriPatientPK = p.PatientPk;
+--Lanyo to advice on the leankage between Ushauri Hei and MNCH_Heis
+--UPDATE a
+    --SET a.PatientPK = p.PatientPK
+--FROM [ODS].[dbo].[Ushauri_HEI] a
+   -- JOIN ods.dbo.MNCH_HEIs p
+--ON  a.sitecode = p.sitecode AND a.UshauriPatientPK = p.PatientPk;
