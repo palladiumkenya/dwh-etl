@@ -33,22 +33,29 @@ Begin
                        Agegroupkey
         ),
         receivedsms As (
-            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As NumberReceivedSMS,
-                    Facilitykey,
-                    Partnerkey,
-                    Agencykey,
-                    Agegroupkey as Agegroupkey
-             From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  Coalesce(Fourweeksmssent, Threeweeksmssent, Twoweeksmssent,
-                    Oneweeksmssent,
-                            Onedaysmssent) = 'Success'
-                    and Consentforsms = 'YES'
-             Group  By eomonth(cast(Appointmentdatekey as date)),
-                       Facilitykey,
-                       Partnerkey,
-                       Agencykey,
-                       Agegroupkey
+           SELECT
+            EOMONTH(CAST(Appointmentdatekey AS DATE)) AS AsofDate,
+            COUNT(DISTINCT Patientkey) AS NumberReceivedSMS,
+            Facilitykey,
+            Partnerkey,
+            Agencykey,
+            Agegroupkey AS Agegroupkey
+FROM
+    ndwh.dbo.FactUshauriAppointments Sms
+WHERE
+        (Fourweeksmssent = 'Success' OR
+        Threeweeksmssent = 'Success' OR
+        Twoweeksmssent = 'Success' OR
+        Oneweeksmssent = 'Success' OR
+        Onedaysmssent = 'Success')
+        AND Consentforsms = 'YES'
+GROUP BY
+    EOMONTH(CAST(Appointmentdatekey AS DATE)),
+    Facilitykey,
+    Partnerkey,
+    Agencykey,
+    Agegroupkey
+
         ),
         honouredappointments As (
             Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
@@ -102,7 +109,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  (Tracingcalls = 1 OR TracingSMS = 1 OR TracingHomevisits = 1)
+             Where  (Tracingcalls > 0 OR TracingSMS > 0 OR TracingHomevisits > 0)
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -117,7 +124,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found '
+             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -127,13 +134,13 @@ Begin
         HomeVisits As (
             Select 
                     eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As NumberOfHomeVisits,
+                    Count(distinct Patientkey) As NoOfPatientswithHomeVisits,
                     Facilitykey,
                     Partnerkey,
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracinghomevisits=1
+             Where Tracinghomevisits> 0
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -170,7 +177,7 @@ Begin
             Coalesce (missingappointments.NumberMissedAppointment,0) As NumberMissedAppointment,
             Coalesce (Traced.NumberTraced,0) As NumberTraced,
             Coalesce (SuccessfullyTraced.NumberSuccessfullyTraced,0) As NumberSuccessfullyTraced,
-            Coalesce (HomeVisits.NumberOfHomeVisits,0) As NumberOfHomeVisits,
+            Coalesce (HomeVisits.NoOfPatientswithHomeVisits,0) As NoOfPatientswithHomeVisits,
             Coalesce (ReturnedToCare.NumberReturnedToCare,0) As NumberReturnedToCare
         From  bookedappointments
             Left Join consentedappointments
@@ -286,7 +293,7 @@ select
     sum(NumberMissedAppointment) as NumberMissedAppointment ,
     sum(NumberTraced) as NumberTraced,
     sum(NumberSuccessfullyTraced) as NumberSuccessfullyTraced,
-    sum(NumberOfHomeVisits) as NumberOfHomeVisits,
+    sum(NoOfPatientswithHomeVisits) as NoOfPatientswithHomeVisits,
     sum(NumberReturnedToCare) as NumberReturnedToCare
 into REPORTING.dbo.AggregateUshauriAppointments
 from joined_indicator
