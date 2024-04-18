@@ -24,4 +24,11 @@ UPDATE a
 		 NUPIHash  =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[NUPI]  as nvarchar(36))), 2) 
 FROM [ODS].[dbo].[Ushauri_Patient] a
 
+	UPDATE a
+	SET  UshauriPatientPKHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.[UshauriPatientPk]  as nvarchar(36))), 2),
+		PatientHEI_IDHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.PatientHEI_ID  as nvarchar(36))), 2),
+		PatientMNCH_IDHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.PatientMNCH_ID  as nvarchar(36))), 2)
+				     
+FROM [ODS].[dbo].[Ushauri_HEI]  a
+
 ----End

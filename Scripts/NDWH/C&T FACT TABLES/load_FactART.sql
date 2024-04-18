@@ -116,6 +116,12 @@ ncd_screening as (
         and latest_diabetes_test.SiteCode = Patient.SiteCode
     left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = Patient.PatientPK
         and visit.SiteCode = Patient.SiteCode
+),
+rtt_within_last_12_months as (
+  select 
+    distinct PatientPKHash,
+    MFLCode
+  from ODS.dbo.Intermediate_RTTLast12MonthsAfter3monthsIIT
 )
    Select 
             Factkey = IDENTITY(INT, 1, 1),
@@ -159,6 +165,12 @@ ncd_screening as (
             AppointmentsCategory,
             Pregnant,
             Breastfeeding,
+
+            case 
+              when rtt_within_last_12_months.PatientPkHash is not null then 1 
+              else 0 
+            end as IsRTTLast12MonthsAfter3monthsIIT,
+
             end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
@@ -178,6 +190,8 @@ left join NDWH.dbo.DimARTOutcome ARTOutcome on ARTOutcome.ARTOutcome=IOutcomes.A
 left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
   and ncd_screening.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
+left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash = Patient.PatientPKHash
+  and rtt_within_last_12_months.MFLCode = Patient.SiteCode
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 

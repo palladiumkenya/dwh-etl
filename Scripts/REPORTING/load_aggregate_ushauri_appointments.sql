@@ -109,7 +109,7 @@ GROUP BY
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  (Tracingcalls > 0 OR TracingSMS > 0 OR TracingHomevisits > 0)
+             Where  Tracingoutcome is not null and Tracingoutcome <>''
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
