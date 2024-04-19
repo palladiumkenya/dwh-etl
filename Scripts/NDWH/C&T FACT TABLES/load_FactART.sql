@@ -163,14 +163,13 @@ rtt_within_last_12_months as (
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
 			ScreenedDepressionDate,
             AppointmentsCategory,
+
             Pregnant,
             Breastfeeding,
-
             case 
               when rtt_within_last_12_months.PatientPkHash is not null then 1 
               else 0 
             end as IsRTTLast12MonthsAfter3monthsIIT,
-
             end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
