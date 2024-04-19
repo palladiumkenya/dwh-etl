@@ -9,7 +9,9 @@ Begin
                     SDP,
                     SDP_Agency,
                     SubCounty,
-                    County
+                    County,
+                    EMR_Status,
+                    EMR
              From   Ods.Dbo.All_emrsites
              Where  Emr_status = 'Active'
              ),
@@ -90,6 +92,8 @@ Begin
                     SDP_Agency,
                     Subcounty,
                     County,
+                    EMR_Status,
+                    EMR,
                     coalesce (isEMRSite,0) as isEMRSite,
                     coalesce (isOTZ,0) as isOTZ,
                     coalesce (isOVC,0) as isOVC,
@@ -127,7 +131,9 @@ Begin
            isOTZ,
            isOVC,
            isPMTCT,
-           isPrep
+           isPrep,
+           EMR_Status,
+           summary.EMR
     Into   Ndwh.Dbo.FactModulesuptake
     From   Summary
            Left join NDWH.dbo.DimFacility as fac on fac.MFLCode=Summary.MFL_Code
