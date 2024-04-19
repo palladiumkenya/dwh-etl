@@ -14,15 +14,16 @@ BEGIN
     (
         select
             distinct convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
-            SiteCode
+            SiteCode,
+            PrepEnrollmentDate
         from ODS.dbo.PrEP_Patient
         where ODS.dbo.PrEP_Patient.PrepNumber is not null
     ),
 
 PrepVisits as (
         select 
-            convert(nvarchar(64), hashbytes('SHA2_256', cast(PatientPK as nvarchar(36))), 2) as PatientPK,
-            SiteCode,    
+            convert(nvarchar(64), hashbytes('SHA2_256', cast(prepvisits.PatientPK as nvarchar(36))), 2) as PatientPK,
+            prepvisits.SiteCode,    
             VisitID,
             VisitDate,
             BloodPressure,
@@ -68,7 +69,7 @@ PrepVisits as (
             TreatedForHepC,
             NextAppointment,
             ClinicalNotes
-        from ODS.DBO.PrEP_Visits
+        from ODS.DBO.PrEP_Visits as prepvisits
         where VisitDate is not null
 
     )
@@ -128,7 +129,9 @@ PrepVisits as (
         PrepVisits.VaccinationForHepCStarted,
         PrepVisits.TreatedForHepC,
         PrepVisits.NextAppointment,
+        case when VisitDate is not null and VisitDate > PrepEnrollmentDate Then 1 else 0 End as PrepCT,
         PrepVisits.ClinicalNotes,
+        prep_patients.PrepEnrollmentDate,
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrepVisits
     from prep_patients

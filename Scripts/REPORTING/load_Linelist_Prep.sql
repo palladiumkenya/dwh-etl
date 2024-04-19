@@ -21,7 +21,6 @@ WITH prepCascade AS  (
         EligiblePrep,
         ScreenedPrep,
        prepEnrol.Date as PrepEnrollmentDate
- 
     FROM NDWH.dbo.FactPrepAssessments prep
 	LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
 	LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
@@ -45,6 +44,14 @@ latest_risk_category as (
         *
     from risk_category_ordering
     where num = 1
+),
+TurnedPositive as (
+    Select 
+    PatientKey,
+    FinalTestResult
+    from 
+    NDWH.dbo.FactHTSClientTests
+    where FinalTestResult='Positive' and TestType='Initial Test'
 )
 select 
         Prep.PatientPKHash,
@@ -58,12 +65,21 @@ select
         AgeGroup,
         AssessmentMonth,
         AssessmentYear,
-        PrepEnrollmentDate ,
+        prep.PrepEnrollmentDate ,
         AsofDate,
         EligiblePrep,
         ScreenedPrep,
         HIVRiskCategory as LatestHIVRiskCategory,
+        ExitDate,
+        ExitReason,
+        PrepCT,
+        case when TurnedPositive.PatientKey is not null then 1 else 0 End as TurnedPositive,
         CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LinelistPrep 
 from prepCascade prep
 left join latest_risk_category  on latest_risk_category.PatientKey = prep.PatientKey 
+left join NDWH.dbo.FactPrepDiscontinuation as disc on disc.PatientKey=prep.PatientKey
+left join NDWH.dbo.FactPrepVisits as visits on visits.PatientKey=prep.PatientKey
+left join TurnedPositive on TurnedPositive.PatientKey=prep.PatientKey
+
+
