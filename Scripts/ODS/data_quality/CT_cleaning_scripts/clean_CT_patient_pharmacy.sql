@@ -31,8 +31,7 @@ GO
 -- clean PeriodTaken
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
     SET PeriodTaken = 999
-WHERE ISNUMERIC(PeriodTaken) = 0 OR CAST(PeriodTaken AS FLOAT) < 0
-
+WHERE ISNUMERIC(PeriodTaken) = 0 OR TRY_CAST(PeriodTaken AS FLOAT) < 0
 
 GO
 
