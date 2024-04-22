@@ -29,7 +29,7 @@ controlled_BP as (
    and isnumeric(right(BP, len(BP) - charindex('/', BP))) = 1
    and try_cast(left(BP, charindex('/', BP) - 1) as float) < 140.0
    and try_cast(right(BP, len(BP) - charindex('/', BP)) as float) < 90.0
-   and num = 1
+   and num = 1 and ltrim(rtrim(BP)) is not null and ltrim(rtrim(BP)) <> '' and ltrim(rtrim(BP)) <>'0' and BP like '%/%'
 )
 select 
   source_data.*, 
