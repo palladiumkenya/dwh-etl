@@ -94,7 +94,7 @@ prep_ct as (
     left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = visits.FacilityKey
     left join NDWH.dbo.DimDate as prep_enroll on prep_enroll.Datekey = patient.PrepEnrollmentDatekey
 	where VisitDateKey is not null 
-        and date_visit.Date <> prep_enroll.Date 
+        and date_visit.Date > prep_enroll.Date 
 	group by 
         facility.MFLCode,
         facility.FacilityName,
