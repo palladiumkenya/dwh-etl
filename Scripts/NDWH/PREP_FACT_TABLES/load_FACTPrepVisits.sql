@@ -146,7 +146,6 @@ PrepVisits as (
     left join NDWH.dbo.DimDate as visit on visit.Date = PrepVisits.VisitDate
     left join NDWH.dbo.DimDate as pregnancy on pregnancy.Date = PrepVisits.PregnancyEndDate
     left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment
-    left join NDWH.dbo.DimPatient as pat on pat.PatientPKHash=Prepvisits.PatientPK
    
 	WHERE patient.voided =0;
     
