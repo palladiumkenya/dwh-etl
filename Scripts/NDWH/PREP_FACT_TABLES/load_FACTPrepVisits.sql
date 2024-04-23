@@ -129,9 +129,8 @@ PrepVisits as (
         PrepVisits.VaccinationForHepCStarted,
         PrepVisits.TreatedForHepC,
         PrepVisits.NextAppointment,
-        case when VisitDate is not null and VisitDate > PrepEnrollmentDate Then 1 else 0 End as PrepCT,
         PrepVisits.ClinicalNotes,
-        prep_patients.PrepEnrollmentDate,
+        pat.PrepEnrollmentDateKey,
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrepVisits
     from prep_patients
@@ -147,9 +146,10 @@ PrepVisits as (
     left join NDWH.dbo.DimDate as visit on visit.Date = PrepVisits.VisitDate
     left join NDWH.dbo.DimDate as pregnancy on pregnancy.Date = PrepVisits.PregnancyEndDate
     left join NDWH.dbo.DimDate as appointment on appointment.Date= PrepVisits.NextAppointment
+    left join NDWH.dbo.DimPatient as pat on pat.PatientPKHash=Prepvisits.PatientPK
+   
 	WHERE patient.voided =0;
     
     alter table NDWH.dbo.FactPrepVisits add primary key(FactKey);
 
 END
-
