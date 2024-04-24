@@ -1,5 +1,5 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.LinelistPrep') AND type in (N'U')) 
-    DROP TABLE REPORTING.dbo.LinelistPrep
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.LinelistPrepAssessments') AND type in (N'U')) 
+    DROP TABLE REPORTING.dbo.LinelistPrepAssessments
 GO
 
 WITH prepCascade AS  (
@@ -73,10 +73,9 @@ select
         HIVRiskCategory as LatestHIVRiskCategory,
         ExitDate,
         ExitReason,
-        case when VisitDate is not null and VisitDate > PrepEnrollmentDate Then 1 else 0 End as PrepCT,
         case when TurnedPositive.PatientKey is not null then 1 else 0 End as TurnedPositive,
         CAST(GETDATE() AS DATE) AS LoadDate 
-INTO REPORTING.dbo.LinelistPrep 
+INTO REPORTING.dbo.LinelistPrepAssessments 
 from prepCascade prep
 left join latest_risk_category  on latest_risk_category.PatientKey = prep.PatientKey 
 left join NDWH.dbo.FactPrepDiscontinuation as disc on disc.PatientKey=prep.PatientKey
