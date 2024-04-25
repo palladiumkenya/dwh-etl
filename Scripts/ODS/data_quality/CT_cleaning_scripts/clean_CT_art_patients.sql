@@ -152,9 +152,23 @@ INNER JOIN ods.dbo.lkp_patient_source ON lkp_patient_source.source_name = ARTPat
 GO
 
 
--- TODO: clean Start RegimenLine
+--  clean Start RegimenLine
+UPDATE ODS.dbo.CT_ARTPatients  SET StartRegimenLine = CASE
+                WHEN StartRegimenLine  in ('1','1st Alternative','1st line','Adult ART FirstLine','Adult first line','Child first line','First line','First line substitute','Paeds ART FirstLine') THEN  'First Line'
+				WHEN StartRegimenLine in  ('2','2nd line','Adult ART SecondLine','Adult second line','Paeds ART Secondline','Second line','Second line substitute') Then 'Second Line'
+                WHEN StartRegimenLine in ('3','Adult ART ThirdLine','Third line') Then 'Third Line'
+                WHEN StartRegimenLine in ('PMTCT Maternal Regimens','PMTCT Regimens','') Then 'PMTCT'
+                WHEN StartRegimenLine in ('Other','Adult intensive') Then 'Other'
+                END 
 
 
 
-
--- TODO: clean Last RegimenLine
+GO
+--  clean Last RegimenLine
+UPDATE ODS.dbo.CT_ARTPatients  SET LastRegimenLine = CASE
+                WHEN LastRegimenLine  in ('1','1st Alternative','1st line','Adult ART FirstLine','Adult first line','Child first line','First line','First line substitute','Paeds ART FirstLine') THEN  'First Line'
+				WHEN LastRegimenLine in  ('2','2nd line','Adult ART SecondLine','Adult second line','Paeds ART Secondline','Second line','Second line substitute') Then 'Second Line'
+                WHEN LastRegimenLine in ('3','Adult ART ThirdLine','Third line') Then 'Third Line'
+                WHEN LastRegimenLine in ('PMTCT Maternal Regimens','PMTCT Regimens','') Then 'PMTCT'
+                WHEN LastRegimenLine in ('Other','Adult intensive') Then 'Other'
+                END 
