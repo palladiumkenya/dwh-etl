@@ -13,8 +13,8 @@ With TurnedPositive as (
     where  TestType='Initial Test'
 )
 SELECT
-       Factkey = IDENTITY(INT, 1, 1)
-      ,PatientPKHash
+     
+      PatientPKHash
       ,SiteCode
       ,Agency
       ,PartnerName
@@ -86,4 +86,6 @@ SELECT
     left JOIN NDWH.dbo.DimDate as prepenrol on prepenrol.DateKey = visits.PrepEnrollmentDateKey
     left join NDWH.dbo.FactPrepDiscontinuation as disc on disc.PatientKey=visits.PatientKey
     left join TurnedPositive on TurnedPositive.Patientkey=visits.Patientkey and visit.[Date]=DateTested
-      
+
+	
+  
