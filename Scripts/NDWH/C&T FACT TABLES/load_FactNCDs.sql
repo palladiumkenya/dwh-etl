@@ -54,7 +54,7 @@ with ncd_source_data as (
                     "Thyroid disease"
                 )
             ) as pivot_table
-    where voided = 0
+    where voided = 0 and PatientPKHash is not null
 ),
 MFL_partner_agency_combination as (
 	select 
@@ -139,21 +139,41 @@ earliest_dyslipidemia_recorded as (
     from dyslipidemia_ordering
     where rank = 1
 ),
-with_underlying_ncd_condition_indicators as (
+hypertensive_and_screening_indicators as (
     select 
-        ncd_source_data.PatientPKHash,
-        ncd_source_data.SiteCode,
-        coalesce(ScreenedDiabetes, 0) as IsDiabeticAndScreenedDiabetes,
-        coalesce(IsDiabetesControlledAtLastTest, 0) as IsDiabeticAndDiabetesControlledAtLastTest,
-        coalesce(visit.ScreenedBPLastVisit,0) as IsHyperTensiveAndScreenedBPLastVisit,
-        coalesce(visit.IsBPControlledAtLastVisit, 0) as IsHyperTensiveAndBPControlledAtLastVisit
+       ncd_source_data.PatientPKHash,
+       ncd_source_data.SiteCode,
+       case 
+            when ncd_controlled_status.Controlled in  ('Yes', 'No') then 1 
+            else 0 
+        end as IsHyperTensiveAndScreenedBPLastVisit,
+       case 
+            when ncd_controlled_status.Controlled = 'Yes' then 1 
+            else 0
+        end as IsHyperTensiveAndBPControlledAtLastVisit
     from ncd_source_data
-    left join ODS.dbo.Intermediate_LatestDiabetesTests as latest_diabetes_test on latest_diabetes_test.PatientPKHash = ncd_source_data.PatientPKHash
-        and latest_diabetes_test.SiteCode = ncd_source_data.SiteCode
-        and ncd_source_data."Diabetes" = 1
-    left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = ncd_source_data.PatientPK
-        and visit.SiteCode = ncd_source_data.SiteCode
+    left join ODS.dbo.Intermediate_NCDControlledStatusLastVisit as ncd_controlled_status on ncd_controlled_status.PatientPKHash = ncd_source_data.PatientPKHash
+        and ncd_controlled_status.SiteCode = ncd_source_data.SiteCode
         and ncd_source_data."Hypertension" = 1
+        and ncd_controlled_status.Disease = 'Hypertension'
+),
+diabetes_and_screening_indicators as (
+    select 
+       ncd_source_data.PatientPKHash,
+       ncd_source_data.SiteCode,
+       case 
+            when ncd_controlled_status.Controlled in ('Yes', 'No') then 1 
+            else 0
+        end as IsDiabeticAndScreenedDiabetes,
+       case 
+            when ncd_controlled_status.Controlled = 'Yes' then 1 
+            else 0 
+        end as IsDiabeticAndDiabetesControlledAtLastTest
+    from ncd_source_data
+    left join ODS.dbo.Intermediate_NCDControlledStatusLastVisit as ncd_controlled_status on ncd_controlled_status.PatientPKHash = ncd_source_data.PatientPKHash
+        and ncd_controlled_status.SiteCode = ncd_source_data.SiteCode
+        and ncd_source_data."Diabetes" = 1
+        and ncd_controlled_status.Disease = 'Diabetes'
 )
 select
     Factkey = IDENTITY(INT, 1, 1),
@@ -188,17 +208,19 @@ select
     ncd_source_data."Osteoporosis",
     ncd_source_data."Sickle Cell Anaemia",
     ncd_source_data."Thyroid disease",
-    with_underlying_ncd_condition_indicators.IsDiabeticAndScreenedDiabetes,
-    with_underlying_ncd_condition_indicators.IsDiabeticAndDiabetesControlledAtLastTest,
-    with_underlying_ncd_condition_indicators.IsHyperTensiveAndScreenedBPLastVisit,
-    with_underlying_ncd_condition_indicators.IsHyperTensiveAndBPControlledAtLastVisit,
+    diabetes_and_screening_indicators.IsDiabeticAndScreenedDiabetes,
+    diabetes_and_screening_indicators.IsDiabeticAndDiabetesControlledAtLastTest,
+    hypertensive_and_screening_indicators.IsHyperTensiveAndScreenedBPLastVisit,
+    hypertensive_and_screening_indicators.IsHyperTensiveAndBPControlledAtLastVisit,
     first_hypertension.DateKey as FirstHypertensionRecoredeDateKey,
     first_diabetes.DateKey as FirstDiabetesRecordedDateKey,
     first_dyslipidemia.DateKey as FirstDyslipidemiaRecordedDateKey
 into NDWH.dbo.FactNCD
 from ncd_source_data
-left join with_underlying_ncd_condition_indicators on with_underlying_ncd_condition_indicators.PatientPKHash = ncd_source_data.PatientPKHash
-    and with_underlying_ncd_condition_indicators.SiteCode = ncd_source_data.SiteCode
+left join diabetes_and_screening_indicators on diabetes_and_screening_indicators.PatientPKHash = ncd_source_data.PatientPKHash
+    and diabetes_and_screening_indicators.SiteCode = ncd_source_data.SiteCode
+left join hypertensive_and_screening_indicators on hypertensive_and_screening_indicators.PatientPKHash = ncd_source_data.PatientPKHash
+    and hypertensive_and_screening_indicators.SiteCode = ncd_source_data.SiteCode
 left join age_as_of_last_visit on age_as_of_last_visit.PatientPKHash = ncd_source_data.PatientPKHash
     and age_as_of_last_visit.SiteCode = ncd_source_data.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = ncd_source_data.SiteCode
