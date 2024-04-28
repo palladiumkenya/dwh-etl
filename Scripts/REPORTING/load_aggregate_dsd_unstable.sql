@@ -36,7 +36,7 @@ FROM (
         ELSE NULL END AS [OnART<12Months],
     case when lob.AgeLastVisit < 20 then 1 else 0 end as Agelessthan20Yrs,
     case when Adherence = 'Poor' then 1 else 0 end as Adherence,
-    Case when Pregnant= 'Yes' THEN 1 Else 0 End as LatestPregnancy,
+    Case when lob.Pregnant= 'Yes' THEN 1 Else 0 End as LatestPregnancy,
     Case when LatestWeight IS NOT NULL AND LatestHeight IS NOT NULL AND cast(LatestWeight as float) > 0 and cast(LatestHeight as float) > 0 AND cast(LatestWeight as float) / (cast(LatestHeight as float) * cast(LatestHeight as float)) <=18.5 THEN 1 
         ELSE 0 END AS BMI,
     Case when ISNumeric(ValidVLResult)=1 and cast(Replace(ValidVLResult,',','') as FLOAT) >= 200.00 then 1 else 0 end as HighVL,
