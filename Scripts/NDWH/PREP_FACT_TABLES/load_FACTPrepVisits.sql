@@ -130,7 +130,7 @@ PrepVisits as (
         PrepVisits.TreatedForHepC,
         PrepVisits.NextAppointment,
         PrepVisits.ClinicalNotes,
-        pat.PrepEnrollmentDateKey,
+        patient.PrepEnrollmentDateKey,
         cast(getdate() as date) as LoadDate
     into NDWH.dbo.FactPrepVisits
     from prep_patients
