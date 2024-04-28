@@ -15,6 +15,7 @@ with SplitDiseases as (
         STRING_SPLIT(chronic.ChronicIllness, '|') as illness
     where
         (ChronicIllness like '%Hypertension%' or ChronicIllness like '%Diabetes%')
+    and voided = 0
 ),
 SplitControlled AS (
     select 
@@ -30,6 +31,7 @@ SplitControlled AS (
         STRING_SPLIT(chronic.Controlled, '|') as controlled
     WHERE
         (ChronicIllness like '%Hypertension%' or ChronicIllness like '%Diabetes%')
+    and voided = 0
 ),
 final_data as (
  select 

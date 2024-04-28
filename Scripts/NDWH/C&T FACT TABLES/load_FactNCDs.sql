@@ -54,7 +54,7 @@ with ncd_source_data as (
                     "Thyroid disease"
                 )
             ) as pivot_table
-    where voided = 0 and PatientPKHash is not null
+    where voided = 0
 ),
 MFL_partner_agency_combination as (
 	select 
