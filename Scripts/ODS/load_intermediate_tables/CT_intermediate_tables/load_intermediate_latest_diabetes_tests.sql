@@ -7,6 +7,7 @@ with diabetes_tests_ordering as (
     select 
         ROW_NUMBER() OVER (PARTITION BY PatientPKHash, Sitecode ORDER BY OrderedbyDate DESC) AS RowNum,
         PatientPKHash,
+        OrderedbyDate,
         SiteCode,
         TestName,
         TRY_CAST(TestResult AS NUMERIC(18, 2)) AS NumericTestResult
@@ -35,8 +36,8 @@ select
     latest_diabetes_test.SiteCode,
     latest_diabetes_test.NumericTestResult,
     latest_diabetes_test.TestName,
-    case when latest_diabetes_test.PatientPKHash is not null then 1 else 0 end as ScreenedDiabetes,
-    case when latest_diabetes_test_controlled.PatientPKHash is not null then 1 else 0 end as IsDiabetesControlledAtLastTest
+    latest_diabetes_test.OrderedbyDate,
+    case when latest_diabetes_test.PatientPKHash is not null then 1 else 0 end as ScreenedDiabetes
 into ODS.dbo.Intermediate_LatestDiabetesTests
 from  latest_diabetes_test
 left join latest_diabetes_test_controlled on latest_diabetes_test_controlled.PatientPKHash = latest_diabetes_test.PatientPKHash

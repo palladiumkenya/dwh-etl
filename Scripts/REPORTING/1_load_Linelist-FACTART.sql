@@ -121,5 +121,3 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
-
-      
