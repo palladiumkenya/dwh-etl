@@ -109,13 +109,21 @@ ncd_screening as (
     select 
         patient.PatientPKHash,
         patient.SiteCode,
-        ScreenedDiabetes,
-        ScreenedBPLastVisit
+        case 
+            when latest_diabetes.Controlled in ('Yes', 'No') then  1 
+            else 0
+        end as ScreenedDiabetes,
+        case 
+        when latest_hypertension.Controlled in ('Yes', 'No') then  1 
+        else 0
+        end as ScreenedBPLastVisit   
     from Patient
-    left join ODS.dbo.Intermediate_LatestDiabetesTests as latest_diabetes_test on latest_diabetes_test.PatientPKHash = Patient.PatientPKHash
-        and latest_diabetes_test.SiteCode = Patient.SiteCode
-    left join ODS.dbo.Intermediate_LastVisitDate as visit on visit.PatientPK = Patient.PatientPK
-        and visit.SiteCode = Patient.SiteCode
+    left join ODS.dbo.Intermediate_NCDControlledStatusLastVisit as latest_diabetes on latest_diabetes.PatientPKHash = Patient.PatientPKHash
+        and latest_diabetes.SiteCode = Patient.SiteCode
+        and latest_diabetes.Disease = 'Diabetes'
+    left join ODS.dbo.Intermediate_NCDControlledStatusLastVisit as latest_hypertension on latest_hypertension.PatientPKHash = Patient.PatientPKHash
+        and latest_hypertension.SiteCode = Patient.SiteCode
+        and latest_hypertension.Disease = 'Hypertension'
 ),
 rtt_within_last_12_months as (
   select 
