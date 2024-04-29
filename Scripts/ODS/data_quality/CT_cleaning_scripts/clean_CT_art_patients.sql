@@ -152,9 +152,17 @@ INNER JOIN ods.dbo.lkp_patient_source ON lkp_patient_source.source_name = ARTPat
 GO
 
 
--- TODO: clean Start RegimenLine
+--  clean Start RegimenLine
+  UPDATE ODS.DBO.CT_ARTPatients
+    SET StartRegimenLine = ODS.dbo.lkp_RegimenLineMap.Target_Regimen
+FROM ODS.DBO.CT_ARTPatients AS ARTPatients
+INNER JOIN ods.dbo.lkp_RegimenLineMap ON lkp_RegimenLineMap.Source_Regimen = ARTPatients.StartRegimenLine
 
 
 
-
--- TODO: clean Last RegimenLine
+GO
+--  clean Last RegimenLine
+  UPDATE ODS.DBO.CT_ARTPatients
+    SET LastRegimenLine = ODS.dbo.lkp_RegimenLineMap.Target_Regimen
+FROM ODS.DBO.CT_ARTPatients AS ARTPatients
+INNER JOIN ods.dbo.lkp_RegimenLineMap ON lkp_RegimenLineMap.Source_Regimen = ARTPatients.LastRegimenLine
