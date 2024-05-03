@@ -30,6 +30,9 @@ select
 	Pregnant,
     breastfeeding,
     TBScreening,
+    OnIPT,
+    StartIPT,
+    EverOnIPT,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactLatestObs
 from ODS.dbo.intermediate_LatestObs obs
