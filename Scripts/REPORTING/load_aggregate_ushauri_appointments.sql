@@ -72,21 +72,6 @@ GROUP BY
                        Agencykey,
                        Agegroupkey
         ),
-        appointmentcounts As (
-            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As Totalappointments,
-                    Facilitykey,
-                    Partnerkey,
-                    Agencykey,
-                    Agegroupkey
-             From   ndwh.dbo.FactUshauriAppointments Sms
-             where Appointmentstatus in ('honoured','not honoured')
-             Group  By eomonth(cast(Appointmentdatekey as date)),
-                       Facilitykey,
-                       Partnerkey,
-                       Agencykey,
-                       Agegroupkey
-        ),
         missingappointments As (
             Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberMissedAppointment,
@@ -160,7 +145,6 @@ GROUP BY
             Coalesce (Consentedappointments.Numberconsented, 0) As NumberConsented,
             Coalesce (Receivedsms.Numberreceivedsms, 0) As NumberReceivedSMS,
             Coalesce (Honouredappointments.Numberhonouredappointment, 0) As NumberHonouredAppointment,
-            Coalesce (appointmentcounts.Totalappointments, 0) as Totalappointments,
             Coalesce (missingappointments.NumberMissedAppointment,0) As NumberMissedAppointment,
             Coalesce (Traced.NumberTraced,0) As NumberTraced,
             Coalesce (SuccessfullyTraced.NumberSuccessfullyTraced,0) As NumberSuccessfullyTraced,
@@ -193,17 +177,6 @@ GROUP BY
                         And Honouredappointments.Agegroupkey =
                             Bookedappointments.Agegroupkey
                         And Honouredappointments.Asofdate =
-                            Bookedappointments.Asofdate
-            Left Join appointmentcounts
-                    On Appointmentcounts.Facilitykey =
-                        Bookedappointments.Facilitykey
-                        And Appointmentcounts.Partnerkey =
-                            Bookedappointments.Partnerkey
-                        And Appointmentcounts.Agencykey =
-                            Bookedappointments.Agencykey
-                        And Appointmentcounts.Agegroupkey =
-                            Bookedappointments.Agegroupkey
-                        And Appointmentcounts.Asofdate =
                             Bookedappointments.Asofdate
             Left Join missingappointments
                     On missingappointments.Facilitykey =
@@ -262,8 +235,7 @@ select
     sum(NumberConsented) as NumberConsented,
     sum(NumberReceivedSMS) as NumberReceivedSMS,
     sum(NumberHonouredAppointment) as NumberHonouredAppointment,
-    sum(Totalappointments) as Totalappointments,
-    round(cast(sum(NumberHonouredAppointment) as float)/cast(nullif(sum(Totalappointments), 0) as float), 2) * 100 as PercentHonoured,
+    round(cast(sum(NumberHonouredAppointment) as float)/cast(nullif(sum(NumberBooked), 0) as float), 2) * 100 as PercentHonoured,
     sum(NumberMissedAppointment) as NumberMissedAppointment ,
     sum(NumberTraced) as NumberTraced,
     sum(NumberSuccessfullyTraced) as NumberSuccessfullyTraced,
