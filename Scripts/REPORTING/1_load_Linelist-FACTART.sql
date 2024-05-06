@@ -101,6 +101,9 @@ Select distinct
 	art.Pregnant,
 	art.Breastfeeding,
     art.IsRTTLast12MonthsAfter3monthsIIT,
+    obs.OnIPT,
+    obs.StartIPT,
+    obs.EverOnIPT,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
