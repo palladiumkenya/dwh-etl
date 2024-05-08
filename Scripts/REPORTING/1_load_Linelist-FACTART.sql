@@ -104,6 +104,7 @@ Select distinct
     obs.OnIPT,
     obs.StartIPT,
     obs.EverOnIPT,
+    art.SwitchedToSecondLineLast12Months,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
