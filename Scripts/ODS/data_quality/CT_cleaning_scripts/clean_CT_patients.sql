@@ -91,7 +91,7 @@ Go
 
 -------------------Update Regimen-------------------------------------------------------------
 UPDATE   M  SET  M.PreviousARTExposure= T.Target_Regimen   from [ODS].[DBO].[CT_Patient]M 
-INNER JOIN [ODS].[dbo].[lkp_RegimenMap] T  ON M.PreviousARTExposure = T.Source_Regimen
+INNER JOIN [ODS].[dbo].[lkp_regimen] T  ON M.PreviousARTExposure = T.Source_Regimen
 
 GO
 -------------------Update Inschool-------------------------------------------------------------
