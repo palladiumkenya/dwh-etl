@@ -130,6 +130,30 @@ rtt_within_last_12_months as (
     distinct PatientPKHash,
     MFLCode
   from ODS.dbo.Intermediate_RTTLast12MonthsAfter3monthsIIT
+),
+partitioned_regimen_line_data as (
+    select 
+        pharmacy.PatientPKHash,
+        pharmacy.SiteCode,
+        pharmacy.DispenseDate,
+        pharmacy.RegimenLine,
+        pharmacy.RegimenChangedSwitched,
+        art.LastRegimenLine,
+        row_number() over (partition by pharmacy.PatientPKHash, pharmacy.SiteCode order by DispenseDate desc) as rank
+    from ODS.dbo.CT_PatientPharmacy as pharmacy
+    left join ODS.dbo.CT_ARTPatients as art on art.PatientPKHash = pharmacy.PatientPKHash
+      and art.SiteCode = pharmacy.SiteCode
+    where RegimenLine = 'First Line' and RegimenChangedSwitched = 'Switch'
+),
+swithced_to_second_line_in_last_12_monhts as (
+select 
+    PatientPKHash,
+    SiteCode,
+    DispenseDate,
+    RegimenChangedSwitched
+from partitioned_regimen_line_data
+where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()))) <= 12
+  and LastRegimenLine = 'Second Line'
 )
    Select 
             Factkey = IDENTITY(INT, 1, 1),
@@ -169,7 +193,7 @@ rtt_within_last_12_months as (
             case when LatestDepressionScreening.Patientpkhash is not null then 1 else 0 End as ScreenedForDepression,
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
-			ScreenedDepressionDate,
+			      ScreenedDepressionDate,
             AppointmentsCategory,
 
             Pregnant,
@@ -178,6 +202,10 @@ rtt_within_last_12_months as (
               when rtt_within_last_12_months.PatientPkHash is not null then 1 
               else 0 
             end as IsRTTLast12MonthsAfter3monthsIIT,
+            case 
+              when swithced_to_second_line_in_last_12_monhts.PatientPkHash is not null then 1 
+              else 0
+            end as SwitchedToSecondLineLast12Months,
             end_month.DateKey as AsOfDateKey,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
@@ -199,9 +227,8 @@ left join ncd_screening on ncd_screening.PatientPKHash = patient.PatientPKHash
 left join NDWH.dbo.DimDate as end_month on end_month.Date = eomonth(dateadd(mm,-1,getdate()))
 left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash = Patient.PatientPKHash
   and rtt_within_last_12_months.MFLCode = Patient.SiteCode
+left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_in_last_12_monhts.PatientPKHash = Patient.PatientPKHash
+  and swithced_to_second_line_in_last_12_monhts.SiteCode = Patient.SiteCode
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
-
-
-
 END
