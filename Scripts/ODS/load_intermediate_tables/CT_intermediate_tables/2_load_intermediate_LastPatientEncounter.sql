@@ -12,7 +12,7 @@ WITH PharmacyRecords AS (
         DispenseDate AS LastEncounterDate,
         CASE
             WHEN DATEDIFF(dd, DispenseDate, ExpectedReturn) >= 365 OR ExpectedReturn = '1900-01-01' OR ExpectedReturn IS NULL THEN DATEADD(dd, 30, DispenseDate)
-            ELSE MAX(ExpectedReturn)
+            ELSE ExpectedReturn
         END AS NextAppointmentDate
     FROM
         ODS.dbo.CT_PatientPharmacy AS LastEncounter
@@ -20,11 +20,7 @@ WITH PharmacyRecords AS (
 
      DispenseDate <= EOMONTH(DATEADD(mm, -1, GETDATE()))
         AND LastEncounter.VOIDED = 0
-    GROUP BY
-        SiteCode,
-        PatientPK,
-        DispenseDate,
-        ExpectedReturn
+  
 ),
 LastEncounterPharmacy as (SELECT
         SiteCode,
