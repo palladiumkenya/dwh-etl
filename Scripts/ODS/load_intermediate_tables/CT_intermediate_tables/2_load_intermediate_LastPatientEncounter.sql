@@ -27,7 +27,7 @@ LastEncounterPharmacy as (SELECT
         PatientPK,
         LastEncounterDate,
         NextAppointmentDate,
-        ROW_NUMBER() OVER (PARTITION BY SiteCode, PatientPK ORDER BY NextAppointmentDate DESC) AS RowNumber
+        ROW_NUMBER() OVER (PARTITION BY SiteCode, PatientPK, LastEncounterDate ORDER BY NextAppointmentDate DESC) AS RowNumber
     FROM
         PharmacyRecords
 ),
