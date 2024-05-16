@@ -26,25 +26,25 @@ WITH PharmacyRecords AS (
         DispenseDate,
         ExpectedReturn
 ),
-Pharmacy as (SELECT
+LastEncounterPharmacy as (SELECT
+        SiteCode,
+        PatientPK,
+        LastEncounterDate,
+        NextAppointmentDate,
+        ROW_NUMBER() OVER (PARTITION BY SiteCode, PatientPK ORDER BY NextAppointmentDate DESC) AS RowNumber
+    FROM
+        PharmacyRecords
+),
+
+Pharmacy as ( SELECT
     SiteCode,
     PatientPK,
     LastEncounterDate,
     NextAppointmentDate
 FROM
-    (
-        SELECT
-            SiteCode,
-            PatientPK,
-            LastEncounterDate,
-            NextAppointmentDate,
-            ROW_NUMBER() OVER (PARTITION BY SiteCode, PatientPK ORDER BY NextAppointmentDate DESC) AS RowNumber
-        FROM
-            PharmacyRecords
-    ) AS Sub
+    LastEncounterPharmacy
 WHERE
     RowNumber = 1
-
 
 ),
 --Pick Expected return and Lastvisit  dates from ARTPatient only if Expected return is <365days and add 30 days to Last visit if it is null
@@ -137,5 +137,6 @@ from CombinedVisits
 where LastEncounterDate <= EOMONTH(DATEADD(mm,-1,GETDATE()))
 
 END
+
 
 
