@@ -19,6 +19,14 @@ WHERE StartARTAtThisFacility < CAST('1980-01-01' AS DATE) OR StartARTAtThisFacil
 
 GO
 
+---------------- Update StartARTDate where StartARTDate is null and  StartARTAtThisFacility has a valid date ---Added by Mugo in consultation with Koske,Diana,MaryG,Juliet and Jacob
+UPDATE ART
+	SET StartARTDate= coalesce(ART.[StartARTDate],ART.[StartARTAtThisFacility])
+ FROM [ODS].[dbo].[CT_ARTPatients] ART
+ where StartARTDate is null
+
+ GO
+
 -- clean LastARTDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET LastARTDate = NULL
