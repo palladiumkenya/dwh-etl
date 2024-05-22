@@ -41,4 +41,16 @@ WHERE Project IN ('Ampathplus', 'AMPATH', 'UCSF Clinical Kisumu', 'CHAP Uzima', 
 
 GO
 
+---Clean ExitDate, ExitReason
+UPDATE [ODS].[DBO].[CT_PatientStatus]
+    SET ExitDate = NULL,ExitReason=NULL
+WHERE ReEnrollmentDate > ExitDate
+GO
+
+---Clean DeathDate incase ExitDate has been cleaned
+UPDATE [ODS].[DBO].[CT_PatientStatus]
+    SET DeathDate = NULL
+WHERE ExitDate is null
+GO
+
 
