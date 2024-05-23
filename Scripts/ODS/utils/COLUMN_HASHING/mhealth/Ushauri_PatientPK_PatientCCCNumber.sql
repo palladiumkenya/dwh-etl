@@ -31,4 +31,9 @@ FROM [ODS].[dbo].[Ushauri_Patient] a
 				     
 FROM [ODS].[dbo].[Ushauri_HEI]  a
 
+	UPDATE a
+	SET  ReferralPatientPKHash =  convert(nvarchar(64), hashbytes('SHA2_256', cast(a.ReferralPatientPK  as nvarchar(36))), 2)
+				     
+FROM [ODS].[dbo].[Ushauri_PatientReferral]  a
+
 ----End
