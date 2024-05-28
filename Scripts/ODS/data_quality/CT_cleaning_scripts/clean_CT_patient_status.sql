@@ -45,6 +45,7 @@ GO
 UPDATE [ODS].[DBO].[CT_PatientStatus]
     SET ExitDate = NULL,ExitReason=NULL
 WHERE ReEnrollmentDate > ExitDate
+and ExitReason in ('dead','Death','Died')
 GO
 
 ---Clean DeathDate incase ExitDate has been cleaned
