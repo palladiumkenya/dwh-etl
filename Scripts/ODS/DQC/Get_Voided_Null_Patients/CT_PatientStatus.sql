@@ -1,27 +1,5 @@
-SELECT 
---[PatientID]
-      [SiteCode]
-      ,[FacilityName]
-      ,[ExitDescription]
-      ,[ExitDate]
-      ,[ExitReason]
-      --,[PatientPK]
-      ,[Emr]
-      ,[Project]
-      ,[DateImported]
-      ,[TOVerified]
-      ,[TOVerifiedDate]
-      ,[ReEnrollmentDate]
-      ,[ReasonForDeath]
-      ,[SpecificDeathReason]
-      ,[DeathDate]
-      ,[EffectiveDiscontinuationDate]
-      ,[PatientPKHash]
-      ,[PatientIDHash]
-      ,[Date_Last_Modified]
-      ,[Date_Created]
-      ,[LoadDate]
-      ,[RecordUUID]
-      ,[voided]
-  FROM [ODS].[dbo].[CT_PatientStatus]
-  WHERE  [PatientIDHash] IS NULL OR [PatientPKHash] IS NULL AND [voided] = 0;
+SELECT [SiteCode],Count(1)NullPatientPK_IDHash
+	FROM [ODS].[dbo].[CT_PatientStatus]
+	WHERE PatientPKHash IS NULL OR PatientIDHash IS NULL AND [voided] = 0
+	GROUP BY [SiteCode]
+	HAVING Count(1) > 1

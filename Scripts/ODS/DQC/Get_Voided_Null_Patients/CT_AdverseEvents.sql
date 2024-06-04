@@ -1,26 +1,5 @@
-SELECT --[PatientID]
-      --,[Patientpk]
-      [SiteCode]
-      ,[AdverseEvent]
-      ,[AdverseEventStartDate]
-      ,[AdverseEventEndDate]
-      ,[Severity]
-      ,[VisitDate]
-      ,[EMR]
-      ,[Project]
-      ,[AdverseEventCause]
-      ,[AdverseEventRegimen]
-      ,[AdverseEventActionTaken]
-      ,[AdverseEventClinicalOutcome]
-      ,[AdverseEventIsPregnant]
-      ,[FacilityName]
-      ,[PatientPKHash]
-      ,[PatientIDHash]
-      ,[ID]
-      ,[Date_Last_Modified]
-      ,[Date_Created]
-      ,[LoadDate]
-      ,[RecordUUID]
-      ,[voided]
+SELECT SiteCode,Count(1)NullPatientPK_IDHash
   FROM [ODS].[dbo].[CT_AdverseEvents]
-  WHERE  [PatientIDHash] IS NULL OR [PatientPKHash] IS NULL AND [voided] = 0;
+  WHERE PatientPKHash IS NULL OR PatientIDHash IS NULL AND [voided] =0
+  GROUP BY SiteCode
+  HAVING Count(1) > 1

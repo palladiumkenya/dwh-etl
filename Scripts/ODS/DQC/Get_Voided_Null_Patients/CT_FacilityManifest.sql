@@ -1,19 +1,5 @@
-SELECT [Voided]
-      ,[Processed]
-      ,[SiteCode]
-      ,[PatientCount]
-      ,[DateRecieved]
-      ,[Name]
-      ,[EmrName]
-      ,[EmrSetup]
-      ,[UploadMode]
-      ,[Start]
-      ,[End]
-      ,[Tag]
-      ,[CreatedOn]
-      ,[PatientPKHash]
-      ,[CKVHash]
-      ,[PatientIDHash]
-      ,[ID]
-  FROM [ODS].[dbo].[CT_FacilityManifest]
-  WHERE  [PatientIDHash] IS NULL OR [PatientPKHash] IS NULL AND [Voided] = 0;
+SELECT [SiteCode],Count(1)NullPatientPK_IDHash
+	FROM [ODS].[dbo].[CT_FacilityManifest]
+	WHERE PatientPKHash IS NULL OR PatientIDHash IS NULL AND [Voided] = 0
+	GROUP BY [SiteCode]
+	HAVING Count(1) > 1

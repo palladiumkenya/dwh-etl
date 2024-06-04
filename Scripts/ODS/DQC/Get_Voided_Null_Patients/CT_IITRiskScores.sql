@@ -1,22 +1,5 @@
-SELECT TOP (1000) [SiteCode]
-      --,[PatientID]
-      --,[PatientPK]
-      [PatientPKHash]
-      ,[PatientIDHash]
-      ,[Emr]
-      ,[Project]
-      ,[Voided]
-      ,[Processed]
-      ,[Id]
-      ,[FacilityName]
-      ,[SourceSysUUID]
-      ,[RiskScore]
-      ,[RiskFactors]
-      ,[RiskDescription]
-      ,[RiskEvaluationDate]
-      ,[Created]
-      ,[Date_Created]
-      ,[Date_Last_Modified]
-      ,[LoadDate]
-  FROM [ODS].[dbo].[CT_IITRiskScores]
-  WHERE  [PatientIDHash] IS NULL OR [PatientPKHash] IS NULL AND [Voided] = 0;
+SELECT [SiteCode],Count(1)NullPatientPK_IDHash
+	FROM [ODS].[dbo].[CT_IITRiskScores]
+	WHERE PatientPKHash IS NULL OR PatientIDHash IS NULL AND [Voided] = 0
+	GROUP BY [SiteCode]
+	HAVING Count(1) > 1
