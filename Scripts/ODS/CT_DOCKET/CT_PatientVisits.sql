@@ -49,6 +49,10 @@ BEGIN
 												ELSE P.[Project] 
 										END AS [Project] 
 										,PV.[Voided] As Voided
+										,VoidingSource = Case 
+															when PV.voided = 1 Then 'Source'
+															Else Null
+														END 
 										,pv.[StabilityAssessment] As StabilityAssessment
 										,pv.[DifferentiatedCare] As DifferentiatedCare
 										,pv.[PopulationType]As PopulationType
@@ -129,8 +133,125 @@ BEGIN
 							and a.voided   = b.voided				
 							)
 					WHEN NOT MATCHED THEN 
-							INSERT(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified],RecordUUID,voided,[WHOStagingOI],LoadDate)  
-							VALUES(PatientID,FacilityName,SiteCode,PatientPK,VisitID,VisitDate,[SERVICE],VisitType,WHOStage,WABStage,Pregnant,LMP,EDD,Height,[Weight],BP,OI,OIDate,Adherence,AdherenceCategory,FamilyPlanningMethod,PwP,GestationAge,NextAppointmentDate,Emr,Project,DifferentiatedCare,StabilityAssessment,KeyPopulationType,PopulationType,VisitBy,Temp,PulseRate,RespiratoryRate,OxygenSaturation,Muac,NutritionalStatus,EverHadMenses,Breastfeeding,Menopausal,NoFPReason,ProphylaxisUsed,CTXAdherence,CurrentRegimen,HCWConcern,TCAReason,ClinicalNotes,[ZScore],[ZScoreAbsolute],RefillDate,PaedsDisclosure,[Date_Created],[Date_Last_Modified],RecordUUID,voided,[WHOStagingOI],Getdate())
+							INSERT(
+									PatientID
+									,FacilityName
+									,SiteCode
+									,PatientPK
+									,VisitID
+									,VisitDate
+									,[SERVICE]
+									,VisitType
+									,WHOStage
+									,WABStage
+									,Pregnant
+									,LMP
+									,EDD
+									,Height
+									,[Weight]
+									,BP
+									,OI
+									,OIDate
+									,Adherence
+									,AdherenceCategory
+									,FamilyPlanningMethod
+									,PwP
+									,GestationAge
+									,NextAppointmentDate
+									,Emr
+									,Project
+									,DifferentiatedCare
+									,StabilityAssessment
+									,KeyPopulationType
+									,PopulationType
+									,VisitBy
+									,Temp
+									,PulseRate
+									,RespiratoryRate
+									,OxygenSaturation
+									,Muac
+									,NutritionalStatus
+									,EverHadMenses
+									,Breastfeeding
+									,Menopausal
+									,NoFPReason
+									,ProphylaxisUsed
+									,CTXAdherence
+									,CurrentRegimen
+									,HCWConcern
+									,TCAReason
+									,ClinicalNotes
+									,[ZScore]
+									,[ZScoreAbsolute]
+									,RefillDate
+									,PaedsDisclosure
+									,[Date_Created]
+									,[Date_Last_Modified]
+									,RecordUUID
+									,voided
+									,VoidingSource
+									,[WHOStagingOI]
+									,LoadDate
+								)  
+							VALUES(
+									PatientID
+									,FacilityName
+									,SiteCode
+									,PatientPK
+									,VisitID
+									,VisitDate
+									,[SERVICE]
+									,VisitType
+									,WHOStage
+									,WABStage
+									,Pregnant
+									,LMP
+									,EDD
+									,Height
+									,[Weight]
+									,BP
+									,OI
+									,OIDate
+									,Adherence
+									,AdherenceCategory
+									,FamilyPlanningMethod
+									,PwP
+									,GestationAge
+									,NextAppointmentDate
+									,Emr,Project
+									,DifferentiatedCare
+									,StabilityAssessment
+									,KeyPopulationType
+									,PopulationType
+									,VisitBy
+									,Temp
+									,PulseRate
+									,RespiratoryRate
+									,OxygenSaturation
+									,Muac
+									,NutritionalStatus
+									,EverHadMenses
+									,Breastfeeding
+									,Menopausal
+									,NoFPReason
+									,ProphylaxisUsed
+									,CTXAdherence
+									,CurrentRegimen
+									,HCWConcern
+									,TCAReason
+									,ClinicalNotes
+									,[ZScore]
+									,[ZScoreAbsolute]
+									,RefillDate
+									,PaedsDisclosure
+									,[Date_Created]
+									,[Date_Last_Modified]
+									,RecordUUID
+									,voided
+									,VoidingSource
+									,[WHOStagingOI]
+									,Getdate()
+								)
 			
 					WHEN MATCHED THEN
 						UPDATE SET 	
@@ -194,6 +315,12 @@ BEGIN
 
 			UPDATE [ODS_Logs].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
-				  WHERE MaxVisitDate = @VisitDate;			
+				  WHERE MaxVisitDate = @VisitDate;	
+
+
+		INSERT INTO [ODS_logs].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
+			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS VisitCount 
+			FROM [ODS].[dbo].[CT_PatientVisits] 
+			GROUP BY SiteCode;		
 			
 END

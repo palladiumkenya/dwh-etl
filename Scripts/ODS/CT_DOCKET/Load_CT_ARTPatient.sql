@@ -41,6 +41,10 @@ BEGIN
 										,GETDATE () AS DateAsOf
 										,PA.RecordUUID
 										,PA.voided
+										 ,VoidingSource = Case 
+															when PA.voided = 1 Then 'Source'
+															Else Null
+														END 
 						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 							INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID 
 							INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
@@ -71,12 +75,88 @@ BEGIN
 					WHEN NOT MATCHED THEN 
 
 						INSERT(
-							  ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-							  LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate)
+							  ID
+							  ,PatientID
+							  ,PatientPK
+							  ,SiteCode
+							  ,FacilityName
+							  ,AgeEnrollment
+							  ,AgeARTStart
+							  ,AgeLastVisit
+							  ,RegistrationDate
+							  ,PatientSource
+							  ,Gender
+							  ,StartARTDate
+							  ,PreviousARTStartDate
+							  ,PreviousARTRegimen
+							  ,StartARTAtThisFacility
+							  ,StartRegimen
+							  ,StartRegimenLine
+							  ,LastARTDate
+							  ,LastRegimen,
+							  LastRegimenLine
+							  ,Duration
+							  ,ExpectedReturn
+							  ,Provider
+							  ,LastVisit
+							  ,ExitReason
+							  ,ExitDate
+							  ,Emr
+							  ,Project
+							  ,[DOB]
+							  ,PreviousARTUse
+							  ,PreviousARTPurpose
+							  ,DateLastUsed
+							  ,DateAsOf
+							  ,[Date_Created]
+							  ,[Date_Last_Modified]
+							  ,RecordUUID
+							  ,voided
+							  ,VoidingSource
+							  ,LoadDate
+							 )
 							   
 						VALUES(
-								ID,PatientID,PatientPK,SiteCode,FacilityName,AgeEnrollment,AgeARTStart,AgeLastVisit,RegistrationDate,PatientSource,Gender,StartARTDate,PreviousARTStartDate,PreviousARTRegimen,StartARTAtThisFacility,StartRegimen,StartRegimenLine,LastARTDate,LastRegimen,
-								LastRegimenLine,Duration,ExpectedReturn,Provider,LastVisit,ExitReason,ExitDate,Emr,Project,[DOB],PreviousARTUse,PreviousARTPurpose,DateLastUsed,DateAsOf,[Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+								ID
+								,PatientID
+								,PatientPK
+								,SiteCode
+								,FacilityName
+								,AgeEnrollment
+								,AgeARTStart
+								,AgeLastVisit
+								,RegistrationDate
+								,PatientSource
+								,Gender
+								,StartARTDate
+								,PreviousARTStartDate
+								,PreviousARTRegimen
+								,StartARTAtThisFacility
+								,StartRegimen
+								,StartRegimenLine
+								,LastARTDate
+								,LastRegimen
+								,LastRegimenLine
+								,Duration
+								,ExpectedReturn
+								,Provider
+								,LastVisit
+								,ExitReason
+								,ExitDate
+								,Emr
+								,Project
+								,[DOB]
+								,PreviousARTUse
+								,PreviousARTPurpose
+								,DateLastUsed
+								,DateAsOf
+								,[Date_Created]
+								,[Date_Last_Modified]
+								,RecordUUID
+								,voided
+								,VoidingSource
+								,Getdate()
+							)
 
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -111,5 +191,10 @@ BEGIN
 								a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 								a.RecordUUID				=b.RecordUUID,
 								a.voided					=b.voided;
+
+			INSERT INTO  [ODS_logs].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
+			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount 
+			FROM [ODS].[dbo].[CT_ARTPatients]
+			group by SiteCode
 
 	END
