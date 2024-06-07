@@ -32,6 +32,10 @@ BEGIN
 								ELSE P.[Project] 
 							END AS [Project] 
 							,PP.[Voided] As Voided
+							,VoidingSource = Case 
+										when PP.voided = 1 Then 'Source'
+										Else Null
+									 END
 							,PP.[Processed]  As Processed
 							,PP.[Provider] As  [Provider]
 							,PP.[RegimenLine] As RegimenLine
@@ -76,8 +80,62 @@ BEGIN
 						)
 
 			WHEN NOT MATCHED THEN 
-					INSERT(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,LoadDate) 
-					VALUES(ID,PatientID,SiteCode,FacilityName,PatientPK,VisitID,Drug,DispenseDate,Duration,ExpectedReturn,TreatmentType,PeriodTaken,ProphylaxisType,Emr,Project,RegimenLine,RegimenChangedSwitched,RegimenChangeSwitchReason,StopRegimenReason,StopRegimenDate, [Date_Created],[Date_Last_Modified],RecordUUID,voided,Getdate())
+					INSERT(
+							ID
+							,PatientID
+							,SiteCode
+							,FacilityName
+							,PatientPK
+							,VisitID
+							,Drug
+							,DispenseDate
+							,Duration
+							,ExpectedReturn
+							,TreatmentType
+							,PeriodTaken
+							,ProphylaxisType
+							,Emr
+							,Project
+							,RegimenLine
+							,RegimenChangedSwitched
+							,RegimenChangeSwitchReason
+							,StopRegimenReason
+							,StopRegimenDate
+							, [Date_Created]
+							,[Date_Last_Modified]
+							,RecordUUID
+							,voided
+							,VoidingSource
+							,LoadDate
+						) 
+					VALUES(
+							ID
+							,PatientID
+							,SiteCode
+							,FacilityName
+							,PatientPK
+							,VisitID
+							,Drug
+							,DispenseDate
+							,Duration
+							,ExpectedReturn
+							,TreatmentType
+							,PeriodTaken
+							,ProphylaxisType
+							,Emr
+							,Project
+							,RegimenLine
+							,RegimenChangedSwitched
+							,RegimenChangeSwitchReason
+							,StopRegimenReason
+							,StopRegimenDate
+							,[Date_Created]
+							,[Date_Last_Modified]
+							,RecordUUID
+							,voided
+							,VoidingSource
+							,Getdate()
+						)
 			
 			WHEN MATCHED THEN
 					UPDATE SET 
@@ -98,6 +156,12 @@ BEGIN
 				UPDATE [ODS_logs].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxDispenseDate = @DispenseDate;
+
+
+			INSERT INTO [ODS_logs].[dbo].[CT_PatientPharmacyCount_Log] ([SiteCode],[CreatedDate],[PatientPharmacyCount])
+			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount 
+			FROM [ODS].[dbo].[CT_PatientPharmacy] 
+			GROUP BY SiteCode;
 
  
 	END
