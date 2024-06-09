@@ -52,6 +52,7 @@ BEGIN
 								SELECT	F.code as SiteCode
 										,p.[PatientPID] as PatientPK
 										,InnerPB.voided
+										,MAX(InnerPB.ID) AS MaxdID
 										, MAX(InnerPB.created) AS Maxdatecreated
 								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
 									INNER JOIN [DWAPICentral].[dbo].[PatientBaselinesExtract] InnerPB  WITH(NoLock)  ON InnerPB.[PatientId]= P.ID 
@@ -63,6 +64,7 @@ BEGIN
 							ON	f.code = tm.[SiteCode] and 
 								p.PatientPID=tm.PatientPK and 
 								PB.voided=tm.voided and  
+								PB.ID = tm.MaxdID    and
 								PB.created = tm.Maxdatecreated
 		WHERE p.gender!='Unknown' AND F.code >0
 	) b
