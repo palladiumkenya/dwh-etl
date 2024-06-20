@@ -20,6 +20,8 @@ BEGIN
 							,R.[Created]
 							, R.PersonAPatientPk
   							,R.PersonBPatientPk
+							,PersonAPatientPkHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PersonAPatientPk  as nvarchar(36))), 2)
+							,PersonBPatientPkHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PersonBPatientPk  as nvarchar(36))), 2)
   							,R.PatientRelationshipToOther
 							,VoidingSource = Case 
 													when R.voided = 1 Then 'Source'
@@ -73,6 +75,8 @@ BEGIN
 								,PersonAPatientPk
 								,PersonBPatientPk
 								,PatientRelationshipToOther
+								,PersonAPatientPkHash
+								,PersonBPatientPkHash
 								,LoadDate							
 						   )  
 						VALUES(
@@ -95,6 +99,8 @@ BEGIN
 								, PersonAPatientPk
 								,PersonBPatientPk								
 								,PatientRelationshipToOther
+								,PersonAPatientPkHash
+								,PersonBPatientPkHash
 								,Getdate()
 							)
 				
@@ -115,6 +121,8 @@ BEGIN
 						a.[Created]=b.[Created],
 						a.PersonAPatientPk = b.PersonAPatientPk,
   						a.PersonBPatientPk = b.PersonBPatientPk,
+						a.PersonAPatientPkHash = b.PersonAPatientPkHash,
+						a.PersonBPatientPkHash  = b.PersonBPatientPkHash,
   						a.PatientRelationshipToOther =b.PatientRelationshipToOther;
 											
 
