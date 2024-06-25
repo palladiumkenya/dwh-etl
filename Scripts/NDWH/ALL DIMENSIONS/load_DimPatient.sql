@@ -32,7 +32,7 @@ BEGIN
                                 AS IsTXCurr,
                              Cast(Getdate() AS DATE)
                                 AS LoadDate,
-                             format(coalesce(patients.DateConfirmedHIVPositiveKey, art.StartARTDate,patients.RegistrationAtCCC), 'yyyymmdd') as DateConfirmedHIVPositiveKey,
+                             format(coalesce(patients.DateConfirmedHIVPositive, art.StartARTDate,patients.RegistrationAtCCC), 'yyyymmdd') as DateConfirmedHIVPositiveKey,
 								     patients.voided
              FROM   ods.dbo.ct_patient AS patients
                     LEFT JOIN ods.dbo.ct_patientbaselines AS baselines
@@ -290,7 +290,7 @@ BEGIN
   
   )
 
-    MERGE [NDWH].[DBO].[dimpatient] AS a
+    MERGE NDWH.[dbo].[DimPatient] AS a
     using (SELECT combined_data_ct_hts_prep_pmtct_Ushauri.patientidhash,
                   combined_data_ct_hts_prep_pmtct_Ushauri.patientpkhash,
                   combined_data_ct_hts_prep_pmtct_Ushauri.htsnumberhash,
