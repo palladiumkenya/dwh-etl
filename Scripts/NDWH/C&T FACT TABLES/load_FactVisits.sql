@@ -18,19 +18,22 @@ select
 	partner.PartnerKey,
 	agency.AgencyKey,
     StartARTDate.DateKey As StartARTDateKey,
+    VisitDate.DateKey As VisitDateKey,
+    NextAppointmentDate.DateKey As NextAppointmentDateKey,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactVisits
 from ODS.dbo.CT_PatientVisits as visits
 left join ODS.dbo.CT_ARTPatients as art on art.PatientPKHash=visits.PatientPKHash and art.SiteCode=visits.SiteCode
-left join NDWH.dbo.DimPatient as patient on visits.PatientPKHash = patient.PatientPKHash 
-    and visits.SiteCode = patient.SiteCode
+left join NDWH.dbo.DimPatient as patient on visits.PatientPKHash = patient.PatientPKHash and visits.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = visits.SiteCode
 left join MFL_partner_agency_combination on MFL_partner_agency_combination.MFL_Code = visits.SiteCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = MFL_partner_agency_combination.SDP
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency_combination.Agency
 left join NDWH.dbo.DimDate as VisitDate on VisitDate.Date=visits.VisitDate
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date=art.StartARTDate
-WHERE patient.voided =0 and  VisitDate >= DATEADD(MONTH, -12, GETDATE())
+left join NDWH.dbo.DimDate as NextAppointmentDate on NextAppointmentDate.Date=visits.NextAppointmentDate
+WHERE patient.voided =0 and  VisitDate >= EOMONTH(DATEADD(MONTH, -12, GETDATE()))
+
 
 alter table NDWH.dbo.FactVisits add primary key(FactKey);
 END
