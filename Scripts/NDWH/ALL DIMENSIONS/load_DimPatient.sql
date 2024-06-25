@@ -374,6 +374,6 @@ BEGIN
 				 a.enrollmentwhokey  =b.enrollmentwhokey,
 				 a.baselinewhokey  = b.baselinewhokey,
 				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
-				 a.voided				= b.voided
-				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey
+				 a.voided				= b.voided,
+				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey;
 END
