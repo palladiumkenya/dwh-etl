@@ -35,6 +35,8 @@ BEGIN
 		on FactARTHistory.ARTOutcomeKey = ARTOutcome.ARTOutcomeKey
 	LEFT OUTER JOIN [NDWH].[dbo].[DimDate] [Date]
 		ON FactARTHistory.AsOfDateKey = [Date].[Date]
+	LEFT OUTER JOIN [NDWH].[dbo].[DimAgeGroup] [AgeGroup]
+		ON FactARTHistory.AgeGroup = [AgeGroup].DATIMAgeGroup
 		WHERE Facility.MFLCode IS NOT NULL AND FactARTHistory.ARTOutcomeKey in (2,3,6,8) AND YEAR(AsOfDateKey) <= YEAR(GETDATE())
 		GROUP BY Facility.FacilityName
 				,Facility.MFLCode
