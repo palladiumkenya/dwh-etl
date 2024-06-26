@@ -32,7 +32,7 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyName = MFL_partner_agency
 left join NDWH.dbo.DimDate as VisitDate on VisitDate.Date=visits.VisitDate
 left join NDWH.dbo.DimDate as StartARTDate on StartARTDate.Date=art.StartARTDate
 left join NDWH.dbo.DimDate as NextAppointmentDate on NextAppointmentDate.Date=visits.NextAppointmentDate
-WHERE patient.voided =0 and  VisitDate >= EOMONTH(DATEADD(MONTH, -12, GETDATE()))
+WHERE Visits.voided =0 and  VisitDate >= EOMONTH(DATEADD(MONTH, -12, GETDATE()))
 
 
 alter table NDWH.dbo.FactVisits add primary key(FactKey);
