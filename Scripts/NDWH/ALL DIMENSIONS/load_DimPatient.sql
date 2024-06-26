@@ -30,9 +30,9 @@ BEGIN
                                ELSE 0
                              END
                                 AS IsTXCurr,
-                             Cast(Getdate() AS DATE)
+                              cast(Getdate() AS DATE)
                                 AS LoadDate,
-                             format(coalesce(patients.DateConfirmedHIVPositive, art.StartARTDate,patients.RegistrationAtCCC), 'yyyymmdd') as DateConfirmedHIVPositiveKey,
+                              coalesce(replace(patients.DateConfirmedHIVPositive,'-',''), replace(art.StartARTDate,'-',''),replace(patients.RegistrationAtCCC,'-','')) as DateConfirmedHIVPositiveKey,
 								     patients.voided
              FROM   ods.dbo.ct_patient AS patients
                     LEFT JOIN ods.dbo.ct_patientbaselines AS baselines
