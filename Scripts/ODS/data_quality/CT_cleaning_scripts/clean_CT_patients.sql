@@ -90,8 +90,8 @@ UPDATE [ODS].[DBO].[CT_Patient] SET PatientType = CASE
 Go
 
 -------------------Update Regimen-------------------------------------------------------------
-UPDATE   M  SET  M.PreviousARTExposure= T.Target_Regimen   from [ODS].[DBO].[CT_Patient]M 
-INNER JOIN [ODS].[dbo].[lkp_regimen] T  ON M.PreviousARTExposure = T.Source_Regimen
+UPDATE   M  SET  M.PreviousARTExposure= T.Target_name   from [ODS].[DBO].[CT_Patient]M 
+INNER JOIN [ODS].[dbo].[lkp_regimen] T  ON M.PreviousARTExposure = T.Source_name
 
 GO
 -------------------Update Inschool-------------------------------------------------------------

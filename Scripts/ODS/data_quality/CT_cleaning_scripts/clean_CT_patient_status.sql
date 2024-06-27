@@ -41,4 +41,20 @@ WHERE Project IN ('Ampathplus', 'AMPATH', 'UCSF Clinical Kisumu', 'CHAP Uzima', 
 
 GO
 
+---Clean up the ExitReason where ExitReason in ('Died','Death','dead')
+UPDATE [ODS].[DBO].[CT_PatientStatus]
+    SET ExitReason = CASE
+						WHEN ExitReason IN ('Died','Death','dead') THEN  'Death'
+						
+            END
+where ExitReason in ('Died','Death','dead')
+
+---Clean ExitDate, ExitReason
+UPDATE [ODS].[DBO].[CT_PatientStatus]
+    SET ExitDate = NULL,ExitReason=NULL
+WHERE ReEnrollmentDate > ExitDate
+and ExitReason in ('dead','Death','Died')
+GO
+
+
 
