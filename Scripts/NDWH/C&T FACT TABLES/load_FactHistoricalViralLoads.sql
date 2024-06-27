@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[NDWH].[dbo].[FactVLLastThreeYears]', N'U') IS NOT NULL 
-	DROP TABLE [NDWH].[dbo].FactVLLastThreeYears;
+IF OBJECT_ID(N'[NDWH].[dbo].[FactVLLastTwoYears]', N'U') IS NOT NULL 
+	DROP TABLE [NDWH].[dbo].FactVLLastTwoYears;
 
 
 BEGIN	
