@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'[HIVCaseSurveillance].[dbo].[TxContinuity]', N'U') IS NOT NULL 
-    DROP TABLE [HIVCaseSurveillance].[dbo].[TxContinuity];
+IF OBJECT_ID(N'[HIVCaseSurveillance].[dbo].[CsTxContinuity]', N'U') IS NOT NULL 
+    DROP TABLE [HIVCaseSurveillance].[dbo].[CsTxContinuity];
 
 
 BEGIN 
@@ -22,7 +22,7 @@ BEGIN
 			,TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2) As CohortYearMonth
 			,cast(asofdatekey as datetime2) As OutcomeYearMonth
 			,COUNT(1) AS NoOfClients
-			INTO [HIVCaseSurveillance].[dbo].[TxContinuity]
+			INTO [HIVCaseSurveillance].[dbo].[CsTxContinuity]
 		FROM [NDWH].[dbo].[FactARTHistory] FactARTHistory
 		LEFT OUTER JOIN [NDWH].[dbo].[DimFacility] Facility
 		ON FactARTHistory.FacilityKey	= Facility.FacilityKey
