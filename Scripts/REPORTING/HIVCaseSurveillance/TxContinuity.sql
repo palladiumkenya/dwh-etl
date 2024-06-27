@@ -10,6 +10,7 @@ BEGIN
 			,Patient.PatientPKHash
 			,Patient.Gender
 			,Patient.DOB
+			,[AgeGroup].DATIMAgeGroup
 			,[Partner].PartnerName
 			,case 
 				when ARTOutcome.ARTOutcomeDescription in ('LOSS TO FOLLOW UP','UNDOCUMENTED LOSS') Then 'IIT'
@@ -37,7 +38,8 @@ BEGIN
 		ON FactARTHistory.AsOfDateKey = [Date].[Date]
 	LEFT OUTER JOIN [NDWH].[dbo].[DimAgeGroup] [AgeGroup]
 		ON FactARTHistory.AgeGroup = [AgeGroup].DATIMAgeGroup
-		WHERE Facility.MFLCode IS NOT NULL AND FactARTHistory.ARTOutcomeKey in (2,3,6,8) AND YEAR(AsOfDateKey) <= YEAR(GETDATE())
+		WHERE Facility.MFLCode IS NOT NULL AND FactARTHistory.ARTOutcomeKey in (2,3,6,8) -- MORTALITY{2="DEAD"},Txcurr{6="ACTIVE},IIT{8=UNDOCUMENTED LOSS" 3="LOSS TO FOLLOW UP"}
+            AND YEAR(AsOfDateKey) <= YEAR(GETDATE())
 		GROUP BY Facility.FacilityName
 				,Facility.MFLCode
 				,Facility.County
@@ -49,6 +51,7 @@ BEGIN
 				,ARTOutcome.ARTOutcomeDescription
 				,asofdatekey
 				,DateConfirmedHIVPositiveKey
+				,[AgeGroup].DATIMAgeGroup
 			ORDER BY DateConfirmedHIVPositiveKey DESC;
 END
 
