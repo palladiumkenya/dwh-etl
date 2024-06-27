@@ -20,7 +20,7 @@ select
     TestName,
 	TestResult,
 	cast(getdate() as date) as LoadDate
-into NDWH.dbo.FactVLLastThreeYears
+into NDWH.dbo.FactVLLastTwoYears
 from ODS.dbo.Intermediate_OrderedViralLoads as vls
 left join NDWH.dbo.DimPatient as patient on vls.PatientPKHash = patient.PatientPKHash and vls.SiteCode = patient.SiteCode
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = vls.SiteCode
@@ -31,5 +31,5 @@ left join NDWH.dbo.DimDate as Orderedby on Orderedby.Date=vls.OrderedbyDate
 WHERE vls.OrderedbyDate >= EOMONTH(DATEADD(MONTH, -24, GETDATE()))
 
 
-alter table NDWH.dbo.FactVLLastThreeYears add primary key(FactKey);
+alter table NDWH.dbo.FactVLLastTwoYears add primary key(FactKey);
 END
