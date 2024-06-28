@@ -9,10 +9,10 @@ with vl_indicators as (
 		FacilityKey,
 		EligibleVL,
         case 
-			when HasValidVL = 0 then 1 
+			when HasValidVL = 0  and EligibleVL = 1 then 1 
 			else 0 
 		end as InvalidVL,
-		case when ValidVLSup = 0 then 1 
+		case when ValidVLSup = 0  and HasValidVL = 1 then 1 
 			else 0
 		end as ValidVLUnSupressed
     from NDWH.dbo.FactViralLoads
@@ -48,7 +48,7 @@ prep_turned_positive as (
         distinct tests.FacilityKey,
 		tests.PatientKey
     from NDWH.dbo.FactHTSClientTests as tests
-    inner join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
+    left join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
 	left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tests.PatientKey
 	where FinalTestResult = 'Positive'
         and patient.PrepEnrollmentDateKey is not null
@@ -65,13 +65,15 @@ select
 	facility.SubCounty,
 	partner.PartnerName,
 	agency.AgencyName,
-	count(OnART) as OnART,
-	count(EligibleVL) as EligibleVL,
-	count(InvalidVL) as InvalidVL,
-	count(ValidVLUnSupressed) as ValidVLUnSupressed,
-	count(IsMortality) as Mortality,
-	count(IsIIT) as IIT,
-	count(IsStage4) as WHOStage4
+	sum(case when patient.DateConfirmedHIVPositiveKey is not null then 1 else 0 end) as ReportedCases,
+	sum(OnART) as OnART,
+	sum(EligibleVL) as EligibleVL,
+	sum(InvalidVL) as InvalidVL,
+	sum(ValidVLUnSupressed) as ValidVLUnSupressed,
+	sum(IsMortality) as Mortality,
+	sum(IsIIT) as IIT,
+	sum(IsStage4) as WHOStage4,
+	count(distinct prep_turned_positive.PatientKey) as Seroconversion
 into [HIVCaseSurveillance].[dbo].[CsAggegateSentinelEventsGaps]
 from art_indicators 
 left join vl_indicators on vl_indicators.PatientKey = art_indicators.PatientKey
