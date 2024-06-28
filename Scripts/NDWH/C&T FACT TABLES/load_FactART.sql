@@ -136,7 +136,6 @@ VALUES ([PatientKey]
 			  ,Getdate()
 			);
 END
-
 ---------------End
 -----------------------Archive  FactARTHistory where the months exceed 12 months
 insert into [NDWH].[dbo].[FACTARTHistory_Archive]( [PatientKey]
