@@ -112,7 +112,7 @@ Visits.AgencyKey
                    Subcounty,
                    Partner,
                    Agency)
-Select Validity.Patientkey,
+Select Invalidity.Patientkey,
        Mflcode,
        Gender,
        Agegroup,
@@ -120,13 +120,13 @@ Select Validity.Patientkey,
        Subcounty,
        Partner,
        Agency,
-       Validity.Asofdate,
-       Validity.Last_viral_load_date,
+       Invalidity.Asofdate,
+       Invalidity.Last_viral_load_date,
        Case
-         When Validity.Last_viral_load_date Is Not Null Then 1
+         When Invalidity.Last_viral_load_date Is Not Null Then 1
          Else 0
        End As Invalid_viral_load_within_12_months
 Into   Hivcasesurveillance.Dbo.Cslinelistmissedopportunitiesvlgap
-From   Invalidity_for_vl As Validity
-Order  By Validity.Patientkey,
-          Validity.Asofdate 
+From   Invalidity_for_vl As Invalidity
+Order  By Invalidity.Patientkey,
+          Invalidity.Asofdate 
