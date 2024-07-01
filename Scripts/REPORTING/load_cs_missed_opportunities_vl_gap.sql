@@ -1,12 +1,7 @@
 If Object_id(N'[HIVCaseSurveillance].[dbo].[CsLinelistMissedOpportunitiesVLGap]', N'U') Is Not Null
   Drop Table [Hivcasesurveillance].[Dbo].[Cslinelistmissedopportunitiesvlgap];
 
-With Mfl_partner_agency_combination
-     As (Select Distinct Mfl_code,
-                         Sdp,
-                         Sdp_agency As Agency
-         From   Ods.Dbo.All_emrsites),
-     Recentdata
+With Recentdata
      As (Select Visits.Patientkey,
                 Pat.Patientpkhash,
                 Fac.Mflcode,
@@ -56,21 +51,19 @@ With Mfl_partner_agency_combination
                        On Orderedbydate.Datekey = Vl.Orderedbydatekey
                 Left Join Ndwh.Dbo.Dimfacility As Fac
                        On Fac.Facilitykey = Visits.Facilitykey
-                Left Join Mfl_partner_agency_combination
-                       On Mfl_partner_agency_combination.Mfl_code = Fac.Mflcode
-                Left Join Ndwh.Dbo.Dimpartner As Partner
-                       On Partner.Partnername =
-Mfl_partner_agency_combination.Sdp
+                              Left Join Ndwh.Dbo.Dimpartner As Partner
+                       On Partner.PartnerKey =
+Visits.PartnerKey
                 Left Join Ndwh.Dbo.Dimagency As Agency
-                       On Agency.Agencyname =
-Mfl_partner_agency_combination.Agency
+                       On Agency.AgencyKey =
+Visits.AgencyKey
                 Left Join Ndwh.Dbo.Dimagegroup As Agegroup
                        On Agegroup.Agegroupkey = Datediff(Year, Pat.Dob, ( Cast
                                                  (
                                                  Visits.Visitdatekey As Date) ))
          Where  Cast(Visits.Visitdatekey As Date) >= Eomonth(
                 Dateadd(Month, -12, Getdate()))),
-     Validity_for_vl
+     Invalidity_for_vl
      As (Select Pat.Patientkey,
                 Mflcode,
                 Visitdate,
@@ -92,9 +85,6 @@ Mfl_partner_agency_combination.Agency
                            And Pat.Sitecode = Recent.Mflcode
                 Inner Join Ndwh.Dbo.Factvllasttwoyears As Vls
                         On Vls.Patientkey = Recent.Patientkey
-                           And Recent.Orderedbydate Not Between
-                               Dateadd(Month, -12, Recent.Visitdate) And
-                               Recent.Visitdate
                            And Recent.Orderedbydate Not Between
                                Dateadd(Month, -12, Recent.Visitdate) And
                                Recent.Visitdate
@@ -137,6 +127,6 @@ Select Validity.Patientkey,
          Else 0
        End As Invalid_viral_load_within_12_months
 Into   Hivcasesurveillance.Dbo.Cslinelistmissedopportunitiesvlgap
-From   Validity_for_vl As Validity
+From   Invalidity_for_vl As Validity
 Order  By Validity.Patientkey,
           Validity.Asofdate 
