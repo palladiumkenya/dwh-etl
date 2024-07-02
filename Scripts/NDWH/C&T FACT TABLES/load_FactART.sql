@@ -150,7 +150,7 @@ ncd_screening as (
             coalesce(ncd_screening.ScreenedBPLastVisit, 0) as ScreenedBPLastVisit,
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
             AppointmentsCategory,
-            end_month.DateKey as AsOfDateKey,
+            end_month.Date as AsOfDate,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
