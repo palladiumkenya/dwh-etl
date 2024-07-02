@@ -20,6 +20,7 @@ select
     StartARTDate.DateKey As StartARTDateKey,
     VisitDate.DateKey As VisitDateKey,
     NextAppointmentDate.DateKey As NextAppointmentDateKey,
+	WHOStage,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactVisits
 from ODS.dbo.CT_PatientVisits as visits
