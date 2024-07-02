@@ -10,7 +10,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  Appointmentstatus Is Not Null
+             Where  Appointmentstatus in ('honoured','not honoured')
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -25,7 +25,7 @@ Begin
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  Consentforsms = 'YES'
+             Where  Consentforsms = 'YES' and Appointmentstatus in ('honoured','not honoured')
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -48,7 +48,7 @@ WHERE
         Twoweeksmssent = 'Success' OR
         Oneweeksmssent = 'Success' OR
         Onedaysmssent = 'Success')
-        AND Consentforsms = 'YES'
+        AND Consentforsms = 'YES' and Appointmentstatus in ('honoured','not honoured')
 GROUP BY
     EOMONTH(CAST(Appointmentdatekey AS DATE)),
     Facilitykey,
@@ -65,21 +65,7 @@ GROUP BY
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  Appointmentstatus = 'honoured'
-             Group  By eomonth(cast(Appointmentdatekey as date)),
-                       Facilitykey,
-                       Partnerkey,
-                       Agencykey,
-                       Agegroupkey
-        ),
-        appointmentcounts As (
-            Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As Totalappointments,
-                    Facilitykey,
-                    Partnerkey,
-                    Agencykey,
-                    Agegroupkey
-             From   ndwh.dbo.FactUshauriAppointments Sms
+             Where  Appointmentstatus ='honoured'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -109,7 +95,7 @@ GROUP BY
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where  (Tracingcalls > 0 OR TracingSMS > 0 OR TracingHomevisits > 0)
+             Where  Tracingoutcome is not null and Tracingoutcome <>'' and Appointmentstatus ='not honoured'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -124,29 +110,15 @@ GROUP BY
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found'
+             Where Tracingoutcome is not null and Tracingoutcome <> 'Client not found' and Appointmentstatus ='not honoured'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
                        Agencykey,
                        Agegroupkey
         ),
-        HomeVisits As (
-            Select 
-                    eomonth(cast(Appointmentdatekey as date)) As AsofDate,
-                    Count(distinct Patientkey) As NoOfPatientswithHomeVisits,
-                    Facilitykey,
-                    Partnerkey,
-                    Agencykey,
-                    Agegroupkey
-             From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracinghomevisits> 0
-             Group  By eomonth(cast(Appointmentdatekey as date)),
-                       Facilitykey,
-                       Partnerkey,
-                       Agencykey,
-                       Agegroupkey
-        ),
+        
+       
         ReturnedToCare As (
             Select  eomonth(cast(Appointmentdatekey as date)) As AsofDate,
                     Count(distinct Patientkey) As NumberReturnedToCare,
@@ -155,7 +127,7 @@ GROUP BY
                     Agencykey,
                     Agegroupkey
              From   ndwh.dbo.FactUshauriAppointments Sms
-             Where Tracingoutcome='Client returned to care '
+             Where Tracingoutcome='Client returned to care 'and Appointmentstatus ='not honoured'
              Group  By eomonth(cast(Appointmentdatekey as date)),
                        Facilitykey,
                        Partnerkey,
@@ -173,11 +145,9 @@ GROUP BY
             Coalesce (Consentedappointments.Numberconsented, 0) As NumberConsented,
             Coalesce (Receivedsms.Numberreceivedsms, 0) As NumberReceivedSMS,
             Coalesce (Honouredappointments.Numberhonouredappointment, 0) As NumberHonouredAppointment,
-            Coalesce (appointmentcounts.Totalappointments, 0) as Totalappointments,
             Coalesce (missingappointments.NumberMissedAppointment,0) As NumberMissedAppointment,
             Coalesce (Traced.NumberTraced,0) As NumberTraced,
             Coalesce (SuccessfullyTraced.NumberSuccessfullyTraced,0) As NumberSuccessfullyTraced,
-            Coalesce (HomeVisits.NoOfPatientswithHomeVisits,0) As NoOfPatientswithHomeVisits,
             Coalesce (ReturnedToCare.NumberReturnedToCare,0) As NumberReturnedToCare
         From  bookedappointments
             Left Join consentedappointments
@@ -207,17 +177,6 @@ GROUP BY
                         And Honouredappointments.Agegroupkey =
                             Bookedappointments.Agegroupkey
                         And Honouredappointments.Asofdate =
-                            Bookedappointments.Asofdate
-            Left Join appointmentcounts
-                    On Appointmentcounts.Facilitykey =
-                        Bookedappointments.Facilitykey
-                        And Appointmentcounts.Partnerkey =
-                            Bookedappointments.Partnerkey
-                        And Appointmentcounts.Agencykey =
-                            Bookedappointments.Agencykey
-                        And Appointmentcounts.Agegroupkey =
-                            Bookedappointments.Agegroupkey
-                        And Appointmentcounts.Asofdate =
                             Bookedappointments.Asofdate
             Left Join missingappointments
                     On missingappointments.Facilitykey =
@@ -252,17 +211,6 @@ GROUP BY
                             Bookedappointments.Agegroupkey
                         And SuccessfullyTraced.Asofdate =
                             Bookedappointments.Asofdate
-            Left Join HomeVisits
-                    On HomeVisits.Facilitykey =
-                        Bookedappointments.Facilitykey
-                        And HomeVisits.Partnerkey =
-                            Bookedappointments.Partnerkey
-                        And HomeVisits.Agencykey =
-                            Bookedappointments.Agencykey
-                        And HomeVisits.Agegroupkey =
-                            Bookedappointments.Agegroupkey
-                        And HomeVisits.Asofdate =
-                            Bookedappointments.Asofdate
          Left Join ReturnedToCare
                     On ReturnedToCare.Facilitykey =
                         Bookedappointments.Facilitykey
@@ -287,13 +235,10 @@ select
     sum(NumberConsented) as NumberConsented,
     sum(NumberReceivedSMS) as NumberReceivedSMS,
     sum(NumberHonouredAppointment) as NumberHonouredAppointment,
-    sum(Totalappointments) as Totalappointments,
-    round(
-        cast(sum(NumberHonouredAppointment) as float)/cast(nullif(sum(Totalappointments), 0) as float), 2) * 100 as PercentHonoured,
+    round(cast(sum(NumberHonouredAppointment) as float)/cast(nullif(sum(NumberBooked), 0) as float), 2) * 100 as PercentHonoured,
     sum(NumberMissedAppointment) as NumberMissedAppointment ,
     sum(NumberTraced) as NumberTraced,
     sum(NumberSuccessfullyTraced) as NumberSuccessfullyTraced,
-    sum(NoOfPatientswithHomeVisits) as NoOfPatientswithHomeVisits,
     sum(NumberReturnedToCare) as NumberReturnedToCare
 into REPORTING.dbo.AggregateUshauriAppointments
 from joined_indicator
@@ -310,3 +255,5 @@ group by
     AgeGroup.DATIMAgeGroup
 
 END
+
+

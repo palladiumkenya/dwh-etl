@@ -4,7 +4,7 @@ UPDATE [ODS].[DBO].[CT_Ipt]
                                 WHEN IndicationForIPT = '1' THEN 'Screened'
                                 WHEN IndicationForIPT IN ('TB Screening not done', '0') THEN  'Not Screened'
                             END
-WHERE TBScreening IN ('1', 'Screening not done', '0')
+WHERE TBScreening IN ('1','TB Screening not done','0')
 
 GO
 

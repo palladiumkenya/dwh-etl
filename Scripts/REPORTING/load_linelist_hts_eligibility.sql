@@ -9,6 +9,8 @@ SELECT
 	SubCounty,
 	p.PartnerName,
 	a.AgencyName,
+    pat.PatientPKHash,
+    pat.NUPI,
 	pat.Gender,
 	age_group.Age,
 	age_group.DATIMAgeGroup AgeGroup,

@@ -141,6 +141,12 @@ WITH NDW_CurTx AS (
                  Docket
                         From ODS.dbo.CT_FacilityManifestCargo 
             ),
+            SiteAbstraction as (
+                select 
+                    distinct SiteCode, 
+                    SiteAbstractionDate 
+                from ODS.dbo.Intermediate_ARTOutcomes
+            ),
             Summary As (Select
                 coalesce (NDW_CurTx.SiteCode, null ) As MFLCode,
                 fac.Facility_Name As FacilityName,
@@ -161,7 +167,8 @@ WITH NDW_CurTx AS (
                 /CAST(DHIS2_CurTx.CurrentOnART_Total  AS DECIMAL(7,2))* 100, 2) AS float) AS Percent_variance_KHIS_EMR,
                 cast (Upload.DateUploaded as date) As DateUploaded,
                 case when CompletenessStatus is null then 'Complete' else 'Incomplete' End As Completeness,
-                DWAPI.DwapiVersion
+                DWAPI.DwapiVersion,
+                SiteAbstraction.SiteAbstractionDate
             from NDW_CurTx
             left join LatestEMR on NDW_CurTx.SiteCode=LatestEMR.facilityCode
             LEFT JOIN DWAPI ON DWAPI.SiteCode= LatestEMR.facilityCode
@@ -169,31 +176,32 @@ WITH NDW_CurTx AS (
             left join Upload on NDW_CurTx.SiteCode=Upload.SiteCode
             left join Uploaddata on NDW_CurTx.SiteCode=Uploaddata.MFL_Code COLLATE Latin1_General_CI_AS
             left join Facilityinfo fac on NDW_CurTx.SiteCode=fac.MFL_Code
-            
-
-            )
-            Select 
+            left join SiteAbstraction on SiteAbstraction.SiteCode = NDW_CurTx.SiteCode
+)
+Select 
             FactKey = IDENTITY(INT, 1, 1),
 		    facility.FacilityKey,
 		    partner.PartnerKey,
-		    agency.AgencyKey ,
+		    agency.AgencyKey,
+            date_abstraction.DateKey as SiteAbstractionDateKey,
             Summary.EMR,
-             KHIS_TxCurr,
-             DWH_TXCurr,
-             EMR_TxCurr,
+            KHIS_TxCurr,
+            DWH_TXCurr,
+            EMR_TxCurr,
             Diff_EMR_DWH,
             DiffKHISDWH,
             DiffKHISEMR,
             Percent_variance_EMR_DWH as Proportion_variance_EMR_DWH,
             Percent_variance_KHIS_DWH as Proportion_variance_KHIS_DWH ,
             Percent_variance_KHIS_EMR as Proportion_variance_KHIS_EMR,
-            dwapi.DwapiVersion
+            DwapiVersion
             into [NDWH].[dbo].FactTxCurrConcordance
-            from Summary
+from Summary
 left join NDWH.dbo.DimFacility as facility on facility.MFLCode = Summary.MFLCode
 left join Facilityinfo on Facilityinfo.MFL_Code=Summary.MFLCode
 left join NDWH.dbo.DimPartner as partner on partner.PartnerName = Facilityinfo.PartnerName
 left join NDWH.dbo.DimAgency as agency on agency.AgencyName = Facilityinfo.Agency
-left join DWAPI on DWAPI.SiteCode=Summary.MFLCode
-alter table NDWH.dbo.FactTxCurrConcordance add primary key(FactKey);
+left join NDWH.dbo.DimDate as date_abstraction on date_abstraction.Date = Summary.SiteAbstractionDate
 
+
+alter table NDWH.dbo.FactTxCurrConcordance add primary key(FactKey);
