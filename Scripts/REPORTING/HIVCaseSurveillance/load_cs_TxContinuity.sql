@@ -17,10 +17,9 @@ BEGIN
 				when ARTOutcome.ARTOutcomeDescription in ('DEAD') Then 'MORTALITY'
 				else ARTOutcome.ARTOutcomeDescription 
 			end ARTOutcome
-			,asofdatekey
+			,[Date].[Date] As asofdatekey
 			,YEAR(TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2)) As CohortYear
 			,TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2) As CohortYearMonth
-			,cast(asofdatekey as datetime2) As OutcomeYearMonth
 			,COUNT(1) AS NoOfClients
 			INTO [HIVCaseSurveillance].[dbo].[CsTxContinuity]
 		FROM [NDWH].[dbo].[FactARTHistory] FactARTHistory
@@ -49,7 +48,7 @@ BEGIN
 				,Patient.DOB
 				,[Partner].PartnerName
 				,ARTOutcome.ARTOutcomeDescription
-				,asofdatekey
+				,[Date].[Date]
 				,DateConfirmedHIVPositiveKey
 				,[AgeGroup].DATIMAgeGroup
 			ORDER BY DateConfirmedHIVPositiveKey DESC;
