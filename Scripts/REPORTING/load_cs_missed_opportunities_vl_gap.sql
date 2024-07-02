@@ -21,7 +21,7 @@ With Recentdata
                 Datediff(Year, Pat.Dob, ( Cast (Visits.Visitdatekey As Date) ))
                 As
                    AgeLastVisit,
-                Dateconfirmed.Date
+                EOMONTH (Dateconfirmed.Date)
                 As
                    DateConfirmedPositive,
                 Orderedbydate.Datekey
@@ -125,13 +125,13 @@ HadVLDone AS (
                 Mflcode,
                 Visitdate,
                 Asofdate,
+				DateConfirmedPositive As CohortYearMonth,
                 visits.Gender,
                 Agegroup,
                 County,
                 Subcounty,
                 Partner,
                 Agency,
-
         Max(Ordereddate.Date) AS OrderedByDate,
         CASE 
             WHEN Max(Ordereddate.Date) IS NOT NULL THEN 1 
@@ -178,6 +178,7 @@ HadVLDone AS (
                 Mflcode,
                 Visitdate,
                 Asofdate,
+				DateConfirmedPositive,
                 visits.Gender,
                 Agegroup,
                 County,
@@ -186,19 +187,21 @@ HadVLDone AS (
                 Agency
 )
 Select
-       Invalidity.Patientkey,
-       Invalidity.MFLCode,
-       Invalidity.Gender,
-       Invalidity.AgeGroup,
-       Invalidity.County,
-       Invalidity.SubCounty,
-       Invalidity.Partner,
-       Invalidity.Agency,
-       Invalidity.Asofdate,
+       HadVLDone.Patientkey,
+       HadVLDone.MFLCode,
+       HadVLDone.Gender,
+       HadVLDone.AgeGroup,
+       HadVLDone.County,
+       HadVLDone.SubCounty,
+       HadVLDone.Partner,
+       HadVLDone.Agency,
+       HadVLDone.Asofdate,
+	   HadVLDone.CohortYearMonth,
        Invalidity.Last_viral_load_date,
 	   HadViralLoadDone,
 	   Invalid_viral_load_within_12_months
 Into   HIVCaseSurveillance.Dbo.CsLinelistMissedOpportunitiesVlGap
 From  HadVLDone  as HadVLDone
 left  join  Invalidity_for_vl As Invalidity  on HadVLDone.Patientkey= Invalidity.PatientKey and hadvldone.VisitDate=invalidity.VisitDate
+
  
