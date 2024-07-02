@@ -74,7 +74,13 @@ Visits.AgencyKey
                 Subcounty,
                 Partner,
                 Agency,
-                Cast(Max(Orderedbydate) As Date) As last_viral_load_date
+                Cast(Max(Orderedbydate) As Date) As last_viral_load_date,
+
+				 CASE 
+            WHEN Max(Orderedbydate) IS not  NULL THEN 1 
+            ELSE 0 
+        END AS Invalid_viral_load_within_12_months
+
          From   Recentdata As Recent
                 Inner Join Ndwh.Dbo.Factart As Art
                         On Art.Patientkey = Recent.Patientkey
@@ -113,40 +119,86 @@ Visits.AgencyKey
                    Partner,
                    Agency),
 
- HadVLDone AS (SELECT 
-     Visits.patientkey,
-     VisitDate.date as VisitDate,
-	 Eomonth (VisitDate.date) As AsOfDate,
-     OrderedDate.Date as OrderedByDate,
-     Case when  OrderedDate.Date is not null then 1 Else 0 End as HadViralLoadDone,
-	 vls.TestResult
-   
-FROM 
-    Ndwh.Dbo.Factvisits as  visits
+HadVLDone AS (
+    SELECT 
+	      Visits.Patientkey,
+                Mflcode,
+                Visitdate,
+                Asofdate,
+                visits.Gender,
+                Agegroup,
+                County,
+                Subcounty,
+                Partner,
+                Agency,
 
-LEFT JOIN 
-     Ndwh.Dbo.Factvllasttwoyears as  vls ON  visits.patientkey = vls.patientkey 
-	 	Left join NDWH.dbo.DimDate as OrderedDate on OrderedDate.Date=vls.OrderedByDateKey 
-		Left join NDWH.dbo.DimDate as VisitDate on VisitDate.Date=visits.VisitDateKey
-	where  EOMONTH (VisitDate.date)  = EOMONTH (OrderedDate.Date)
+        Max(Ordereddate.Date) AS OrderedByDate,
+        CASE 
+            WHEN Max(Ordereddate.Date) IS NOT NULL THEN 1 
+            ELSE 0 
+        END AS HadViralLoadDone
+		
+    
+    FROM 
+         Recentdata AS visits
+	Inner Join Ndwh.Dbo.Factart As Art
+                        On Art.Patientkey = visits.Patientkey
+	Left Join Ndwh.Dbo.Dimdate As Startartdate
+                       On Startartdate.Datekey = visits.StartARTDate
+
+	Inner Join Ndwh.Dbo.Dimpatient As Pat
+                        On Pat.Patientpkhash = visits.Patientpkhash
+                           And Pat.Sitecode = visits.Mflcode
+    LEFT JOIN 
+        Ndwh.Dbo.Factvllasttwoyears AS vls ON visits.patientkey = vls.patientkey 
+		 And Visits.Orderedbydate  Between
+                               Dateadd(Month, -12, Visits.Visitdate) And
+                               Visits.Visitdate
+                           And ( ( Datediff(Month, Startartdate.Datekey, Getdate
+                                   ())
+                                   >= 3
+                                   And Visits.Agelastvisit >= 25
+                                   And Datediff(Month, Visits.Orderedbydate,
+                                       Visits.Visitdate) >
+                                       12 )
+                                  Or ( Datediff(Month, Startartdate.Datekey,
+                                       Getdate(
+                                       ))
+                                       >= 3
+                                       And Visits.Agelastvisit < 25
+                                       And Datediff(Month, Visits.Orderedbydate,
+                                           Visits.Visitdate) > 6 ) )
+
+    LEFT JOIN 
+        NDWH.dbo.DimDate AS OrderedDate ON OrderedDate.Date = vls.OrderedByDateKey
+    LEFT JOIN 
+        NDWH.dbo.DimDate AS VisitDate ON VisitDate.Date = visits.VisitDate
+		Group by
+		 Visits.Patientkey,
+                Mflcode,
+                Visitdate,
+                Asofdate,
+                visits.Gender,
+                Agegroup,
+                County,
+                Subcounty,
+                Partner,
+                Agency
 )
 Select
        Invalidity.Patientkey,
-       Mflcode,
-       Gender,
-       Agegroup,
-       County,
-       Subcounty,
-       Partner,
-       Agency,
+       Invalidity.MFLCode,
+       Invalidity.Gender,
+       Invalidity.AgeGroup,
+       Invalidity.County,
+       Invalidity.SubCounty,
+       Invalidity.Partner,
+       Invalidity.Agency,
        Invalidity.Asofdate,
        Invalidity.Last_viral_load_date,
-       Case
-         When Invalidity.Last_viral_load_date Is Not Null Then 1
-         Else 0
-       End As Invalid_viral_load_within_12_months,
-	   coalesce (HadViralLoadDone,0) as HadViralLoadDone
-Into   Hivcasesurveillance.Dbo.Cslinelistmissedopportunitiesvlgap
-From   Invalidity_for_vl As Invalidity
-left join HadVLDone on HadVLDone.Patientkey= Invalidity.PatientKey-- and Invalidity.AsOfDate= HadVLDone.AsOfDate
-
+	   HadViralLoadDone,
+	   Invalid_viral_load_within_12_months
+Into   HIVCaseSurveillance.Dbo.CsLinelistMissedOpportunitiesVlGap
+From  HadVLDone  as HadVLDone
+left  join  Invalidity_for_vl As Invalidity  on HadVLDone.Patientkey= Invalidity.PatientKey and hadvldone.VisitDate=invalidity.VisitDate
+ 
