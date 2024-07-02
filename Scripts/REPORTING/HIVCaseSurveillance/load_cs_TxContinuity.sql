@@ -17,6 +17,7 @@ BEGIN
 				when ARTOutcome.ARTOutcomeDescription in ('DEAD') Then 'MORTALITY'
 				else ARTOutcome.ARTOutcomeDescription 
 			end ARTOutcome
+			
 			,[Date].[Date] As asofdatekey
 			,YEAR(TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2)) As CohortYear
 			,TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2) As CohortYearMonth
