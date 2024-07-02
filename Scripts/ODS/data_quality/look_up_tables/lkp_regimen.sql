@@ -3338,5 +3338,6 @@ BEGIN
 		INSERT INTO ODS.dbo.lkp_regimen VALUES('Anyother1stlineAdultregimens','Other',GETDATE())
 		INSERT INTO ODS.dbo.lkp_regimen VALUES('Anyother1stlinePaediatricregimens','Other',GETDATE())
 		INSERT INTO ODS.dbo.lkp_regimen VALUES('Anyother2ndlineAdultregimens','Other',GETDATE())
+		INSERT INTO ODS.dbo.lkp_regimen VALUES('3TC + TDF + DTG', '3TC+DTG+TDF', GETDATE())
 
 END

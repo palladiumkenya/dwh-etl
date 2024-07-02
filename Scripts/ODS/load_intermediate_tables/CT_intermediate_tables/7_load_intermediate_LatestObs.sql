@@ -140,7 +140,10 @@ latest_Who as (
 		visits.TBScreening,
         visits.SiteCode,
 		visits.VisitDate,
-		visits.VisitID
+		visits.VisitID,
+        visits.OnIPT,
+        visits.StartIPT,
+        visits.EverOnIPT
 	from ODS.dbo.CT_IPT as visits
 	WHERE  VISITS.VOIDED=0
 	),
@@ -148,6 +151,9 @@ latest_Who as (
 	select
 		distinct Screening.PatientPK, 
 		Screening.TBScreening,
+        Screening.OnIPT,
+        Screening.StartIPT,
+        Screening.EverOnIPT,
         Screening.SiteCode
 	from last_TBScreening as Screening
 	inner join ODS.dbo.Intermediate_LastVisitDate as last_visit on Screening.SiteCode = last_visit.SiteCode 
@@ -173,6 +179,9 @@ latest_Who as (
         latest_breastfeeding.GestationAge,
         latest_Who.WhoStage,
         latest_TBScreening.TBScreening,
+        latest_TBScreening.OnIPT,
+        latest_TBScreening.StartIPT,
+        latest_TBScreening.EverOnIPT,
         cast(getdate() as date) as LoadDate
         into ODS.dbo.intermediate_LatestObs
 	from ODS.dbo.CT_Patient as patient

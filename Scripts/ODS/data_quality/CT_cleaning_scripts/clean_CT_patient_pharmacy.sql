@@ -31,8 +31,7 @@ GO
 -- clean PeriodTaken
 UPDATE [ODS].[DBO].[CT_PatientPharmacy]
     SET PeriodTaken = 999
-WHERE ISNUMERIC(PeriodTaken) = 0 OR CAST(PeriodTaken AS FLOAT) < 0
-
+WHERE ISNUMERIC(PeriodTaken) = 0 OR TRY_CAST(PeriodTaken AS FLOAT) < 0
 
 GO
 
@@ -64,4 +63,8 @@ WHERE Project IN ('Ampathplus', 'AMPATH', 'UCSF Clinical Kisumu', 'CHAP Uzima', 
 
 GO
 
--- TODO: clean RegimenLine
+-- clean RegimenLine
+UPDATE ODS.DBO.CT_PatientPharmacy
+    SET RegimenLine = ODS.dbo.lkp_RegimenLineMap.Target_Regimen
+FROM ODS.DBO.CT_PatientPharmacy AS Pharmacy
+INNER JOIN ods.dbo.lkp_RegimenLineMap ON lkp_RegimenLineMap.Source_Regimen = Pharmacy.RegimenLine

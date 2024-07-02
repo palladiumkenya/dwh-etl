@@ -19,6 +19,14 @@ WHERE StartARTAtThisFacility < CAST('1980-01-01' AS DATE) OR StartARTAtThisFacil
 
 GO
 
+---------------- Update StartARTDate where StartARTDate is null and  StartARTAtThisFacility has a valid date ---Added by Mugo in consultation with Koske,Diana,MaryG,Juliet and Jacob
+UPDATE ART
+	SET StartARTDate= coalesce(ART.[StartARTDate],ART.[StartARTAtThisFacility])
+ FROM [ODS].[dbo].[CT_ARTPatients] ART
+ where StartARTDate is null
+
+ GO
+
 -- clean LastARTDate
 UPDATE [ODS].[DBO].[CT_ARTPatients]
     SET LastARTDate = NULL
@@ -152,9 +160,17 @@ INNER JOIN ods.dbo.lkp_patient_source ON lkp_patient_source.source_name = ARTPat
 GO
 
 
--- TODO: clean Start RegimenLine
+--  clean Start RegimenLine
+  UPDATE ODS.DBO.CT_ARTPatients
+    SET StartRegimenLine = ODS.dbo.lkp_RegimenLineMap.Target_Regimen
+FROM ODS.DBO.CT_ARTPatients AS ARTPatients
+INNER JOIN ods.dbo.lkp_RegimenLineMap ON lkp_RegimenLineMap.Source_Regimen = ARTPatients.StartRegimenLine
 
 
 
-
--- TODO: clean Last RegimenLine
+GO
+--  clean Last RegimenLine
+  UPDATE ODS.DBO.CT_ARTPatients
+    SET LastRegimenLine = ODS.dbo.lkp_RegimenLineMap.Target_Regimen
+FROM ODS.DBO.CT_ARTPatients AS ARTPatients
+INNER JOIN ods.dbo.lkp_RegimenLineMap ON lkp_RegimenLineMap.Source_Regimen = ARTPatients.LastRegimenLine

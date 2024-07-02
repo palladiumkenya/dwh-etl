@@ -41,6 +41,7 @@ SELECT DISTINCT
     MonthsLastTest,
     TestedBefore,
     MaritalStatus,
+    pat.NUPI,
     CAST(GETDATE() AS DATE) AS LoadDate 
 INTO REPORTING.dbo.LineListTransHTS 
 FROM NDWH.dbo.FactHTSClientTests hts
@@ -56,3 +57,5 @@ left join NDWH.dbo.FactHTSPartnerNotificationServices pns on pns.PatientKey=hts.
 WHERE  ( DATEDIFF ( MONTH, DOB, d.Date ) > 18 AND DATEDIFF ( MONTH, DOB, d.Date ) <= 1500 )
 AND FinalTestResult IS NOT NULL 
 AND d.[Date] >= CAST ( '2015-01-01' AS DATE )
+
+

@@ -102,3 +102,14 @@ WHERE
     BP = '999/999'
 
 Go
+
+-- clean BP
+   UPDATE [ODS].[DBO].[CT_PatientVisits]
+    SET BP = replace(ltrim(rtrim(BP)),'-','/')
+	WHERE ltrim(rtrim(BP)) not like '%/%';
+
+	  UPDATE [ODS].[DBO].[CT_PatientVisits]
+    SET BP = replace(BP,' ','')
+	WHERE ltrim(rtrim(BP)) not like '%/%';
+
+Go

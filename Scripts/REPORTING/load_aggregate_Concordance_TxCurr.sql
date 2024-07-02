@@ -6,6 +6,7 @@ Select
    PartnerName,
    Agency,
    txcurr.EMR,
+   date.Date as SiteAbstractionDate,
    KHIS_TxCurr,
    DWH_TxCurr,
    EMR_TxCurr,
@@ -28,6 +29,9 @@ from
       on agency.AgencyKey = txcurr.AgencyKey 
    LEFT JOIN
       NDWH.dbo.DimPartner pat 
-      on pat.PartnerKey = txcurr.PartnerKey 
+      on pat.PartnerKey = txcurr.PartnerKey
+   LEFT JOIN 
+      NDWH.dbo.DimDate as date 
+      on date.DateKey =  txcurr.SiteAbstractionDateKey
 ORDER BY
    Proportion_variance_EMR_DWH DESC

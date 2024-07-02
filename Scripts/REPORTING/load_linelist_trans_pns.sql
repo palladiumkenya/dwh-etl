@@ -13,7 +13,8 @@ With cte1 as (
 		a.CccNumber,
 		c.FinalTestResult as FinalResult, 
 		e.Date DateElicited,
-		f.Date TestDate 
+		f.Date TestDate, 
+        b.NupiHash
 	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
 	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
 	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
@@ -30,6 +31,7 @@ With cte1 as (
 		a.ScreenedForIpv,
 		a.CccNumber,
 		c.FinalTestResult as FinalResult, 
+        b.NupiHash,
 		e.Date DateElicited,
 		f.Date TestDate, 
 		d.ReportedCCCNumber
@@ -53,6 +55,7 @@ With cte1 as (
         j.Date HIVDiagnosisDate,
         PartnerPersonID,
         b.PartnerPatientPk,
+        pat.NUPI,
         Gender, 
         Age,
         DATIMAgeGroup  Agegroup,

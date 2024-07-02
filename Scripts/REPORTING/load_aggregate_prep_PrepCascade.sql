@@ -94,7 +94,7 @@ prep_ct as (
     left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = visits.FacilityKey
     left join NDWH.dbo.DimDate as prep_enroll on prep_enroll.Datekey = patient.PrepEnrollmentDatekey
 	where VisitDateKey is not null 
-        and date_visit.Date <> prep_enroll.Date 
+        and date_visit.Date > prep_enroll.Date 
 	group by 
         facility.MFLCode,
         facility.FacilityName,
@@ -180,7 +180,7 @@ prep_turned_positive as (
         EOMONTH(date_test.Date) as AsofDate,
         count(distinct tests.PatientKey) as CountPositive
     from NDWH.dbo.FactHTSClientTests as tests
-    inner join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
+    left join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
     left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tests.PatientKey
     left join NDWH.dbo.DimDate as date_test on date_test.DateKey = tests.DateTestedKey
     left join NDWH.dbo.DimAgency as agency on agency.Agencykey = tests.AgencyKey

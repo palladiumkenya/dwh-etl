@@ -92,11 +92,19 @@ Select distinct
     obs.TBScreening,
     ART.PHQ_9_rating,
     ART.ScreenedForDepression,
+	ScreenedDepressionDate,
     case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
     onMMD,
     StabilityAssessment,
     AppointmentsCategory,
+	art.Pregnant,
+	art.Breastfeeding,
+    art.IsRTTLast12MonthsAfter3monthsIIT,
+    obs.OnIPT,
+    obs.StartIPT,
+    obs.EverOnIPT,
+    art.SwitchedToSecondLineLast12Months,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
@@ -117,7 +125,3 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
-
-
-
-      

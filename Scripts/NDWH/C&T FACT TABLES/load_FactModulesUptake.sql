@@ -11,9 +11,12 @@ Begin
                     SubCounty,
                     County,
                     EMR_Status,
-                    EMR
-             From   Ods.Dbo.All_emrsites
-             Where  Emr_status = 'Active'
+                    EMR,
+                    [Owner],
+                    [InfrastructureType],
+                    [KEPH_Level]
+                    
+             From   [ODS].[dbo].[ALL_EMRSites]
              ),
          Otz
          As (Select 
@@ -94,6 +97,9 @@ Begin
                     County,
                     EMR_Status,
                     EMR,
+                    [owner],
+                    [InfrastructureType],
+                    [KEPH_Level],
                     coalesce (isEMRSite,0) as isEMRSite,
                     coalesce (isOTZ,0) as isOTZ,
                     coalesce (isOVC,0) as isOVC,
@@ -133,7 +139,10 @@ Begin
            isPMTCT,
            isPrep,
            EMR_Status,
-           summary.EMR
+           summary.EMR,
+           [Owner],
+           [InfrastructureType],
+           [KEPH_Level]
     Into   Ndwh.Dbo.FactModulesuptake
     From   Summary
            Left join NDWH.dbo.DimFacility as fac on fac.MFLCode=Summary.MFL_Code
