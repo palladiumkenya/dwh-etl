@@ -195,7 +195,7 @@ where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
 			      ScreenedDepressionDate,
             AppointmentsCategory,
-
+            end_month.Date as AsOfDate,
             Pregnant,
             Breastfeeding,
             case 
