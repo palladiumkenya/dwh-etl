@@ -36,7 +36,7 @@ left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.Age = confirmed_reported_
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = confirmed_reported_cases_and_art.FacilityKey
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = confirmed_reported_cases_and_art.PartnerKey
 left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = confirmed_reported_cases_and_art.AgencyKey
-where CohortYearMonth is not null
+where CohortYearMonth is not null and AsOfDate <= eomonth(dateadd(mm,-1,getdate()))
 group by
 	AsOfDate,
 	CohortYearMonth,	
