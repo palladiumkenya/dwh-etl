@@ -8,9 +8,10 @@ BEGIN
 			,Facility.County
 			,Facility.SubCounty
 			,Patient.PatientPKHash
+			,Patient.PatientKey
 			,Patient.Gender
 			,Patient.DOB
-			,[AgeGroup].DATIMAgeGroup
+			,FactARTHistory.AgeGroup
 			,[Partner].PartnerName
 			,case 
 				when ARTOutcome.ARTOutcomeDescription in ('LOSS TO FOLLOW UP','UNDOCUMENTED LOSS') Then 'IIT'
@@ -22,7 +23,7 @@ BEGIN
 			,YEAR(TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2)) As CohortYear
 			,TRY_CAST(DateConfirmedHIVPositiveKey AS DATETIME2) As CohortYearMonth
 			,COUNT(1) AS NoOfClients
-			INTO [HIVCaseSurveillance].[dbo].[CsTxContinuity]
+			--INTO [HIVCaseSurveillance].[dbo].[CsTxContinuity]
 		FROM [NDWH].[dbo].[FactARTHistory] FactARTHistory
 		LEFT OUTER JOIN [NDWH].[dbo].[DimFacility] Facility
 		ON FactARTHistory.FacilityKey	= Facility.FacilityKey
@@ -36,10 +37,8 @@ BEGIN
 		on FactARTHistory.ARTOutcomeKey = ARTOutcome.ARTOutcomeKey
 	LEFT OUTER JOIN [NDWH].[dbo].[DimDate] [Date]
 		ON FactARTHistory.AsOfDateKey = [Date].[Date]
-	LEFT OUTER JOIN [NDWH].[dbo].[DimAgeGroup] [AgeGroup]
-		ON FactARTHistory.AgeGroup = [AgeGroup].DATIMAgeGroup
 		WHERE Facility.MFLCode IS NOT NULL AND FactARTHistory.ARTOutcomeKey in (2,3,6,8) -- MORTALITY{2="DEAD"},Txcurr{6="ACTIVE},IIT{8=UNDOCUMENTED LOSS" 3="LOSS TO FOLLOW UP"}
-            AND YEAR(AsOfDateKey) <= YEAR(GETDATE())
+            AND YEAR(AsOfDateKey) <= YEAR(GETDATE()) 
 		GROUP BY Facility.FacilityName
 				,Facility.MFLCode
 				,Facility.County
@@ -50,8 +49,10 @@ BEGIN
 				,[Partner].PartnerName
 				,ARTOutcome.ARTOutcomeDescription
 				,[Date].[Date]
+				,Patient.PatientKey
 				,DateConfirmedHIVPositiveKey
-				,[AgeGroup].DATIMAgeGroup
+				,FactARTHistory.AgeGroup
 			ORDER BY DateConfirmedHIVPositiveKey DESC;
 END
+
 
