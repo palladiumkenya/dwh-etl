@@ -94,20 +94,10 @@ Visits.AgencyKey
                            And Recent.Orderedbydate Not Between
                                Dateadd(Month, -12, Recent.Visitdate) And
                                Recent.Visitdate
-                           And ( ( Datediff(Month, Startartdate.Datekey, Getdate
+                           And   Datediff(Month, Startartdate.Datekey, Getdate
                                    ())
                                    >= 3
-                                   And Recent.Agelastvisit >= 25
-                                   And Datediff(Month, Recent.Orderedbydate,
-                                       Recent.Visitdate) >
-                                       12 )
-                                  Or ( Datediff(Month, Startartdate.Datekey,
-                                       Getdate(
-                                       ))
-                                       >= 3
-                                       And Recent.Agelastvisit < 25
-                                       And Datediff(Month, Recent.Orderedbydate,
-                                           Recent.Visitdate) > 6 ) )
+                                  
          Group  By Pat.Patientkey,
                    Mflcode,
                    Visitdate,
@@ -154,20 +144,10 @@ HadVLDone AS (
 		 And Visits.Orderedbydate  Between
                                Dateadd(Month, -12, Visits.Visitdate) And
                                Visits.Visitdate
-                           And ( ( Datediff(Month, Startartdate.Datekey, Getdate
+                           And  Datediff(Month, Startartdate.Datekey, Getdate
                                    ())
                                    >= 3
-                                   And Visits.Agelastvisit >= 25
-                                   And Datediff(Month, Visits.Orderedbydate,
-                                       Visits.Visitdate) >
-                                       12 )
-                                  Or ( Datediff(Month, Startartdate.Datekey,
-                                       Getdate(
-                                       ))
-                                       >= 3
-                                       And Visits.Agelastvisit < 25
-                                       And Datediff(Month, Visits.Orderedbydate,
-                                           Visits.Visitdate) > 6 ) )
+                                   
 
     LEFT JOIN 
         NDWH.dbo.DimDate AS OrderedDate ON OrderedDate.Date = vls.OrderedByDateKey
@@ -185,7 +165,51 @@ HadVLDone AS (
                 Subcounty,
                 Partner,
                 Agency
+),
+ DueAndDoneVL AS (
+    SELECT 
+        visits.Patientkey,
+        visits.Mflcode,
+        visits.Visitdate,
+        visits.Asofdate,
+        visits.DateConfirmedPositive AS CohortYearMonth,
+        visits.Gender,
+        visits.Agegroup,
+        visits.County,
+        visits.Subcounty,
+        visits.Partner,
+        visits.Agency,
+        MAX(OrderedDate.Date) AS OrderedByDate,
+        CASE 
+            WHEN MAX(OrderedDate.Date) IS NOT NULL THEN 1 
+            ELSE 0 
+        END AS HadViralLoadDone
+    FROM 
+        Recentdata AS visits
+    INNER JOIN 
+        Ndwh.Dbo.Factart AS Art ON Art.Patientkey = visits.Patientkey
+    LEFT JOIN 
+        Ndwh.Dbo.Dimdate AS Startartdate ON Startartdate.Datekey = visits.StartARTDate
+    LEFT JOIN 
+        Ndwh.Dbo.Factvllasttwoyears AS vls ON visits.Patientkey = vls.Patientkey 
+            AND visits.Visitdate BETWEEN DATEADD(MONTH, -12, Visits.Visitdate) AND Visits.Visitdate
+            AND DATEDIFF(MONTH, Startartdate.Datekey, GETDATE()) >= 3
+    LEFT JOIN 
+        NDWH.dbo.DimDate AS OrderedDate ON OrderedDate.Date = vls.OrderedByDateKey
+    GROUP BY
+        visits.Patientkey,
+        visits.Mflcode,
+        visits.Visitdate,
+        visits.Asofdate,
+        visits.DateConfirmedPositive,
+        visits.Gender,
+        visits.Agegroup,
+        visits.County,
+        visits.Subcounty,
+        visits.Partner,
+        visits.Agency
 )
+ 
 Select
        HadVLDone.Patientkey,
        HadVLDone.MFLCode,
@@ -198,10 +222,11 @@ Select
        HadVLDone.Asofdate,
 	   HadVLDone.CohortYearMonth,
        Invalidity.Last_viral_load_date,
-	   HadViralLoadDone,
-	   Invalid_viral_load_within_12_months
+	   HadVLDone.HadViralLoadDone ,
+	   DueAndDoneVL.HadViralLoadDone as DueAndVLDone,
+	   Invalid_viral_load_within_12_months as DueAndVLNotDone
 Into   HIVCaseSurveillance.Dbo.CsLinelistMissedOpportunitiesVlGap
 From  HadVLDone  as HadVLDone
 left  join  Invalidity_for_vl As Invalidity  on HadVLDone.Patientkey= Invalidity.PatientKey and hadvldone.VisitDate=invalidity.VisitDate
-
+left join DueAndDoneVL on DueAndDoneVL.PatientKey=HadVLDone.PatientKey and DueAndDoneVL.visitdate=HadVLDone.visitdate
  
