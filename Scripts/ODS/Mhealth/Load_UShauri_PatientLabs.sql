@@ -8,8 +8,8 @@ BEGIN
   ) AS b
   ON (a.[PatientID] = b.[PatientID])
   WHEN NOT MATCHED THEN
-    INSERT ([PatientPK], [Ushauri_PatientPK], [PatientPKHash], [PatientID], [PatientIDHash], [SiteCode], [FacilityName], [OrderedbyDate], [ReportedbyDate], [TestName], [TestResult], [Units], [LabName])
-    VALUES (b.[PatientPK], b.[PatientPK], b.[PatientPKHash], b.[PatientID], b.[PatientIDHash], b.[SiteCode], b.[FacilityName], b.[OrderedbyDate], b.[ReportedbyDate], b.[TestName], b.[TestResult], b.[Units], b.[LabName])
+    INSERT ([Ushauri_PatientPK], [PatientPKHash], [PatientID], [PatientIDHash], [SiteCode], [FacilityName], [OrderedbyDate], [ReportedbyDate], [TestName], [TestResult], [Units], [LabName])
+    VALUES (b.[PatientPK], b.[PatientPKHash], b.[PatientID], b.[PatientIDHash], b.[SiteCode], b.[FacilityName], b.[OrderedbyDate], b.[ReportedbyDate], b.[TestName], b.[TestResult], b.[Units], b.[LabName])
     WHEN MATCHED THEN
     UPDATE
     SET
