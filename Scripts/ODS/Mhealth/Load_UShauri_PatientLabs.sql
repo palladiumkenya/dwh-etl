@@ -3,7 +3,7 @@ BEGIN
 
   MERGE [ODS].[dbo].[Ushauri_PatientLabs] AS a
   USING (
-    SELECT DISTINCT [PatientPK], [PatientPKHash], [PatientID], [PatientIDHash], [SiteCode], [FacilityName], [OrderedbyDate], [ReportedbyDate], [TestName], [TestResult], [Units], [LabName], [CT_PatientPK]
+    SELECT DISTINCT [PatientPK], [PatientPKHash], [PatientID], [PatientIDHash], [SiteCode], [FacilityName], [OrderedbyDate], [ReportedbyDate], [TestName], [TestResult], [Units], [LabName]
     FROM [MhealthCentral].[dbo].[CT_PatientLabs] (NOLOCK)
   ) AS b
   ON (a.[PatientID] = b.[PatientID])
