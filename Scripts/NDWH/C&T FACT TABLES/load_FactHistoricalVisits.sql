@@ -1,6 +1,6 @@
 
-IF OBJECT_ID(N'[NDWH].[dbo].[FactVisits]', N'U') IS NOT NULL 
-	DROP TABLE NDWH.[dbo].[FactVisits];
+IF OBJECT_ID(N'[NDWH].[dbo].[FactHistoricalVisits]', N'U') IS NOT NULL 
+	DROP TABLE NDWH.[dbo].[FactHistoricalVisits];
 
 
 BEGIN	
@@ -48,7 +48,7 @@ left join NDWH.dbo.DimDate as NextAppointmentDate on NextAppointmentDate.Date=vi
 WHERE Visits.voided =0 and Visits.NUM=1 and VisitDate >= EOMONTH(DATEADD(MONTH, -11, GETDATE())) 
 
 
-alter table HIVCaseSurveillance.dbo.FactVisits add primary key(FactKey);
+alter table NDWH.dbo.FactHistoricalVisits add primary key(FactKey);
 END
 
 
