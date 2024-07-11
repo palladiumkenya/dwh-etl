@@ -4,15 +4,10 @@ IF OBJECT_ID(N'[HIVCaseSurveillance].[dbo].[CsLinelistMissedOpportunitiesVLGap]'
 WITH Recentdata AS (
     SELECT 
         Visits.Patientkey,
-        Pat.Patientpkhash,
         Fac.Mflcode,
         Visits.Facilitykey,
         CAST(Visits.Visitdatekey AS DATE) AS VisitDate,
         EOMONTH(CAST(Visits.Visitdatekey AS DATE)) AS AsOfDate,
-        CAST(Visits.Nextappointmentdatekey AS DATE) AS NextAppointmentDate,
-        CAST(Visits.Startartdatekey AS DATE) AS StartARTDate,
-        DATEDIFF(YEAR, Pat.Dob, CAST(Visits.Visitdatekey AS DATE)) AS AgeLastVisit,
-        EOMONTH(Dateconfirmed.Date) AS DateConfirmedPositive,
         Orderedbydate.Datekey AS OrderedbyDate,
         cast (Vl.TestResult as float) as TestResult ,
 		case 
@@ -22,11 +17,7 @@ WITH Recentdata AS (
 					else 0 
 				end 
 				End as IsUnsuppressed,
-        Gender,
-        Agegroup.Mohagegroup AS AgeGroup,
-        Fac.County,
-        Fac.Subcounty,
-        Partnername AS Partner,
+        Partnername as Partner,
         Agencyname AS Agency
     FROM 
         Ndwh.Dbo.Factvisits AS Visits
@@ -35,17 +26,12 @@ WITH Recentdata AS (
     INNER JOIN 
         Ndwh.Dbo.Dimpatient AS Pat ON Pat.Patientkey = Visits.Patientkey
     LEFT JOIN 
-        Ndwh.Dbo.Dimdate AS Dateconfirmed ON Dateconfirmed.Datekey = Pat.Dateconfirmedhivpositivekey
-    LEFT JOIN 
         Ndwh.Dbo.Dimdate AS Orderedbydate ON Orderedbydate.Datekey = Vl.Orderedbydatekey
     LEFT JOIN 
         Ndwh.Dbo.Dimfacility AS Fac ON Fac.Facilitykey = Visits.Facilitykey
-    LEFT JOIN 
-        Ndwh.Dbo.Dimpartner AS Partner ON Partner.PartnerKey = Visits.PartnerKey
-    LEFT JOIN 
-        Ndwh.Dbo.Dimagency AS Agency ON Agency.AgencyKey = Visits.AgencyKey
-    LEFT JOIN 
-        Ndwh.Dbo.Dimagegroup AS Agegroup ON Agegroup.Agegroupkey = DATEDIFF(YEAR, Pat.Dob, CAST(Visits.Visitdatekey AS DATE))
+LEFT JOIN  Ndwh.Dbo.Dimpartner AS Partner ON Partner.PartnerKey = visits.PartnerKey
+LEFT JOIN Ndwh.Dbo.Dimagency AS Agency ON Agency.AgencyKey = Visits.AgencyKey
+   
     WHERE 
         CAST(Visits.Visitdatekey AS DATE) >= EOMONTH(DATEADD(MONTH, -12, GETDATE()))
 ),
@@ -56,12 +42,6 @@ Invalidity_for_vl AS (
         Recent.Mflcode,
         Recent.Visitdate,
         Recent.Asofdate,
-        Recent.Gender,
-        Recent.Agegroup,
-        Recent.County,
-        Recent.Subcounty,
-        Recent.Partner,
-        Recent.Agency,
 		-- Calculates whether a viral load measurement is invalid within the last 12 months
         CAST(MAX(Orderedbydate.Date) AS DATE) AS last_viral_load_date,
         CASE 
@@ -77,20 +57,15 @@ Invalidity_for_vl AS (
     LEFT JOIN 
         Ndwh.Dbo.Dimdate AS Startartdate ON Startartdate.Datekey = Art.Startartdatekey
     INNER JOIN 
-        Ndwh.Dbo.Dimpatient AS Pat ON Pat.Patientpkhash = Recent.Patientpkhash AND Pat.Sitecode = Recent.Mflcode
+        Ndwh.Dbo.Dimpatient AS Pat ON Pat.PatientKey = Recent.PatientKey AND Pat.Sitecode = Recent.Mflcode
     LEFT JOIN 
         Ndwh.Dbo.Dimdate AS Orderedbydate ON Orderedbydate.Datekey = recent.Orderedbydate
+
     GROUP BY 
         Pat.Patientkey,
         Recent.Mflcode,
         Recent.Visitdate,
-        Recent.Asofdate,
-        Recent.Gender,
-        Recent.Agegroup,
-        Recent.County,
-        Recent.Subcounty,
-        Recent.Partner,
-        Recent.Agency
+        Recent.Asofdate
 ),
 
 DueAndDoneVL AS (
@@ -99,13 +74,6 @@ DueAndDoneVL AS (
         visits.Mflcode,
         visits.Visitdate,
         visits.Asofdate,
-        visits.DateConfirmedPositive AS CohortYearMonth,
-        visits.Gender,
-        visits.Agegroup,
-        visits.County,
-        visits.Subcounty,
-        visits.Partner,
-        visits.Agency,
 		-- Determines whether a viral load was performed within the last 12 months
         MAX(OrderedDate.Date) AS OrderedByDate,
         CASE 
@@ -119,8 +87,6 @@ DueAndDoneVL AS (
     LEFT JOIN 
         Ndwh.Dbo.Factart AS Art ON Art.Patientkey = visits.Patientkey
     LEFT JOIN 
-        Ndwh.Dbo.Dimdate AS Startartdate ON Startartdate.Datekey = visits.StartARTDate
-    LEFT JOIN 
         Ndwh.Dbo.Factvllasttwoyears AS vls ON visits.Patientkey = vls.Patientkey
     LEFT JOIN 
         NDWH.Dbo.Dimdate AS OrderedDate ON OrderedDate.Datekey = vls.Orderedbydatekey
@@ -131,32 +97,31 @@ DueAndDoneVL AS (
         visits.Patientkey,
         visits.Mflcode,
         visits.Visitdate,
-        visits.Asofdate,
-        visits.DateConfirmedPositive,
-        visits.Gender,
-        visits.Agegroup,
-        visits.County,
-        visits.Subcounty,
-        visits.Partner,
-        visits.Agency
+        visits.Asofdate
 )
 
 SELECT
     HadVLDone.Patientkey,
     HadVLDone.MFLCode,
-    HadVLDone.Gender,
-    HadVLDone.AgeGroup,
-    HadVLDone.County,
-    HadVLDone.SubCounty,
+    Pat.Gender,
+    Agegroup.DATIMAgeGroup as Agegroup,
+    fac.County,
+    Fac.SubCounty,
     HadVLDone.Partner,
     HadVLDone.Agency,
     HadVLDone.Asofdate,
-    HadVLDone.DateConfirmedPositive AS CohortYearMonth,
+	EOMONTH(Dateconfirmed.Date)AS CohortYearMonth, 
     Invalidity.Last_viral_load_date,
     DueAndDoneVL.HadViralLoadDone AS DueAndVLDone,
     Invalidity.Invalid_viral_load_within_12_months AS DueAndVLNotDone,
     HadVLDone.IsUnsuppressed
 INTO HIVCaseSurveillance.Dbo.CsLinelistMissedOpportunitiesVlGap
 FROM Recentdata AS HadVLDone
+Left  JOIN  Ndwh.Dbo.Dimpatient AS Pat ON Pat.Patientkey = HadVLDone.Patientkey
+LEFT JOIN  Ndwh.Dbo.Dimagegroup AS Agegroup ON Agegroup.Agegroupkey = DATEDIFF(YEAR, Pat.Dob, HadVLDone.AsOfDate)
+LEFT JOIN Ndwh.Dbo.Dimfacility AS Fac ON Fac.Facilitykey = HadVLDone.FacilityKey
+LEFT JOIN  Ndwh.Dbo.Dimpartner AS Partner ON Partner.PartnerKey = HadVLDone.Partner
+LEFT JOIN Ndwh.Dbo.Dimagency AS Agency ON Agency.AgencyKey = HadVLDone.Agency
 LEFT JOIN Invalidity_for_vl AS Invalidity ON HadVLDone.Patientkey = Invalidity.Patientkey AND HadVLDone.VisitDate = Invalidity.VisitDate
-LEFT JOIN DueAndDoneVL ON DueAndDoneVL.PatientKey = HadVLDone.PatientKey AND DueAndDoneVL.Visitdate = HadVLDone.Visitdate;
+LEFT JOIN DueAndDoneVL ON DueAndDoneVL.PatientKey = HadVLDone.PatientKey AND DueAndDoneVL.Visitdate = HadVLDone.Visitdate
+LEFT JOIN Ndwh.Dbo.Dimdate AS Dateconfirmed ON Dateconfirmed.Datekey = Pat.Dateconfirmedhivpositivekey
