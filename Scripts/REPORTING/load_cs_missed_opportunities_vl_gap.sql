@@ -32,8 +32,7 @@ WITH Recentdata AS (
 LEFT JOIN  Ndwh.Dbo.Dimpartner AS Partner ON Partner.PartnerKey = visits.PartnerKey
 LEFT JOIN Ndwh.Dbo.Dimagency AS Agency ON Agency.AgencyKey = Visits.AgencyKey
    
-    WHERE 
-        CAST(Visits.Visitdatekey AS DATE) >= EOMONTH(DATEADD(MONTH, -12, GETDATE()))
+   
 ),
 
 Invalidity_for_vl AS (
