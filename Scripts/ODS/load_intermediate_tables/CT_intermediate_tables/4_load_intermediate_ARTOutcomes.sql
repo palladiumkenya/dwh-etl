@@ -53,7 +53,7 @@ BEGIN
 WHEN DATEDIFF(day, ISNULL(LastPatientEncounter.NextAppointmentDate, ART.ExpectedReturn), EOMONTH(DATEADD(month, -1, GETDATE()))) > 30
     AND LatestExits.ExitReason IS NULL
     AND DateUploaded Not BETWEEN DATEADD(day, 1 - DAY(GETDATE()), GETDATE())  -- First day of current month
-    AND DATEADD(day, 15 - DAY(GETDATE()), GETDATE()) -- 15th day of current month
+    AND DATEADD(day, 20 - DAY(GETDATE()), GETDATE()) -- 20th day of current month
 THEN 'LostinHMIS'
 
             WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
