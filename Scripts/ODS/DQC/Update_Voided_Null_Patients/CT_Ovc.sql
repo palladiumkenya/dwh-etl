@@ -1,5 +1,5 @@
 UPDATE ap
-SET ap.voided = 1, VoidedSource = 1
+SET ap.voided = 1, ap.VoidingSource = 1
 FROM [ODS].[dbo].[CT_Ovc] ap
 LEFT JOIN [ODS].[dbo].[CT_Patient] p
 ON ap.PatientIDHash = p.PatientIDHash AND ap.PatientPKHash = p.PatientPKHash
