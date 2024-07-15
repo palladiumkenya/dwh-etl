@@ -97,6 +97,8 @@ BEGIN
 										,PV.[Date_Last_Modified]
 										,PV.RecordUUID
 										,[WHOStagingOI]
+										,PV.[AppointmentReminderWillingness]
+										,PV.[WantsToGetPregnant]
 						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
 							INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 						
 							INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
@@ -191,6 +193,8 @@ BEGIN
 									,voided
 									,VoidingSource
 									,[WHOStagingOI]
+									,[AppointmentReminderWillingness]
+									,[WantsToGetPregnant]
 									,LoadDate
 								)  
 							VALUES(
@@ -250,6 +254,8 @@ BEGIN
 									,voided
 									,VoidingSource
 									,[WHOStagingOI]
+									,[AppointmentReminderWillingness]
+									,[WantsToGetPregnant]
 									,Getdate()
 								)
 			
@@ -311,7 +317,9 @@ BEGIN
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 						a.RecordUUID			    =b.RecordUUID,
 						a.voided		            =b.voided,
-						a.[WHOStagingOI]            =b.[WHOStagingOI];
+						a.[WHOStagingOI]            =b.[WHOStagingOI],
+						a.[AppointmentReminderWillingness] = b.[AppointmentReminderWillingness],
+						a.[WantsToGetPregnant]      = b.[WantsToGetPregnant];
 
 			UPDATE [ODS_Logs].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
