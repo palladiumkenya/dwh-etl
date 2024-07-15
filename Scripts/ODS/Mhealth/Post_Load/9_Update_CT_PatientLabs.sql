@@ -8,9 +8,8 @@ FROM
 
 UPDATE a
 SET
-    a.PatientPK = p.PatientPK,
-    a.PatientPKHash = p.PatientPKHash
+    a.PatientPK = p.PatientPK
 FROM
     [ODS].[dbo].[Ushauri_PatientLabs] a
-	JOIN [MhealthCentral].[dbo].[CT_PatientLabs] p
+	JOIN [ODS].[dbo].[CT_PatientLabs] p
 		ON a.SiteCode = p.SiteCode AND a.PatientID = p.PatientID;
