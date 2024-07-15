@@ -180,7 +180,7 @@ prep_turned_positive as (
         EOMONTH(date_test.Date) as AsofDate,
         count(distinct tests.PatientKey) as CountPositive
     from NDWH.dbo.FactHTSClientTests as tests
-    inner join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
+    left join NDWH.dbo.FactPrepAssessments as assessments on assessments.PatientKey = tests.PatientKey
     left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tests.PatientKey
     left join NDWH.dbo.DimDate as date_test on date_test.DateKey = tests.DateTestedKey
     left join NDWH.dbo.DimAgency as agency on agency.Agencykey = tests.AgencyKey

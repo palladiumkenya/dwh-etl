@@ -50,13 +50,16 @@ BEGIN
 		LastPatientEncounter.NextAppointmentDate,
 		CASE
             When  Latestexits.ExitReason  in ('DIED','dead','Death','Died') THEN 'D'--1
+
 WHEN DATEDIFF(day, ISNULL(LastPatientEncounter.NextAppointmentDate, ART.ExpectedReturn), EOMONTH(DATEADD(month, -1, GETDATE()))) > 30
     AND LatestExits.ExitReason IS NULL
     AND DateUploaded Not BETWEEN DATEADD(day, 1 - DAY(GETDATE()), GETDATE())  -- First day of current month
     AND DATEADD(day, 20 - DAY(GETDATE()), GETDATE()) -- 20th day of current month
-THEN 'LostinHMIS'
+THEN 'Lost in HMIS'
 
-            WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
+           
+            WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and (LatestExits.ExitReason is null or LatestExits.ExitReason ='') THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
+
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.ReEnrollmentDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'--3
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.EffectiveDiscontinuationDate >=  EOMONTH(DATEADD(mm,-1,GETDATE())) THEN 'V'--4
  	        WHEN  ART.startARTDate> DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,GETDATE()),0)) THEN 'NP'--5
