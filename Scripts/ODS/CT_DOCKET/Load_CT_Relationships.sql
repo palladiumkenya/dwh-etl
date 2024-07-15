@@ -73,8 +73,6 @@ BEGIN
 								,PersonAPatientPk
 								,PersonBPatientPk
 								,PatientRelationshipToOther
-								,PersonAPatientPkHash
-								,PersonBPatientPkHash
 								,LoadDate							
 						   )  
 						VALUES(
@@ -97,8 +95,6 @@ BEGIN
 								, PersonAPatientPk
 								,PersonBPatientPk								
 								,PatientRelationshipToOther
-								,PersonAPatientPkHash
-								,PersonBPatientPkHash
 								,Getdate()
 							)
 				
