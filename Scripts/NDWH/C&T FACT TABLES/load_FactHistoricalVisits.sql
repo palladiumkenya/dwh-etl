@@ -34,7 +34,7 @@ select
     NextAppointmentDate.DateKey As NextAppointmentDateKey,
 	WHOStage,
 	cast(getdate() as date) as LoadDate
-into NDWH.dbo.FactVisits
+into NDWH.dbo.FactHistoricalVisits
 from UniqueVisits as  visits
 inner join ODS.dbo.CT_ARTPatients as art on art.PatientPKHash=visits.PatientPKHash and art.SiteCode=visits.SiteCode
 inner join NDWH.dbo.DimPatient as patient on visits.PatientPKHash = patient.PatientPKHash and visits.SiteCode = patient.SiteCode
