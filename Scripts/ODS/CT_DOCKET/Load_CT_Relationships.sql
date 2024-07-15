@@ -115,8 +115,6 @@ BEGIN
 						a.[Created]=b.[Created],
 						a.PersonAPatientPk = b.PersonAPatientPk,
   						a.PersonBPatientPk = b.PersonBPatientPk,
-						a.PersonAPatientPkHash = b.PersonAPatientPkHash,
-						a.PersonBPatientPkHash  = b.PersonBPatientPkHash,
   						a.PatientRelationshipToOther =b.PatientRelationshipToOther;
 											
 
