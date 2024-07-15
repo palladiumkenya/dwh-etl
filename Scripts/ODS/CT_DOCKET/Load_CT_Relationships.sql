@@ -20,9 +20,7 @@ BEGIN
 							,R.[Created]
 							, R.PersonAPatientPk
   							,R.PersonBPatientPk
-							,PersonAPatientPkHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PersonAPatientPk  as nvarchar(36))), 2)
-							,PersonBPatientPkHash = convert(nvarchar(64), hashbytes('SHA2_256', cast(PersonBPatientPk  as nvarchar(36))), 2)
-  							,R.PatientRelationshipToOther
+                            ,R.PatientRelationshipToOther
 							,VoidingSource = Case 
 													when R.voided = 1 Then 'Source'
 													Else Null
