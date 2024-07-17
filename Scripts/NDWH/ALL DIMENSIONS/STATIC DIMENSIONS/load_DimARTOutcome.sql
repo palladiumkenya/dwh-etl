@@ -36,7 +36,7 @@ BEGIN
 			WHEN [ARTOutcome] ='NP' THEN 'NEW PATIENT'
 			WHEN [ARTOutcome] ='UL' THEN 'UNDOCUMENTED LOSS'
 			WHEN [ARTOutcome] = 'FV'  THEN 'FUTURE VISIT'
-         WHEN [ARTOutcome] = 'LHMIS'  THEN 'LOST IN HMIS'
+         WHEN [ARTOutcome] = 'LIHMIS'  THEN 'LOST IN HMIS'
 
 
 		end as ARTOutcomeDescription,
