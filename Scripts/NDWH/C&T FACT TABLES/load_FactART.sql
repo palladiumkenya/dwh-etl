@@ -76,7 +76,8 @@ Patient As (
     Else 'Unclassified'
     END As AppointmentsCategory,
     pbfw.Pregnant,
-    pbfw.Breastfeeding
+    pbfw.Breastfeeding,
+    pbfw_at_confirm_pos.PbfwAtConfirmedPositive
         from 
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
@@ -85,7 +86,7 @@ left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patien
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_Pbfw pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
-
+left join ODS.dbo.Intermediate_PbfwAtConfimationPositive as pbfw_at_confirm_pos on pbfw_at_confirm_pos.PatientPK = Patient.PatientPK and pbfw_at_confirm_pos.SiteCode = Patient.SiteCode
 ),
 
    DepressionScreening as (Select 
@@ -207,6 +208,7 @@ where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()
               else 0
             end as SwitchedToSecondLineLast12Months,
             end_month.DateKey as AsOfDateKey,
+            Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
