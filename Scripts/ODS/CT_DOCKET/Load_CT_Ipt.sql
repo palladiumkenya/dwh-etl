@@ -59,6 +59,10 @@ BEGIN
 					   						when IE.voided = 1 Then 'Source'
 											Else Null
 										END 
+						,IE.[Adherence]      
+						,IE.Hepatoxicity
+						,IE.PeripheralNeruopath
+						,IE.Rash
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
@@ -132,6 +136,10 @@ BEGIN
 								,RecordUUID
 								,voided
 								,VoidingSource
+								,[Adherence]
+								,Hepatoxicity
+								,PeripheralNeruopath
+								,Rash
 								,LoadDate
 							)  
 						VALUES(
@@ -171,6 +179,10 @@ BEGIN
 								,RecordUUID
 								,voided
 								,VoidingSource
+								,[Adherence]
+								,Hepatoxicity
+								,PeripheralNeruopath
+								,Rash
 								,Getdate()
 							)
 				
@@ -202,7 +214,11 @@ BEGIN
 						a.IPTDiscontinuation    = b.IPTDiscontinuation,
 						a.DateOfDiscontinuation   = b.DateOfDiscontinuation,
 						a.RecordUUID			 = b.RecordUUID,
-						a.voided				= b.voided;
+						a.voided				= b.voided
+						,a.[Adherence]          = b.[Adherence]
+						,a.Hepatoxicity         = b.Hepatoxicity
+						,a.PeripheralNeruopath   = b.PeripheralNeruopath
+						,a.Rash          = b.Rash;
 						
 
 					UPDATE [ODS_logs].[dbo].[CT_Ipt_Log]

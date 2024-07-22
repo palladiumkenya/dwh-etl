@@ -29,6 +29,13 @@ BEGIN
         where RowNum=1 and ExitDate  <=EOMONTH(DATEADD(mm,-1,GETDATE()))
     ),
     
+	LatestUpload AS (
+	select 
+		cast (SiteCode as nvarchar)As SiteCode ,
+		Max(DateRecieved) As DateUploaded
+	 from ODS.dbo.CT_FacilityManifest
+	  group by SiteCode
+	),
     ARTOutcomes AS (
 	Select
 	DISTINCT 
@@ -43,6 +50,12 @@ BEGIN
 		LastPatientEncounter.NextAppointmentDate,
 		CASE
             When  Latestexits.ExitReason  in ('DIED','dead','Death','Died') THEN 'D'--1
+WHEN DATEDIFF(day, ISNULL(LastPatientEncounter.NextAppointmentDate, ART.ExpectedReturn), EOMONTH(DATEADD(month, -1, GETDATE()))) > 30
+    AND LatestExits.ExitReason IS NULL
+    AND DateUploaded Not BETWEEN DATEADD(day, 1 - DAY(GETDATE()), GETDATE())  -- First day of current month
+    AND DATEADD(day, 20 - DAY(GETDATE()), GETDATE()) -- 20th day of current month
+THEN 'LIHMIS'
+
             WHEN DATEDIFF( dd, ISNULL(LastPatientEncounter.NextAppointmentDate,ART.ExpectedReturn), EOMONTH(DATEADD(mm,-1,GETDATE()))) >30 and LatestExits.ExitReason is null THEN 'uL'--Date diff btw TCA  and Last day of Previous month--2
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.ReEnrollmentDate between  DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE())-1, 0) and DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE())-1, -1) THEN 'V'--3
             WHEN  LatestExits.ExitDate IS NOT NULL and LatestExits.ExitReason not in ('DIED','dead','Death','Died') and  Latestexits.EffectiveDiscontinuationDate >=  EOMONTH(DATEADD(mm,-1,GETDATE())) THEN 'V'--4
@@ -61,21 +74,16 @@ BEGIN
 		 Patients.Project,
          Latestexits.ReEnrollmentDate,
          Latestexits.EffectiveDiscontinuationDate
-	FROM ODS.dbo.CT_Patient Patients
+	FROM ODS.dbo.CT_Patient as Patients
 
 	INNER JOIN ODS.dbo.CT_ARTPatients  ART  ON  Patients.PatientPK=ART.PatientPK and Patients.Sitecode=ART.Sitecode
 	Left JOIN ODS.dbo.Intermediate_LastPatientEncounter  LastPatientEncounter ON   Patients.PatientPK  =LastPatientEncounter.PatientPK   AND Patients.SiteCode  =LastPatientEncounter.SiteCode
 	LEFT JOIN  LatestExits   ON  Patients.PatientPK=Latestexits.PatientPK  and Patients.Sitecode=Latestexits.Sitecode
+	left join LatestUpload on LatestUpload.SiteCode=Patients.SiteCode
 
 	  WHERE  ART.startARTDate IS NOT NULL AND  ART.VOIDED=0
 	),
-	LatestUpload AS (
-	select 
-		cast (SiteCode as nvarchar)As SiteCode ,
-		Max(DateRecieved) As DateUploaded
-	 from ODS.dbo.CT_FacilityManifest
-	  group by SiteCode
-	),
+	
 
 	LatestVisits AS (
 		Select 
@@ -105,10 +113,11 @@ BEGIN
             ReEnrollmentDate,
            EffectiveDiscontinuationDate,
 			cast(getdate() as date) as LoadDate
-	  INTO  [ODS].[dbo].[Intermediate_ARTOutcomes]
+	  INTO  ODS.[dbo].[Intermediate_ARTOutcomes]
 	 from ARTOutcomes
 	 left join LatestUpload ON LatestUpload.SiteCode = ARTOutcomes.SiteCode 
 	 left  join  LatestVisits  ON  LatestVisits.SiteCode = ARTOutcomes.SiteCode
 
 	 	
 END
+
