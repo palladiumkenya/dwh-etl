@@ -23,6 +23,9 @@ WITH ModulesUptake AS (
         fac.Longitude,
         EMR_Status,
         modules.EMR,
+        modules.owner,
+        modules.InfrastructureType,
+        modules.KEPH_Level,
         CAST(GETDATE() AS DATE) AS LoadDate 
     FROM NDWH.dbo.FactModulesuptake AS modules
     LEFT JOIN NDWH.dbo.DimFacility fac ON fac.FacilityKey = modules.FacilityKey

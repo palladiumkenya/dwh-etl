@@ -18,7 +18,7 @@ select
     evaluation.Date as RiskEvaluationDate,    
     appointment.Date as LastVisitAppointmentGivenDate,
     scores.LatestRiskScore,
-    scores.LastestRiskCategory
+    scores.LatestRiskCategory
 into REPORTING.dbo.LinelistIITRiskScores
 from NDWH.dbo.FactIITRiskScores as scores
 left join NDWH.dbo.DimFacility as facility on facility.FacilityKey = scores.FacilityKey

@@ -55,6 +55,14 @@ BEGIN
 						,IE.DateOfDiscontinuation
 					   ,IE.RecordUUID
 					   ,IE.voided
+					   ,VoidingSource = Case 
+					   						when IE.voided = 1 Then 'Source'
+											Else Null
+										END 
+						,IE.[Adherence]      
+						,IE.Hepatoxicity
+						,IE.PeripheralNeruopath
+						,IE.Rash
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
 						INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
@@ -77,7 +85,6 @@ BEGIN
 							) tm 
 							ON	f.code = tm.[SiteCode] and 
 								p.PatientPID=tm.PatientPK and 
-								--IE.visitID = tm.visitID and 
 								IE.VisitDate = tm.VisitDate and
 								cast(IE.created as date) = tm.Maxdatecreated and
 								IE.ID = tm.Max_ID
@@ -89,15 +96,95 @@ BEGIN
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.voided	= b.voided
-						--and a.ID		=b.ID
-						--and a.RecordUUID  = b.RecordUUID
-						--and a.[Date_Created] = b.[Date_Created]
-						--and a.[Date_Last_Modified] = b.[Date_Last_Modified]
 						)
 					
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,LoadDate)  
-						VALUES(ID,PatientID,PatientPK,SiteCode,FacilityName,VisitID,VisitDate,Emr,Project,OnTBDrugs,OnIPT,EverOnIPT,Cough,Fever,NoticeableWeightLoss,NightSweats,Lethargy,ICFActionTaken,TestResult,TBClinicalDiagnosis,ContactsInvited,EvaluatedForIPT,StartAntiTBs,TBRxStartDate,TBScreening,IPTClientWorkUp,StartIPT,IndicationForIPT,[Date_Created],[Date_Last_Modified],[TPTInitiationDate],IPTDiscontinuation,DateOfDiscontinuation,RecordUUID,voided,Getdate())
+						INSERT(
+								ID
+								,PatientID
+								,PatientPK
+								,SiteCode
+								,FacilityName
+								,VisitID
+								,VisitDate
+								,Emr
+								,Project
+								,OnTBDrugs
+								,OnIPT
+								,EverOnIPT
+								,Cough
+								,Fever
+								,NoticeableWeightLoss
+								,NightSweats
+								,Lethargy
+								,ICFActionTaken
+								,TestResult
+								,TBClinicalDiagnosis
+								,ContactsInvited
+								,EvaluatedForIPT
+								,StartAntiTBs
+								,TBRxStartDate
+								,TBScreening
+								,IPTClientWorkUp
+								,StartIPT
+								,IndicationForIPT
+								,[Date_Created]
+								,[Date_Last_Modified]
+								,[TPTInitiationDate]
+								,IPTDiscontinuation
+								,DateOfDiscontinuation
+								,RecordUUID
+								,voided
+								,VoidingSource
+								,[Adherence]
+								,Hepatoxicity
+								,PeripheralNeruopath
+								,Rash
+								,LoadDate
+							)  
+						VALUES(
+								ID
+								,PatientID
+								,PatientPK
+								,SiteCode
+								,FacilityName
+								,VisitID
+								,VisitDate
+								,Emr
+								,Project
+								,OnTBDrugs
+								,OnIPT
+								,EverOnIPT
+								,Cough
+								,Fever
+								,NoticeableWeightLoss
+								,NightSweats
+								,Lethargy
+								,ICFActionTaken
+								,TestResult
+								,TBClinicalDiagnosis
+								,ContactsInvited
+								,EvaluatedForIPT
+								,StartAntiTBs
+								,TBRxStartDate
+								,TBScreening
+								,IPTClientWorkUp
+								,StartIPT
+								,IndicationForIPT
+								,[Date_Created]
+								,[Date_Last_Modified]
+								,[TPTInitiationDate]
+								,IPTDiscontinuation
+								,DateOfDiscontinuation
+								,RecordUUID
+								,voided
+								,VoidingSource
+								,[Adherence]
+								,Hepatoxicity
+								,PeripheralNeruopath
+								,Rash
+								,Getdate()
+							)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 
@@ -127,11 +214,19 @@ BEGIN
 						a.IPTDiscontinuation    = b.IPTDiscontinuation,
 						a.DateOfDiscontinuation   = b.DateOfDiscontinuation,
 						a.RecordUUID			 = b.RecordUUID,
-						a.voided				= b.voided;
+						a.voided				= b.voided
+						,a.[Adherence]          = b.[Adherence]
+						,a.Hepatoxicity         = b.Hepatoxicity
+						,a.PeripheralNeruopath   = b.PeripheralNeruopath
+						,a.Rash          = b.Rash;
 						
 
 					UPDATE [ODS_logs].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 				
+					INSERT INTO [ODS_logs].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
+					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS IptCount 
+					FROM [ODS].[dbo].[CT_Ipt] 
+					GROUP BY SiteCode;
 END

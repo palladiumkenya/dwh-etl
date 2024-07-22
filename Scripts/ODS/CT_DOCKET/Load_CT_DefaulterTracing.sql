@@ -15,8 +15,8 @@ BEGIN
 						  ,P.[Project]
 						  ,F.Code AS SiteCode
 						  ,F.Name AS FacilityName 
-						  ,[VisitID]
-						  ,Cast([VisitDate] As Date)[VisitDate]
+						  ,C.[VisitID]
+						  ,Cast(C.[VisitDate] As Date)[VisitDate]
 						  ,[EncounterId]
 						  ,[TracingType]
 						  ,[TracingOutcome]
@@ -29,12 +29,41 @@ BEGIN
 						  ,C.RecordUUID
 						  ,C.voided
 						  ,[DatePromisedToCome]
-     					 ,[ReasonForMissedAppointment]
-      					,[DateOfMissedAppointment]
-					 	,P.ID,C.[Date_Created],C.[Date_Last_Modified]
+     					  ,[ReasonForMissedAppointment]
+      					 ,[DateOfMissedAppointment]
+					 	 ,P.ID
+						 ,C.[Date_Created]
+						 ,C.[Date_Last_Modified]
+						 ,VoidingSource = Case 
+													when C.voided = 1 Then 'Source'
+													Else Null
+											END 
 					  FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
 					  INNER JOIN [DWAPICentral].[dbo].[DefaulterTracingExtract](NoLock) C ON C.[PatientId]= P.ID 
 					  INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+					  INNER JOIN (
+										SELECT  F.code as SiteCode
+												,p.[PatientPID] as PatientPK
+												,InnerC.voided
+												,InnerC.VisitDate
+												,InnerC.VisitID
+												,max(InnerC.ID) As maxID
+												,MAX(InnerC.created )AS Maxdatecreated
+										FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+											INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) InnerC ON InnerC.[PatientId] = P.ID 
+											INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
+										GROUP BY F.code
+												,p.[PatientPID]
+												,InnerC.voided
+												,InnerC.VisitDate
+												,InnerC.VisitID
+							) tm 
+							ON	f.code = tm.[SiteCode] and 
+								p.PatientPID=tm.PatientPK and 
+								C.voided = tm.voided and 
+								C.created = tm.Maxdatecreated and
+								C.ID =tm.maxID  and
+								C.VisitDate = tm.VisitDate
 					WHERE P.gender != 'Unknown' AND F.code >0) AS b 
 						ON(
 						 a.PatientPK  = b.PatientPK 
@@ -42,12 +71,68 @@ BEGIN
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
 						and a.voided   = b.voided
-						and a.ID =b.ID
+						--and a.ID =b.ID
 						)
 
 					WHEN NOT MATCHED THEN 
-						INSERT(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided   ,[DatePromisedToCome],[ReasonForMissedAppointment],[DateOfMissedAppointment],LoadDate)  
-						VALUES(ID,PatientPK,PatientID,Emr,Project,SiteCode,FacilityName,VisitID,VisitDate,EncounterId,TracingType,TracingOutcome,AttemptNumber,IsFinalTrace,TrueStatus,CauseOfDeath,Comments,BookingDate,[Date_Created],[Date_Last_Modified],RecordUUID,voided   ,[DatePromisedToCome],[ReasonForMissedAppointment],[DateOfMissedAppointment],Getdate())
+						INSERT(
+								ID
+								,PatientPK
+								,PatientID
+								,Emr
+								,Project
+								,SiteCode
+								,FacilityName
+								,VisitID
+								,VisitDate
+								,EncounterId
+								,TracingType
+								,TracingOutcome
+								,AttemptNumber
+								,IsFinalTrace
+								,TrueStatus
+								,CauseOfDeath
+								,Comments
+								,BookingDate
+								,[Date_Created]
+								,[Date_Last_Modified]
+								,RecordUUID
+								,voided   
+								,VoidingSource
+								,[DatePromisedToCome]
+								,[ReasonForMissedAppointment]
+								,[DateOfMissedAppointment]
+								,LoadDate
+							)  
+						VALUES(
+								ID
+								,PatientPK
+								,PatientID
+								,Emr
+								,Project
+								,SiteCode
+								,FacilityName
+								,VisitID
+								,VisitDate
+								,EncounterId
+								,TracingType
+								,TracingOutcome
+								,AttemptNumber
+								,IsFinalTrace
+								,TrueStatus
+								,CauseOfDeath
+								,Comments
+								,BookingDate
+								,[Date_Created]
+								,[Date_Last_Modified]
+								,RecordUUID
+								,voided   
+								,VoidingSource
+								,[DatePromisedToCome]
+								,[ReasonForMissedAppointment]
+								,[DateOfMissedAppointment]
+								,Getdate()
+							)
 				
 					WHEN MATCHED THEN
 						UPDATE SET 	
@@ -73,5 +158,9 @@ BEGIN
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
+				INSERT INTO [ODS_Logs].[dbo].[CT_DefaulterTracingCount_Log]([SiteCode],[CreatedDate],[DefaulterTracingCount])
+				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DefaulterTracingCount 
+				FROM [ODS].[dbo].CT_DefaulterTracing
+				GROUP BY SiteCode;
 
 	END
