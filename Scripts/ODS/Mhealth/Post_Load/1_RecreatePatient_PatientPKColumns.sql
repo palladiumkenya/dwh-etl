@@ -8,7 +8,7 @@ BEGIN
 		BEGIN
 			  IF  NOT EXISTS (SELECT *					/* If above condition is met, check if Ushauri_Patient exists. If it exists escape. If it doesn't exist create it*/
 							 FROM   INFORMATION_SCHEMA.COLUMNS
-							 WHERE  TABLE_NAME = 'Ushauri_Patient'
+							 WHERE  TABLE_NAME = 'Mhealth_Ushauri_Patient'
 							 AND COLUMN_NAME = 'UshauriPatientPK')
 
 					BEGIN
