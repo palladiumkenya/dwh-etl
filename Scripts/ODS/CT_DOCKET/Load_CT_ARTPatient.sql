@@ -27,10 +27,10 @@ BEGIN
 										,PA.[ExitReason]
 										,PA.[ExitDate]
 										,P.[Emr]
-										,CASE P.[Project] 
-												WHEN 'I-TECH' THEN 'Kenya HMIS II' 
+										,CASE P.[Project]
+												WHEN 'I-TECH' THEN 'Kenya HMIS II'
 												WHEN 'HMIS' THEN 'Kenya HMIS II'
-												ELSE P.[Project] 
+												ELSE P.[Project]
 										END AS [Project]
 										,PA.[DOB]
 										,PA.[PreviousARTUse]
@@ -41,38 +41,38 @@ BEGIN
 										,GETDATE () AS DateAsOf
 										,PA.RecordUUID
 										,PA.voided
-										 ,VoidingSource = Case 
+										 ,VoidingSource = Case
 															when PA.voided = 1 Then 'Source'
 															Else Null
-														END 
-						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-							INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID 
-							INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0 
-							INNER JOIN (SELECT 
+														END
+						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+							INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract](NoLock) PA ON PA.[PatientId]= P.ID
+							INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+							INNER JOIN (SELECT
 												a.PatientPID
 												,c.code
 												,Max(b.ID) As MaxID
 												,Max(cast(b.created as date))MaxCreated
 												FROM [DWAPICentral].[dbo].[PatientExtract]  a  with (NoLock)
-													INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] b with(NoLock) ON b.[PatientId]= a.ID 
-													INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0 
+													INNER JOIN [DWAPICentral].[dbo].[PatientArtExtract] b with(NoLock) ON b.[PatientId]= a.ID
+													INNER JOIN [DWAPICentral].[dbo].[Facility] c with (NoLock)  ON a.[FacilityId] = c.Id AND c.Voided=0
 												GROUP BY	a.PatientPID
 															,c.code
 										)tn
-							ON	P.PatientPID = tn.PatientPID and 
-								F.code = tn.code and 
+							ON	P.PatientPID = tn.PatientPID and
+								F.code = tn.code and
 								 PA.ID = tn.MaxID and
 								cast(PA.Created as date) = tn.MaxCreated
-						WHERE p.gender!='Unknown' AND F.code >0) AS b	
+						WHERE p.gender!='Unknown' AND F.code >0) AS b
 						ON(
 							a.PatientPK  = b.PatientPK and
 							a.SiteCode = b.SiteCode and
 							a.lastvisit = b.lastvisit and
-							a.voided   = b.voided 				
-						
+							a.voided   = b.voided
+
 						)
-					
-					WHEN NOT MATCHED THEN 
+
+					WHEN NOT MATCHED THEN
 
 						INSERT(
 							  ID
@@ -115,7 +115,7 @@ BEGIN
 							  ,VoidingSource
 							  ,LoadDate
 							 )
-							   
+
 						VALUES(
 								ID
 								,PatientID
@@ -159,10 +159,10 @@ BEGIN
 							)
 
 					WHEN MATCHED THEN
-						UPDATE SET 
+						UPDATE SET
 								a.PatientID					=b.PatientID,
 								a.[AgeEnrollment]			=b.[AgeEnrollment],
-								a.[AgeARTStart]				=b.[AgeARTStart],	
+								a.[AgeARTStart]				=b.[AgeARTStart],
 								a.[AgeLastVisit]			=b.[AgeLastVisit],
 								a.[FacilityName]			=b.[FacilityName],
 								a.[RegistrationDate]		=b.[RegistrationDate],
@@ -174,15 +174,15 @@ BEGIN
 								a.[StartARTAtThisFacility]	=b.[StartARTAtThisFacility],
 								a.[StartRegimen]			=b.[StartRegimen],
 								a.[StartRegimenLine]		=b.[StartRegimenLine],
-								a.[LastARTDate]				=b.[LastARTDate],	
-								a.[LastRegimen]				=b.[LastRegimen],	
-								a.[LastRegimenLine]			=b.[LastRegimenLine],	
+								a.[LastARTDate]				=b.[LastARTDate],
+								a.[LastRegimen]				=b.[LastRegimen],
+								a.[LastRegimenLine]			=b.[LastRegimenLine],
 								a.[Duration]				=b.[Duration],
 								a.[ExpectedReturn]			=b.[ExpectedReturn],
 								a.[Provider]				=b.[Provider],
 								a.[ExitReason]				=b.[ExitReason]	,
 								a.[ExitDate]				=b.[ExitDate],
-								a.[Emr]						=b.[Emr],			
+								a.[Emr]						=b.[Emr],
 								a.[PreviousARTUse]			=b.[PreviousARTUse]	,
 								a.[PreviousARTPurpose]		=b.[PreviousARTPurpose],
 								a.[DateLastUsed]			=b.[DateLastUsed],
@@ -192,9 +192,9 @@ BEGIN
 								a.RecordUUID				=b.RecordUUID,
 								a.voided					=b.voided;
 
-			INSERT INTO  [ODS_logs].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
-			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount 
-			FROM [ODS].[dbo].[CT_ARTPatients]
-			group by SiteCode
+			-- INSERT INTO  [ODS_logs].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
+			-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount
+			-- FROM [ODS].[dbo].[CT_ARTPatients]
+			-- group by SiteCode
 
 	END

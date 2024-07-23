@@ -1,5 +1,5 @@
 BEGIN ;
-    
+
 DECLARE @MaxAdverseEventStartDate DATETIME,
         @AdverseEventStartDate    DATETIME,
         @MaxCreatedDate           DATETIME
@@ -46,10 +46,10 @@ using(SELECT DISTINCT P.[patientcccnumber] AS PatientID,
                         PA.[date_last_modified],
                         PA.recorduuid,
                         PA.voided,
-			VoidingSource = Case 
+			VoidingSource = Case
 						when PA.voided = 1 Then 'Source'
 						Else Null
-					END 
+					END
         FROM   [DWAPICentral].[dbo].[patientextract](nolock) P
                 INNER JOIN [DWAPICentral].[dbo].patientadverseeventextract(nolock) PA
                     ON PA.[patientid] = P.id
@@ -72,12 +72,12 @@ using(SELECT DISTINCT P.[patientcccnumber] AS PatientID,
 										,InnerPA.AdverseEvent
 										,VisitDate
 										,InnerPA.voided
-							) tm 
-				ON	f.code = tm.[SiteCode] and 
-					p.PatientPID=tm.PatientPK and 
+							) tm
+				ON	f.code = tm.[SiteCode] and
+					p.PatientPID=tm.PatientPK and
 					PA.VisitDate = tm.VisitDate and
 					cast(PA.created as date) = tm.Maxdatecreated and
-					PA.ID = tm.Max_ID	
+					PA.ID = tm.Max_ID
 
 
 	) AS b
@@ -85,7 +85,7 @@ ON(	 a.sitecode = b.sitecode AND
      a.patientpk = b.patientpk AND
 	 a.AdverseEvent = b.AdverseEvent AND
      a.visitdate = b.visitdate AND
-     a.voided = b.voided 
+     a.voided = b.voided
 	)
 WHEN NOT matched THEN
     INSERT(patientid,
@@ -155,14 +155,14 @@ SET    loadenddatetime = Getdate()
 WHERE  maxadverseeventstartdate = @AdverseEventStartDate;
 
 
- INSERT INTO [ODS_Logs].[dbo].[ct_adverseeventcount_log]
-                ([sitecode],
-                 [createddate],
-                 [adverseeventcount])
-    SELECT sitecode,
-           Getdate(),
-           Count(Concat(sitecode, patientpk)) AS AdverseEventCount
-    FROM   [ODS].[dbo].[ct_adverseevents]
-    GROUP  BY sitecode;
-	
-END 
+--  INSERT INTO [ODS_Logs].[dbo].[ct_adverseeventcount_log]
+--                 ([sitecode],
+--                  [createddate],
+--                  [adverseeventcount])
+--     SELECT sitecode,
+--            Getdate(),
+--            Count(Concat(sitecode, patientpk)) AS AdverseEventCount
+--     FROM   [ODS].[dbo].[ct_adverseevents]
+--     GROUP  BY sitecode;
+
+END

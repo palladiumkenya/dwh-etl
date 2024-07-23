@@ -3,10 +3,10 @@ BEGIN
 
 		DECLARE	@MaxCovid19AssessmentDate_Hist			DATETIME,
 				    @Covid19AssessmentDate					DATETIME
-				
+
 		SELECT @MaxCovid19AssessmentDate_Hist =  MAX(MaxCovid19AssessmentDate) FROM [ODS_Logs].[dbo].[CT_Covid_Log]  (NoLock)
-		SELECT @Covid19AssessmentDate = MAX(Covid19AssessmentDate) FROM [DWAPICentral].[dbo].[CovidExtract](NoLock)		
-					
+		SELECT @Covid19AssessmentDate = MAX(Covid19AssessmentDate) FROM [DWAPICentral].[dbo].[CovidExtract](NoLock)
+
 		INSERT INTO  [ODS_Logs].[dbo].[CT_Covid_Log](MaxCovid19AssessmentDate,LoadStartDateTime)
 		VALUES(@MaxCovid19AssessmentDate_Hist,GETDATE())
 
@@ -17,7 +17,7 @@ BEGIN
 							,P.[Emr]
 							,P.[Project]
 							,F.Code AS SiteCode
-							,F.Name AS FacilityName 
+							,F.Name AS FacilityName
 							,C.[VisitID]
 							,Cast(C.[Covid19AssessmentDate] as Date)[Covid19AssessmentDate]
 							,[ReceivedCOVID19Vaccine]
@@ -55,14 +55,14 @@ BEGIN
 							,C.[Date_Last_Modified]
 							,C.RecordUUID
 							,C.voided
-							,VoidingSource = Case 
+							,VoidingSource = Case
 													when C.voided = 1 Then 'Source'
 													Else Null
-											END 
-						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-							INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID 
+											END
+						FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+							INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) C  ON C.[PatientId]= P.ID
 							INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id  AND F.Voided=0
-							INNER JOIN (SELECT 
+							INNER JOIN (SELECT
 												a.PatientPID
 												,f.code
 												,InnerC.visitID
@@ -71,7 +71,7 @@ BEGIN
 												,Max(InnerC.ID) As MaxID
 												,Max(cast(InnerC.created as date))MaxCreated
 												FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) a
-													INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) InnerC  ON InnerC.[PatientId]= a.ID 
+													INNER JOIN [DWAPICentral].[dbo].[CovidExtract](NoLock) InnerC  ON InnerC.[PatientId]= a.ID
 													INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON a.[FacilityId] = F.Id  AND F.Voided=0
 												GROUP BY	a.PatientPID
 															,f.code
@@ -79,21 +79,21 @@ BEGIN
 															,InnerC.Covid19AssessmentDate
 															,InnerC.voided
 										)tn
-							ON	P.PatientPID = tn.PatientPID and 
-								F.code = tn.code and 
+							ON	P.PatientPID = tn.PatientPID and
+								F.code = tn.code and
 								 C.ID = tn.MaxID and
 								cast(C.Created as date) = tn.MaxCreated
-						WHERE P.gender != 'Unknown' AND F.code >0) AS b 
+						WHERE P.gender != 'Unknown' AND F.code >0) AS b
 						ON(
 							 a.SiteCode = b.SiteCode
-							and  a.PatientPK  = b.PatientPK 
+							and  a.PatientPK  = b.PatientPK
 							and a.visitID = b.visitID
 							AND a.Covid19AssessmentDate = b.Covid19AssessmentDate
 							and a.voided   = b.voided
 							--and a.ID = b.ID
 						)
 
-					WHEN NOT MATCHED THEN 
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,PatientPK
@@ -140,7 +140,7 @@ BEGIN
 								,voided
 								,VoidingSource
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,PatientPK
@@ -188,10 +188,10 @@ BEGIN
 								,VoidingSource
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 						
-						a.PatientID						=b.PatientID,					
+						UPDATE SET
+						a.PatientID						=b.PatientID,
 						a.DateGivenFirstDose				=b.DateGivenFirstDose,
 						a.FirstDoseVaccineAdministered		=b.FirstDoseVaccineAdministered,
 						a.DateGivenSecondDose				=b.DateGivenSecondDose,
@@ -225,16 +225,16 @@ BEGIN
 						a.[Date_Last_Modified]				=b.[Date_Last_Modified],
 						a.RecordUUID			=b.RecordUUID,
 						a.voided		=b.voided;
-											
+
 
 				UPDATE [ODS_Logs].[dbo].[CT_Covid_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxCovid19AssessmentDate = @MaxCovid19AssessmentDate_Hist;
 
-				INSERT INTO [ODS_Logs].[dbo].[CT_CovidCount_Log]([SiteCode],[CreatedDate],[CovidCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS CovidCount 
-				FROM [ODS].[dbo].[CT_Covid] 
-				GROUP BY SiteCode;
+				-- INSERT INTO [ODS_Logs].[dbo].[CT_CovidCount_Log]([SiteCode],[CreatedDate],[CovidCount])
+				-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS CovidCount
+				-- FROM [ODS].[dbo].[CT_Covid]
+				-- GROUP BY SiteCode;
 
 
 	END

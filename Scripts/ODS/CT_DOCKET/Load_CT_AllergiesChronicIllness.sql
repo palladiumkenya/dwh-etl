@@ -1,9 +1,9 @@
 
 BEGIN
 
-	--;with cte AS ( Select            
-	--		P.PatientPID,            
-	--		ACI.PatientId,            
+	--;with cte AS ( Select
+	--		P.PatientPID,
+	--		ACI.PatientId,
 	--		F.code,
 	--		ACI.VisitID,
 	--		ACI.VisitDate,
@@ -13,24 +13,24 @@ BEGIN
 	--		INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID AND ACI.Voided = 0
 	--		INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 
-	--		WHERE P.gender != 'Unknown')      
-		
+	--		WHERE P.gender != 'Unknown')
+
 	--		delete ACI from  [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] (NoLock) ACI
-	--		inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON ACI.[PatientId]= P.ID AND ACI.Voided = 0       
-	--		inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0       
-	--		inner join cte on ACI.PatientId = cte.PatientId  
-	--			and cte.Created = ACI.created 
-	--			and cte.Code =  f.Code     
+	--		inner join [DWAPICentral].[dbo].[PatientExtract](NoLock) P ON ACI.[PatientId]= P.ID AND ACI.Voided = 0
+	--		inner join [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
+	--		inner join cte on ACI.PatientId = cte.PatientId
+	--			and cte.Created = ACI.created
+	--			and cte.Code =  f.Code
 	--			and cte.VisitID = ACI.VisitID
 	--			and cte.VisitDate = ACI.VisitDate
 	--		where  Row_Num  > 1;
- 
+
 	 DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
-				
+
 			SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log]  (NoLock)
-			SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] WITH (NOLOCK) 					
-					
+			SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract] WITH (NOLOCK)
+
 			INSERT INTO  [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log](MaxVisitDate,LoadStartDateTime)
 			VALUES(@VisitDate,GETDATE())
 
@@ -69,13 +69,13 @@ BEGIN
 						,ACI.[Date_Created]
 						,ACI.[Date_Last_Modified]
 						,ACI.RecordUUID,ACI.voided
-						,VoidingSource = Case 
+						,VoidingSource = Case
 													when ACI.voided = 1 Then 'Source'
 													Else Null
-											END 
+											END
 						 ,ACI.Controlled
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-					INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID 
+					INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) ACI ON ACI.[PatientId] = P.ID
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 					INNER JOIN (
 								SELECT F.code as SiteCode
@@ -86,33 +86,33 @@ BEGIN
 										,max(InnerACI.ID) As Max_ID
 										,MAX(cast(InnerACI.created as date)) AS Maxdatecreated
 								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-									INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) InnerACI ON InnerACI.[PatientId] = P.ID 
+									INNER JOIN [DWAPICentral].[dbo].[AllergiesChronicIllnessExtract](NoLock) InnerACI ON InnerACI.[PatientId] = P.ID
 									INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 								GROUP BY F.code
 										,p.[PatientPID]
 										,InnerACI.visitDate
 										,InnerACI.VisitID
 										,InnerACI.voided
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								ACI.visitDate = tm.visitDate and 
-								ACI.VisitID = tm.VisitID and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								ACI.visitDate = tm.visitDate and
+								ACI.VisitID = tm.VisitID and
 								ACI.voided = tm.voided and
 								cast(ACI.created as date) = tm.Maxdatecreated and
 								ACI.ID = tm.Max_ID
 
 					WHERE P.gender != 'Unknown' AND F.code >0
-			) AS b 
+			) AS b
 						ON(
-						 a.PatientPK  = b.PatientPK 
+						 a.PatientPK  = b.PatientPK
 						and a.SiteCode = b.SiteCode
 						and a.VisitDate = b.VisitDate
 						and a.VisitID = b.VisitID
 						and a.voided   = b.voided
 						)
 
-					WHEN NOT MATCHED THEN 
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,AllergiesChronicIllnessUnique_ID
@@ -146,7 +146,7 @@ BEGIN
 								,VoidingSource
 								,Controlled
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,ID
@@ -181,10 +181,10 @@ BEGIN
 								,Controlled
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 
-							a.PatientID				=b.PatientID,							
+						UPDATE SET
+							a.PatientID				=b.PatientID,
 							a.ChronicIllness		=b.ChronicIllness,
 							a.ChronicOnsetDate		=b.ChronicOnsetDate,
 							a.knownAllergies		=b.knownAllergies,
@@ -205,16 +205,16 @@ BEGIN
 							a.RecordUUID			=b.RecordUUID,
 							a.voided		=b.voided,
 							a.Controlled    = b.Controlled;
-												
-					
+
+
 					UPDATE [ODS_logs].[dbo].[CT_AllergiesChronicIllness_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 
-					INSERT INTO [ODS_logs].[dbo].[CT_AllergiesChronicIllnessCount_Log]([SiteCode],[CreatedDate],[AllergiesChronicIllnessCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount 
-					FROM [ODS].[dbo].[CT_AllergiesChronicIllness] 
-					GROUP BY SiteCode;
-					
+					-- INSERT INTO [ODS_logs].[dbo].[CT_AllergiesChronicIllnessCount_Log]([SiteCode],[CreatedDate],[AllergiesChronicIllnessCount])
+					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount
+					-- FROM [ODS].[dbo].[CT_AllergiesChronicIllness]
+					-- GROUP BY SiteCode;
+
 
 	END

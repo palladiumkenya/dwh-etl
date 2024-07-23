@@ -4,10 +4,10 @@ BEGIN
 
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
-				
+
 		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_Logs].[dbo].[CT_Otz_Log]  (NoLock)
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[OtzExtract](NoLock)
-					
+
 			INSERT INTO  [ODS_Logs].[dbo].[CT_Otz_Log](MaxVisitDate,LoadStartDateTime)
 			VALUES(@MaxVisitDate_Hist,GETDATE())
 
@@ -39,12 +39,12 @@ BEGIN
 							,OE.[Date_Last_Modified]
 							,OE.RecordUUID
 							,OE.voided
-							,VoidingSource = Case 
+							,VoidingSource = Case
 													when OE.voided = 1 Then 'Source'
 													Else Null
-											END 
+											END
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-						INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID 
+						INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) OE ON OE.[PatientId] = P.ID
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 						INNER JOIN (
 										SELECT  F.code as SiteCode
@@ -55,33 +55,33 @@ BEGIN
 												,max(InnerOE.ID) As maxID
 												,MAX(InnerOE.created )AS Maxdatecreated
 										FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-											INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) InnerOE ON InnerOE.[PatientId] = P.ID 
+											INNER JOIN [DWAPICentral].[dbo].[OtzExtract](NoLock) InnerOE ON InnerOE.[PatientId] = P.ID
 											INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 										GROUP BY F.code
 												,p.[PatientPID]
 												,InnerOE.voided
 												,InnerOE.VisitDate
 												,InnerOE.VisitID
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								OE.voided = tm.voided and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								OE.voided = tm.voided and
 								OE.created = tm.Maxdatecreated and
 								OE.ID =tm.maxID  and
 								OE.VisitDate = tm.VisitDate
 
 					WHERE P.gender != 'Unknown' AND F.code >0
-				) AS b	
+				) AS b
 						ON(
-							 a.PatientPK  = b.PatientPK 
+							 a.PatientPK  = b.PatientPK
 							and a.SiteCode = b.SiteCode
 							and a.VisitID	=b.VisitID
 							and a.VisitDate	=b.VisitDate
 							and a.voided   = b.voided
 							--and a.ID =b.ID
 						)
-					
-					WHEN NOT MATCHED THEN 
+
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,PatientID
@@ -106,7 +106,7 @@ BEGIN
 								,voided
 								,VoidingSource
 								,LoadDate
-							) 
+							)
 						VALUES(
 								ID
 								,PatientID
@@ -132,10 +132,10 @@ BEGIN
 								,VoidingSource
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 						
-						a.PatientID						=b.PatientID,						
+						UPDATE SET
+						a.PatientID						=b.PatientID,
 						a.TransferInStatus				=b.TransferInStatus,
 						a.ModulesPreviouslyCovered		=b.ModulesPreviouslyCovered,
 						a.ModulesCompletedToday			=b.ModulesCompletedToday,
@@ -148,16 +148,16 @@ BEGIN
 						 a.OTZEnrollmentDate			=b.OTZEnrollmentDate,
 						a.voided						=b.voided
 						;
-						
+
 
 					UPDATE [ODS_Logs].[dbo].[CT_Otz_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-					INSERT INTO [ODS_Logs].[dbo].[CT_OtzCount_Log]([SiteCode],[CreatedDate],[OtzCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS OtzCount 
-					FROM [ODS].[dbo].[CT_Otz]
-					GROUP BY SiteCode;
+					-- INSERT INTO [ODS_Logs].[dbo].[CT_OtzCount_Log]([SiteCode],[CreatedDate],[OtzCount])
+					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS OtzCount
+					-- FROM [ODS].[dbo].[CT_Otz]
+					-- GROUP BY SiteCode;
 
-			
+
 	END

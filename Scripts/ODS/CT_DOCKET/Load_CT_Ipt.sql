@@ -4,11 +4,11 @@ BEGIN
 
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
-				
+
 		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_Ipt_Log]  (NoLock);
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[IptExtract](NoLock);
-	
-					
+
+
 		INSERT INTO  [ODS_logs].[dbo].[CT_Ipt_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@VisitDate,GETDATE());
 
@@ -55,17 +55,17 @@ BEGIN
 						,IE.DateOfDiscontinuation
 					   ,IE.RecordUUID
 					   ,IE.voided
-					   ,VoidingSource = Case 
+					   ,VoidingSource = Case
 					   						when IE.voided = 1 Then 'Source'
 											Else Null
-										END 
-						,IE.[Adherence]      
+										END
+						,IE.[Adherence]
 						,IE.Hepatoxicity
 						,IE.PeripheralNeruopath
 						,IE.Rash
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-						INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID 
-						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
+						INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) IE ON IE.[PatientId] = P.ID
+						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 						INNER JOIN (
 								SELECT	F.code as SiteCode
 										,p.[PatientPID] as PatientPK
@@ -75,30 +75,30 @@ BEGIN
 										,max(InnerIE.ID) As Max_ID
 										,MAX(cast(InnerIE.created as date)) AS Maxdatecreated
 								FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-									INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) InnerIE ON InnerIE.[PatientId] = P.ID 
-									INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0 
+									INNER JOIN [DWAPICentral].[dbo].[IptExtract](NoLock) InnerIE ON InnerIE.[PatientId] = P.ID
+									INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 								GROUP BY F.code
 										,p.[PatientPID]
 										--,visitID
 										,VisitDate
 										,InnerIE.voided
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
 								IE.VisitDate = tm.VisitDate and
 								cast(IE.created as date) = tm.Maxdatecreated and
 								IE.ID = tm.Max_ID
 				WHERE P.gender != 'Unknown'  AND F.code >0
-			) AS b 
+			) AS b
 						ON(
-						 a.PatientPK	= b.PatientPK 
+						 a.PatientPK	= b.PatientPK
 						and a.SiteCode	= b.SiteCode
 						and a.VisitID	=b.VisitID
 						and a.VisitDate	=b.VisitDate
 						and a.voided	= b.voided
 						)
-					
-					WHEN NOT MATCHED THEN 
+
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,PatientID
@@ -141,7 +141,7 @@ BEGIN
 								,PeripheralNeruopath
 								,Rash
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,PatientID
@@ -185,10 +185,10 @@ BEGIN
 								,Rash
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 
-						a.PatientID				=b.PatientID,						
+						UPDATE SET
+						a.PatientID				=b.PatientID,
 						a.OnTBDrugs				=b.OnTBDrugs,
 						a.OnIPT					=b.OnIPT,
 						a.EverOnIPT				=b.EverOnIPT,
@@ -219,14 +219,14 @@ BEGIN
 						,a.Hepatoxicity         = b.Hepatoxicity
 						,a.PeripheralNeruopath   = b.PeripheralNeruopath
 						,a.Rash          = b.Rash;
-						
+
 
 					UPDATE [ODS_logs].[dbo].[CT_Ipt_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
-				
-					INSERT INTO [ODS_logs].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS IptCount 
-					FROM [ODS].[dbo].[CT_Ipt] 
-					GROUP BY SiteCode;
+
+					-- INSERT INTO [ODS_logs].[dbo].[CT_IptCount_Log]([SiteCode],[CreatedDate],[IptCount])
+					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS IptCount
+					-- FROM [ODS].[dbo].[CT_Ipt]
+					-- GROUP BY SiteCode;
 END

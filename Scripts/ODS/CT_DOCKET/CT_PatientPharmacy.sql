@@ -1,21 +1,21 @@
 
 BEGIN
-				
+
 			DECLARE @MaxDispenseDate_Hist			DATETIME,
 				  @DispenseDate					DATETIME,
 				  @MaxCreatedDate				DATETIME
 
 			SELECT @MaxDispenseDate_Hist =  MAX(MaxDispenseDate) FROM [ODS_logs].[dbo].[CT_PharmacyVisit_Log]  (NoLock)
-			SELECT @DispenseDate = MAX(DispenseDate) FROM [DWAPICentral].[dbo].[PatientPharmacyExtract] WITH (NOLOCK) 
-							
+			SELECT @DispenseDate = MAX(DispenseDate) FROM [DWAPICentral].[dbo].[PatientPharmacyExtract] WITH (NOLOCK)
+
 			INSERT INTO  [ODS_logs].[dbo].[CT_PharmacyVisit_Log](MaxDispenseDate,LoadStartDateTime)
 			VALUES(@DispenseDate,GETDATE())
 
 			MERGE [ODS].[dbo].[CT_PatientPharmacy] AS a
-				USING(SELECT Distinct 
+				USING(SELECT Distinct
 							P.[PatientCccNumber] AS PatientID
 							,P.[PatientPID] AS PatientPK
-							,F.[Name] AS FacilityName 
+							,F.[Name] AS FacilityName
 							,F.Code AS SiteCode
 							,PP.[VisitID] As VisitID
 							,PP.[Drug] As Drug
@@ -26,13 +26,13 @@ BEGIN
 							,PP.[PeriodTaken] As PeriodTaken
 							,PP.[ProphylaxisType] As ProphylaxisType
 							,P.[Emr] As Emr
-							,CASE P.[Project] 
-								WHEN 'I-TECH'	THEN 'Kenya HMIS II' 
+							,CASE P.[Project]
+								WHEN 'I-TECH'	THEN 'Kenya HMIS II'
 								WHEN 'HMIS'		THEN 'Kenya HMIS II'
-								ELSE P.[Project] 
-							END AS [Project] 
+								ELSE P.[Project]
+							END AS [Project]
 							,PP.[Voided] As Voided
-							,VoidingSource = Case 
+							,VoidingSource = Case
 										when PP.voided = 1 Then 'Source'
 										Else Null
 									 END
@@ -43,13 +43,13 @@ BEGIN
 							,PP.RegimenChangedSwitched As RegimenChangedSwitched
 							,PP.RegimenChangeSwitchReason As RegimenChangeSwitchReason
 							,PP.StopRegimenReason As StopRegimenReason
-							,PP.StopRegimenDate As StopRegimenDate				  
+							,PP.StopRegimenDate As StopRegimenDate
 							,PP.ID
 							,PP.[Date_Created]
 							,PP.[Date_Last_Modified]
 							,PP.RecordUUID
-						FROM [DWAPICentral].[dbo].[PatientExtract] P 
-							INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID 
+						FROM [DWAPICentral].[dbo].[PatientExtract] P
+							INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract] PP ON PP.[PatientId]= P.ID
 							INNER JOIN [DWAPICentral].[dbo].[Facility] F ON P.[FacilityId] = F.Id AND F.Voided=0
 							INNER JOIN (
 										SELECT  F.code as SiteCode
@@ -58,28 +58,28 @@ BEGIN
 												,InnerPP.DispenseDate
 												,max(InnerPP.ID) As maxID
 												,MAX(InnerPP.created )AS Maxdatecreated
-										FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
-											INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract]  InnerPP WITH(NoLock)  ON InnerPP.[PatientId]= P.ID 
+										FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)
+											INNER JOIN [DWAPICentral].[dbo].[PatientPharmacyExtract]  InnerPP WITH(NoLock)  ON InnerPP.[PatientId]= P.ID
 											INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
 										GROUP BY F.code,p.[PatientPID],InnerPP.voided,InnerPP.DispenseDate
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								PP.voided = tm.voided and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								PP.voided = tm.voided and
 								PP.created = tm.Maxdatecreated and
 								PP.ID =tm.maxID  and
 								PP.DispenseDate = tm.DispenseDate
 
 						WHERE p.gender!='Unknown' AND F.code >0
-					) AS b 
+					) AS b
 						ON(
 							 a.SiteCode		= b.SiteCode and
 							 a.PatientPK	= b.PatientPK and
 							 a.DispenseDate = b.DispenseDate and
-							 a.voided		= b.voided					
+							 a.voided		= b.voided
 						)
 
-			WHEN NOT MATCHED THEN 
+			WHEN NOT MATCHED THEN
 					INSERT(
 							ID
 							,PatientID
@@ -107,7 +107,7 @@ BEGIN
 							,voided
 							,VoidingSource
 							,LoadDate
-						) 
+						)
 					VALUES(
 							ID
 							,PatientID
@@ -136,9 +136,9 @@ BEGIN
 							,VoidingSource
 							,Getdate()
 						)
-			
+
 			WHEN MATCHED THEN
-					UPDATE SET 
+					UPDATE SET
 						a.PatientID					=b.PatientID,
 						a.FacilityName				=b.FacilityName,
 						a.PeriodTaken				=b.PeriodTaken,
@@ -152,16 +152,16 @@ BEGIN
 						a.RecordUUID				=b.RecordUUID,
 						a.voided					=b.voided;
 
-						
+
 				UPDATE [ODS_logs].[dbo].[CT_PharmacyVisit_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxDispenseDate = @DispenseDate;
 
 
-			INSERT INTO [ODS_logs].[dbo].[CT_PatientPharmacyCount_Log] ([SiteCode],[CreatedDate],[PatientPharmacyCount])
-			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount 
-			FROM [ODS].[dbo].[CT_PatientPharmacy] 
-			GROUP BY SiteCode;
+			-- INSERT INTO [ODS_logs].[dbo].[CT_PatientPharmacyCount_Log] ([SiteCode],[CreatedDate],[PatientPharmacyCount])
+			-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount
+			-- FROM [ODS].[dbo].[CT_PatientPharmacy]
+			-- GROUP BY SiteCode;
 
- 
+
 	END

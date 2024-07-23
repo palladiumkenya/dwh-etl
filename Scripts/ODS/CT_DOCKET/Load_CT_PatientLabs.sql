@@ -2,13 +2,13 @@ BEGIN
 
 		 DECLARE @MaxOrderedbyDate_Hist			DATETIME,
 				   @OrderedbyDate					DATETIME
-				
+
 		SELECT @MaxOrderedbyDate_Hist =  MAX(MaxOrderedbyDate) FROM [ODS_Logs].[dbo].[CT_PatientLabs_Log]  (NoLock)
-		SELECT  @OrderedbyDate = MAX(OrderedbyDate) FROM [DWAPICentral].[dbo].[PatientLaboratoryExtract] WITH (NOLOCK) 		
-					
+		SELECT  @OrderedbyDate = MAX(OrderedbyDate) FROM [DWAPICentral].[dbo].[PatientLaboratoryExtract] WITH (NOLOCK)
+
 		INSERT INTO  [ODS_Logs].[dbo].[CT_PatientLabs_Log](MaxOrderedbyDate,LoadStartDateTime)
 		VALUES( @OrderedbyDate,GETDATE())
-	
+
 	       ---- Refresh [ODS].[dbo].[CT_PatientLabs]
 			MERGE [ODS].[dbo].[CT_PatientLabs] AS a
 				USING(SELECT distinct
@@ -23,25 +23,25 @@ BEGIN
 							 ,PL.[EnrollmentTest]
 							 ,PL.[TestResult]
 							 ,P.[Emr]
-							,CASE P.[Project] 
-									WHEN 'I-TECH' THEN 'Kenya HMIS II' 
+							,CASE P.[Project]
+									WHEN 'I-TECH' THEN 'Kenya HMIS II'
 									WHEN 'HMIS' THEN 'Kenya HMIS II'
-									ELSE P.[Project] 
-							END AS [Project] 
+									ELSE P.[Project]
+							END AS [Project]
 							,PL.DateSampleTaken
 							,PL.SampleType
-							,p.ID 
+							,p.ID
 							,reason
 							,PL.[Date_Created]
 							,PL.[Date_Last_Modified]
 							,PL.RecordUUID
 							,PL.voided
-							,VoidingSource = Case 
+							,VoidingSource = Case
 													when PL.voided = 1 Then 'Source'
 													Else Null
-											END 
-					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P 
-					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID 
+											END
+					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
+					INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract](NoLock) PL ON PL.[PatientId]= P.ID
 					INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided=0
 					INNER JOIN (
 								SELECT F.code as SiteCode
@@ -52,8 +52,8 @@ BEGIN
 										,InnerPL.voided
 										,max(InnerPL.ID) As Max_ID
 										,MAX(cast(InnerPL.created as date)) AS Maxdatecreated
-								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
-									INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract] InnerPL WITH(NoLock)  ON InnerPL.[PatientId]= P.ID 
+								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)
+									INNER JOIN [DWAPICentral].[dbo].[PatientLaboratoryExtract] InnerPL WITH(NoLock)  ON InnerPL.[PatientId]= P.ID
 									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
 								GROUP BY F.code
 										,p.[PatientPID]
@@ -61,25 +61,25 @@ BEGIN
 										,InnerPL.TestName
 										,InnerPL.OrderedbyDate
 										,InnerPL.voided
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								PL.TestResult = tm.TestResult and 
-								PL.TestName = tm.TestName and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								PL.TestResult = tm.TestResult and
+								PL.TestName = tm.TestName and
 								PL.OrderedbyDate = tm.OrderedbyDate and
 								PL.voided = tm.voided and
 								cast(PL.created as date) = tm.Maxdatecreated and
 								PL.ID = tm.Max_ID
 							WHERE p.gender!='Unknown'
-					) AS b 
+					) AS b
 						ON(
-						 a.PatientPK  = b.PatientPK 
+						 a.PatientPK  = b.PatientPK
 						and a.SiteCode = b.SiteCode
 						and a.VisitID		=b.VisitID
 						and a.OrderedbyDate	=b.OrderedbyDate
 						and a.voided = b.voided
-						and  a.TestResult =  b.TestResult					
-						and  a.TestName =  b.TestName 
+						and  a.TestResult =  b.TestResult
+						and  a.TestName =  b.TestName
 						and a.voided   = b.voided
 						--and a.[Date_Created] = b.[Date_Created]
 						--and a.RecordUUID = b.RecordUUID
@@ -87,8 +87,8 @@ BEGIN
 						--and a.[Date_Last_Modified] = b.[Date_Last_Modified]
 						)
 
-												
-					WHEN NOT MATCHED THEN 
+
+					WHEN NOT MATCHED THEN
 
 						INSERT(
 								ID
@@ -113,7 +113,7 @@ BEGIN
 								,voided
 								,VoidingSource
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,PatientID
@@ -140,7 +140,7 @@ BEGIN
 							)
 
 					WHEN MATCHED THEN
-						UPDATE SET 
+						UPDATE SET
 							a.[PatientID]			= b.[PatientID],
 							a.[FacilityName]		= b.[FacilityName],
 							a.[VisitID]				= b.[VisitID],
@@ -158,17 +158,17 @@ BEGIN
 							a.[Date_Created]		= b.[Date_Created],
 							a.[RecordUUID]			= b.[RecordUUID],
 							a.[voided]				= b.[voided];
-				
+
 
 					UPDATE [ODS_Logs].[dbo].[CT_PatientLabs_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxOrderedbyDate =  @OrderedbyDate;
 
 
-					INSERT INTO [ODS_logs].[dbo].[CT_PatientLabsCount_Log]([SiteCode],[CreatedDate],[PatientLabsCount])
-					SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientLabsCount 
-					FROM [ODS].[dbo].[CT_PatientLabs] 
-					GROUP BY SiteCode;
+					-- INSERT INTO [ODS_logs].[dbo].[CT_PatientLabsCount_Log]([SiteCode],[CreatedDate],[PatientLabsCount])
+					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientLabsCount
+					-- FROM [ODS].[dbo].[CT_PatientLabs]
+					-- GROUP BY SiteCode;
 
 
 	END

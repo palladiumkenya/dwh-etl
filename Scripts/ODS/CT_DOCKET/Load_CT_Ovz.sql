@@ -2,11 +2,11 @@ BEGIN
 
 			DECLARE @MaxVisitDate_Hist			DATETIME,
 				   @VisitDate					DATETIME
-				
+
 		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_Ovc_Log]  (NoLock)
 		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[OvcExtract](NoLock)
 
-					
+
 					INSERT INTO  [ODS_logs].[dbo].[CT_Ovc_Log](MaxVisitDate,LoadStartDateTime)
 					VALUES(@MaxVisitDate_Hist,GETDATE())
 
@@ -33,17 +33,17 @@ BEGIN
 								,OE.[PartnerOfferingOVCServices]
 								,OE.[OVCExitReason]
 								,OE.[ExitDate]
-								,P.ID 
+								,P.ID
 								,OE.[Date_Created]
 								,OE.[Date_Last_Modified]
 								,OE.RecordUUID
 								,OE.voided
-								,VoidingSource = Case 
+								,VoidingSource = Case
 													when OE.voided = 1 Then 'Source'
 													Else Null
-											END 
+											END
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-						INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID 
+						INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) OE ON OE.[PatientId] = P.ID
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 						INNER JOIN (
 										SELECT  F.code as SiteCode
@@ -54,23 +54,23 @@ BEGIN
 												,max(InnerOE.ID) As maxID
 												,MAX(InnerOE.created )AS Maxdatecreated
 										FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-											INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) InnerOE ON InnerOE.[PatientId] = P.ID 
+											INNER JOIN [DWAPICentral].[dbo].[OvcExtract](NoLock) InnerOE ON InnerOE.[PatientId] = P.ID
 											INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 										GROUP BY F.code
 												,p.[PatientPID]
 												,InnerOE.voided
 												,InnerOE.VisitDate
 												,InnerOE.VisitID
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								OE.voided = tm.voided and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								OE.voided = tm.voided and
 								OE.created = tm.Maxdatecreated and
 								OE.ID =tm.maxID  and
 								OE.VisitDate = tm.VisitDate
-					WHERE P.gender != 'Unknown'AND F.code >0 ) AS b 
+					WHERE P.gender != 'Unknown'AND F.code >0 ) AS b
 						ON(
-							 a.PatientPK  = b.PatientPK 
+							 a.PatientPK  = b.PatientPK
 							and a.SiteCode = b.SiteCode
 							and a.VisitID	=b.VisitID
 							and a.VisitDate	=b.VisitDate
@@ -79,7 +79,7 @@ BEGIN
 							--and a.ID = b.ID
 						)
 
-					WHEN NOT MATCHED THEN 
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,PatientID
@@ -103,7 +103,7 @@ BEGIN
 								,voided
 								,VoidingSource
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,PatientID
@@ -128,11 +128,11 @@ BEGIN
 								,VoidingSource
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 
+						UPDATE SET
 						a.PatientID					=b.PatientID,
-						a.FacilityName				=b.FacilityName,						
+						a.FacilityName				=b.FacilityName,
 						a.RelationshipToClient		=b.RelationshipToClient,
 						a.EnrolledinCPIMS			=b.EnrolledinCPIMS,
 						a.CPIMSUniqueIdentifier		=b.CPIMSUniqueIdentifier,
@@ -140,15 +140,15 @@ BEGIN
 						a.OVCExitReason				=b.OVCExitReason,
 						a.[Date_Created]			=b.[Date_Created],
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified];
-					
+
 
 				UPDATE [ODS_logs].[dbo].[CT_Ovc_Log]
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-				INSERT INTO [ODS_logs].[dbo].[CT_OvcCount_Log]([SiteCode],[CreatedDate],[OvcCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS OVCCount 
-				FROM [ODS].[dbo].[CT_Ovc] 
-				GROUP BY SiteCode;
+				-- INSERT INTO [ODS_logs].[dbo].[CT_OvcCount_Log]([SiteCode],[CreatedDate],[OvcCount])
+				-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS OVCCount
+				-- FROM [ODS].[dbo].[CT_Ovc]
+				-- GROUP BY SiteCode;
 
 	END
