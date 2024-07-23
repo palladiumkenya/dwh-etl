@@ -163,11 +163,6 @@ BEGIN
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-				-- INSERT INTO [ODS_logs].[dbo].[CT_DepressionScreeningCount_Log]([SiteCode],[CreatedDate],[DepressionScreeningCount])
-				-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DepressionScreeningCount
-				-- FROM [ODS].[dbo].[CT_DepressionScreening]
-				-- GROUP BY SiteCode;
-
 
 
 	END

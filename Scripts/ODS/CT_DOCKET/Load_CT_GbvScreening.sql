@@ -140,10 +140,5 @@ BEGIN
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-					-- INSERT INTO [ODS_logs].[dbo].[CT_GbvScreeningCount_Log]([SiteCode],[CreatedDate],[GbvScreeningCount])
-					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS GbvScreeningCount
-					-- FROM [ODS].[dbo].[CT_GbvScreening]
-					-- GROUP BY SiteCode;
-
 
 	END

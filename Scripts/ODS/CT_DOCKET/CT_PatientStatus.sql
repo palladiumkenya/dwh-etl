@@ -168,14 +168,4 @@ BEGIN;
 		WHERE
 		  maxexitdate = @ExitDate;
 
-
-      --  INSERT INTO [ODS_logs].[dbo].[CT_PatientStatusCount_Log]
-      --           ([sitecode],
-      --            [createddate],
-      --            [patientstatuscount])
-      --   SELECT sitecode,
-      --         Getdate(),
-      --         Count(Concat(sitecode, patientpk)) AS PatientStatusCount
-      --   FROM   [ODS].[dbo].[ct_patientstatus]
-      --   GROUP  BY sitecode;
 END

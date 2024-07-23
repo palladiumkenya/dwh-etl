@@ -131,10 +131,5 @@ BEGIN
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @VisitDate;
 
-				-- INSERT INTO [ODS_logs].[dbo].[CT_DrugAlcoholScreeningCount_Log]([SiteCode],[CreatedDate],[DrugAlcoholScreeningCount])
-				-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DrugAlcoholScreeningCount
-				-- FROM [ODS].[dbo].[CT_DrugAlcoholScreening]
-				-- GROUP BY [SiteCode];
-
 
 	END

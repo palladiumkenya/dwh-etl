@@ -325,10 +325,4 @@ BEGIN
 				  SET LoadEndDateTime = GETDATE()
 				  WHERE MaxVisitDate = @VisitDate;
 
-
-		-- INSERT INTO [ODS_logs].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
-		-- 	SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS VisitCount
-		-- 	FROM [ODS].[dbo].[CT_PatientVisits]
-		-- 	GROUP BY SiteCode;
-
 END

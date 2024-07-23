@@ -158,10 +158,4 @@ BEGIN
 					WHERE MaxDispenseDate = @DispenseDate;
 
 
-			-- INSERT INTO [ODS_logs].[dbo].[CT_PatientPharmacyCount_Log] ([SiteCode],[CreatedDate],[PatientPharmacyCount])
-			-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientPharmacyCount
-			-- FROM [ODS].[dbo].[CT_PatientPharmacy]
-			-- GROUP BY SiteCode;
-
-
 	END

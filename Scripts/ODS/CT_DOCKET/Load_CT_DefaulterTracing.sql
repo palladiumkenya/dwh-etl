@@ -158,9 +158,5 @@ BEGIN
 					SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
-				-- INSERT INTO [ODS_Logs].[dbo].[CT_DefaulterTracingCount_Log]([SiteCode],[CreatedDate],[DefaulterTracingCount])
-				-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DefaulterTracingCount
-				-- FROM [ODS].[dbo].CT_DefaulterTracing
-				-- GROUP BY SiteCode;
 
 	END

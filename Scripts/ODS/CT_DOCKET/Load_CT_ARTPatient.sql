@@ -192,9 +192,5 @@ BEGIN
 								a.RecordUUID				=b.RecordUUID,
 								a.voided					=b.voided;
 
-			-- INSERT INTO  [ODS_logs].[dbo].[CT_ARTPatientsCount_Log]([SiteCode],[CreatedDate],ARTPatientsCount)
-			-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS PatientStatusCount
-			-- FROM [ODS].[dbo].[CT_ARTPatients]
-			-- group by SiteCode
 
 	END

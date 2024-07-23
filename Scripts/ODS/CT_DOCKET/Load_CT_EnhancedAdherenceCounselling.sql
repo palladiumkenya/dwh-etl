@@ -289,10 +289,5 @@ BEGIN
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
 
 
-					-- INSERT INTO [ODS_logs].[dbo].[CT_EnhancedAdherenceCounsellingCount_Log]([SiteCode],[CreatedDate],[EnhancedAdherenceCounsellingCount])
-					-- SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS EnhancedAdherenceCounsellingCount
-					-- FROM [ODS].[dbo].[CT_EnhancedAdherenceCounselling]
-					-- GROUP BY SiteCode;
-
 
 	END

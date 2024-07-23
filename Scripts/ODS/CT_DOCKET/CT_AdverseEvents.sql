@@ -155,14 +155,5 @@ SET    loadenddatetime = Getdate()
 WHERE  maxadverseeventstartdate = @AdverseEventStartDate;
 
 
---  INSERT INTO [ODS_Logs].[dbo].[ct_adverseeventcount_log]
---                 ([sitecode],
---                  [createddate],
---                  [adverseeventcount])
---     SELECT sitecode,
---            Getdate(),
---            Count(Concat(sitecode, patientpk)) AS AdverseEventCount
---     FROM   [ODS].[dbo].[ct_adverseevents]
---     GROUP  BY sitecode;
 
 END
