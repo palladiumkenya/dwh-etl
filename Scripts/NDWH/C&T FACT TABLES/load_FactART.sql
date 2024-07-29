@@ -1,30 +1,265 @@
+
 ---------------Insert into FactArtHistory before droping FactART for new data
 BEGIN
-	INSERT INTO [NDWH].[dbo].[factarthistory]
-            ([facilitykey],
-             [partnerkey],
-             [agencykey],
-             [patientkey],
-             [asofdatekey],
-             [artoutcomekey],
-             [nextappointmentdate],
-             [lastencounterdate],
-             [loaddate],
-             datetimestamp)
-SELECT [facilitykey],
-       [partnerkey],
-       [agencykey],
-       [patientkey],
-       [asofdatekey],
-       artoutcomekey,
-       [nextappointmentdate],
-       lastvisitdate,
-       [loaddate],
-       Getdate() AS DateTimeStamp
-FROM   [NDWH].[dbo].[factart] 
-END
+	MERGE [NDWH].[dbo].[FactARTHistory] AS a
+using(SELECT  [Factkey]
+			  ,[PatientKey]
+			  ,[FacilityKey]
+			  ,[PartnerKey]
+			  ,[AgencyKey]
+			  ,[AgeGroupKey]
+			  ,[StartARTDateKey]
+			  ,[LastARTDateKey]
+			  ,[DateConfirmedPosKey]
+			  ,[ARTOutcomeKey]
+			  ,[CurrentRegimen]
+			  ,[CurrentRegimenline]
+			  ,[StartRegimen]
+			  ,[StartRegimenLine]
+			  ,[AgeAtEnrol]
+			  ,[AgeAtARTStart]
+			  ,[AgeLastVisit]
+			  ,[Agegrouping]
+			  ,[TimetoARTDiagnosis]
+			  ,[TimetoARTEnrollment]
+			  ,[PregnantARTStart]
+			  ,[PregnantAtEnrol]
+			  ,[LastVisitDate]
+			  ,[NextAppointmentDate]
+			  ,[StartARTAtThisfacility]
+			  ,[PreviousARTStartDate]
+			  ,[PreviousARTRegimen]
+			  ,[WhoStage]
+			  ,[PHQ_9_rating]
+			  ,[ScreenedForDepression]
+			  ,[ScreenedBPLastVisit]
+			  ,[ScreenedDiabetes]
+			  ,[ScreenedDepressionDate]
+			  ,[AppointmentsCategory]
+			  ,[Pregnant]
+			  ,[Breastfeeding]
+			  ,[IsRTTLast12MonthsAfter3monthsIIT]
+			  ,[SwitchedToSecondLineLast12Months]
+			  ,[AsOfDateKey]
+			  ,[LoadDate]
+		FROM [NDWH].[dbo].[FACTART]
+	 ) As b
+	 ON (
+			a.FacilityKey		= b.FacilityKey		and
+			a.PatientKey		= b.PatientKey		and
+			a.AsOfDateKey		= b.AsOfDateKey		and
+			a.[ARTOutcomeKey]   = b.[ARTOutcomeKey]
 
+		)
+
+when not matched THEN
+	INSERT ([PatientKey]
+			  ,[FacilityKey]
+			  ,[PartnerKey]
+			  ,[AgencyKey]
+			  ,[AgeGroupKey]
+			  ,[StartARTDateKey]
+			  ,[LastARTDateKey]
+			  ,[DateConfirmedPosKey]
+			  ,[ARTOutcomeKey]
+			  ,[CurrentRegimen]
+			  ,[CurrentRegimenline]
+			  ,[StartRegimen]
+			  ,[StartRegimenLine]
+			  ,[AgeAtEnrol]
+			  ,[AgeAtARTStart]
+			  ,[AgeLastVisit]
+			  ,[Agegrouping]
+			  ,[TimetoARTDiagnosis]
+			  ,[TimetoARTEnrollment]
+			  ,[PregnantARTStart]
+			  ,[PregnantAtEnrol]
+			  ,[LastVisitDate]
+			  ,[NextAppointmentDate]
+			  ,[StartARTAtThisfacility]
+			  ,[PreviousARTStartDate]
+			  ,[PreviousARTRegimen]
+			  ,[WhoStage]
+			  ,[PHQ_9_rating]
+			  ,[ScreenedForDepression]
+			  ,[ScreenedBPLastVisit]
+			  ,[ScreenedDiabetes]
+			  ,[ScreenedDepressionDate]
+			  ,[AppointmentsCategory]
+			  ,[Pregnant]
+			  ,[Breastfeeding]
+			  ,[IsRTTLast12MonthsAfter3monthsIIT]
+			  ,[SwitchedToSecondLineLast12Months]
+			  ,[AsOfDateKey]
+			  ,[LoadDate]	
+			  ,[DateTimeStamp]
+			)
+VALUES ([PatientKey]
+			  ,[FacilityKey]
+			  ,[PartnerKey]
+			  ,[AgencyKey]
+			  ,[AgeGroupKey]
+			  ,[StartARTDateKey]
+			  ,[LastARTDateKey]
+			  ,[DateConfirmedPosKey]
+			  ,[ARTOutcomeKey]
+			  ,[CurrentRegimen]
+			  ,[CurrentRegimenline]
+			  ,[StartRegimen]
+			  ,[StartRegimenLine]
+			  ,[AgeAtEnrol]
+			  ,[AgeAtARTStart]
+			  ,[AgeLastVisit]
+			  ,[Agegrouping]
+			  ,[TimetoARTDiagnosis]
+			  ,[TimetoARTEnrollment]
+			  ,[PregnantARTStart]
+			  ,[PregnantAtEnrol]
+			  ,[LastVisitDate]
+			  ,[NextAppointmentDate]
+			  ,[StartARTAtThisfacility]
+			  ,[PreviousARTStartDate]
+			  ,[PreviousARTRegimen]
+			  ,[WhoStage]
+			  ,[PHQ_9_rating]
+			  ,[ScreenedForDepression]
+			  ,[ScreenedBPLastVisit]
+			  ,[ScreenedDiabetes]
+			  ,[ScreenedDepressionDate]
+			  ,[AppointmentsCategory]
+			  ,[Pregnant]
+			  ,[Breastfeeding]
+			  ,[IsRTTLast12MonthsAfter3monthsIIT]
+			  ,[SwitchedToSecondLineLast12Months]
+			  ,[AsOfDateKey]
+			  ,[LoadDate]	
+			  ,Getdate()
+			);
+END
 ---------------End
+-----------------------Archive  FactARTHistory where the months exceed 12 months
+insert into [NDWH].[dbo].[FACTARTHistory_Archive]( [PatientKey]
+												  ,[FacilityKey]
+												  ,[PartnerKey]
+												  ,[AgencyKey]												 
+												  ,[ARTOutcomeKey]
+												  ,[AsOfDateKey]
+												  ,[PatientPKHash]
+												  ,[PatientIDHash]
+												  ,[SiteCode]
+												  ,[age]
+												  ,[AgeGroup]
+												  ,[StartARTDate]
+												  ,[PartnerName]
+												  ,[AgencyName]
+												  ,[ARTOutcome]
+												  ,[CurrentRegimen]
+												  ,[CurrentRegimenline]
+												  ,[StartRegimen]
+												  ,[StartRegimenLine]
+												  ,[AgeAtEnrol]
+												  ,[AgeAtARTStart]
+												  ,[AgeLastVisit]
+												  ,[Agegrouping]
+												  ,[TimetoARTDiagnosis]
+												  ,[TimetoARTEnrollment]
+												  ,[PregnantARTStart]
+												  ,[PregnantAtEnrol]
+												  ,[LastVisitDate]
+												  ,[NextAppointmentDate]
+												  ,[StartARTAtThisfacility]
+												  ,[PreviousARTStartDate]
+												  ,[PreviousARTRegimen]
+												  ,[WhoStage]
+												  ,[PHQ_9_rating]
+												  ,[ScreenedForDepression]
+												  ,[ScreenedBPLastVisit]
+												  ,[ScreenedDiabetes]
+												  ,[ScreenedDepressionDate]
+												  ,[AppointmentsCategory]
+												  ,[Pregnant]
+												  ,[Breastfeeding]
+												  ,[IsRTTLast12MonthsAfter3monthsIIT]
+												  ,[SwitchedToSecondLineLast12Months]
+												  ,[AsOfDate]
+												  ,[ISTxCurr]
+												  ,[DifferentiatedCare]
+												  ,[LoadDate]
+												  ,[Eligible4VL]
+												  ,[Last12MonthVL]
+												  ,[Last12MVLSup]
+												  ,[LastVL]
+												  ,[LastVLDate]
+												  ,[Last12MVLResult]
+												  ,[HighViremia]
+												  ,[LowViremia]
+												  ,[DateTimeStamp])
+	SELECT [PatientKey]
+      ,[FacilityKey]
+      ,[PartnerKey]
+      ,[AgencyKey]     
+      ,[ARTOutcomeKey]
+      ,[AsOfDateKey]
+      ,[PatientPKHash]
+      ,[PatientIDHash]
+      ,[SiteCode]
+      ,[age]
+      ,[AgeGroup]
+      ,[StartARTDate]
+      ,[PartnerName]
+      ,[AgencyName]
+      ,[ARTOutcome]
+      ,[CurrentRegimen]
+      ,[CurrentRegimenline]
+      ,[StartRegimen]
+      ,[StartRegimenLine]
+      ,[AgeAtEnrol]
+      ,[AgeAtARTStart]
+      ,[AgeLastVisit]
+      ,[Agegrouping]
+      ,[TimetoARTDiagnosis]
+      ,[TimetoARTEnrollment]
+      ,[PregnantARTStart]
+      ,[PregnantAtEnrol]
+      ,[LastVisitDate]
+      ,[NextAppointmentDate]
+      ,[StartARTAtThisfacility]
+      ,[PreviousARTStartDate]
+      ,[PreviousARTRegimen]
+      ,[WhoStage]
+      ,[PHQ_9_rating]
+      ,[ScreenedForDepression]
+      ,[ScreenedBPLastVisit]
+      ,[ScreenedDiabetes]
+      ,[ScreenedDepressionDate]
+      ,[AppointmentsCategory]
+      ,[Pregnant]
+      ,[Breastfeeding]
+      ,[IsRTTLast12MonthsAfter3monthsIIT]
+      ,[SwitchedToSecondLineLast12Months]
+      ,[AsOfDate]
+      ,[ISTxCurr]
+      ,[DifferentiatedCare]
+      ,[LoadDate]
+      ,[Eligible4VL]
+      ,[Last12MonthVL]
+      ,[Last12MVLSup]
+      ,[LastVL]
+      ,[LastVLDate]
+      ,[Last12MVLResult]
+      ,[HighViremia]
+      ,[LowViremia]
+      ,[DateTimeStamp]
+  FROM [NDWH].[dbo].[FactARTHistory]
+  where datediff(month,AsOfDateKey,getdate()) > 12
+  order by AsOfDateKey desc;
+
+----------------------END
+-------------------Delete the archived records from [NDWH].[dbo].[FactARTHistory]
+
+DELETE [NDWH].[dbo].[FactARTHistory]
+WHERE datediff(month,AsOfDateKey,getdate()) > 12;
+----------End
 
 
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
@@ -76,7 +311,8 @@ Patient As (
     Else 'Unclassified'
     END As AppointmentsCategory,
     pbfw.Pregnant,
-    pbfw.Breastfeeding
+    pbfw.Breastfeeding,
+    pbfw_at_confirm_pos.PbfwAtConfirmedPositive
         from 
 ODS.dbo.CT_Patient Patient
 inner join ODS.dbo.CT_ARTPatients ART on ART.PatientPK=Patient.Patientpk and ART.SiteCode=Patient.SiteCode
@@ -85,7 +321,7 @@ left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patien
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_Pbfw pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
-
+left join ODS.dbo.Intermediate_PbfwAtConfimationPositive as pbfw_at_confirm_pos on pbfw_at_confirm_pos.PatientPK = Patient.PatientPK and pbfw_at_confirm_pos.SiteCode = Patient.SiteCode
 ),
 
    DepressionScreening as (Select 
@@ -195,7 +431,7 @@ where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()
             coalesce(ncd_screening.ScreenedDiabetes, 0) as ScreenedDiabetes,
 			      ScreenedDepressionDate,
             AppointmentsCategory,
-
+            end_month.Date as AsOfDate,
             Pregnant,
             Breastfeeding,
             case 
@@ -207,6 +443,7 @@ where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()
               else 0
             end as SwitchedToSecondLineLast12Months,
             end_month.DateKey as AsOfDateKey,
+            Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient

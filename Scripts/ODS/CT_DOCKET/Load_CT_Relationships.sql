@@ -20,7 +20,7 @@ BEGIN
 							,R.[Created]
 							, R.PersonAPatientPk
   							,R.PersonBPatientPk
-  							,R.PatientRelationshipToOther
+                            ,R.PatientRelationshipToOther
 							,VoidingSource = Case 
 													when R.voided = 1 Then 'Source'
 													Else Null

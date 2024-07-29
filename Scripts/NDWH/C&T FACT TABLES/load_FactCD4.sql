@@ -34,7 +34,7 @@ source_CD4 as (
 		CD4atEnrollment_Date as CD4atEnrollmentDate,
 		bCD4 as BaselineCD4,
 		bCD4Date as BaselineCD4Date,
-		LastCD4AfterARTStart_Date as LastCD4Date,
+		LatestCD4s.OrderedbyDate as LastCD4Date,
         Case When LatestCD4s.TestName='CD4 Count'Then LatestCD4s.TestResult Else Null End as LastCD4,
         Case When LatestCD4s.TestName='CD4 Percentage' Then LatestCD4s.TestResult Else Null End as LastCD4Percentage,
 		datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit
