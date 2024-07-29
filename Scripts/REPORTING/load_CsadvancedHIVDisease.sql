@@ -58,7 +58,7 @@ With Visitdata As (
         Left Join Ndwh.Dbo.Dimpartner As Partner On Partner.Partnerkey = Visits.Partnerkey
         Left Join Ndwh.Dbo.Dimagency As Agency On Agency.Agencykey = Visits.Agencykey
     Where  
-        Visits.Patientkey Is Not Null
+        Visits.Patientkey Is Not Null and  Visitdatekey <= @as_of_date
 ), Rankedvisits As (
     Select 
         Visitdata.Patientkey,
@@ -144,7 +144,7 @@ From
     Left Join Ndwh.Dbo.Dimpatient As Pat On Pat.Patientkey = Visits.Patientkey
     Left Join Ndwh.Dbo.Dimdate As Dateconfirmed On Dateconfirmed.Datekey = Pat.Dateconfirmedhivpositivekey
     Left Join Ndwh.Dbo.Dimagegroup Age On Age.Age = Visits.Age
-     where VisitDate <= @as_of_date
+   
    fetch next from cursor_AsOfDates into @as_of_date
 
 end
