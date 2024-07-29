@@ -367,6 +367,7 @@ BEGIN
 			 PrepEnrollmentDateKey,
              istxcurr,
              DateConfirmedHIVPositiveKey,
+			 disclosure,
              loaddate,
 			 voided)
       VALUES(patientidhash,
@@ -386,6 +387,7 @@ BEGIN
              PrepEnrollmentDateKey,
              istxcurr,
              DateConfirmedHIVPositiveKey,
+			 disclosure,
              loaddate,
 			 voided)
     WHEN matched THEN
@@ -402,5 +404,7 @@ BEGIN
 				 a.baselinewhokey  = b.baselinewhokey,
 				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
 				 a.voided				= b.voided,
-				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey;
+				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey,
+				 a.Disclosure = b.Disclosure;
 END
+
