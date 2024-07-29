@@ -2,11 +2,11 @@ TRUNCATE TABLE ndwh.dbo.FactViralLoad_Hist;
 
 DECLARE @start_date DATE;
 
-SELECT @start_date = dateadd(month, -12, eomonth(dateadd(month, -2, getdate())));
+SELECT @start_date = dateadd(month, -12, eomonth(dateadd(month, -1, getdate())));
 
 DECLARE @end_date DATE;
 
-SELECT @end_date = eomonth(dateadd(month, -2, getdate()));
+SELECT @end_date = eomonth(dateadd(month, -1, getdate()));
 
 --- create a temp table to store end of month for each month
 with dates as (     
@@ -20,6 +20,7 @@ SELECT
 	eomonth(dte) as end_date
 INTO #months
 FROM dates
+
 OPTION (maxrecursion 0);   
 
 --declare as of date
@@ -37,8 +38,9 @@ WHILE @@FETCH_STATUS = 0
 BEGIN
 WITH viralLoad As (
 					SELECT	DISTINCT	
-					Labs.PatientPk,
-					Labs.SiteCode,
+					patient.PatientPk,
+					patient.PatientPkHash,
+					patient.SiteCode,
 					VisitID,
 					art.StartARTDate,
 					[OrderedbyDate],
@@ -57,50 +59,33 @@ WITH viralLoad As (
 						WHEN datediff(month,[OrderedbyDate],@as_of_date) <= 6 and  Datediff(year,Patient.DOB,@as_of_date) <= 24 THEN 1
 						WHEN datediff(month,[OrderedbyDate],@as_of_date) <= 12 and  Datediff(year,Patient.DOB,@as_of_date) > 24 THEN 1 
 						ELSE 0
-					END As IsValidVL,
-					CASE 
-						WHEN IsNumeric([TestResult]) = 1 THEN 
-																CASE 
-																	WHEN cast(replace([TestResult], ',', '') as  float) < 200.00 THEN 1 
-																	ELSE 0 
-																END 
-						ELSE 
-							CASE 
-								WHEN [TestResult]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') THEN 1 
-								ELSE 0 
-							END  
-					END as VLSup,
+					END As IsValidVL,					
+					0 as VLSup,
 					@as_of_date As AsOfDate,
 					getdate() As LoadDate
-					---into  ndwh.dbo.FactViralLoad_Hist
-			FROM  ODS.dbo.CT_ARTPatients art 
-			join ODS.dbo.CT_PatientLabs Labs    ---Visits to know whether the the pregnant or not(Pbfw)
+			FROM  ODS.dbo.CT_patient  patient
+			INNER join ODS.dbo.CT_ARTPatients art 
+			on art.PatientPK = patient.Patientpk and
+				art.SiteCode = patient.SiteCode			
+			left join ODS.dbo.CT_PatientLabs Labs   
 			ON	art.PatientPK = labs.Patientpk and
 				art.SiteCode = labs.SiteCode
-			Left join ODS.dbo.CT_patient  patient
-			on art.PatientPK = patient.Patientpk and
-				art.SiteCode = patient.SiteCode
-
-			where TestName = 'Viral Load'
-					and TestName <>'CholesterolLDL (mmol/L)' and TestName <> 'Hepatitis C viral load' 
-					and TestResult is not null 
-					and Labs.SiteCode =12601 and art.PatientPK = 10 
-					and [OrderedbyDate] <= @as_of_date
+			where NullIf('2000-01-01',[OrderedbyDate]) <= @as_of_date
 				),
-
+				
 Visits As(
 
 select	Visits.SiteCode,
 		Visits.PatientPK,
 		VisitDate,Pregnant,
 		Breastfeeding,
+		LMP,
 		NextAppointmentDate ,
 		@as_of_date As AsOfDate
 		from ODS.DBO.CT_PatientVisits Visits
 		join viralLoad 
 		on  Visits.SiteCode = viralLoad.Sitecode and Visits.PatientPK = viralLoad.PatientPK
-where Visits.VisitDate <= @as_of_date and  Visits.SiteCode =12601 and Visits.PatientPK = 10
-
+where Visits.VisitDate <= @as_of_date 
 ),
 
 MaxVisitsByAsOf As (
@@ -112,15 +97,48 @@ MaxVisitsByAsOf As (
    AsOfDate,
    NextAppointmentDate,
    Pregnant,
-   Breastfeeding
+   Breastfeeding,
+   LMP
    from Visits
 ),
 RankMaxVisitDateAsOf As(
-select SiteCode,PatientPK, VisitDate,Pregnant,Breastfeeding,NextAppointmentDate,AsOfDate
+select SiteCode,PatientPK, VisitDate,Pregnant,Breastfeeding,LMP,NextAppointmentDate,AsOfDate
 from MaxVisitsByAsOf
 where rank =1
 
 
+),
+VlSupBasedOfValidity As(
+    Select SiteCode,
+			PatientPK,
+			PatientPkHash,
+			StartARTDate,
+			DOB,
+			AgeAsOfDate,
+			[OrderedbyDate],
+			[ReportedbyDate],
+			EligibleVL,
+			IsValidVL,
+			CASE 
+						WHEN IsNumeric([TestResult]) = 1 and IsValidVL=1 THEN 
+																CASE 
+																	WHEN try_cast(replace([TestResult], ',', '') as  float) < 200.00 THEN 1 
+																	ELSE 0 
+																END 
+						ELSE 
+							CASE 
+								WHEN [TestResult]  in ('undetectable','NOT DETECTED','0 copies/ml','LDL','Less than Low Detectable Level') and IsValidVL=1 THEN 1 
+								ELSE 0 
+							END  
+					END as VLSup,
+			AsOfDate,
+			[TestName],
+			TestResult,
+			[Emr],
+			[Project]
+	
+	from viralLoad
+	where NullIf('2000-01-01',[OrderedbyDate]) <= AsOfDate
 ),
 
 MaxOrderedbyDateByAsOfDate As (
@@ -128,6 +146,7 @@ MaxOrderedbyDateByAsOfDate As (
 						row_number() over(partition by  SiteCode, PatientPK,AsOfDate order by [OrderedbyDate] desc) as rank, 
 						SiteCode,
 						PatientPK,
+						PatientPkHash,
 						StartARTDate,
 						DOB,
 						AgeAsOfDate,
@@ -141,43 +160,116 @@ MaxOrderedbyDateByAsOfDate As (
 						TestResult,
 						[Emr],
 						[Project]
-					from viralLoad
-					where [OrderedbyDate] <= AsOfDate
+					from VlSupBasedOfValidity
+					where NullIf('2000-01-01',[OrderedbyDate]) <= AsOfDate
 
 			),
 MaxOrderedbyDateByAsOfDate_Final As (
-select SiteCode,PatientPK,StartARTDate,DOB,AgeAsOfDate,OrderedbyDate,ReportedbyDate,EligibleVL,IsValidVL,VLSup,AsOfDate,TestName,TestResult,Emr,Project 
+select SiteCode,PatientPK,PatientPkHash,StartARTDate,DOB,AgeAsOfDate,OrderedbyDate,ReportedbyDate,EligibleVL,IsValidVL,VLSup,AsOfDate,TestName,TestResult,Emr,Project 
 from MaxOrderedbyDateByAsOfDate
 where rank =1
 
-),
+)
+
+,
 Combined As(
- Select OrderedFinal.SiteCode,OrderedFinal.PatientPK,StartARTDate,DOB,AgeAsOfDate,OrderedbyDate,MaxVisitAsOf.VisitDate,MaxVisitAsOf.Pregnant,MaxVisitAsOf.Breastfeeding,ReportedbyDate,EligibleVL,IsValidVL,VLSup,OrderedFinal.AsOfDate,TestName,TestResult,Emr,Project  
+ Select OrderedFinal.SiteCode,OrderedFinal.PatientPK,OrderedFinal.PatientPkHash,StartARTDate,DOB,AgeAsOfDate,OrderedbyDate,MaxVisitAsOf.VisitDate,MaxVisitAsOf.Pregnant,MaxVisitAsOf.Breastfeeding,LMP,ReportedbyDate,EligibleVL,IsValidVL,VLSup,OrderedFinal.AsOfDate,TestName,TestResult,Emr,Project  
  from MaxOrderedbyDateByAsOfDate_Final OrderedFinal
  join RankMaxVisitDateAsOf MaxVisitAsOf
  on OrderedFinal.SiteCode =  MaxVisitAsOf.SiteCode and OrderedFinal.PatientPK =  MaxVisitAsOf.PatientPK
  and OrderedFinal.AsOfDate =  MaxVisitAsOf.AsOfDate
 
-)
-
-insert into ndwh.dbo.FactViralLoad_Hist( SiteCode,PatientPK,StartARTDate,DOB,VisitDate,Pregnant,Breastfeeding,AgeAsOfDate,OrderedbyDate,ReportedbyDate,EligibleVL,IsValidVL,VLSup,AsOfDate,TestName,TestResult,Emr,Project)
-
-select  SiteCode,PatientPK,StartARTDate,DOB,VisitDate,Pregnant,Breastfeeding,AgeAsOfDate,OrderedbyDate,ReportedbyDate,EligibleVL,IsValidVL,VLSup,AsOfDate,TestName,TestResult,Emr,Project  
-from Combined
-
-Update a
-set   IsPBFW= case
+),
+Combined_PBFW As(
+Select	SiteCode,
+		PatientPK,
+		PatientPkHash,
+		StartARTDate,
+		DOB,
+		AgeAsOfDate,
+		OrderedbyDate,
+		VisitDate,
+		Pregnant,
+		Breastfeeding,
+		LMP,
+		ReportedbyDate,
+		EligibleVL,
+		IsPBFW= case
 						WHEN (Pregnant ='yes' or  Breastfeeding ='yes')  THEN 1
 						ELSE 0
-						END
-from ndwh.dbo.FactViralLoad_Hist a;
+						END,
+		IsValidVL,
+		VLSup,
+		AsOfDate,
+		TestName,
+		TestResult,
+		Emr,
+		Project   
+	from Combined
 
-Update a
-set   IsValidVL= case
-						WHEN datediff(month,[OrderedbyDate],a.AsOfDate) <= 6  THEN 1
-						END
-from ndwh.dbo.FactViralLoad_Hist a
-where IsPBFW = 1
+)
+
+insert into ndwh.dbo.FactViralLoad_Hist(PatientKey,
+										FacilityKey,
+										AgeGroupKey,
+										SiteCode,
+										VisitDate,
+										Pregnant,
+										Breastfeeding,
+										LMP,
+										AgeAsOfDate,											
+										OrderedbyDate,											
+										ReportedbyDate,
+										EligibleVL,
+										IsPBFW,
+										IsValidVL,
+										VLSup,
+										AsOfDate,
+										TestName,
+										TestResult,
+										Emr,
+										Project
+									)
+
+select  Patient.PatientKey,
+		Facility.FacilityKey,
+		AgeGroup.AgeGroupKey,
+		Combined_PBFW.SiteCode,
+		VisitDate,
+		Pregnant,
+		Breastfeeding,
+		LMP,
+		AgeAsOfDate,
+		OrderedbyDate,
+		ReportedbyDate,
+		EligibleVL,
+		IsPBFW,
+		IsValidVL,
+		VLSup,
+		AsOfDate,
+		TestName,
+		TestResult,
+		Combined_PBFW.Emr,
+		Combined_PBFW.Project  
+from Combined_PBFW
+left join NDWH.dbo.DimPatient Patient
+   on Combined_PBFW.SiteCode = Patient.SiteCode and Combined_PBFW.PatientPkHash = Patient.PatientPKHash
+Left join NDWH.dbo.DimFacility   Facility
+	on Combined_PBFW.SiteCode = Facility.MFLCode
+left join [NDWH].[dbo].[DimAgeGroup] AgeGroup
+     on Combined_PBFW.AgeAsOfDate = AgeGroup.Age
+
+--Update a
+--set   IsValidVL= 0
+--from ndwh.dbo.FactViralLoad_Hist  a
+--where IsPBFW = 1;
+
+--Update a
+--set   IsValidVL= case
+--						WHEN datediff(month,[OrderedbyDate],a.AsOfDate) <= 6  THEN 1
+--						END
+--from ndwh.dbo.FactViralLoad_Hist a
+--where IsPBFW = 1
 
 
 
