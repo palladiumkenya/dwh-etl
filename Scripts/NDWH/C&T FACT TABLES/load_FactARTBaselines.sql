@@ -18,7 +18,7 @@ select
 	facility.FacilityKey,
 	partner.PartnerKey,
 	agency.AgencyKey,
-    age_group.AgeGroupKey,
+    age_group.AgeGroupKey as AgeATARTStart,
     WHOStageAtART,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactARTBaselines
