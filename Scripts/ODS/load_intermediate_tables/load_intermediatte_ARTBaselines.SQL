@@ -14,7 +14,8 @@ with MFL_partner_agency_combination as (
     Patientpk,
     PatientPKHash,
     SiteCode,
-    StartARTDate
+    StartARTDate,
+    DATEDIFF(year,dob,StartARTDate) as AgeATARTStart
     from ODS.dbo.CT_ARTPatients
 ),
 Baseline_Who as (
@@ -34,6 +35,7 @@ Baseline_Who as (
         patient.PatientPK,
 		patient.SiteCode,
 		WhoStage as WhoStageAtART,
+        AgeATARTStart,
         cast(getdate() as date) as LoadDate
         into ODS.dbo.intermediate_ARTBaselines
 	from ARTPatients as patient
