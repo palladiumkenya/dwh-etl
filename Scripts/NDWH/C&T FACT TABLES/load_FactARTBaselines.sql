@@ -19,7 +19,7 @@ select
 	partner.PartnerKey,
 	agency.AgencyKey,
     age_group.AgeGroupKey,
-	
+    WHOStageAtART,
 	cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactARTBaselines
 from ODS.dbo.intermediate_ARTBaselines art
