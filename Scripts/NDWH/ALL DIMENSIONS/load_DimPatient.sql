@@ -232,7 +232,28 @@ BEGIN
                 where ushauri.PatientPKHash is null and SiteCode is not null
              
               ) ,
-
+            Disclosure as (
+             Select 
+               row_number() OVER (PARTITION BY SiteCode,PatientPKHash ORDER BY VisitDate DESC) AS NUM,
+                PatientPKHash,
+                Sitecode,
+                PaedsDisclosure,
+                PwP
+              from ODS.dbo.CT_PatientVisits as visits
+                WHERE PwP LIKE '%|disclosure|%'
+                    OR PwP LIKE 'disclosure|%'
+                    OR PwP LIKE '%|disclosure'
+                    OR PwP = 'disclosure'
+                    or   PaedsDisclosure ='full disclosure' or PwP='Disclosure'    
+                ),
+                LatestDisclosure as (
+                    SELECT
+                    PatientPKHash,
+                        SiteCode,
+                    Coalesce (PaedsDisclosure, PWP) as Disclosure
+                    From Disclosure
+                    where NUM=1      
+ ),
   combined_data_ct_hts_prep_pmtct_Ushauri
   as(
   SELECT combined_data_ct_hts_prep_pmtct.patientpkhash AS PatientPKHash,
@@ -252,6 +273,7 @@ BEGIN
          combined_data_ct_hts_prep_pmtct.DateConfirmedHIVPositiveKey,
          combined_data_ct_hts_prep_pmtct.htsnumberhash,
          NUll As sitetype,
+         LatestDisclosure.Disclosure,
          Cast(Getdate() AS DATE) AS LoadDate,
 		 combined_data_ct_hts_prep_pmtct.Voided,
 		 combined_data_ct_hts_prep_pmtct.PrepNumber,
@@ -259,6 +281,7 @@ BEGIN
 		 combined_data_ct_hts_prep_pmtct.PatientMnchIDHash,
 		 combined_data_ct_hts_prep_pmtct.FirstEnrollmentAtMnchDateKey
     FROM   combined_data_ct_hts_prep_pmtct
+    left join LatestDisclosure on LatestDisclosure.patientpkhash=combined_data_ct_hts_prep_pmtct.patientpkhash and LatestDisclosure.sitecode=combined_data_ct_hts_prep_pmtct.sitecode
 
     UNION
 	SELECT	concat(ushauri.UshauriPatientPKHash,'_Ushauri') AS PatientPKHash,
@@ -278,6 +301,7 @@ BEGIN
 			Null DateConfirmedHIVPositiveKey,
 			Null htsnumberhash,
 			sitetype,
+            LatestDisclosure.Disclosure,
 			Null LoadDate,
 			Null Voided,
 			Null PrepNumber,
@@ -285,8 +309,9 @@ BEGIN
 			Null PatientMnchIDHash,
 			Null FirstEnrollmentAtMnchDateKey
 	FROM ushauri_patient_source_nonEMR ushauri
-	where sitecode is not null
-                  
+     left join LatestDisclosure on LatestDisclosure.patientpkhash=ushauri.UshauriPatientPKHash and LatestDisclosure.sitecode=ushauri.sitecode
+
+	where ushauri.SiteCode is not null                
   
   )
 
@@ -314,6 +339,7 @@ BEGIN
                   combined_data_ct_hts_prep_pmtct_Ushauri.prepenrollmentdatekey,
                   combined_data_ct_hts_prep_pmtct_Ushauri.istxcurr,
                   combined_data_ct_hts_prep_pmtct_Ushauri.DateConfirmedHIVPositiveKey,
+				  combined_data_ct_hts_prep_pmtct_Ushauri.Disclosure,
                   combined_data_ct_hts_prep_pmtct_Ushauri.patientmnchidhash,
                   combined_data_ct_hts_prep_pmtct_Ushauri.firstenrollmentatmnchdatekey,
                   combined_data_ct_hts_prep_pmtct_Ushauri.loaddate,
@@ -337,9 +363,11 @@ BEGIN
              patientsource,
              enrollmentwhokey,
              datebaselinewhokey,
-             baselinewhokey,PrepEnrollmentDateKey,
+             baselinewhokey,
+			 PrepEnrollmentDateKey,
              istxcurr,
              DateConfirmedHIVPositiveKey,
+			 disclosure,
              loaddate,
 			 voided)
       VALUES(patientidhash,
@@ -359,6 +387,7 @@ BEGIN
              PrepEnrollmentDateKey,
              istxcurr,
              DateConfirmedHIVPositiveKey,
+			 disclosure,
              loaddate,
 			 voided)
     WHEN matched THEN
@@ -375,5 +404,7 @@ BEGIN
 				 a.baselinewhokey  = b.baselinewhokey,
 				 a.PrepEnrollmentDateKey = b.PrepEnrollmentDateKey,
 				 a.voided				= b.voided,
-				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey;
+				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey,
+				 a.Disclosure = b.Disclosure;
 END
+
