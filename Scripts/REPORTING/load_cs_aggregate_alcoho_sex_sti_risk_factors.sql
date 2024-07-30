@@ -1,5 +1,5 @@
-IF OBJECT_ID(N'HIVCaseSurveillance.dbo.CsAggregateAlcoholSex&STIRiskFactors', N'U') IS NOT NULL 
-	DROP TABLE HIVCaseSurveillance.dbo.CsAggregateAlcoholSex&STIRiskFactors;
+IF OBJECT_ID(N'HIVCaseSurveillance.dbo.CsAggregateAlcoholSexSTIRiskFactors', N'U') IS NOT NULL 
+	DROP TABLE HIVCaseSurveillance.dbo.CsAggregateAlcoholSexSTIRiskFactors;
 
 with cases as (
   select 
@@ -13,7 +13,6 @@ with cases as (
   from NDWH.dbo.FactART as art 
   left join NDWH.dbo.DimPatient as pat on pat.PatientKey = art.PatientKey
   left join NDWH.dbo.DimDate as confirm_date on confirm_date.DateKey = pat.DateConfirmedHIVPositiveKey
-  where confirm_date.Date > DATEADD(MONTH, -12, EOMONTH(GETDATE()))
 ),
 eligibility_indicators as (
   select
@@ -62,7 +61,7 @@ select
   count(joined_data.PatientKey) as NoOfCases,
   sum(SexwithAlcohoDrugs) HasSexwithAlcohoDrugs,
   sum(EverHadSTI) as EverHadSTI
-into HIVCaseSurveillance.dbo.CsAggregateAlcoholSex&STIRiskFactors
+into HIVCaseSurveillance.dbo.CsAggregateAlcoholSexSTIRiskFactors
 from joined_data
 left join NDWH.dbo.DimPartner as partner on partner.PartnerKey = joined_data.PartnerKey
 left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = joined_data.AgencyKey
