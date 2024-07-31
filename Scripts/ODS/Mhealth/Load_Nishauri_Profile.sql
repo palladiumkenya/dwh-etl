@@ -77,12 +77,11 @@ VALUES
     b.[PKV],
     b.[DOB_Date],
     b.[DateCreated_Date],
-    Getdate()
+    GETDATE()
   )
   WHEN MATCHED THEN
 UPDATE
 SET
-  a.[Ushauri_PatientPK] = b.[PatientPK],
   a.[PatientPKHash] = b.[PatientPKHash],
   a.[PartnerName] = b.[PartnerName],
   a.[SiteCode] = b.[SiteCode],
@@ -95,7 +94,7 @@ SET
   a.[MaritalStatus] = b.[MaritalStatus],
   a.[PatientResidentCounty] = b.[PatientResidentCounty],
   a.[PatientResidentLocation] = b.[PatientResidentLocation],
-  a.[PatientResidentSubCounty] = b.[PatientResidentSubCount],
+  a.[PatientResidentSubCounty] = b.[PatientResidentSubCounty],
   a.[PatientResidentSubLocation] = b.[PatientResidentSubLocation],
   a.[PatientResidentVillage] = b.[PatientResidentVillage],
   a.[PatientResidentWard] = b.[PatientResidentWard],
@@ -103,4 +102,4 @@ SET
   a.[DOB] = b.[DOB_Date],
   a.[DateCreated] = b.[DateCreated_Date];
 
-END
+END;
