@@ -43,7 +43,7 @@ BEGIN
                               AND outcomes.sitecode = patients.sitecode
                     LEFT JOIN ODS.dbo.CT_ARTPatients as art on art.PatientPKHash = patients.PatientPKHash
                         AND art.SiteCode = patients.SiteCode
-            ),		
+            ),
          hts_patient_source
          AS (SELECT DISTINCT htsnumberhash,
                              patientpkhash,
@@ -55,7 +55,7 @@ BEGIN
                              nupihash,
 							 clients.voided
              FROM   ods.dbo.hts_clients AS clients
-   
+
             ),
          prep_patient_source
          AS (SELECT DISTINCT patientpkhash,
@@ -69,7 +69,7 @@ BEGIN
                              maritalstatus
 							 ,voided
              FROM   ods.dbo.prep_patient),
-			 
+
          pmtct_patient_source
          AS (SELECT DISTINCT patientpkhash,
                              patientpk,
@@ -124,7 +124,7 @@ BEGIN
                               AND ct_patient_source.sitecode =
                                   hts_patient_source.sitecode),
 
-			
+
          combined_data_ct_hts_prep
          AS (SELECT COALESCE(combined_data_ct_hts.patientpkhash,
                     prep_patient_source.patientpkhash)
@@ -171,7 +171,7 @@ BEGIN
                               AND prep_patient_source.sitecode =
                                   combined_data_ct_hts.sitecode),
 
-			 
+
          combined_data_ct_hts_prep_pmtct
          AS (SELECT COALESCE(combined_data_ct_hts_prep.patientpkhash,
                                pmtct_patient_source.patientpkhash)
@@ -216,7 +216,7 @@ BEGIN
                               AND combined_data_ct_hts_prep.sitecode =
                                   pmtct_patient_source.sitecode),
 	 ushauri_patient_source_nonEMR
-         AS (SELECT DISTINCT 
+         AS (SELECT DISTINCT
                              ushauri.UshauriPatientPkHash,
                              ushauri.PatientIDHash,
                              ushauri.patientpk,
@@ -228,9 +228,9 @@ BEGIN
                              ushauri.maritalstatus,
                              ushauri.nupihash,
                              ushauri.SiteType
-             FROM   ods.dbo.Ushauri_Patient AS ushauri
+             FROM   [ODS].[dbo].[Mhealth_Ushauri_Patient] AS ushauri
                 where ushauri.PatientPKHash is null and SiteCode is not null
-             
+
               ) ,
             Disclosure as (
              Select 
@@ -347,7 +347,7 @@ BEGIN
            FROM   combined_data_ct_hts_prep_pmtct_Ushauri) AS b
     ON ( a.sitecode = b.sitecode
          AND a.patientpkhash = b.patientpkhash
-		
+
         )
     WHEN NOT matched THEN
       INSERT(patientidhash,
@@ -407,4 +407,3 @@ BEGIN
 				 a.DateConfirmedHIVPositiveKey = b.DateConfirmedHIVPositiveKey,
 				 a.Disclosure = b.Disclosure;
 END
-

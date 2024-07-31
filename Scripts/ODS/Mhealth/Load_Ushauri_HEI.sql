@@ -1,6 +1,6 @@
 BEGIN
 
-			MERGE [ODS].[dbo].[Ushauri_HEI] AS a
+			MERGE [ODS].[dbo].[Mhealth_Ushauri_HEI] AS a
 				USING(SELECT Distinct
 						PatientPK As UshauriPatientPK,PatientPKHash As UshauriPatientPKHash,PartnerName,SiteCode,SiteType,Emr,Project,
 						FacilityName,PatientMNCH_ID,PatientHEI_ID,[1stDNAPCRDate],[2ndDNAPCRDate],
@@ -10,20 +10,20 @@ BEGIN
 						HEIExitDate_Date,DateCreated_Date,DateModified_Date
 
 					FROM [MhealthCentral].[dbo].[pmtct_MNCH_HEI](NoLock) P
-					) AS b	
+					) AS b
 						ON(
-						 a.[UshauriPatientPK]  = b.UshauriPatientPK 
-						and a.SiteCode = b.SiteCode	
+						 a.[UshauriPatientPK]  = b.UshauriPatientPK
+						and a.SiteCode = b.SiteCode
 						and a.PatientHEI_ID = b.PatientHEI_ID
-						
+
 						)
-					
-					WHEN NOT MATCHED THEN 
-						INSERT(UshauriPatientPK,UshauriPatientPKHash,PartnerName,SiteCode,SiteType,Emr,Project,FacilityName,PatientMNCH_ID,PatientHEI_ID,[1stDNAPCRDate],[2ndDNAPCRDate],[3rdDNAPCRDate],ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,[1stDNAPCR],[2ndDNAPCR],[3rdDNAPCR],ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCriteria,DateCreated,DateModified,[1stDNAPCRDate_Date],[2ndDNAPCRDate_Date],[3rdDNAPCRDate_Date],ConfirmatoryPCRDate_Date,BasellineVLDate_Date,FinalyAntibodyDate_Date,HEIExitDate_Date,DateCreated_Date,DateModified_Date,LoadDate) 
+
+					WHEN NOT MATCHED THEN
+						INSERT(UshauriPatientPK,UshauriPatientPKHash,PartnerName,SiteCode,SiteType,Emr,Project,FacilityName,PatientMNCH_ID,PatientHEI_ID,[1stDNAPCRDate],[2ndDNAPCRDate],[3rdDNAPCRDate],ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,[1stDNAPCR],[2ndDNAPCR],[3rdDNAPCR],ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCriteria,DateCreated,DateModified,[1stDNAPCRDate_Date],[2ndDNAPCRDate_Date],[3rdDNAPCRDate_Date],ConfirmatoryPCRDate_Date,BasellineVLDate_Date,FinalyAntibodyDate_Date,HEIExitDate_Date,DateCreated_Date,DateModified_Date,LoadDate)
 						VALUES(UshauriPatientPK,UshauriPatientPKHash,PartnerName,SiteCode,SiteType,Emr,Project,FacilityName,PatientMNCH_ID,PatientHEI_ID,[1stDNAPCRDate],[2ndDNAPCRDate],[3rdDNAPCRDate],ConfirmatoryPCRDate,BasellineVLDate,FinalyAntibodyDate,[1stDNAPCR],[2ndDNAPCR],[3rdDNAPCR],ConfirmatoryPCR,BasellineVL,FinalyAntibody,HEIExitDate,HEIHIVStatus,HEIExitCriteria,DateCreated,DateModified,[1stDNAPCRDate_Date],[2ndDNAPCRDate_Date],[3rdDNAPCRDate_Date],ConfirmatoryPCRDate_Date,BasellineVLDate_Date,FinalyAntibodyDate_Date,HEIExitDate_Date,DateCreated_Date,DateModified_Date,Getdate())
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 						
+						UPDATE SET
 						a.[PartnerName]					=		b.[PartnerName],
 						a.[SiteType]					=		b.[SiteType],
 						a.[Emr]							=		b.[Emr],
@@ -57,5 +57,5 @@ BEGIN
 						a.[DateModified_Date]			=		b.[DateModified_Date]
 						;
 
-		
+
 	END
