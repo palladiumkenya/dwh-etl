@@ -13,7 +13,8 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Feature_Access] AS a USING (
     [Project],
     [FacilityName],
     [Gender],
-    [DOB] [MaritalStatus],
+    [DOB],
+    [MaritalStatus],
     [PatientResidentCounty],
     [PatientResidentLocation],
     [PatientResidentSubCounty],
@@ -85,12 +86,10 @@ VALUES
   WHEN MATCHED THEN
 UPDATE
 SET
-  a.[UshauriPatientPK] = b.[PatientPK],
   a.[PatientPKHash] = b.[PatientPKHash],
   a.[PartnerName] = b.[PartnerName],
   a.[SiteCode] = b.[SiteCode],
   a.[SiteType] = b.[SiteType],
-  a.[PatientID] = b.[PatientID],
   a.[PatientIDHash] = b.[PatientIDHash],
   a.[FacilityID] = b.[FacilityID],
   a.[Emr] = b.[Emr],
