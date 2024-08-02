@@ -1,3 +1,7 @@
+/*
+Created by : Dennis Mugo
+Revised by : Nobert Mumo and  Mary Wambui
+*/
 TRUNCATE TABLE ndwh.dbo.FactViralLoad_Hist;
 
 DECLARE @start_date DATE;
