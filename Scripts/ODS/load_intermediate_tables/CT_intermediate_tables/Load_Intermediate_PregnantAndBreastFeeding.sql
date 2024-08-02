@@ -1,3 +1,7 @@
+/*
+Created By: Dennis Mugo
+Revised By: Ann Kiwara and Nobert Mumo
+*/
 TRUNCATE TABLE ODS.dbo.Intermediate_PregnantAndBreastFeeding;
 
 DECLARE @start_date DATE;
