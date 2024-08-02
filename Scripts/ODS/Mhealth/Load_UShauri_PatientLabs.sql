@@ -1,8 +1,8 @@
 ---- Loads data from MhealthCentral to ODS
------truncate table[ODS].[dbo].[Ushauri_PatientLabs]
+-----truncate table[ODS].[dbo].[Mhealth_mLab_PatientLab]
 BEGIN
 
-  MERGE  [ODS].[dbo].[Ushauri_PatientLabs] AS a
+  MERGE  [ODS].[dbo].[Mhealth_mLab_PatientLab] AS a
   USING (
     SELECT DISTINCT [PatientPK]
 					,[PatientPKHash]
