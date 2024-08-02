@@ -10,12 +10,14 @@ BEGIN
 			,Patient.PatientPKHash
 			,Patient.Gender
 			,Patient.DOB
+			,StartARTDate
 			,AsOfDate
 			,AgeAsOfDate
 			,[AgeGroup].DATIMAgeGroup
 			,YEAR(TRY_CAST(DateConfirmedHIVPositiveKey AS DATE)) As CohortYear
 			,TRY_CAST(DateConfirmedHIVPositiveKey AS DATE) As CohortYearMonth
 			,cast(DateConfirmedHIVPositiveKey as date) As OutcomeYearMonth
+			,IsPBFW
 			,EligibleVL As VLEligibility
 			,IsValidVL As VLValidity
 			,VLSup As VLSuppression
