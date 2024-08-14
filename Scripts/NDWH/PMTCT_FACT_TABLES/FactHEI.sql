@@ -142,14 +142,38 @@ infected_and_ART as (
         and art.SiteCode = heis.SiteCode
     where HEIHIVStatus = 'Positive' and art.StartARTDate is not null
 ),
-prophylaxis_data as (
+Mothers as (
     select
-        heis.PatientPk,
-        heis.SiteCode
-    from ODS.dbo.MNCH_HEIs as heis
-    inner join latest_cwc_visit on latest_cwc_visit.PatientPK = heis.PatientPK
-        and latest_cwc_visit.SiteCode = heis.Sitecode
-    where MedicationGiven in ('AZT', 'NVP', 'CTX')
+        Patientpk,
+        sitecode,
+        row_number() OVER (PARTITION BY SiteCode, PatientPK ORDER BY VisitDate DESC) AS num
+    FROM ODS.dbo.MNCH_AncVisits
+    WHERE AZTBabyDispense IS NOT NULL OR NVPBabyDispense IS NOT NULL
+),
+prophylaxis_data as (SELECT
+    Patientpk,
+    Sitecode,
+    ''Babypatientpk
+FROM Mothers
+WHERE num = 1
+
+UNION
+
+SELECT
+    Patientpk,
+    sitecode,
+    ''Babypatientpk
+FROM ODS.dbo.MNCH_PncVisits
+WHERE InfantProphylaxisGiven = 'Yes'
+
+union
+ SELECT
+    mat.Patientpk,
+    mat.sitecode,
+    Babypatientpk
+FROM ODS.dbo.MNCH_MatVisits as mat
+left join ODS.dbo.mnch_motherbabypairs as pair on pair.PatientPk=mat.patientpk and pair.sitecode=mat.sitecode
+WHERE BabyGivenProphylaxis = 'Yes'
 )
 select
     FactKey = IDENTITY(INT, 1, 1),
@@ -213,7 +237,7 @@ select
     positive_heis.HEIExitCritearia as HEIExitCriteria,
     positive_heis.HEIHIVStatus,
     case 
-        when prophylaxis_data.PatientPk is not null then 1 
+        when prophylaxis_data.Babypatientpk is not null then 1 
         else 0
     end as OnProhylaxis,
     case 
