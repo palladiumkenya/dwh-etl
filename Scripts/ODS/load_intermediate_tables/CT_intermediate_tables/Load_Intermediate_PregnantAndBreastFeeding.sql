@@ -149,7 +149,7 @@ step 5 breastFeeding Category 1:
       - From the pregnant list in step 4(above), If AsOfDate is greater that EDD and date difference between EDD and AsOfDate is less than 
 	  24 months, then you are considered breastfeeding
 */
-BreastFeedingFromPregnantOrdered As (---6,365   
+BreastFeedingFromPregnantOrdered As ( 
 					select
 							SiteCode
 							,PatientPK
