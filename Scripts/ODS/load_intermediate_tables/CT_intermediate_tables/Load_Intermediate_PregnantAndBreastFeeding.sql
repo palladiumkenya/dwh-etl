@@ -302,7 +302,7 @@ SELECT  [SiteCode]
       ,[PatientPK]
 	  ,PatientPKHash
       ,[IsPregnant]
-      ,[IsBreastFeedingAsOfDate]
+      ,[IsBreastFeeding]
       ,[AsOfDate]
       ,[VisitDate]
       ,[IsPBFW]
