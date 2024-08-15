@@ -297,12 +297,12 @@ PBFW As(
 /*
 Step 10 : Insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding] for reuse
 */
-insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeedingAsOfDate],[AsOfDate],[VisitDate],[IsPBFW])
+insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeeding],[AsOfDate],[VisitDate],[IsPBFW])
 SELECT  [SiteCode]
       ,[PatientPK]
 	  ,PatientPKHash
       ,[IsPregnant]
-      ,[IsBreastFeeding]
+      ,[IsBreastFeedingAsOfDate]
       ,[AsOfDate]
       ,[VisitDate]
       ,[IsPBFW]
