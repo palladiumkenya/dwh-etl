@@ -1,4 +1,4 @@
-						Select
+			with cte AS (Select
 						PatientPK,
 						Sitecode,
 						OrderedbyDate,
