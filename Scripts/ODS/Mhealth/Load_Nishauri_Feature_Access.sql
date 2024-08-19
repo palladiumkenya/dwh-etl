@@ -13,7 +13,6 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Feature_Access] AS a USING (
     [Project],
     [FacilityName],
     [Gender],
-    [DOB],
     [MaritalStatus],
     [PatientResidentCounty],
     [PatientResidentLocation],
@@ -21,7 +20,7 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Feature_Access] AS a USING (
     [PatientResidentSubLocation],
     [PatientResidentVillage],
     [PatientResidentWard],
-    [FeatureAccessDate],
+    [DateCreated],
     [PKV],
     [FeatureAccess],
     [DOB_Date],
@@ -32,7 +31,7 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Feature_Access] AS a USING (
 WHEN NOT MATCHED THEN
 INSERT
   (
-    [UshauriPatientPK],
+    [PatientPK],
     [PatientPKHash],
     [PartnerName],
     [SiteCode],
@@ -51,6 +50,7 @@ INSERT
     [PatientResidentSubLocation],
     [PatientResidentVillage],
     [PatientResidentWard],
+    [DateCreated],
     [PKV],
     [FeatureAccess],
     [DOB],
@@ -77,16 +77,15 @@ VALUES
     b.[PatientResidentSubLocation],
     b.[PatientResidentVillage],
     b.[PatientResidentWard],
+    b.[DateCreated],
     b.[PKV],
     b.[FeatureAccess],
-    b.[FeatureAccessDate],
     b.[DOB_Date],
     b.[FeatureAccessDate_Date]
   )
   WHEN MATCHED THEN
 UPDATE
 SET
-  a.[PatientPKHash] = b.[PatientPKHash],
   a.[PartnerName] = b.[PartnerName],
   a.[SiteCode] = b.[SiteCode],
   a.[SiteType] = b.[SiteType],
