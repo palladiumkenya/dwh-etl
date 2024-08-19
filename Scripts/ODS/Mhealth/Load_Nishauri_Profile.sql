@@ -29,7 +29,7 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Profile] AS a USING (
 WHEN NOT MATCHED THEN
 INSERT
   (
-    [Ushauri_PatientPK],
+    [PatientPK],
     [PatientPKHash],
     [PartnerName],
     [SiteCode],
@@ -50,8 +50,7 @@ INSERT
     [PatientResidentWard],
     [PKV],
     [DOB],
-    [DateCreated],
-    [LoadDate]
+    [DateCreated]
   )
 VALUES
   (
@@ -76,13 +75,11 @@ VALUES
     b.[PatientResidentWard],
     b.[PKV],
     b.[DOB_Date],
-    b.[DateCreated_Date],
-    GETDATE()
+    b.[DateCreated_Date]
   )
   WHEN MATCHED THEN
 UPDATE
 SET
-  a.[PatientPKHash] = b.[PatientPKHash],
   a.[PartnerName] = b.[PartnerName],
   a.[SiteCode] = b.[SiteCode],
   a.[SiteType] = b.[SiteType],
