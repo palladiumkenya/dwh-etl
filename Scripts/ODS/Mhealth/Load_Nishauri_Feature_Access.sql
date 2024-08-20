@@ -32,6 +32,7 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Feature_Access] AS a USING (
   AND a.[SiteCode] = b.[SiteCode]
   AND a.[PatientPK] = b.[PatientPK]
   AND a.[FeatureAccessDate_Date] = b.[FeatureAccessDate_Date]
+  AND a.[FeatureAccess] = b.[FeatureAccess]
 )
 WHEN NOT MATCHED THEN
 INSERT
