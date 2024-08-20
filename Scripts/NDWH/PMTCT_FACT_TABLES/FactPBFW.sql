@@ -9,20 +9,24 @@ BEGIN
              FROM   Ods.Dbo.All_emrsites
        ),
        Anc_from_mnch AS (
-              SELECT Row_number()
-                      OVER (
-                        Partition BY Patientpk, Sitecode
-                        ORDER BY Visitdate ASC ) AS NUM,
-                    Patientpk,
-                    Patientpkhash,
-                    Sitecode,
-                    Visitdate
-             FROM   Ods.Dbo.Mnch_ancvisits
-             WHERE  Hivstatusbeforeanc = 'KP'
-                     OR Hivtestfinalresult = 'Positive'
-		),
+              select Row_number()
+                            OVER (
+                            Partition BY Patientpk, Sitecode
+                            ORDER BY Visitdate asc ) as num,
+                     Patientpk,
+                     Patientpkhash,
+                     Sitecode,
+                     Visitdate,
+                     HIVStatusBeforeANC
+              from   Ods.Dbo.Mnch_ancvisits
+              where (Hivstatusbeforeanc = 'KP'
+                            OR Hivtestfinalresult = 'Positive')	
+       ),
        Pbfw_patient AS (
-              select * from ODS.dbo.Intermediate_Pbfw
+              select
+                     * 
+              from ODS.dbo.Intermediate_PregnantAndBreastFeeding
+              where AsOfDate = (select max(AsOfDate) from ODS.dbo.Intermediate_PregnantAndBreastFeeding)
        ),
        Ancdate1 as (
               SELECT Anc.Patientpkhash,
@@ -151,13 +155,54 @@ BEGIN
          Pbfwreglineswitch
          AS (SELECT *
              FROM   Switches
-             WHERE  Num = 1),
-         Summary
-         AS (SELECT Patient.PatientPKHash,
+             WHERE  Num = 1
+       ),
+       visits_ordered as (
+       select 
+              PatientPK,
+              SiteCode,
+              VisitDate,
+              row_number() over (partition by PatientPK, SiteCode order by VisitDate asc) as rank
+       from ODS.dbo.CT_PatientVisits
+              where (Pregnant='Yes' OR breastfeeding='Yes')
+              and datediff(month, VisitDate, EOMONTH(DATEADD(mm,-1,GETDATE()))) <= 33 --filtering for 9 months pregnancy and at least 24 months of brestfeeding
+       ),
+       earliest_anc_from_greencard as (
+       select 
+              PatientPK,
+              SiteCode,
+              VisitDate as GreenCardAncDate1
+       from visits_ordered
+       where rank = 1
+       ),
+       anc_source_ordered_desc as (
+              select Row_number()
+                            OVER (
+                            Partition BY Patientpk, Sitecode
+                            ORDER BY Visitdate desc ) as num,
+                     Patientpk,
+                     Patientpkhash,
+                     Sitecode,
+                     Visitdate,
+                     HIVStatusBeforeANC
+              from   Ods.Dbo.Mnch_ancvisits
+              where (Hivstatusbeforeanc = 'KP'
+                            OR Hivtestfinalresult = 'Positive')
+              and datediff(month, VisitDate, EOMONTH(DATEADD(mm,-1,GETDATE()))) <= 33 --filtering for 9 months pregnancy and at least 24 months of brestfeeding
+       ),
+       latest_anc as (
+	select 
+		*
+	from anc_source_ordered_desc
+	where num = 1
+       ),
+       Summary AS (
+              SELECT
+                    Patient.PatientPKHash,
                     Patient.Sitecode,
-                    Dob,
-                    Gender,
-                    coalesce(GreenCardAncDate1, Ancdate1.ANCDate1) AS ANCDate1,
+                    dim_patient.Dob,
+                    dim_patient.Gender,
+                    coalesce(earliest_anc_from_greencard.GreenCardAncDate1, Ancdate1.ANCDate1) AS ANCDate1,
                     ANCDate2.Ancdate2,
                     ANCDate3.Ancdate3,
                     ANCDate4.Ancdate4,
@@ -174,20 +219,12 @@ BEGIN
                       ELSE 0
                     END       AS TestedatPNC,
                     CASE
-                      WHEN Datediff(Year, Dob,  EOMONTH(DATEADD(mm,-1,GETDATE()))) BETWEEN 10 AND 19 THEN
+                      WHEN Datediff(Year, dim_patient.Dob,  EOMONTH(DATEADD(mm,-1,GETDATE()))) BETWEEN 10 AND 19 THEN
                       1
                       ELSE 0
                     END       AS PositiveAdolescent,
                     CASE
-                      WHEN PBFWCategory = 'New Positive'  THEN 1
-                      ELSE 0
-                    END       AS NewPositives,
-                    CASE
-                      WHEN PBFWCategory = 'Known Positive'  THEN 1
-                      ELSE 0
-                    END      AS KnownPositive,
-                    CASE
-                      WHEN Startartdate IS NOT NULL THEN 1
+                      WHEN art.Startartdate IS NOT NULL THEN 1
                       ELSE 0
                     END       AS RecieivedART,
                     CASE
@@ -203,42 +240,63 @@ BEGIN
                       ELSE 0
                     END       AS ReceivedEAC3,
                     Pbfwreglineswitch,
-                    Pregnant,
-                    Breastfeeding
-             FROM   Pbfw_patient AS Patient
-                     LEFT JOIN Ancdate1
-                           ON Patient.Patientpk = Ancdate1.Patientpk
-                              AND Patient.Sitecode = Ancdate1.Sitecode
-                    LEFT JOIN Ancdate2
-                           ON Patient.Patientpk = Ancdate2.Patientpk
-                              AND Patient.Sitecode = Ancdate2.Sitecode
-                    LEFT JOIN Ancdate3
-                           ON Patient.Patientpk = Ancdate3.Patientpk
-                              AND Patient.Sitecode = Ancdate3.Sitecode
-                    LEFT JOIN Ancdate4
-                           ON Patient.Patientpk = Ancdate4.Patientpk
-                              AND Patient.Sitecode = Ancdate4.Sitecode
-                    LEFT JOIN Testedatanc
-                           ON Patient.Patientpk = Testedatanc.Patientpk
-                              AND Patient.Sitecode = Testedatanc.Sitecode
-                    LEFT JOIN Testedatlandd
-                           ON Patient.Patientpk = Testedatlandd.Patientpk
-                              AND Patient.Sitecode = Testedatlandd.Sitecode
-                    LEFT JOIN Testedatpnc
-                           ON Patient.Patientpk = Testedatpnc.Patientpk
-                              AND Patient.Sitecode = Testedatpnc.Sitecode
-                    LEFT JOIN Receivedeac1
-                           ON Patient.Patientpk = Receivedeac1.Patientpk
-                              AND Patient.Sitecode = Receivedeac1.Sitecode
-                    LEFT JOIN Receivedeac2
-                           ON Patient.Patientpk = Receivedeac2.Patientpk
-                              AND Patient.Sitecode = Receivedeac2.Sitecode
-                    LEFT JOIN Receivedeac3
-                           ON Patient.Patientpk = Receivedeac3.Patientpk
-                              AND Patient.Sitecode = Receivedeac3.Sitecode
-                    LEFT JOIN Pbfwreglineswitch
-                           ON Patient.Patientpk = Pbfwreglineswitch.Patientpk
-                              AND Patient.Sitecode = Pbfwreglineswitch.Sitecode)
+                    case when IsPregnant = 1 then 'Yes' else 'No' end as Pregnant,
+                    case when IsBreastfeeding = 1 then 'Yes' else 'No' end as Breastfeeding,
+					case 
+						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) < patient.VisitDate then 'Known Positive'
+						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) = patient.VisitDate then 'New Positive'
+						when HIVStatusBeforeANC in ('Positive', 'KP') then 'Known Positive'
+						when latest_anc.PatientPK is not null and HIVStatusBeforeANC not in ('KP') then 'New Positive'
+						else 'Missing'
+					end as PBFWCategory
+              FROM   Pbfw_patient AS Patient
+              LEFT JOIN Ancdate1
+                     ON Patient.Patientpk = Ancdate1.Patientpk
+                            AND Patient.Sitecode = Ancdate1.Sitecode
+              LEFT JOIN Ancdate2
+                     ON Patient.Patientpk = Ancdate2.Patientpk
+                            AND Patient.Sitecode = Ancdate2.Sitecode
+              LEFT JOIN Ancdate3
+                     ON Patient.Patientpk = Ancdate3.Patientpk
+                            AND Patient.Sitecode = Ancdate3.Sitecode
+              LEFT JOIN Ancdate4
+                     ON Patient.Patientpk = Ancdate4.Patientpk
+                            AND Patient.Sitecode = Ancdate4.Sitecode
+              LEFT JOIN Testedatanc
+                     ON Patient.Patientpk = Testedatanc.Patientpk
+                            AND Patient.Sitecode = Testedatanc.Sitecode
+              LEFT JOIN Testedatlandd
+                     ON Patient.Patientpk = Testedatlandd.Patientpk
+                            AND Patient.Sitecode = Testedatlandd.Sitecode
+              LEFT JOIN Testedatpnc
+                     ON Patient.Patientpk = Testedatpnc.Patientpk
+                            AND Patient.Sitecode = Testedatpnc.Sitecode
+              LEFT JOIN Receivedeac1
+                     ON Patient.Patientpk = Receivedeac1.Patientpk
+                            AND Patient.Sitecode = Receivedeac1.Sitecode
+              LEFT JOIN Receivedeac2
+                     ON Patient.Patientpk = Receivedeac2.Patientpk
+                            AND Patient.Sitecode = Receivedeac2.Sitecode
+              LEFT JOIN Receivedeac3
+                     ON Patient.Patientpk = Receivedeac3.Patientpk
+                            AND Patient.Sitecode = Receivedeac3.Sitecode
+              LEFT JOIN Pbfwreglineswitch
+                     ON Patient.Patientpk = Pbfwreglineswitch.Patientpk
+                            AND Patient.Sitecode = Pbfwreglineswitch.Sitecode
+              left join NDWH.dbo.Dimpatient as dim_patient 
+                     on dim_patient.PatientPKHash = CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST(Patient.PatientPK as NVARCHAR(36))), 2) 
+                            and dim_patient.SiteCode = Patient.SiteCode
+              left join ODS.dbo.CT_ARTPatients as art 
+                                   on art.PatientPK = Patient.PatientPK
+                            and art.SiteCode = Patient.SiteCode
+              left join latest_anc        
+                            on latest_anc.PatientPK = Patient.PatientPK 
+                            and latest_anc.SiteCode = Patient.SiteCode
+              left join earliest_anc_from_greencard 
+                            on earliest_anc_from_greencard.PatientPK = Patient.PatientPK 
+                            and earliest_anc_from_greencard.SiteCode = Patient.SiteCode
+                     
+)
     SELECT FactKey = IDENTITY(Int, 1, 1),
            Patient.Patientkey,
            Facility.Facilitykey,
@@ -253,8 +311,14 @@ BEGIN
            Testedatlandd,
            Testedatpnc,
            Positiveadolescent,
-           Newpositives,
-           Knownpositive,
+           CASE
+              WHEN PBFWCategory = 'New Positive'  THEN 1
+              ELSE 0
+           END AS NewPositives,
+           CASE
+              WHEN PBFWCategory = 'Known Positive'  THEN 1
+              ELSE 0
+           END AS KnownPositive,
            Recieivedart,
            Ancdate1.Datekey AS ANCDate1Key,
            Ancdate2.Datekey AS ANCDate2Key,
@@ -294,3 +358,4 @@ BEGIN
     ALTER TABLE Ndwh.Dbo.Factpbfw
       ADD PRIMARY KEY(Factkey);
 END 
+
