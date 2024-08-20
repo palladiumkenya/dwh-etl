@@ -25,7 +25,11 @@ BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Profile] AS a USING (
     [DateCreated_Date]
   FROM
     [MhealthCentral].[dbo].[Nishauri_Profile] (NOLOCK)
-) AS b ON (a.[PatientID] = b.[PatientID])
+) AS b ON (
+  a.[PatientID] = b.[PatientID]
+  AND a.[SiteCode] = b.[SiteCode]
+  AND a.[PatientPK] = b.[PatientPK]
+)
 WHEN NOT MATCHED THEN
 INSERT
   (
