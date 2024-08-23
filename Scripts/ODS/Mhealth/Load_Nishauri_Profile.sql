@@ -1,7 +1,7 @@
 ---- Loads Nishauri Profile data from MhealthCentral to ODS
 BEGIN MERGE [ODS].[dbo].[Mhealth_Nishauri_Profile] AS a USING (
   SELECT
-    DISTINCT [PatientPK],
+    [PatientPK],
     [PatientPKHash],
     [PartnerName],
     [SiteCode],
