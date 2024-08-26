@@ -168,12 +168,36 @@ BEGIN
               and datediff(month, VisitDate, EOMONTH(DATEADD(mm,-1,GETDATE()))) <= 33 --filtering for 9 months pregnancy and at least 24 months of brestfeeding
        ),
        earliest_anc_from_greencard as (
-       select 
-              PatientPK,
-              SiteCode,
-              VisitDate as GreenCardAncDate1
-       from visits_ordered
-       where rank = 1
+        select 
+                PatientPK,
+                SiteCode,
+                VisitDate as GreenCardAncDate1
+        from visits_ordered
+        where rank = 1
+       ),
+       second_anc_greencard as (
+        select 
+                PatientPK,
+                SiteCode,
+                VisitDate as GreenCardAncDate2
+        from visits_ordered
+        where rank = 2
+       ),
+       third_anc_greencard as (
+        select 
+                PatientPK,
+                SiteCode,
+                VisitDate as GreenCardAncDate3
+        from visits_ordered
+        where rank = 3
+       ),
+       fourth_anc_greencard as (
+        select 
+                PatientPK,
+                SiteCode,
+                VisitDate as GreenCardAncDate4
+        from visits_ordered
+        where rank = 4
        ),
        anc_source_ordered_desc as (
               select Row_number()
@@ -202,10 +226,10 @@ BEGIN
                     Patient.Sitecode,
                     dim_patient.Dob,
                     dim_patient.Gender,
-                    coalesce(earliest_anc_from_greencard.GreenCardAncDate1, Ancdate1.ANCDate1) AS ANCDate1,
-                    ANCDate2.Ancdate2,
-                    ANCDate3.Ancdate3,
-                    ANCDate4.Ancdate4,
+                    coalesce(earliest_anc_from_greencard.GreenCardAncDate1, Ancdate1.ANCDate1) as ANCDate1,
+                    coalesce(second_anc_greencard.GreenCardAncDate2, ANCDate2.Ancdate2) as Ancdate2,
+                    coalesce(third_anc_greencard.GreenCardAncDate3, ANCDate3.Ancdate3) as Ancdate3,
+                    coalesce(fourth_anc_greencard.GreenCardAncDate4, ANCDate4.Ancdate4) as Ancdate4,
                     CASE
                       WHEN Testedatlandd.Patientpkhash IS NOT NULL THEN 1
                       ELSE 0
@@ -295,7 +319,15 @@ BEGIN
               left join earliest_anc_from_greencard 
                             on earliest_anc_from_greencard.PatientPK = Patient.PatientPK 
                             and earliest_anc_from_greencard.SiteCode = Patient.SiteCode
-                     
+              left join second_anc_greencard 
+                            on second_anc_greencard.PatientPK = Patient.PatientPK 
+                            and second_anc_greencard.SiteCode = Patient.SiteCode
+              left join third_anc_greencard 
+                            on third_anc_greencard.PatientPK = Patient.PatientPK 
+                            and third_anc_greencard.SiteCode = Patient.SiteCode
+              left join fourth_anc_greencard 
+                            on fourth_anc_greencard.PatientPK = Patient.PatientPK 
+                            and fourth_anc_greencard.SiteCode = Patient.SiteCode                     
 )
     SELECT FactKey = IDENTITY(Int, 1, 1),
            Patient.Patientkey,
@@ -358,4 +390,3 @@ BEGIN
     ALTER TABLE Ndwh.Dbo.Factpbfw
       ADD PRIMARY KEY(Factkey);
 END 
-
