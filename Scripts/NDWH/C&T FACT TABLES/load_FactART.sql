@@ -260,8 +260,6 @@ insert into [NDWH].[dbo].[FACTARTHistory_Archive]( [PatientKey]
 DELETE [NDWH].[dbo].[FactARTHistory]
 WHERE datediff(month,AsOfDateKey,getdate()) > 12;
 ----------End
-
-
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -390,7 +388,37 @@ select
 from partitioned_regimen_line_data
 where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()))) <= 12
   and LastRegimenLine = 'Second Line'
+),
+
+ UnsuppressedAtlastVl as (
+    SELECT
+    PatientPKHash,
+    SiteCode,
+    TestResult,
+    OrderedbyDate
+    from ODS.dbo.Intermediate_OrderedViralLoads
+    where   try_cast (TestResult as decimal) > 1000 and  rank=1
+),
+  UnsuppressedAtsecondLastVL as (
+     SELECT
+    PatientPKHash,
+    SiteCode,
+    TestResult,
+    OrderedbyDate
+    from ODS.dbo.Intermediate_OrderedViralLoads
+    where   try_cast (TestResult as decimal) > 1000 and  rank=2
+  
+),
+ConfirmedTreatmentFailure as (
+    SELECT
+    UnsuppressedAtlastVl.PatientPKHash,
+    UnsuppressedAtlastVl.SiteCode,
+    UnsuppressedAtlastVl.TestResult,
+    UnsuppressedAtlastVl.OrderedbyDate
+   from  UnsuppressedAtlastVl
+   inner join UnsuppressedAtsecondLastVL on UnsuppressedAtlastVl.PatientPKHash=UnsuppressedAtsecondLastVL.PatientPKHash and UnsuppressedAtlastVl.SiteCode=UnsuppressedAtsecondLastVL.SiteCode
 )
+
    Select 
             Factkey = IDENTITY(INT, 1, 1),
             pat.PatientKey,
@@ -444,6 +472,7 @@ where rank = 1 and datediff(month, DispenseDate, eomonth(dateadd(mm,-1,getdate()
             end as SwitchedToSecondLineLast12Months,
             end_month.DateKey as AsOfDateKey,
             Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
+            Case When ConfirmedTreatmentFailure.PatientPKHash is not null then 1 else 0 End as ConfirmedTreatmentFailure,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
@@ -466,6 +495,9 @@ left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash =
   and rtt_within_last_12_months.MFLCode = Patient.SiteCode
 left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_in_last_12_monhts.PatientPKHash = Patient.PatientPKHash
   and swithced_to_second_line_in_last_12_monhts.SiteCode = Patient.SiteCode
+  left join ConfirmedTreatmentFailure on ConfirmedTreatmentFailure.PatientPKHash=Patient.patientpkhash and ConfirmedTreatmentFailure.SiteCode=Patient.sitecode
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END
+
+
