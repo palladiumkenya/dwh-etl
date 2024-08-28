@@ -55,7 +55,7 @@ BEGIN
            Daysdefaulted,
            Nupihash
     INTO   NDWH.dbo.FactUshauriAppointments
-    FROM   Ods.Dbo.Ushauri_patientappointments AS Apt
+    FROM   [ODS].[dbo].[Mhealth_Ushauri_PatientAppointments] AS Apt
            LEFT JOIN Ndwh.Dbo.Dimfacility AS Facility
                   ON Facility.Mflcode = Apt.Sitecode
            LEFT JOIN Mfl_partner_agency_combination

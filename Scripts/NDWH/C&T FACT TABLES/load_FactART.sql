@@ -417,6 +417,7 @@ ConfirmedTreatmentFailure as (
     UnsuppressedAtlastVl.OrderedbyDate
    from  UnsuppressedAtlastVl
    inner join UnsuppressedAtsecondLastVL on UnsuppressedAtlastVl.PatientPKHash=UnsuppressedAtsecondLastVL.PatientPKHash and UnsuppressedAtlastVl.SiteCode=UnsuppressedAtsecondLastVL.SiteCode
+
 ),
 TBLamResults as (
 Select 
@@ -452,6 +453,7 @@ TBLamPosonTBRx as (
     from TBLamPos
     inner join OnTBDrugs on TBLamPos.PatientPKHash=OnTBDrugs.PatientPKHash and TBLamPos.SiteCode=OnTBDrugs.SiteCode
     where TBLamPos.OrderedbyDate <OnTBDrugs.VisitDate
+
 )
 
    Select 
@@ -536,10 +538,10 @@ left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_i
   left join ConfirmedTreatmentFailure on ConfirmedTreatmentFailure.PatientPKHash=Patient.patientpkhash and ConfirmedTreatmentFailure.SiteCode=Patient.sitecode
   left join TBLamResults on TBLamResults.PatientPKHash=Patient.PatientPKHash and TBLamResults.SiteCode=Patient.SiteCode
   left join TBLamPosonTBRx on TBLamPosonTBRx.PatientPKHash=Patient.PatientPKHash and TBLamPosonTBRx.SiteCode=Patient.SiteCode
+
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END
-
 
 
 
