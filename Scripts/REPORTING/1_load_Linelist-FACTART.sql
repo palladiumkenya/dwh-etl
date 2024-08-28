@@ -95,6 +95,7 @@ Select distinct
 	ScreenedDepressionDate,
     case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
+    Case when startdate.Date >= DATEADD(MONTH, DATEDIFF(MONTH,0, GETDATE()) -1,0) and startdate.Date <DATEADD(MONTH,DATEDIFF(MONTH, 0, GETDATE()), 0) Then 1 Else 0 End as NewPatient,
     onMMD,
     StabilityAssessment,
     AppointmentsCategory,
@@ -105,6 +106,7 @@ Select distinct
     obs.StartIPT,
     obs.EverOnIPT,
     art.SwitchedToSecondLineLast12Months,
+    art.ConfirmedTreatmentFailure,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
