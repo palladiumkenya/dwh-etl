@@ -6,7 +6,7 @@ TRUNCATE TABLE ODS.dbo.Intermediate_PregnantAndBreastFeeding;
 
 DECLARE @start_date DATE;
 
-SELECT @start_date = dateadd(month, -12, eomonth(dateadd(month, -1, getdate())));
+SELECT @start_date = dateadd(month, -60, eomonth(dateadd(month, -1, getdate())));
 
 DECLARE @end_date DATE;
 
@@ -48,7 +48,7 @@ step 1 pregnant:
 
 */
 WITH ReportedAsPregnant As (
-    select				SiteCode
+    select		distinct		SiteCode
 						,CT_PatientVisits.PatientPK
 						,CT_PatientVisits.PatientPKHash
 						,Pregnant
@@ -59,7 +59,8 @@ WITH ReportedAsPregnant As (
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
 						where  Pregnant='Yes' and cast(LMP as date) <>'1900-01-01' and LMP is not null and voided=0 and LMP <=@as_of_date 
-						and VisitDate <= @as_of_date	
+						and VisitDate <= @as_of_date --and PatientPK = 12706 and SiteCode = 11259	
+						
 ),
 ---End of step 1
 /*
@@ -78,7 +79,7 @@ OrderedPregnant As (
 											else 0 end,
 						LMP As LatestLMPByVisitDate,						
 						AsOfDate,
-						VisitDate
+						VisitDate As PregnancyRelatedVisitDate
 						
 					from ReportedAsPregnant
 
@@ -94,7 +95,7 @@ select SiteCode
 		,IspregnantAsOfDate
 		,LatestLMPByVisitDate
 		,AsOfDate
-		,VisitDate
+		,PregnancyRelatedVisitDate
 from OrderedPregnant
 where rank =1 
 ),
@@ -116,7 +117,7 @@ PregnantAndBreastFeedingCheckByAsOfDateByEDD As (
 																,LatestLMPByVisitDate
 																,EDD =  Cast(dateadd(day,280,LatestLMPByVisitDate) as date)
 																,AsOfDate
-																,VisitDate
+																,PregnancyRelatedVisitDate
 																,0 IsPBFW
 														from MaxOrderedPregnantByAsOfDate						
 ),
@@ -136,13 +137,13 @@ PregnantAsOfDate As (  --Those who are really pregnant based on EDD
 										,LatestLMPByVisitDate
 										,EDD 
 										,AsOfDate
-										,VisitDate
+										,PregnancyRelatedVisitDate
 										,0 IsPBFW
 								from PregnantAndBreastFeedingCheckByAsOfDateByEDD 
 								where  AsOfDate < EDD 
 
 ),
----End
+--End
 
 /*
 step 5 breastFeeding Category 1:
@@ -160,12 +161,12 @@ BreastFeedingFromPregnantOrdered As (
 							,LatestLMPByVisitDate
 							,EDD 
 							,AsOfDate
-							,VisitDate
+							,PregnancyRelatedVisitDate As BreastFeedingRelatedVisitDate
 							,IsPBFW
 						from PregnantAndBreastFeedingCheckByAsOfDateByEDD
 						where AsOfDate > EDD  and datediff(month,EDD,AsOfDate) <= 24
 						),
-----End
+--End
 /*
 Step 6 BreastFeeding :
                - Pick all the records where Breastfeeding status  is yes and visitDate less than or equal to asOfDate
@@ -179,17 +180,17 @@ ReportedAsBreastFeeding As (
 						,Breastfeeding
 						,cast(LMP as date)LMP
 						,@as_of_date As AsOfDate
-						,VisitDate					
+						,VisitDate	As BreastFeedingRelatedVisitDate			
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
-						where  Breastfeeding='Yes'  and voided=0 and VisitDate <= @as_of_date
+						where  Breastfeeding='Yes'  and voided=0 and VisitDate <= @as_of_date-- and PatientPK = 12706 and SiteCode = 11259	
 
 
 ),
-----Get the latest breastfeeding based on a visit
+------Get the latest breastfeeding based on a visit
 OrderedBreastFeeding As (
                      select 
-						row_number() over(partition by  SiteCode, PatientPK,Pregnant,AsOfDate order by visitdate Desc) as rank, 
+						row_number() over(partition by  SiteCode, PatientPK,Pregnant,AsOfDate order by BreastFeedingRelatedVisitDate Desc) as rank, 
 						SiteCode,
 						PatientPK,
 						PatientPkHash,
@@ -197,14 +198,13 @@ OrderedBreastFeeding As (
 						0 IsBreastFeedingAsOfDate,
 						LMP,						
 						AsOfDate,
-						VisitDate
-						
+						BreastFeedingRelatedVisitDate						
 					from ReportedAsBreastFeeding
 
 			),
 ----Pick the unique breastfeeding record by on a visit
 MaxOrderedBreastFeedingAsOfDate As (
-select SiteCode,PatientPK,PatientPkHash,Pregnant,IsBreastFeedingAsOfDate,LMP,AsOfDate,VisitDate
+select SiteCode,PatientPK,PatientPkHash,Pregnant,IsBreastFeedingAsOfDate,LMP,AsOfDate,BreastFeedingRelatedVisitDate
 from OrderedBreastFeeding
 where rank =1 
 ),
@@ -227,7 +227,7 @@ IsBreastFeedingFromHeiDOB As( ---breastfeeding confirmed from MNCH
 						,IsBreastFeedingAsOfDate
 						,LMP
 						,@as_of_date As AsOfDate
-						,VisitDate					
+						,BreastFeedingRelatedVisitDate					
 						,0 IsPBFW 
 				From MaxOrderedBreastFeedingAsOfDate                           
 				left join ods.dbo.MNCH_MotherBabyPairs pairs
@@ -235,9 +235,9 @@ IsBreastFeedingFromHeiDOB As( ---breastfeeding confirmed from MNCH
 				left join ods.dbo.MNCH_Patient  Patient
 				on pairs.SiteCode = Patient.SiteCode 
 							and pairs.BabyPatientPK = Patient.PatientPK
-				WHERE Datediff(month,Patient.DOB,@as_of_date) <=24 
+				WHERE Datediff(month,Patient.DOB,@as_of_date) <=24 ---and pairs.PatientPK = 12706 and pairs.SiteCode = 11259	
 ),
-----End
+--End
 /*
 Step 8 combine the breastFeeders
 */
@@ -250,7 +250,7 @@ CombineBreastFeeding As(
 								,0 Pregnant
 								,IsBreastFeedingAsOfDate =1
 								,AsOfDate
-								,VisitDate
+								,BreastFeedingRelatedVisitDate
 								,0 IsPBFW 
 							from BreastFeedingFromPregnantOrdered
 							union
@@ -260,51 +260,67 @@ select				SiteCode
 					,0 Pregnant
 					,IsBreastFeedingAsOfDate =1
 					,AsOfDate
-					,VisitDate
+					,BreastFeedingRelatedVisitDate
 					,0 IsPBFW 
 	
 	from IsBreastFeedingFromHeiDOB
 ),
----End
+--End
 /*
 Step 9 combine breastfeeders and and pregnancies 
   - Combines to the two datasets to form PBFW
   - A seperator of either isPregnant or Isbreastfeeding is also there
 */
 PBFW As(
-       select SiteCode
-			,PatientPK
-			,PatientPKHash
-			,IsPregnant =0
+   --    select SiteCode
+			--,PatientPK
+			--,PatientPKHash
+			--,IsPregnant =0
+			--,IsBreastFeedingAsOfDate
+			--,AsOfDate
+			--,BreastFeedingRelatedVisitDate
+			--,IsPBFW	 = 1  
+	  -- from CombineBreastFeeding
+	  -- UNION
+	  -- SELECT SiteCode
+			--,PatientPK
+			--,PatientPKHash
+			--,IsPregnant =1
+			--,IsBreastFeedingAsOfDate =0
+			--,AsOfDate
+			--,PregnancyRelatedVisitDate
+			--,IsPBFW	 =1   
+	  -- FROM PregnantAsOfDate
+
+	   select CombineBreastFeeding.SiteCode
+			,CombineBreastFeeding.PatientPK
+			,CombineBreastFeeding.PatientPKHash
+			,IsPregnant  = case when PregnantAsOfDate.Pregnant ='yes' then 1 else 0 end
 			,IsBreastFeedingAsOfDate
-			,AsOfDate
-			,VisitDate
+			,CombineBreastFeeding.AsOfDate
+			,BreastFeedingRelatedVisitDate
+			,PregnantAsOfDate.PregnancyRelatedVisitDate
 			,IsPBFW	 = 1  
 	   from CombineBreastFeeding
-	   UNION
-	   SELECT SiteCode
-			,PatientPK
-			,PatientPKHash
-			,IsPregnant =1
-			,IsBreastFeedingAsOfDate =0
-			,AsOfDate
-			,VisitDate
-			,IsPBFW	 =1   
-	   FROM PregnantAsOfDate
+	   full join PregnantAsOfDate
+	   on	CombineBreastFeeding.SiteCode = PregnantAsOfDate.SiteCode and
+			CombineBreastFeeding.PatientPK = PregnantAsOfDate.PatientPK and
+			CombineBreastFeeding.AsOfDate = PregnantAsOfDate.AsOfDate
 
 )
-----End
+--End
 /*
 Step 10 : Insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding] for reuse
 */
-insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeeding],[AsOfDate],[VisitDate],[IsPBFW])
-SELECT  [SiteCode]
+insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeeding],[AsOfDate],BreastFeedingRelatedVisitDate,PregnancyRelatedVisitDate,[IsPBFW])
+SELECT [SiteCode]
       ,[PatientPK]
 	  ,PatientPKHash
       ,[IsPregnant]
       ,[IsBreastFeedingAsOfDate]
       ,[AsOfDate]
-      ,[VisitDate]
+      ,BreastFeedingRelatedVisitDate
+	  ,PregnancyRelatedVisitDate
       ,[IsPBFW]
   FROM PBFW
 
