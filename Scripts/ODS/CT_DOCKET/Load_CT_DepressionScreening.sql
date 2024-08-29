@@ -2,10 +2,10 @@ BEGIN
 
 		DECLARE		@MaxVisitDate_Hist			DATETIME,
 					@VisitDate					DATETIME
-				
+
 		SELECT @MaxVisitDate_Hist =  MAX(MaxVisitDate) FROM [ODS_logs].[dbo].[CT_DepressionScreening_Log]  (NoLock)
-		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock)		
-					
+		SELECT @VisitDate = MAX(VisitDate) FROM [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock)
+
 		INSERT INTO  [ODS_logs].[dbo].[CT_DepressionScreening_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@MaxVisitDate_Hist,GETDATE())
 
@@ -34,18 +34,18 @@ BEGIN
 							,DS.[PHQ9_8]
 							,DS.[PHQ9_9]
 							,DS.[PHQ_9_rating]
-							,DS.[DepressionAssesmentScore]						
+							,DS.[DepressionAssesmentScore]
 							,P.ID
 							,DS.[Date_Created]
 							,DS.[Date_Last_Modified]
 							,DS.RecordUUID
 							,DS.voided
-							,VoidingSource = Case 
+							,VoidingSource = Case
 													when DS.voided = 1 Then 'Source'
 													Else Null
-											END 
+											END
 					FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-						INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) DS ON DS.[PatientId] = P.ID 
+						INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) DS ON DS.[PatientId] = P.ID
 						INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 						INNER JOIN (
 										SELECT  F.code as SiteCode
@@ -56,24 +56,24 @@ BEGIN
 												,max(InnerDS.ID) As maxID
 												,MAX(InnerDS.created )AS Maxdatecreated
 										FROM [DWAPICentral].[dbo].[PatientExtract](NoLock) P
-											INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) InnerDS ON InnerDS.[PatientId] = P.ID 
+											INNER JOIN [DWAPICentral].[dbo].[DepressionScreeningExtract](NoLock) InnerDS ON InnerDS.[PatientId] = P.ID
 											INNER JOIN [DWAPICentral].[dbo].[Facility](NoLock) F ON P.[FacilityId] = F.Id AND F.Voided = 0
 										GROUP BY F.code
 												,p.[PatientPID]
 												,InnerDS.voided
 												,InnerDS.VisitDate
 												,InnerDS.VisitID
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								DS.voided = tm.voided and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								DS.voided = tm.voided and
 								DS.created = tm.Maxdatecreated and
 								DS.ID =tm.maxID  and
 								DS.VisitDate = tm.VisitDate
 					WHERE P.gender != 'Unknown' AND F.code >0
-				) AS b 
+				) AS b
 						ON(
-						 a.PatientPK  = b.PatientPK 
+						 a.PatientPK  = b.PatientPK
 						and a.SiteCode = b.SiteCode
 						and a.VisitID = b.VisitID
 						and a.VisitDate = b.VisitDate
@@ -81,7 +81,7 @@ BEGIN
 
 						)
 
-					WHEN NOT MATCHED THEN 
+					WHEN NOT MATCHED THEN
 						INSERT(
 								ID
 								,PatientID
@@ -109,7 +109,7 @@ BEGIN
 								,voided
 								,VoidingSource
 								,LoadDate
-							)  
+							)
 						VALUES(
 								ID
 								,PatientID
@@ -138,9 +138,9 @@ BEGIN
 								,VoidingSource
 								,Getdate()
 							)
-				
+
 					WHEN MATCHED THEN
-						UPDATE SET 
+						UPDATE SET
 						a.PatientID					=b.PatientID,
 						a.PHQ9_1					=b.PHQ9_1,
 						a.PHQ9_2					=b.PHQ9_2,
@@ -157,16 +157,11 @@ BEGIN
 						a.[Date_Last_Modified]		=b.[Date_Last_Modified],
 						a.RecordUUID				=b.RecordUUID,
 						a.voided					=b.voided;
-											
-	
+
+
 					UPDATE [ODS_logs].[dbo].[CT_DepressionScreening_Log]
 						SET LoadEndDateTime = GETDATE()
 					WHERE MaxVisitDate = @MaxVisitDate_Hist;
-
-				INSERT INTO [ODS_logs].[dbo].[CT_DepressionScreeningCount_Log]([SiteCode],[CreatedDate],[DepressionScreeningCount])
-				SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS DepressionScreeningCount 
-				FROM [ODS].[dbo].[CT_DepressionScreening] 
-				GROUP BY SiteCode;
 
 
 

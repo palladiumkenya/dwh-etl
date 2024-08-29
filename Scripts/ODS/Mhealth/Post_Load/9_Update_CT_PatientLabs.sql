@@ -4,12 +4,12 @@ SET
     a.PatientPK = NULL,
     a.PatientPKHash = NULL
 FROM
-    [ODS].[dbo].[Ushauri_PatientLabs] a;
+    [ODS].[dbo].[Mhealth_mLab_PatientLab] a;
 
 UPDATE a
 SET
     a.PatientPK = p.PatientPK
 FROM
-    [ODS].[dbo].[Ushauri_PatientLabs] a
+    [ODS].[dbo].[Mhealth_mLab_PatientLab] a
 	JOIN [ODS].[dbo].[CT_Patient] p
 		ON a.PatientID = p.PatientID;

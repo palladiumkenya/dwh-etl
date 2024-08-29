@@ -417,6 +417,7 @@ ConfirmedTreatmentFailure as (
     UnsuppressedAtlastVl.OrderedbyDate
    from  UnsuppressedAtlastVl
    inner join UnsuppressedAtsecondLastVL on UnsuppressedAtlastVl.PatientPKHash=UnsuppressedAtsecondLastVL.PatientPKHash and UnsuppressedAtlastVl.SiteCode=UnsuppressedAtsecondLastVL.SiteCode
+<<<<<<< HEAD
 ),
 TBLamResults as (
 Select 
@@ -452,6 +453,8 @@ TBLamPosonTBRx as (
     from TBLamPos
     inner join OnTBDrugs on TBLamPos.PatientPKHash=OnTBDrugs.PatientPKHash and TBLamPos.SiteCode=OnTBDrugs.SiteCode
     where TBLamPos.OrderedbyDate <OnTBDrugs.VisitDate
+=======
+>>>>>>> ffd3d1a3e31d4b963373b568610d02c628026db6
 )
 
    Select 
@@ -508,9 +511,12 @@ TBLamPosonTBRx as (
             end_month.DateKey as AsOfDateKey,
             Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
             Case When ConfirmedTreatmentFailure.PatientPKHash is not null then 1 else 0 End as ConfirmedTreatmentFailure,
+<<<<<<< HEAD
             case when TBLamResults.PatientPKHash is not null then 1 else 0 end as DoneTBLamTest,
             case when TBLamResults.TestResult='Present' Then 1 else 0 End as TBLamPositive,
             case when TBLamPosonTBRx.PatientPKHash is not null then 1 Else 0 End as TBLamPosonTBRx,
+=======
+>>>>>>> ffd3d1a3e31d4b963373b568610d02c628026db6
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
@@ -534,12 +540,18 @@ left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash =
 left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_in_last_12_monhts.PatientPKHash = Patient.PatientPKHash
   and swithced_to_second_line_in_last_12_monhts.SiteCode = Patient.SiteCode
   left join ConfirmedTreatmentFailure on ConfirmedTreatmentFailure.PatientPKHash=Patient.patientpkhash and ConfirmedTreatmentFailure.SiteCode=Patient.sitecode
+<<<<<<< HEAD
   left join TBLamResults on TBLamResults.PatientPKHash=Patient.PatientPKHash and TBLamResults.SiteCode=Patient.SiteCode
   left join TBLamPosonTBRx on TBLamPosonTBRx.PatientPKHash=Patient.PatientPKHash and TBLamPosonTBRx.SiteCode=Patient.SiteCode
+=======
+>>>>>>> ffd3d1a3e31d4b963373b568610d02c628026db6
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> ffd3d1a3e31d4b963373b568610d02c628026db6
