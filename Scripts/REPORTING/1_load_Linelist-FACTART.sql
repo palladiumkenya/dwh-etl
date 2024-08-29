@@ -114,7 +114,6 @@ Select distinct
     art.DoneTBLamTest,
     art.TBLamPositive,
     art.TBLamPosonTBRx,
-    art.ConfirmedTreatmentFailure,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
