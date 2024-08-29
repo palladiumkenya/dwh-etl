@@ -82,10 +82,14 @@ Select distinct
     ncd.FirstDiabetesRecordedDate,
     CD4.LastCD4,
     CD4.LastCD4Percentage,
+    case when CD4.LastCD4 is not null or CD4.LastCD4Percentage is not null then 1 else 0 End as DoneCD4Test,
+    case when CONVERT(float, CD4.LastCD4) < 200 OR TRY_CAST(CD4.LastCD4Percentage AS decimal) < 25 THEN 1 ELSE 0 END AS CD4Lessthan200,
     ART.WhoStage,
     Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
         OR age.Age<5 
-            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
+            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)
+             OR (age.Age >= 5 AND Try_cast(CD4.LastCD4Percentage as decimal) < 25)
+            Then 1 
         Else 0 
     End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
@@ -95,6 +99,7 @@ Select distinct
 	ScreenedDepressionDate,
     case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
     case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
+    Case when startdate.Date >= DATEADD(MONTH, DATEDIFF(MONTH,0, GETDATE()) -1,0) and startdate.Date <DATEADD(MONTH,DATEDIFF(MONTH, 0, GETDATE()), 0) Then 1 Else 0 End as NewPatient,
     onMMD,
     StabilityAssessment,
     AppointmentsCategory,
@@ -105,6 +110,10 @@ Select distinct
     obs.StartIPT,
     obs.EverOnIPT,
     art.SwitchedToSecondLineLast12Months,
+    art.ConfirmedTreatmentFailure,
+    art.DoneTBLamTest,
+    art.TBLamPositive,
+    art.TBLamPosonTBRx,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
@@ -125,3 +134,5 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
+
+
