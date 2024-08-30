@@ -28,6 +28,29 @@ BEGIN
               from ODS.dbo.Intermediate_PregnantAndBreastFeeding
               where AsOfDate = (select max(AsOfDate) from ODS.dbo.Intermediate_PregnantAndBreastFeeding)
        ),
+       pbfw_visit_dates as (
+              select 
+                     PatientPK,
+                     SiteCode,
+                     BreastFeedingRelatedVisitDate as VisitDate
+              from Pbfw_patient
+              union 
+              select 
+                     PatientPK,
+                     SiteCode,
+                     PregnancyRelatedVisitDate as VisitDate
+              from Pbfw_patient            
+       ),
+       greatest_pbfw_visit_dates as (
+              select 
+                     PatientPK,
+                     SiteCode,
+                     max(VisitDate) as VisitDate
+              from pbfw_visit_dates
+              group by 
+                     PatientPK, 
+                     SiteCode
+       ),
        Ancdate1 as (
               SELECT Anc.Patientpkhash,
                     Anc.Sitecode,
@@ -60,19 +83,22 @@ BEGIN
              FROM   Anc_from_mnch as anc
              WHERE  Num = 4
        ),
-         Testsatanc
-         AS (SELECT Row_number()
+         Testsatanc AS (
+              SELECT Row_number()
                       OVER (
                         Partition BY Tests.Sitecode, Tests.Patientpk,tests.TestDate,tests.TestType 
                         ORDER BY EncounterId ASC ) AS NUM,
                     Tests.Patientpkhash,
                     Tests.Sitecode,
                     Tests.Patientpk
-             FROM   Ods.Dbo.Hts_clienttests Tests
-             WHERE  Entrypoint IN ( 'PMTCT ANC', 'MCH' )
+              FROM   Ods.Dbo.Hts_clienttests Tests
+              WHERE  Entrypoint IN ( 'PMTCT ANC', 'MCH')
+              and tests.TestType = 'Initial Test'
        ),
          Testedatanc
-         AS (SELECT Pat.Patientpkhash,
+         AS ( 
+              SELECT 
+                    distinct Pat.Patientpkhash,
                     Pat.Sitecode,
                     Pat.Patientpk
              FROM   Testsatanc Pat
@@ -87,9 +113,11 @@ BEGIN
                     Tests.Patientpk,
                     Tests.Sitecode
              FROM   Ods.Dbo.Hts_clienttests Tests
-             WHERE  Entrypoint IN ( 'Maternity', 'PMTCT MAT' )),
+             WHERE  Entrypoint IN ( 'Maternity', 'PMTCT MAT')
+             and tests.TestType = 'Initial Test'
+       ),
          Testedatlandd
-         AS (SELECT Pat.Patientpkhash,
+         AS (SELECT distinct Pat.Patientpkhash,
                     Pat.Sitecode,
                     Pat.Patientpk
              FROM   Testsatlandd AS Pat
@@ -103,10 +131,11 @@ BEGIN
                     Tests.Patientpk,
                     Tests.Sitecode
              FROM   Ods.Dbo.Hts_clienttests Tests
-             WHERE  Entrypoint IN ( 'PMTCT PNC', 'PNC', 'POSTNATAL CARE CLINIC'
-                                  )),
+             WHERE  Entrypoint IN ( 'PMTCT PNC', 'PNC', 'POSTNATAL CARE CLINIC')
+             and tests.TestType = 'Initial Test'                          
+          ),
          Testedatpnc
-         AS (SELECT Pat.Patientpkhash,
+         AS (SELECT distinct Pat.Patientpkhash,
                     Pat.Sitecode,
                     Pat.Patientpk
              FROM   Testsatpnc Pat
@@ -267,8 +296,8 @@ BEGIN
                     case when IsPregnant = 1 then 'Yes' else 'No' end as Pregnant,
                     case when IsBreastfeeding = 1 then 'Yes' else 'No' end as Breastfeeding,
 					case 
-						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) < patient.VisitDate then 'Known Positive'
-						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) = patient.VisitDate then 'New Positive'
+						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) < greatest_pbfw_visit_dates.VisitDate then 'Known Positive'
+						when cast(dim_patient.DateConfirmedHIVPositiveKey as date) = greatest_pbfw_visit_dates.VisitDate then 'New Positive'
 						when HIVStatusBeforeANC in ('Positive', 'KP') then 'Known Positive'
 						when latest_anc.PatientPK is not null and HIVStatusBeforeANC not in ('KP') then 'New Positive'
 						else 'Missing'
@@ -327,7 +356,10 @@ BEGIN
                             and third_anc_greencard.SiteCode = Patient.SiteCode
               left join fourth_anc_greencard 
                             on fourth_anc_greencard.PatientPK = Patient.PatientPK 
-                            and fourth_anc_greencard.SiteCode = Patient.SiteCode                     
+                            and fourth_anc_greencard.SiteCode = Patient.SiteCode      
+              left join greatest_pbfw_visit_dates 
+                            on greatest_pbfw_visit_dates.PatientPK = Patient.PatientPK
+                            and greatest_pbfw_visit_dates.SiteCode = Patient.SiteCode               
 )
     SELECT FactKey = IDENTITY(Int, 1, 1),
            Patient.Patientkey,
