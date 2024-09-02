@@ -59,7 +59,7 @@ WITH ReportedAsPregnant As (
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
 						where  Pregnant='Yes' and cast(LMP as date) <>'1900-01-01' and LMP is not null and voided=0 and LMP <=@as_of_date 
-						and VisitDate <= @as_of_date --and PatientPK = 12706 and SiteCode = 11259	
+						and VisitDate <= @as_of_date 
 						
 ),
 ---End of step 1
@@ -183,7 +183,7 @@ ReportedAsBreastFeeding As (
 						,VisitDate	As BreastFeedingRelatedVisitDate			
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
-						where  Breastfeeding='Yes'  and voided=0 and VisitDate <= @as_of_date-- and PatientPK = 12706 and SiteCode = 11259	
+						where  Breastfeeding='Yes'  and voided=0 and VisitDate <= @as_of_date
 
 
 ),
@@ -265,6 +265,27 @@ select				SiteCode
 	
 	from IsBreastFeedingFromHeiDOB
 ),
+OrderedCombineBreastFeeding As (
+
+select 
+						row_number() over(partition by  SiteCode, PatientPK,AsOfDate order by BreastFeedingRelatedVisitDate Desc) as rank, 
+						SiteCode,
+						PatientPK,
+						PatientPKHash,
+						Pregnant,
+						IsBreastFeedingAsOfDate,						
+						AsOfDate,
+						BreastFeedingRelatedVisitDate,	
+						IsPBFW
+					from CombineBreastFeeding
+
+
+),
+MaxOrderedCombineBreastFeeding As (
+			select SiteCode,PatientPK,PatientPkHash,Pregnant,IsBreastFeedingAsOfDate,AsOfDate,BreastFeedingRelatedVisitDate
+			from OrderedCombineBreastFeeding
+			where rank =1 
+),
 --End
 /*
 Step 9 combine breastfeeders and and pregnancies 
@@ -272,48 +293,29 @@ Step 9 combine breastfeeders and and pregnancies
   - A seperator of either isPregnant or Isbreastfeeding is also there
 */
 PBFW As(
-   --    select SiteCode
-			--,PatientPK
-			--,PatientPKHash
-			--,IsPregnant =0
-			--,IsBreastFeedingAsOfDate
-			--,AsOfDate
-			--,BreastFeedingRelatedVisitDate
-			--,IsPBFW	 = 1  
-	  -- from CombineBreastFeeding
-	  -- UNION
-	  -- SELECT SiteCode
-			--,PatientPK
-			--,PatientPKHash
-			--,IsPregnant =1
-			--,IsBreastFeedingAsOfDate =0
-			--,AsOfDate
-			--,PregnancyRelatedVisitDate
-			--,IsPBFW	 =1   
-	  -- FROM PregnantAsOfDate
-
-	   select CombineBreastFeeding.SiteCode
-			,CombineBreastFeeding.PatientPK
-			,CombineBreastFeeding.PatientPKHash
+  
+	   select MaxOrderedCombineBreastFeeding.SiteCode
+			,MaxOrderedCombineBreastFeeding.PatientPK
+			,MaxOrderedCombineBreastFeeding.PatientPKHash
 			,IsPregnant  = case when PregnantAsOfDate.Pregnant ='yes' then 1 else 0 end
 			,IsBreastFeedingAsOfDate
-			,CombineBreastFeeding.AsOfDate
+			,MaxOrderedCombineBreastFeeding.AsOfDate
 			,BreastFeedingRelatedVisitDate
 			,PregnantAsOfDate.PregnancyRelatedVisitDate
 			,IsPBFW	 = 1  
-	   from CombineBreastFeeding
+	   from MaxOrderedCombineBreastFeeding
 	   full join PregnantAsOfDate
-	   on	CombineBreastFeeding.SiteCode = PregnantAsOfDate.SiteCode and
-			CombineBreastFeeding.PatientPK = PregnantAsOfDate.PatientPK and
-			CombineBreastFeeding.AsOfDate = PregnantAsOfDate.AsOfDate
+	   on	MaxOrderedCombineBreastFeeding.SiteCode = PregnantAsOfDate.SiteCode and
+			MaxOrderedCombineBreastFeeding.PatientPK = PregnantAsOfDate.PatientPK and
+			MaxOrderedCombineBreastFeeding.AsOfDate = PregnantAsOfDate.AsOfDate
 
 )
 --End
-/*
-Step 10 : Insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding] for reuse
-*/
+--/*
+--Step 10 : Insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding] for reuse
+--*/
 insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeeding],[AsOfDate],BreastFeedingRelatedVisitDate,PregnancyRelatedVisitDate,[IsPBFW])
-SELECT [SiteCode]
+SELECT distinct [SiteCode]
       ,[PatientPK]
 	  ,PatientPKHash
       ,[IsPregnant]
