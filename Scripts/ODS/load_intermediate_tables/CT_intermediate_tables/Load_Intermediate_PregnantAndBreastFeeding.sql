@@ -59,7 +59,7 @@ WITH ReportedAsPregnant As (
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
 						where  Pregnant='Yes' and cast(LMP as date) <>'1900-01-01' and LMP is not null and voided=0 and LMP <=@as_of_date 
-						and VisitDate <= @as_of_date 
+						and VisitDate <= @as_of_date and SiteCode is not null
 						
 ),
 ---End of step 1
@@ -184,6 +184,7 @@ ReportedAsBreastFeeding As (
 						,0 IsPBFW
 						from ods.dbo.CT_PatientVisits 
 						where  Breastfeeding='Yes'  and voided=0 and VisitDate <= @as_of_date
+						and SiteCode is not null
 
 
 ),
@@ -315,7 +316,7 @@ PBFW As(
 --Step 10 : Insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding] for reuse
 --*/
 insert into [ODS].[dbo].[Intermediate_PregnantAndBreastFeeding]([SiteCode],[PatientPK],PatientPKHash,[IsPregnant],[IsBreastFeeding],[AsOfDate],BreastFeedingRelatedVisitDate,PregnancyRelatedVisitDate,[IsPBFW])
-SELECT distinct [SiteCode]
+SELECT  [SiteCode]
       ,[PatientPK]
 	  ,PatientPKHash
       ,[IsPregnant]
@@ -324,7 +325,7 @@ SELECT distinct [SiteCode]
       ,BreastFeedingRelatedVisitDate
 	  ,PregnancyRelatedVisitDate
       ,[IsPBFW]
-  FROM PBFW
+  FROM PBFW where [SiteCode] is not null
 
 fetch next from cursor_AsOfDates into @as_of_date
 end
