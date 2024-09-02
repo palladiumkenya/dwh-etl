@@ -174,7 +174,16 @@ WITH Pbfw_patient
                        OR Latestvl1 IN ( 'undetectable', 'NOT DETECTED',
                                          '0 copies/ml',
                                          'LDL',
-                                         'Less than Low Detectable Level' ) ))
+                                         'Less than Low Detectable Level' ) )),
+		 OTZ_Patients AS (
+			SELECT DISTINCT
+				pat.PatientKey,
+				otz.FacilityKey
+			FROM NDWH.dbo.FactOTZ otz
+			left join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=otz.AgeGroupKey
+			left JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = otz.PatientKey
+			WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1
+		 )
 SELECT Mflcode,
        F.Facilityname,
        County,
@@ -215,7 +224,8 @@ SELECT Mflcode,
        Sum(CASE
              WHEN Durable_ldl.Patientkey IS NOT NULL THEN 1
              ELSE 0
-           END)                AS CountDurableLDL
+           END)                AS CountDurableLDL,
+			 COUNT(DISTINCT OTZ_Patients.PatientKey) AS otzEnrolled
 INTO   Reporting.Dbo.Aggregateldldurable
 FROM   Base_data
        LEFT JOIN Eligible_for_two_vl_tests
@@ -225,6 +235,8 @@ FROM   Base_data
                  Base_data.Patientkey
        LEFT JOIN Durable_ldl
               ON Durable_ldl.Patientkey = Base_data.Patientkey
+       LEFT JOIN OTZ_Patients
+              ON OTZ_Patients.Patientkey = Base_data.Patientkey
        LEFT JOIN Ndwh.Dbo.Dimagegroup G
               ON G.Agegroupkey = Base_data.Agegroupkey
        LEFT JOIN Ndwh.Dbo.Dimfacility F
@@ -248,5 +260,4 @@ GROUP  BY Mflcode,
           Validvlresultcategory ,
           Pregnant,
           Breastfeeding
-
 
