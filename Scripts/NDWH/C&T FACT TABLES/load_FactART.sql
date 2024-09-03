@@ -308,8 +308,8 @@ Patient As (
     When DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) >151 THEN '>6+ Months'
     Else 'Unclassified'
     END As AppointmentsCategory,
-    pbfw.Pregnant,
-    pbfw.Breastfeeding,
+    case when pbfw.IsPregnant = 1 then 'Yes' else 'No' end as Pregnant,
+    case when pbfw.IsBreastfeeding = 1 then 'Yes' else 'No' end as Breastfeeding,
     pbfw_at_confirm_pos.PbfwAtConfirmedPositive
         from 
 ODS.dbo.CT_Patient Patient
@@ -318,8 +318,9 @@ left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= P
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
-left join ODS.dbo.Intermediate_Pbfw pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
+left join ODS.dbo.Intermediate_PregnantAndBreastFeeding as pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_PbfwAtConfimationPositive as pbfw_at_confirm_pos on pbfw_at_confirm_pos.PatientPK = Patient.PatientPK and pbfw_at_confirm_pos.SiteCode = Patient.SiteCode
+where pbfw.AsOfDate = (select max(AsOfDate) from ODS.dbo.Intermediate_PregnantAndBreastFeeding)
 ),
 
    DepressionScreening as (Select 
