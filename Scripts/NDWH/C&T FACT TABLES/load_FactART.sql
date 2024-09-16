@@ -260,8 +260,6 @@ insert into [NDWH].[dbo].[FACTARTHistory_Archive]( [PatientKey]
 DELETE [NDWH].[dbo].[FactARTHistory]
 WHERE datediff(month,AsOfDateKey,getdate()) > 12;
 ----------End
-
-
 IF OBJECT_ID(N'[NDWH].[dbo].[FACTART]', N'U') IS NOT NULL 
 	DROP TABLE [NDWH].[dbo].[FACTART];
 BEGIN
@@ -310,8 +308,8 @@ Patient As (
     When DATEDIFF(DAY, las.LastEncounterDate,las.NextAppointmentDate) >151 THEN '>6+ Months'
     Else 'Unclassified'
     END As AppointmentsCategory,
-    pbfw.Pregnant,
-    pbfw.Breastfeeding,
+    case when pbfw.IsPregnant = 1 then 'Yes' else 'No' end as Pregnant,
+    case when pbfw.IsBreastfeeding = 1 then 'Yes' else 'No' end as Breastfeeding,
     pbfw_at_confirm_pos.PbfwAtConfirmedPositive
         from 
 ODS.dbo.CT_Patient Patient
@@ -320,8 +318,9 @@ left join ODS.dbo.Intermediate_PregnancyAsATInitiation   Pre on Pre.Patientpk= P
 left join ODS.dbo.Intermediate_LastPatientEncounter las on las.PatientPK =Patient.PatientPK  and las.SiteCode =Patient.SiteCode 
 left join ODS.dbo.Intermediate_ARTOutcomes  outcome on outcome.PatientPK=Patient.PatientPK and outcome.SiteCode=Patient.SiteCode
 left join ODS.dbo.intermediate_LatestObs obs on obs.PatientPK=Patient.PatientPK and obs.SiteCode=Patient.SiteCode
-left join ODS.dbo.Intermediate_Pbfw pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
+left join ODS.dbo.Intermediate_PregnantAndBreastFeeding as pbfw on pbfw.PatientPK=Patient.PatientPK and pbfw.SiteCode=Patient.SiteCode
 left join ODS.dbo.Intermediate_PbfwAtConfimationPositive as pbfw_at_confirm_pos on pbfw_at_confirm_pos.PatientPK = Patient.PatientPK and pbfw_at_confirm_pos.SiteCode = Patient.SiteCode
+where pbfw.AsOfDate = (select max(AsOfDate) from ODS.dbo.Intermediate_PregnantAndBreastFeeding)
 ),
 
    DepressionScreening as (Select 
@@ -420,6 +419,7 @@ ConfirmedTreatmentFailure as (
    from  UnsuppressedAtlastVl
    inner join UnsuppressedAtsecondLastVL on UnsuppressedAtlastVl.PatientPKHash=UnsuppressedAtsecondLastVL.PatientPKHash and UnsuppressedAtlastVl.SiteCode=UnsuppressedAtsecondLastVL.SiteCode
 
+
 ),
 TBLamResults as (
 Select 
@@ -492,6 +492,8 @@ TBLamPosonTBRx as (
       inner join Fluconazole on CSFCrAg.PatientPKHash=Fluconazole.PatientPKHash and CSFCrAg.SiteCode=Fluconazole.SiteCode
       where TestResult='1.00'
       )
+
+
    Select 
             Factkey = IDENTITY(INT, 1, 1),
             pat.PatientKey,
@@ -546,6 +548,7 @@ TBLamPosonTBRx as (
             end_month.DateKey as AsOfDateKey,
             Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
             Case When ConfirmedTreatmentFailure.PatientPKHash is not null then 1 else 0 End as ConfirmedTreatmentFailure,
+
             case when TBLamResults.PatientPKHash is not null then 1 else 0 end as DoneTBLamTest,
             case when TBLamResults.TestResult='Present' Then 1 else 0 End as TBLamPositive,
             case when TBLamPosonTBRx.PatientPKHash is not null then 1 Else 0 End as TBLamPosonTBRx,
@@ -578,17 +581,15 @@ left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash =
 left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_in_last_12_monhts.PatientPKHash = Patient.PatientPKHash
   and swithced_to_second_line_in_last_12_monhts.SiteCode = Patient.SiteCode
   left join ConfirmedTreatmentFailure on ConfirmedTreatmentFailure.PatientPKHash=Patient.patientpkhash and ConfirmedTreatmentFailure.SiteCode=Patient.sitecode
+
   left join TBLamResults on TBLamResults.PatientPKHash=Patient.PatientPKHash and TBLamResults.SiteCode=Patient.SiteCode
   left join TBLamPosonTBRx on TBLamPosonTBRx.PatientPKHash=Patient.PatientPKHash and TBLamPosonTBRx.SiteCode=Patient.SiteCode
   left join SerumCrag on SerumCrag.PatientPKHash=Patient.PatientPKHash and SerumCrag.SiteCode=Patient.SiteCode
   left join CSFCrAg on CSFCrAg.Patientpkhash=Patient.PatientPKHash and CSFCrAg.SiteCode=Patient.SiteCode
   left join PreemtiveCMTheraphy on PreemtiveCMTheraphy.PatientPKHash=Patient.PatientPKHash and PreemtiveCMTheraphy.SiteCode=Patient.SiteCode
   left join InitiatedCMTreatment on InitiatedCMTreatment.PatientPKHash=Patient.PatientPKHash and InitiatedCMTreatment.SiteCode=Patient.SiteCode
-
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END
-
-
 
 

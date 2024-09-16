@@ -1,13 +1,13 @@
 BEGIN
-	 
+
 	 DECLARE	@MaxVisitDate_Hist		DATETIME,
 				@VisitDate				DATETIME,
 				@MaxCreatedDate			DATETIME
-				
+
 		SELECT @MaxVisitDate_Hist	= MAX(MaxVisitDate) FROM [ODS_Logs].[dbo].[CT_Visit_Log]  (NoLock);
 		SELECT @VisitDate			= MAX(VisitDate)	FROM [DWAPICentral].[dbo].[PatientVisitExtract] WITH (NOLOCK) ;
 		SELECT @MaxCreatedDate		= MAX(CreatedDate)	FROM [ODS_logs].[dbo].[CT_VisitCount_Log] WITH (NOLOCK) ;
-				
+
 		INSERT INTO  [ODS_Logs].[dbo].[CT_Visit_Log](MaxVisitDate,LoadStartDateTime)
 		VALUES(@VisitDate,GETDATE());
 
@@ -44,21 +44,21 @@ BEGIN
 										,PV.[NextAppointmentDate] As NextAppointmentDate
 										,P.[Emr] As  Emr
 										,CASE P.[Project]
-												WHEN 'I-TECH' THEN 'Kenya HMIS II' 
+												WHEN 'I-TECH' THEN 'Kenya HMIS II'
 												WHEN 'HMIS' THEN 'Kenya HMIS II'
-												ELSE P.[Project] 
-										END AS [Project] 
+												ELSE P.[Project]
+										END AS [Project]
 										,PV.[Voided] As Voided
-										,VoidingSource = Case 
+										,VoidingSource = Case
 															when PV.voided = 1 Then 'Source'
 															Else Null
-														END 
+														END
 										,pv.[StabilityAssessment] As StabilityAssessment
 										,pv.[DifferentiatedCare] As DifferentiatedCare
 										,pv.[PopulationType]As PopulationType
 										,pv.[KeyPopulationType] As KeyPopulationType
 										,PV.[Processed] As Processed
-										,PV.[Created] As Created						  
+										,PV.[Created] As Created
 										,[GeneralExamination]
 										,[SystemExamination]
 										,[Skin]
@@ -99,8 +99,8 @@ BEGIN
 										,[WHOStagingOI]
 										,PV.[AppointmentReminderWillingness]
 										,PV.[WantsToGetPregnant]
-						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  
-							INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID 						
+						FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)
+							INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] PV WITH(NoLock)  ON PV.[PatientId]= P.ID
 							INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
 							INNER JOIN (
 								SELECT	F.code as SiteCode
@@ -108,33 +108,33 @@ BEGIN
 										,[VisitId]
 										,visitDate
 										,InnerPV.voided,
-										max(InnerPV.ID) maxID, 
+										max(InnerPV.ID) maxID,
 										MAX(InnerPV.created) AS Maxdatecreated
-								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)  						
-									INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] InnerPV WITH(NoLock)  ON InnerPV.[PatientId]= P.ID 
+								FROM [DWAPICentral].[dbo].[PatientExtract] P WITH (NoLock)
+									INNER JOIN [DWAPICentral].[dbo].[PatientVisitExtract] InnerPV WITH(NoLock)  ON InnerPV.[PatientId]= P.ID
 									INNER JOIN [DWAPICentral].[dbo].[Facility] F WITH(NoLock)  ON P.[FacilityId] = F.Id AND F.Voided=0
 								GROUP BY F.code
 										,p.[PatientPID]
 										,[VisitId]
 										,visitDate
 										,InnerPV.voided
-							) tm 
-							ON	f.code = tm.[SiteCode] and 
-								p.PatientPID=tm.PatientPK and 
-								pv.[VisitId] = tm.[VisitId] and 
-								pv.visitDate = tm.visitDate and 
-								pv.voided = tm.voided and 
+							) tm
+							ON	f.code = tm.[SiteCode] and
+								p.PatientPID=tm.PatientPK and
+								pv.[VisitId] = tm.[VisitId] and
+								pv.visitDate = tm.visitDate and
+								pv.voided = tm.voided and
 								pv.created = tm.Maxdatecreated and
 								PV.ID =tm. maxID
-					WHERE p.gender!='Unknown' AND F.code >0) AS b 
+					WHERE p.gender!='Unknown' AND F.code >0) AS b
 						ON(
-							 a.PatientPK  = b.PatientPK 
+							 a.PatientPK  = b.PatientPK
 							AND a.SiteCode = b.SiteCode
 							AND a.visitID = b.[VisitId]
-							and a.visitDate = b.visitDate	
-							and a.voided   = b.voided				
+							and a.visitDate = b.visitDate
+							and a.voided   = b.voided
 							)
-					WHEN NOT MATCHED THEN 
+					WHEN NOT MATCHED THEN
 							INSERT(
 									PatientID
 									,FacilityName
@@ -196,7 +196,7 @@ BEGIN
 									,[AppointmentReminderWillingness]
 									,[WantsToGetPregnant]
 									,LoadDate
-								)  
+								)
 							VALUES(
 									PatientID
 									,FacilityName
@@ -258,9 +258,9 @@ BEGIN
 									,[WantsToGetPregnant]
 									,Getdate()
 								)
-			
+
 					WHEN MATCHED THEN
-						UPDATE SET 	
+						UPDATE SET
 						a.PatientID					=b.PatientID,
 						a.[SERVICE]					= b.[SERVICE],
 						a.VisitType					= b.VisitType,
@@ -323,12 +323,6 @@ BEGIN
 
 			UPDATE [ODS_Logs].[dbo].[CT_Visit_Log]
 				  SET LoadEndDateTime = GETDATE()
-				  WHERE MaxVisitDate = @VisitDate;	
+				  WHERE MaxVisitDate = @VisitDate;
 
-
-		INSERT INTO [ODS_logs].[dbo].[CT_VisitCount_Log]([SiteCode],[CreatedDate],[VisitCount])
-			SELECT SiteCode,GETDATE(),COUNT(concat(Sitecode,PatientPK)) AS VisitCount 
-			FROM [ODS].[dbo].[CT_PatientVisits] 
-			GROUP BY SiteCode;		
-			
 END

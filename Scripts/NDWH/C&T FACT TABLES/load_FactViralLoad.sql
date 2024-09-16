@@ -57,12 +57,13 @@ BEGIN
 			 pbfw.PatientPK,
 			 viral_loads.OrderedbyDate,
 			 Replace(viral_loads.TestResult ,',','') as TestResult	 
-		from ODS.dbo.Intermediate_Pbfw as pbfw
+		from ODS.dbo.Intermediate_PregnantAndBreastFeeding as pbfw
 		left join ODS.dbo.Intermediate_LatestViralLoads as viral_loads on viral_loads.PatientPK = pbfw.PatientPK
 			and viral_loads.SiteCode = pbfw.SiteCode
 		left join ODS.dbo.CT_ARTPatients as art_patient on art_patient.PatientPK = pbfw.PatientPK
 			and art_patient.SiteCode = pbfw.SiteCode
 		where datediff(month, OrderedbyDate, eomonth(dateadd(mm,-1,getdate()))) <= 6
+		and  pbfw.AsOfDate = (select max(AsOfDate) from ODS.dbo.Intermediate_PregnantAndBreastFeeding)
      ),
 	 PBFW_valid_vl_indicators as (
 		select 

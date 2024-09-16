@@ -18,12 +18,12 @@ left join NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = history.A
 left join NDWH.dbo.DimDate as date on date.DateKey = history.AsOfDateKey
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = history.PatientKey
 left join NDWH.dbo.DimAgeGroup as age_group on age_group.Age = datediff(yy, patient.DOB, date.[Date])
-where ARTOutcome in ('uL', 'L')
+where outcome.ARTOutcome in ('uL', 'L')
 group by 
     FacilityKey,
     AgencyKey,
     PartnerKey,
-    AgeGroupKey,
+    age_group.AgeGroupKey,
     Gender,
     date.Year,
     date.[Month]
