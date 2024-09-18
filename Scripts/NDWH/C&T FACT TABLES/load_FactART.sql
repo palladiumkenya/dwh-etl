@@ -418,7 +418,81 @@ ConfirmedTreatmentFailure as (
     UnsuppressedAtlastVl.OrderedbyDate
    from  UnsuppressedAtlastVl
    inner join UnsuppressedAtsecondLastVL on UnsuppressedAtlastVl.PatientPKHash=UnsuppressedAtsecondLastVL.PatientPKHash and UnsuppressedAtlastVl.SiteCode=UnsuppressedAtsecondLastVL.SiteCode
-)
+
+
+),
+TBLamResults as (
+Select 
+    Patientpkhash,
+    sitecode,
+    TestResult,
+    OrderedbyDate
+    from ODS.dbo.ct_PatientLabs
+where testname='TB LAM'
+),
+TBLamPos as (
+Select 
+    Patientpkhash,
+    sitecode,
+    TestResult,
+    OrderedbyDate
+    from ODS.dbo.ct_PatientLabs
+where testname='TB LAM'and TestResult='Present'
+
+),
+OnTBDrugs as (
+    Select 
+    PatientPKHash,
+    SiteCode,
+    VisitDate
+    from ODS.dbo.CT_Ipt
+    where OnTBDrugs='Yes'
+),
+TBLamPosonTBRx as (
+    Select 
+    TBLamPos.PatientPKHash,
+    TBLamPos.SiteCode
+    from TBLamPos
+    inner join OnTBDrugs on TBLamPos.PatientPKHash=OnTBDrugs.PatientPKHash and TBLamPos.SiteCode=OnTBDrugs.SiteCode
+    where TBLamPos.OrderedbyDate <OnTBDrugs.VisitDate
+),
+    SerumCrag as (Select 
+      PatientPKHash,
+      SiteCode,
+      OrderedbyDate,
+      TestResult
+    from ODS.dbo.CT_PatientLabs
+    where testname in ('Crag test','Serum Crypto','serum cryptococcal ag')
+    ),
+     CSFCrAg as (Select 
+      PatientPKHash,
+      SiteCode,
+      OrderedbyDate,
+      TestResult
+    from ODS.dbo.CT_PatientLabs
+    where testname ='CSF Crypto'
+     ),
+    Fluconazole as (Select 
+      PatientPKHash,
+      SiteCode
+    from ODS.dbo.CT_PatientPharmacy
+    where Drug like '%Fluconazole%'
+      ),
+
+      PreemtiveCMTheraphy as (Select 
+      Fluconazole.PatientPKHash,
+      Fluconazole.SiteCode
+    from Fluconazole
+    inner join SerumCrag on Fluconazole.Patientpkhash=SerumCrag.Patientpkhash and Fluconazole.Sitecode=SerumCrag.Sitecode
+      ),
+      InitiatedCMTreatment as (Select
+      CSFCrAg.PatientPKHash,
+      CSFCrAg.sitecode
+      from CSFCrAg
+      inner join Fluconazole on CSFCrAg.PatientPKHash=Fluconazole.PatientPKHash and CSFCrAg.SiteCode=Fluconazole.SiteCode
+      where TestResult='1.00'
+      )
+
 
    Select 
             Factkey = IDENTITY(INT, 1, 1),
@@ -474,6 +548,16 @@ ConfirmedTreatmentFailure as (
             end_month.DateKey as AsOfDateKey,
             Patient.PbfwAtConfirmedPositive as IsPbfwAtConfirmationPositive,
             Case When ConfirmedTreatmentFailure.PatientPKHash is not null then 1 else 0 End as ConfirmedTreatmentFailure,
+
+            case when TBLamResults.PatientPKHash is not null then 1 else 0 end as DoneTBLamTest,
+            case when TBLamResults.TestResult='Present' Then 1 else 0 End as TBLamPositive,
+            case when TBLamPosonTBRx.PatientPKHash is not null then 1 Else 0 End as TBLamPosonTBRx,
+            case when SerumCrag.PatientPKHash is not null then 1 Else 0 End as DoneCragTest,
+            case when SerumCrag.TestResult='Positive' then 1 Else 0 end as CrAgPositive,
+            case when CSFCrAg.Patientpkhash is not null then 1 Else 0 end as CSFCrAg,
+            case when CSFCrAg.TestResult='1.00' then 1 else 0 End as CSFCrAgPositive,
+            case when PreemtiveCMTheraphy.PatientPKHash is not null then 1 Else 0 End as PreemtiveCMTheraphy,
+            case when InitiatedCMTreatment.PatientPKHash is not null then 1 Else 0 End as InitiatedCMTreatment,
             cast(getdate() as date) as LoadDate
 INTO NDWH.dbo.FACTART 
 from  Patient
@@ -497,6 +581,13 @@ left join rtt_within_last_12_months on rtt_within_last_12_months.PatientPKHash =
 left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_in_last_12_monhts.PatientPKHash = Patient.PatientPKHash
   and swithced_to_second_line_in_last_12_monhts.SiteCode = Patient.SiteCode
   left join ConfirmedTreatmentFailure on ConfirmedTreatmentFailure.PatientPKHash=Patient.patientpkhash and ConfirmedTreatmentFailure.SiteCode=Patient.sitecode
+
+  left join TBLamResults on TBLamResults.PatientPKHash=Patient.PatientPKHash and TBLamResults.SiteCode=Patient.SiteCode
+  left join TBLamPosonTBRx on TBLamPosonTBRx.PatientPKHash=Patient.PatientPKHash and TBLamPosonTBRx.SiteCode=Patient.SiteCode
+  left join SerumCrag on SerumCrag.PatientPKHash=Patient.PatientPKHash and SerumCrag.SiteCode=Patient.SiteCode
+  left join CSFCrAg on CSFCrAg.Patientpkhash=Patient.PatientPKHash and CSFCrAg.SiteCode=Patient.SiteCode
+  left join PreemtiveCMTheraphy on PreemtiveCMTheraphy.PatientPKHash=Patient.PatientPKHash and PreemtiveCMTheraphy.SiteCode=Patient.SiteCode
+  left join InitiatedCMTreatment on InitiatedCMTreatment.PatientPKHash=Patient.PatientPKHash and InitiatedCMTreatment.SiteCode=Patient.SiteCode
 WHERE pat.voided =0;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END

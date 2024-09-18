@@ -87,7 +87,9 @@ Select distinct
     ART.WhoStage,
     Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
         OR age.Age<5 
-            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1 
+            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)
+             OR (age.Age >= 5 AND Try_cast(CD4.LastCD4Percentage as decimal) < 25)
+            Then 1 
         Else 0 
     End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
@@ -109,6 +111,15 @@ Select distinct
     obs.EverOnIPT,
     art.SwitchedToSecondLineLast12Months,
     art.ConfirmedTreatmentFailure,
+    art.DoneTBLamTest,
+    art.TBLamPositive,
+    art.TBLamPosonTBRx,
+    art.DoneCrAgTest,
+    art.CrAgPositive,
+    art.CSFCrAg,
+    art.CSFCrAgPositive,
+    art.PreemtiveCMTheraphy,
+    art.InitiatedCMTreatment,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
@@ -129,3 +140,5 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
+
+
