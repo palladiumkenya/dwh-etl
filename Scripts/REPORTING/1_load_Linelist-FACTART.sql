@@ -82,6 +82,8 @@ Select distinct
     ncd.FirstDiabetesRecordedDate,
     CD4.LastCD4,
     CD4.LastCD4Percentage,
+    case when CD4.LastCD4 is not null or CD4.LastCD4Percentage is not null then 1 else 0 End as DoneCD4Test,
+    case when CONVERT(float, CD4.LastCD4) < 200 OR TRY_CAST(CD4.LastCD4Percentage AS decimal) < 25 THEN 1 ELSE 0 END AS CD4Lessthan200,
     ART.WhoStage,
     Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
         OR age.Age<5 
