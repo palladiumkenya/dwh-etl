@@ -736,6 +736,6 @@ left join swithced_to_second_line_in_last_12_monhts on swithced_to_second_line_i
   left join MaxOrderedCSFCrAg CSFCrAg on CSFCrAg.Patientpkhash=Patient.PatientPKHash and CSFCrAg.SiteCode=Patient.SiteCode
   left join PreemtiveCMTheraphy on PreemtiveCMTheraphy.PatientPKHash=Patient.PatientPKHash and PreemtiveCMTheraphy.SiteCode=Patient.SiteCode
   left join InitiatedCMTreatment on InitiatedCMTreatment.PatientPKHash=Patient.PatientPKHash and InitiatedCMTreatment.SiteCode=Patient.SiteCode
-WHERE pat.voided =0 and ARTOutcomeKey =6;
+WHERE pat.voided =0 ;
 alter table NDWH.dbo.FactART add primary key(FactKey)
 END
