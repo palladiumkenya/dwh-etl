@@ -120,6 +120,7 @@ Select distinct
     art.CSFCrAgPositive,
     art.PreemtiveCMTheraphy,
     art.InitiatedCMTreatment,
+    art.OnTBTreatment,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
