@@ -41,9 +41,11 @@ with MFL_partner_agency_combination as (
 	  BaselineCD4s as (Select * from BCD4s
 	  where RowNum=1
 	  ),
+
       OtherCD4s as (Select * from CD4s
       Where RowNum=2
       ),
+
 source_CD4 as (
 	select
 		distinct baselines.PatientIDHash,
@@ -66,7 +68,9 @@ source_CD4 as (
 		and last_encounter.SiteCode = baselines.SiteCode
     left join LatestCD4s on LatestCD4s.PatientPK=baselines.PatientPK and LatestCD4s.Sitecode=baselines.SiteCode
     left join BaselineCD4s on BaselineCD4s.PatientPk=baselines.PatientPK and BaselineCD4s.SiteCode=baselines.SiteCode
+
     left join OtherCD4s on OtherCD4s.Patientpk=baselines.Patientpk and OtherCD4s.Sitecode=baselines.Sitecode
+
 )
 
 select 
