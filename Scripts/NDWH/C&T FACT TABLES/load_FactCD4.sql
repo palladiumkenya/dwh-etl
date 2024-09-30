@@ -57,8 +57,8 @@ source_CD4 as (
         Case When LatestCD4s.TestName='CD4 Count'Then LatestCD4s.TestResult Else Null End as LastCD4,
         Case When LatestCD4s.TestName='CD4 Percentage' Then LatestCD4s.TestResult Else Null End as LastCD4Percentage,
 		datediff(yy, patient.DOB, last_encounter.LastEncounterDate) as AgeLastVisit,
-        OtherCD4s.TestResult as OtherCD4s,
-        OtherCD4s.OrderedbyDate as OtherCD4sDate
+        OtherCD4s.TestResult as SecondCD4,
+        OtherCD4s.OrderedbyDate as SecondCD4Date
 	from ODS.dbo.CT_PatientBaselines as baselines
 	left join ODS.dbo.CT_Patient as patient on patient.PatientPK = baselines.PatientPK
 	and patient.SiteCode = baselines.SiteCode
@@ -83,8 +83,8 @@ select
 	source_CD4.LastCD4,
 	source_CD4.LastCD4Date,
     source_CD4.LastCD4Percentage,
-    source_CD4.OtherCD4s,
-    source_CD4.OtherCD4sDate,
+    source_CD4.SecondCD4,
+    source_CD4.SecondCD4Date,
 	 cast(getdate() as date) as LoadDate
 into NDWH.dbo.FactCD4
 from source_CD4 as source_CD4
