@@ -11,7 +11,7 @@ WITH PharmacyRecords AS (
         PatientPK,
         DispenseDate AS LastEncounterDate,
         CASE
-            WHEN DATEDIFF(dd, DispenseDate, ExpectedReturn) >= 365 OR ExpectedReturn = '1900-01-01' OR ExpectedReturn IS NULL THEN DATEADD(dd, 30, DispenseDate)
+            WHEN DATEDIFF(dd, DispenseDate, ExpectedReturn) >= 365 OR ExpectedReturn = '1900-01-01' OR ExpectedReturn IS NULL OR ExpectedReturn< DispenseDate  THEN DATEADD(dd, 30, DispenseDate)
             ELSE ExpectedReturn
         END AS NextAppointmentDate
     FROM
@@ -27,6 +27,7 @@ LastEncounterPharmacy as (SELECT
         PatientPK,
         LastEncounterDate,
         NextAppointmentDate,
+       
         ROW_NUMBER() OVER (PARTITION BY SiteCode, PatientPK ORDER BY NextAppointmentDate DESC) AS RowNumber
     FROM
         PharmacyRecords
@@ -54,7 +55,7 @@ ART_expected_dates_logic AS (
         CASE 
             WHEN DATEDIFF(dd,LastVisit,ExpectedReturn) <= 365 THEN ExpectedReturn Else DATEADD(day, 30, LastVisit)
         END AS expected_return_on_365,
-        case when LastVisit is null Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
+        case when LastVisit is null  OR ExpectedReturn< LastVisit Then DATEADD(day, 30, LastVisit) else LastVisit End AS last_visit_plus_30_days
   FROM ODS.dbo.CT_ARTPatients
   where LastVisit <= EOMONTH(DATEADD(mm,-1,GETDATE())) and VOIDED=0
 ),
@@ -124,9 +125,11 @@ Select distinct
     cast( '' as nvarchar(100))PatientPKHash,
     cast( '' as nvarchar(100))PatientIDHash,
     LastEncounterDate,
-    CASE 
-        WHEN DATEDIFF(dd,GETDATE(),NextAppointmentDate) <= 365 THEN NextAppointmentDate Else DATEADD(day, 30, LastEncounterDate)
-    END AS NextAppointmentDate,
+   CASE 
+    WHEN nextappointmentdate < LastEncounterDate THEN DATEADD(day, 30, LastEncounterDate) 
+    WHEN DATEDIFF(dd, GETDATE(), NextAppointmentDate) <= 365 THEN NextAppointmentDate 
+    ELSE DATEADD(day, 30, LastEncounterDate) 
+END AS NextAppointmentDate,
         cast (getdate() as DATE) as LoadDate
     INTO ODS.dbo.Intermediate_LastPatientEncounter
 from CombinedVisits
