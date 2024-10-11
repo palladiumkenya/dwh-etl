@@ -60,7 +60,7 @@ Select distinct
     end as ARTOutcomeDescription,
     vl.EligibleVL as Eligible4VL,
     vl.HasValidVL,
-    vl.ValidVLSup,
+    Case when vl.HasValidVL= 1 Then vl.ValidVLSup Else 0 End as ValidVLSup,
     vl.LastVL,
     lastVL.Date as LastVLDate,
     vl.ValidVLResult,
@@ -141,5 +141,3 @@ left join NDWH.dbo.FactCD4 as CD4 on CD4.PatientKey= ART.PatientKey
 left join NDWH.dbo.DimDate as end_month on end_month.DateKey = ART.AsOfDateKey;
 
 END
-
-

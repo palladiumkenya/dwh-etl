@@ -296,7 +296,7 @@ RepeatVlUnSupp as (Select
 			case when pbfw_clients.PatientPK is not null then 1 else 0 end as IsPBFW,
             valid_VL_indicators.ValidVLResultCategory1,
 			valid_VL_indicators.ValidVLResultCategory2,
-			case when valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
+			case  when valid_VL_indicators.PatientPK is not null  and valid_VL_indicators.ValidVLSup is not null then valid_VL_indicators.ValidVLSup else 0 end as ValidVLSup,
 			valid_VL_indicators.ValidVLDate,     
 			patient_viral_load_intervals.[_6MonthVLDate],
 			patient_viral_load_intervals.[_6MonthVL],
