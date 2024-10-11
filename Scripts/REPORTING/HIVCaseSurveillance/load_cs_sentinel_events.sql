@@ -1,13 +1,8 @@
 IF OBJECT_ID(N'[HIVCaseSurveillance].[dbo].[CsSentinelEvents]', N'U') IS NOT NULL 
     DROP TABLE [HIVCaseSurveillance].[dbo].[CsSentinelEvents];
 begin
- with  MFL_partner_agency_combination as (
-    select 
-        distinct MFL_Code,
-         SDP,
-        SDP_Agency as Agency 
-    from ODS.dbo.All_EMRSites 
- ),
+ with 
+
  confirmed_reported_cases_and_art as (
         select 
                 ctpatients.PatientKey,
