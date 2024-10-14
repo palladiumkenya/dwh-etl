@@ -1,0 +1,19 @@
+[sqlfluff]
+dialect = tsql
+
+[sqlfluff:indentation]
+tab_space_size = 2
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = pascal
+unquoted_identifiers_policy = all
+
+
+[sqlfluff:rules:aliasing.table]
+aliasing.table = explicit
+
+[sqlfluff:rules:layout.set_operators]
+set_operator_on_new_line = ['UNION', 'UNION ALL']
