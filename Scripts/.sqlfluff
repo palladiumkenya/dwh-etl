@@ -8,7 +8,7 @@ tab_space_size = 2
 capitalisation_policy = lower
 
 [sqlfluff:rules:capitalisation.identifiers]
-extended_capitalisation_policy = pascal
+extended_capitalisation_policy = lower
 unquoted_identifiers_policy = all
 
 
@@ -17,3 +17,7 @@ aliasing.table = explicit
 
 [sqlfluff:rules:layout.set_operators]
 set_operator_on_new_line = ['UNION', 'UNION ALL']
+
+
+[sqlfluff:rules:capitalisation.functions]
+capitalisation_policy = lower
