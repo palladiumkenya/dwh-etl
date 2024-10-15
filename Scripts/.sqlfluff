@@ -1,6 +1,9 @@
 [sqlfluff]
 dialect = tsql
 
+[sqlfluff]
+exclude_rules =  AM01
+
 [sqlfluff:indentation]
 tab_space_size = 2
 
@@ -20,4 +23,4 @@ set_operator_on_new_line = ['UNION', 'UNION ALL']
 
 
 [sqlfluff:rules:capitalisation.functions]
-capitalisation_policy = lower
+extended_capitalisation_policy = lower
