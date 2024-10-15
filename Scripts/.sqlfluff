@@ -1,8 +1,6 @@
 [sqlfluff]
 dialect = tsql
-
-[sqlfluff]
-exclude_rules =  AM01
+exclude_rules = AM01
 
 [sqlfluff:indentation]
 tab_space_size = 2
