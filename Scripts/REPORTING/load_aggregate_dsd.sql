@@ -1,42 +1,41 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[AggregateDSD]', N'U') IS NOT NULL 
-	drop TABLE [REPORTING].[dbo].[AggregateDSD]
-GO
+if object_id(N'[REPORTING].[dbo].[AggregateDSD]', N'U') is not null
+  drop table reporting.dbo.aggregatedsd
+go
 
-SELECT DISTINCT
-    MFLCode,
-    f.FacilityName,
-    County,
-    SubCounty,
-    p.PartnerName,
-    a.AgencyName,
-    Gender,
-    age.DATIMAgeGroup as AgeGroup, 
-    StabilityAssessment,
-	DifferentiatedCare,
-    SUM(onMMD) as patients_onMMD,
-    SUM(case when onMMD = 0 then 1 else 0 end) as patients_nonMMD,
-    COUNT(StabilityAssessment) AS Stability,
-    Sum(pat.isTXCurr) As TXCurr,
-    cast(getdate() as date) as LoadDate
-INTO [REPORTING].[dbo].[AggregateDSD]
-FROM NDWH.dbo.FactART as art
-LEFT JOIN NDWH.dbo.FactLatestObs as lob on lob.Patientkey = art.PatientKey
-LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey = art.AgeGroupKey
-LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = art.FacilityKey
-LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = art.AgencyKey
-LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = art.PatientKey
-LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = art.PartnerKey
-WHERE pat.IsTXCurr = 1
-GROUP BY 
-    MFLCode, 
-    f.FacilityName, 
-    County, 
-    SubCounty, 
-    p.PartnerName,
-    a.AgencyName, 
-    Gender, 
-    age.DATIMAgeGroup, 
-    StabilityAssessment,
-    DifferentiatedCare
-
-GO
+select distinct
+  f.mflcode,
+  f.facilityname,
+  f.county,
+  f.subcounty,
+  p.partnername,
+  a.agencyname,
+  pat.gender,
+  age.datimagegroup as agegroup,
+  art.stabilityassessment,
+  art.differentiatedcare,
+  cast(getdate() as date) as loaddate,
+  sum(art.onmmd) as patients_onmmd,
+  sum(case when art.onmmd = 0 then 1 else 0 end) as patients_nonmmd,
+  count(art.stabilityassessment) as stability,
+  sum(pat.istxcurr) as txcurr
+into reporting.dbo.aggregatedsd
+from ndwh.dbo.factart as art
+left join ndwh.dbo.factlatestobs as lob on art.patientkey = lob.patientkey
+left join ndwh.dbo.dimagegroup as age on art.agegroupkey = age.agegroupkey
+left join ndwh.dbo.dimfacility as f on art.facilitykey = f.facilitykey
+left join ndwh.dbo.dimagency as a on art.agencykey = a.agencykey
+left join ndwh.dbo.dimpatient as pat on art.patientkey = pat.patientkey
+left join ndwh.dbo.dimpartner as p on art.partnerkey = p.partnerkey
+where pat.istxcurr = 1
+group by
+  f.mflcode,
+  f.facilityname,
+  f.county,
+  f.subcounty,
+  p.partnername,
+  a.agencyname,
+  pat.gender,
+  age.datimagegroup,
+  art.stabilityassessment,
+  art.differentiatedcare
+go
