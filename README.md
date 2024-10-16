@@ -6,9 +6,8 @@ dwapi-etl
 SQLFluff is an open source, dialect-flexible and configurable SQL linter. Designed with ELT applications in mind, SQLFluff also works with Jinja templating and dbt. SQLFluff will auto-fix most linting errors, allowing you to focus your time on what matters. More documentation at: https://sqlfluff.com/
 
 ## Setting up sqlfluff locally
- ## Requirements
+### Requirements
 - Make sure you have python 3.8 or higher
-
 ### Setup
 - Create a python virtual environment by runing python3.8 -m venv <name_of_environemt> (e.g. `python3.8 -m venv venv`)
 - Activate virtual environment by running: source venv/Scripts/activate
